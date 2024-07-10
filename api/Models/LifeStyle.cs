@@ -13,6 +13,6 @@ namespace api.Models
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 
-        public List<UserLifeStyle> userLifeStyles { get; set; } = new List<UserLifeStyle>();
+        public List<UserProfileLifeStyle> userProfileLifeStyles { get; set; } = new List<UserProfileLifeStyle>();
     }
 }

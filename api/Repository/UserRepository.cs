@@ -23,12 +23,14 @@ namespace api.Repository
             }
 
             return await _context.Users
-                .Include(u => u.UserInterests)
-                .Include(u => u.UserLifeStyles)
                 .Include(u => u.LiveStreams)
-                .Include(u => u.LiveStreamParticipants)
+                    .ThenInclude(ls => ls.LiveStreamParticipants)
                 .Include(u => u.Media)
                 .Include(u => u.UserProfile)
+                .Include(u => u.UserProfile)
+                    .ThenInclude(up => up.UserProfileInterests)
+                .Include(u => u.UserProfile)
+                    .ThenInclude(up => up.UserProfileLifeStyles)
                 .Skip((query.PageNumber - 1) * query.PageSize)
                 .Take(query.PageSize)
                 .ToListAsync();

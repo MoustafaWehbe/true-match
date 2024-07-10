@@ -26,6 +26,9 @@ namespace api.Models
 
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 
+        public List<UserProfileInterest> UserProfileInterests { get; set; } = new List<UserProfileInterest>();
+        public List<UserProfileLifeStyle> UserProfileLifeStyles { get; set; } = new List<UserProfileLifeStyle>();
+
         public string UserId { get; set; }
 
         [ForeignKey("UserId")]

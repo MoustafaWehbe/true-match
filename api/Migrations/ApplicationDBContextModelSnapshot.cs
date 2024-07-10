@@ -50,13 +50,13 @@ namespace api.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "45b9c87d-40ba-4b31-86a3-fa8340cbd6a6",
+                            Id = "70ef115b-9d45-4059-bca0-bfa696b29931",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "c1b25d9c-1fb3-4d73-bd8c-dbedeb4d2f76",
+                            Id = "6497a98c-770d-4e93-b214-bacd8e2243cf",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -194,37 +194,37 @@ namespace api.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2024, 7, 2, 14, 33, 40, 974, DateTimeKind.Utc).AddTicks(4050),
+                            CreatedAt = new DateTime(2024, 7, 10, 14, 11, 50, 979, DateTimeKind.Utc).AddTicks(250),
                             Name = "Travel",
-                            UpdatedAt = new DateTime(2024, 7, 2, 14, 33, 40, 974, DateTimeKind.Utc).AddTicks(4050)
+                            UpdatedAt = new DateTime(2024, 7, 10, 14, 11, 50, 979, DateTimeKind.Utc).AddTicks(250)
                         },
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2024, 7, 2, 14, 33, 40, 974, DateTimeKind.Utc).AddTicks(4050),
+                            CreatedAt = new DateTime(2024, 7, 10, 14, 11, 50, 979, DateTimeKind.Utc).AddTicks(250),
                             Name = "Cooking",
-                            UpdatedAt = new DateTime(2024, 7, 2, 14, 33, 40, 974, DateTimeKind.Utc).AddTicks(4050)
+                            UpdatedAt = new DateTime(2024, 7, 10, 14, 11, 50, 979, DateTimeKind.Utc).AddTicks(250)
                         },
                         new
                         {
                             Id = 3,
-                            CreatedAt = new DateTime(2024, 7, 2, 14, 33, 40, 974, DateTimeKind.Utc).AddTicks(4050),
+                            CreatedAt = new DateTime(2024, 7, 10, 14, 11, 50, 979, DateTimeKind.Utc).AddTicks(250),
                             Name = "Sports",
-                            UpdatedAt = new DateTime(2024, 7, 2, 14, 33, 40, 974, DateTimeKind.Utc).AddTicks(4050)
+                            UpdatedAt = new DateTime(2024, 7, 10, 14, 11, 50, 979, DateTimeKind.Utc).AddTicks(250)
                         },
                         new
                         {
                             Id = 4,
-                            CreatedAt = new DateTime(2024, 7, 2, 14, 33, 40, 974, DateTimeKind.Utc).AddTicks(4050),
+                            CreatedAt = new DateTime(2024, 7, 10, 14, 11, 50, 979, DateTimeKind.Utc).AddTicks(250),
                             Name = "Music",
-                            UpdatedAt = new DateTime(2024, 7, 2, 14, 33, 40, 974, DateTimeKind.Utc).AddTicks(4050)
+                            UpdatedAt = new DateTime(2024, 7, 10, 14, 11, 50, 979, DateTimeKind.Utc).AddTicks(250)
                         },
                         new
                         {
                             Id = 5,
-                            CreatedAt = new DateTime(2024, 7, 2, 14, 33, 40, 974, DateTimeKind.Utc).AddTicks(4050),
+                            CreatedAt = new DateTime(2024, 7, 10, 14, 11, 50, 979, DateTimeKind.Utc).AddTicks(250),
                             Name = "Movies",
-                            UpdatedAt = new DateTime(2024, 7, 2, 14, 33, 40, 974, DateTimeKind.Utc).AddTicks(4050)
+                            UpdatedAt = new DateTime(2024, 7, 10, 14, 11, 50, 979, DateTimeKind.Utc).AddTicks(250)
                         });
                 });
 
@@ -254,30 +254,30 @@ namespace api.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2024, 7, 2, 14, 33, 40, 974, DateTimeKind.Utc).AddTicks(4080),
+                            CreatedAt = new DateTime(2024, 7, 10, 14, 11, 50, 979, DateTimeKind.Utc).AddTicks(280),
                             Name = "Smoking",
-                            UpdatedAt = new DateTime(2024, 7, 2, 14, 33, 40, 974, DateTimeKind.Utc).AddTicks(4080)
+                            UpdatedAt = new DateTime(2024, 7, 10, 14, 11, 50, 979, DateTimeKind.Utc).AddTicks(280)
                         },
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2024, 7, 2, 14, 33, 40, 974, DateTimeKind.Utc).AddTicks(4080),
+                            CreatedAt = new DateTime(2024, 7, 10, 14, 11, 50, 979, DateTimeKind.Utc).AddTicks(280),
                             Name = "Workout",
-                            UpdatedAt = new DateTime(2024, 7, 2, 14, 33, 40, 974, DateTimeKind.Utc).AddTicks(4080)
+                            UpdatedAt = new DateTime(2024, 7, 10, 14, 11, 50, 979, DateTimeKind.Utc).AddTicks(280)
                         },
                         new
                         {
                             Id = 3,
-                            CreatedAt = new DateTime(2024, 7, 2, 14, 33, 40, 974, DateTimeKind.Utc).AddTicks(4090),
+                            CreatedAt = new DateTime(2024, 7, 10, 14, 11, 50, 979, DateTimeKind.Utc).AddTicks(280),
                             Name = "Drinking",
-                            UpdatedAt = new DateTime(2024, 7, 2, 14, 33, 40, 974, DateTimeKind.Utc).AddTicks(4090)
+                            UpdatedAt = new DateTime(2024, 7, 10, 14, 11, 50, 979, DateTimeKind.Utc).AddTicks(280)
                         },
                         new
                         {
                             Id = 4,
-                            CreatedAt = new DateTime(2024, 7, 2, 14, 33, 40, 974, DateTimeKind.Utc).AddTicks(4090),
+                            CreatedAt = new DateTime(2024, 7, 10, 14, 11, 50, 979, DateTimeKind.Utc).AddTicks(280),
                             Name = "Pets",
-                            UpdatedAt = new DateTime(2024, 7, 2, 14, 33, 40, 974, DateTimeKind.Utc).AddTicks(4090)
+                            UpdatedAt = new DateTime(2024, 7, 10, 14, 11, 50, 979, DateTimeKind.Utc).AddTicks(280)
                         });
                 });
 
@@ -454,36 +454,6 @@ namespace api.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("api.Models.UserInterest", b =>
-                {
-                    b.Property<string>("UserId")
-                        .HasColumnType("text");
-
-                    b.Property<int>("InterestId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("UserId", "InterestId");
-
-                    b.HasIndex("InterestId");
-
-                    b.ToTable("UserInterests");
-                });
-
-            modelBuilder.Entity("api.Models.UserLifeStyle", b =>
-                {
-                    b.Property<string>("UserId")
-                        .HasColumnType("text");
-
-                    b.Property<int>("LifeStyleId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("UserId", "LifeStyleId");
-
-                    b.HasIndex("LifeStyleId");
-
-                    b.ToTable("UserLifeStyles");
-                });
-
             modelBuilder.Entity("api.Models.UserProfile", b =>
                 {
                     b.Property<int>("Id")
@@ -531,6 +501,36 @@ namespace api.Migrations
                         .IsUnique();
 
                     b.ToTable("UserProfiles");
+                });
+
+            modelBuilder.Entity("api.Models.UserProfileInterest", b =>
+                {
+                    b.Property<int>("UserProfileId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("InterestId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("UserProfileId", "InterestId");
+
+                    b.HasIndex("InterestId");
+
+                    b.ToTable("UserProfileInterests");
+                });
+
+            modelBuilder.Entity("api.Models.UserProfileLifeStyle", b =>
+                {
+                    b.Property<int>("UserProfileId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("LifeStyleId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("UserProfileId", "LifeStyleId");
+
+                    b.HasIndex("LifeStyleId");
+
+                    b.ToTable("UserProfileLifeStyles");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -623,44 +623,6 @@ namespace api.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("api.Models.UserInterest", b =>
-                {
-                    b.HasOne("api.Models.Interest", "Interest")
-                        .WithMany("userInterests")
-                        .HasForeignKey("InterestId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("api.Models.User", "User")
-                        .WithMany("UserInterests")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Interest");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("api.Models.UserLifeStyle", b =>
-                {
-                    b.HasOne("api.Models.LifeStyle", "LifeStyle")
-                        .WithMany("userLifeStyles")
-                        .HasForeignKey("LifeStyleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("api.Models.User", "User")
-                        .WithMany("UserLifeStyles")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("LifeStyle");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("api.Models.UserProfile", b =>
                 {
                     b.HasOne("api.Models.User", "User")
@@ -672,14 +634,52 @@ namespace api.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("api.Models.UserProfileInterest", b =>
+                {
+                    b.HasOne("api.Models.Interest", "Interest")
+                        .WithMany("UserProfileInterests")
+                        .HasForeignKey("InterestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("api.Models.UserProfile", "UserProfile")
+                        .WithMany("UserProfileInterests")
+                        .HasForeignKey("UserProfileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Interest");
+
+                    b.Navigation("UserProfile");
+                });
+
+            modelBuilder.Entity("api.Models.UserProfileLifeStyle", b =>
+                {
+                    b.HasOne("api.Models.LifeStyle", "LifeStyle")
+                        .WithMany("userProfileLifeStyles")
+                        .HasForeignKey("LifeStyleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("api.Models.UserProfile", "UserProfile")
+                        .WithMany("UserProfileLifeStyles")
+                        .HasForeignKey("UserProfileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("LifeStyle");
+
+                    b.Navigation("UserProfile");
+                });
+
             modelBuilder.Entity("api.Models.Interest", b =>
                 {
-                    b.Navigation("userInterests");
+                    b.Navigation("UserProfileInterests");
                 });
 
             modelBuilder.Entity("api.Models.LifeStyle", b =>
                 {
-                    b.Navigation("userLifeStyles");
+                    b.Navigation("userProfileLifeStyles");
                 });
 
             modelBuilder.Entity("api.Models.LiveStream", b =>
@@ -695,12 +695,15 @@ namespace api.Migrations
 
                     b.Navigation("Media");
 
-                    b.Navigation("UserInterests");
-
-                    b.Navigation("UserLifeStyles");
-
                     b.Navigation("UserProfile")
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("api.Models.UserProfile", b =>
+                {
+                    b.Navigation("UserProfileInterests");
+
+                    b.Navigation("UserProfileLifeStyles");
                 });
 #pragma warning restore 612, 618
         }

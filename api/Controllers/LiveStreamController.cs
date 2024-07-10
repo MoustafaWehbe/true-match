@@ -37,6 +37,7 @@ namespace api.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult<LiveStream>> CreateLiveStream([FromBody] CreateLiveStreamDto liveStreamDto)
         {
             if (!ModelState.IsValid)
@@ -60,6 +61,7 @@ namespace api.Controllers
         }
 
         [HttpGet("{id:int}")]
+        [Authorize]
         public async Task<ActionResult<LiveStream>> GetLiveStreamById(int id)
         {
             if (!ModelState.IsValid)

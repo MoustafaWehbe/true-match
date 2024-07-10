@@ -10,8 +10,6 @@ namespace api.Mappers
             return new UserDto
             {
                 UserName = userModel.UserName,
-                UserInterests = userModel.UserInterests,
-                UserLifeStyles = userModel.UserLifeStyles,
                 LiveStreams = userModel.LiveStreams,
                 Media = userModel.Media,
                 UserProfile = userModel.UserProfile

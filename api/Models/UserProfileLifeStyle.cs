@@ -2,12 +2,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace api.Models
 {
-    [Table("UserLifeStyles")]
-    public class UserLifeStyle
+    [Table("UserProfileLifeStyles")]
+    public class UserProfileLifeStyle
     {
-        public string UserId { get; set; }
+        public int UserProfileId { get; set; }
         public int LifeStyleId { get; set; }
-        public User User { get; set; }
+        public UserProfile UserProfile { get; set; }
         public LifeStyle LifeStyle { get; set; }
     }
 }

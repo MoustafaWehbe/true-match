@@ -34,7 +34,7 @@ namespace api.Controllers
                 TotalUsers = totalUsers,
                 TotalPages = totalPages,
                 CurrentPage = query.PageNumber,
-                PageSize = query.PageSize,
+                query.PageSize,
                 Users = userDto
             };
 

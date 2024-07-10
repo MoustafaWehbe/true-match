@@ -13,8 +13,8 @@ namespace api.Data
         {
         }
 
-        public DbSet<UserInterest> userInterests { get; set; }
-        public DbSet<UserLifeStyle> userLifeStyles { get; set; }
+        public DbSet<UserProfileInterest> userProfileInterests { get; set; }
+        public DbSet<UserProfileLifeStyle> userProfileLifeStyles { get; set; }
         public DbSet<LifeStyle> LifeStyles { get; set; }
         public DbSet<Interest> Interests { get; set; }
         public DbSet<LiveStream> LiveStreams { get; set; }
@@ -26,8 +26,8 @@ namespace api.Data
         {
             base.OnModelCreating(builder);
 
-            builder.Entity<UserInterest>(x => x.HasKey(p => new { p.UserId, p.InterestId }));
-            builder.Entity<UserLifeStyle>(x => x.HasKey(p => new { p.UserId, p.LifeStyleId }));
+            builder.Entity<UserProfileInterest>(x => x.HasKey(p => new { p.UserProfileId, p.InterestId }));
+            builder.Entity<UserProfileLifeStyle>(x => x.HasKey(p => new { p.UserProfileId, p.LifeStyleId }));
 
             builder.Entity<User>()
             .HasMany(u => u.LiveStreams)
@@ -39,24 +39,24 @@ namespace api.Data
             .WithOne(up => up.User)
             .HasForeignKey<UserProfile>(up => up.UserId);
 
-            builder.Entity<UserInterest>()
-            .HasOne(u => u.User)
-            .WithMany(u => u.UserInterests)
-            .HasForeignKey(ui => ui.UserId);
+            builder.Entity<UserProfileInterest>()
+            .HasOne(u => u.UserProfile)
+            .WithMany(u => u.UserProfileInterests)
+            .HasForeignKey(ui => ui.UserProfileId);
 
-            builder.Entity<UserInterest>()
+            builder.Entity<UserProfileInterest>()
             .HasOne(u => u.Interest)
-            .WithMany(u => u.userInterests)
+            .WithMany(u => u.UserProfileInterests)
             .HasForeignKey(ui => ui.InterestId);
 
-            builder.Entity<UserLifeStyle>()
-            .HasOne(u => u.User)
-            .WithMany(u => u.UserLifeStyles)
-            .HasForeignKey(ui => ui.UserId);
+            builder.Entity<UserProfileLifeStyle>()
+            .HasOne(u => u.UserProfile)
+            .WithMany(u => u.UserProfileLifeStyles)
+            .HasForeignKey(ui => ui.UserProfileId);
 
-            builder.Entity<UserLifeStyle>()
+            builder.Entity<UserProfileLifeStyle>()
             .HasOne(u => u.LifeStyle)
-            .WithMany(u => u.userLifeStyles)
+            .WithMany(u => u.userProfileLifeStyles)
             .HasForeignKey(ui => ui.LifeStyleId);
 
             builder.Entity<LiveStreamParticipant>()

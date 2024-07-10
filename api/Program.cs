@@ -59,6 +59,7 @@ builder.Services.AddScoped<ILifeStyleRepository, LifeStyleRepository>();
 builder.Services.AddScoped<ILiveStreamRepository, LiveStreamRepository>();
 builder.Services.AddScoped<ILiveStreamParticipantsRepository, LiveStreamParticipantsRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserProfileRepository, UserProfileRepository>();
 
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

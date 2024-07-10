@@ -215,49 +215,129 @@ namespace api.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "UserInterests",
+                name: "Media",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(type: "text", nullable: false),
-                    InterestId = table.Column<int>(type: "integer", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Url = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    MediaType = table.Column<int>(type: "integer", nullable: false),
+                    UserId = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserInterests", x => new { x.UserId, x.InterestId });
+                    table.PrimaryKey("PK_Media", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_UserInterests_AspNetUsers_UserId",
+                        name: "FK_Media_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_UserInterests_Interests_InterestId",
-                        column: x => x.InterestId,
-                        principalTable: "Interests",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "UserLifeStyles",
+                name: "UserProfiles",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(type: "text", nullable: false),
-                    LifeStyleId = table.Column<int>(type: "integer", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Bio = table.Column<string>(type: "text", nullable: false),
+                    Height = table.Column<decimal>(type: "numeric(3,2)", nullable: false),
+                    RelationshipGoal = table.Column<string>(type: "text", nullable: false),
+                    Education = table.Column<string>(type: "text", nullable: false),
+                    Zodiac = table.Column<string>(type: "text", nullable: false),
+                    LoveStyle = table.Column<string>(type: "text", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    UserId = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserLifeStyles", x => new { x.UserId, x.LifeStyleId });
+                    table.PrimaryKey("PK_UserProfiles", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_UserLifeStyles_AspNetUsers_UserId",
+                        name: "FK_UserProfiles_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "LiveStreamParticipants",
+                columns: table => new
+                {
+                    LiveStreamId = table.Column<int>(type: "integer", nullable: false),
+                    UserId = table.Column<string>(type: "text", nullable: false),
+                    IsInterested = table.Column<bool>(type: "boolean", nullable: false),
+                    Attended = table.Column<bool>(type: "boolean", nullable: false),
+                    AttendedFromTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    AttendedToTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_LiveStreamParticipants", x => new { x.LiveStreamId, x.UserId });
+                    table.ForeignKey(
+                        name: "FK_LiveStreamParticipants_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_UserLifeStyles_LifeStyles_LifeStyleId",
+                        name: "FK_LiveStreamParticipants_LiveStreams_LiveStreamId",
+                        column: x => x.LiveStreamId,
+                        principalTable: "LiveStreams",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserProfileInterests",
+                columns: table => new
+                {
+                    UserProfileId = table.Column<int>(type: "integer", nullable: false),
+                    InterestId = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserProfileInterests", x => new { x.UserProfileId, x.InterestId });
+                    table.ForeignKey(
+                        name: "FK_UserProfileInterests_Interests_InterestId",
+                        column: x => x.InterestId,
+                        principalTable: "Interests",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UserProfileInterests_UserProfiles_UserProfileId",
+                        column: x => x.UserProfileId,
+                        principalTable: "UserProfiles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserProfileLifeStyles",
+                columns: table => new
+                {
+                    UserProfileId = table.Column<int>(type: "integer", nullable: false),
+                    LifeStyleId = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserProfileLifeStyles", x => new { x.UserProfileId, x.LifeStyleId });
+                    table.ForeignKey(
+                        name: "FK_UserProfileLifeStyles_LifeStyles_LifeStyleId",
                         column: x => x.LifeStyleId,
                         principalTable: "LifeStyles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UserProfileLifeStyles_UserProfiles_UserProfileId",
+                        column: x => x.UserProfileId,
+                        principalTable: "UserProfiles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -267,8 +347,8 @@ namespace api.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "6f55c99b-7c1b-4ef8-9505-646dcffb3d0d", null, "Admin", "ADMIN" },
-                    { "84fdb6a6-71be-44ab-acfc-2e18caf3576f", null, "User", "USER" }
+                    { "6497a98c-770d-4e93-b214-bacd8e2243cf", null, "User", "USER" },
+                    { "70ef115b-9d45-4059-bca0-bfa696b29931", null, "Admin", "ADMIN" }
                 });
 
             migrationBuilder.InsertData(
@@ -276,11 +356,11 @@ namespace api.Migrations
                 columns: new[] { "Id", "CreatedAt", "Name", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2024, 7, 1, 21, 28, 15, 371, DateTimeKind.Utc).AddTicks(2020), "Travel", new DateTime(2024, 7, 1, 21, 28, 15, 371, DateTimeKind.Utc).AddTicks(2020) },
-                    { 2, new DateTime(2024, 7, 1, 21, 28, 15, 371, DateTimeKind.Utc).AddTicks(2020), "Cooking", new DateTime(2024, 7, 1, 21, 28, 15, 371, DateTimeKind.Utc).AddTicks(2020) },
-                    { 3, new DateTime(2024, 7, 1, 21, 28, 15, 371, DateTimeKind.Utc).AddTicks(2020), "Sports", new DateTime(2024, 7, 1, 21, 28, 15, 371, DateTimeKind.Utc).AddTicks(2020) },
-                    { 4, new DateTime(2024, 7, 1, 21, 28, 15, 371, DateTimeKind.Utc).AddTicks(2020), "Music", new DateTime(2024, 7, 1, 21, 28, 15, 371, DateTimeKind.Utc).AddTicks(2020) },
-                    { 5, new DateTime(2024, 7, 1, 21, 28, 15, 371, DateTimeKind.Utc).AddTicks(2020), "Movies", new DateTime(2024, 7, 1, 21, 28, 15, 371, DateTimeKind.Utc).AddTicks(2020) }
+                    { 1, new DateTime(2024, 7, 10, 14, 11, 50, 979, DateTimeKind.Utc).AddTicks(250), "Travel", new DateTime(2024, 7, 10, 14, 11, 50, 979, DateTimeKind.Utc).AddTicks(250) },
+                    { 2, new DateTime(2024, 7, 10, 14, 11, 50, 979, DateTimeKind.Utc).AddTicks(250), "Cooking", new DateTime(2024, 7, 10, 14, 11, 50, 979, DateTimeKind.Utc).AddTicks(250) },
+                    { 3, new DateTime(2024, 7, 10, 14, 11, 50, 979, DateTimeKind.Utc).AddTicks(250), "Sports", new DateTime(2024, 7, 10, 14, 11, 50, 979, DateTimeKind.Utc).AddTicks(250) },
+                    { 4, new DateTime(2024, 7, 10, 14, 11, 50, 979, DateTimeKind.Utc).AddTicks(250), "Music", new DateTime(2024, 7, 10, 14, 11, 50, 979, DateTimeKind.Utc).AddTicks(250) },
+                    { 5, new DateTime(2024, 7, 10, 14, 11, 50, 979, DateTimeKind.Utc).AddTicks(250), "Movies", new DateTime(2024, 7, 10, 14, 11, 50, 979, DateTimeKind.Utc).AddTicks(250) }
                 });
 
             migrationBuilder.InsertData(
@@ -288,10 +368,10 @@ namespace api.Migrations
                 columns: new[] { "Id", "CreatedAt", "Name", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2024, 7, 1, 21, 28, 15, 371, DateTimeKind.Utc).AddTicks(2050), "Smoking", new DateTime(2024, 7, 1, 21, 28, 15, 371, DateTimeKind.Utc).AddTicks(2050) },
-                    { 2, new DateTime(2024, 7, 1, 21, 28, 15, 371, DateTimeKind.Utc).AddTicks(2050), "Workout", new DateTime(2024, 7, 1, 21, 28, 15, 371, DateTimeKind.Utc).AddTicks(2050) },
-                    { 3, new DateTime(2024, 7, 1, 21, 28, 15, 371, DateTimeKind.Utc).AddTicks(2050), "Drinking", new DateTime(2024, 7, 1, 21, 28, 15, 371, DateTimeKind.Utc).AddTicks(2050) },
-                    { 4, new DateTime(2024, 7, 1, 21, 28, 15, 371, DateTimeKind.Utc).AddTicks(2050), "Pets", new DateTime(2024, 7, 1, 21, 28, 15, 371, DateTimeKind.Utc).AddTicks(2050) }
+                    { 1, new DateTime(2024, 7, 10, 14, 11, 50, 979, DateTimeKind.Utc).AddTicks(280), "Smoking", new DateTime(2024, 7, 10, 14, 11, 50, 979, DateTimeKind.Utc).AddTicks(280) },
+                    { 2, new DateTime(2024, 7, 10, 14, 11, 50, 979, DateTimeKind.Utc).AddTicks(280), "Workout", new DateTime(2024, 7, 10, 14, 11, 50, 979, DateTimeKind.Utc).AddTicks(280) },
+                    { 3, new DateTime(2024, 7, 10, 14, 11, 50, 979, DateTimeKind.Utc).AddTicks(280), "Drinking", new DateTime(2024, 7, 10, 14, 11, 50, 979, DateTimeKind.Utc).AddTicks(280) },
+                    { 4, new DateTime(2024, 7, 10, 14, 11, 50, 979, DateTimeKind.Utc).AddTicks(280), "Pets", new DateTime(2024, 7, 10, 14, 11, 50, 979, DateTimeKind.Utc).AddTicks(280) }
                 });
 
             migrationBuilder.CreateIndex(
@@ -332,19 +412,35 @@ namespace api.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_LiveStreamParticipants_UserId",
+                table: "LiveStreamParticipants",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_LiveStreams_UserId",
                 table: "LiveStreams",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserInterests_InterestId",
-                table: "UserInterests",
+                name: "IX_Media_UserId",
+                table: "Media",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserProfileInterests_InterestId",
+                table: "UserProfileInterests",
                 column: "InterestId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserLifeStyles_LifeStyleId",
-                table: "UserLifeStyles",
+                name: "IX_UserProfileLifeStyles_LifeStyleId",
+                table: "UserProfileLifeStyles",
                 column: "LifeStyleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserProfiles_UserId",
+                table: "UserProfiles",
+                column: "UserId",
+                unique: true);
         }
 
         /// <inheritdoc />
@@ -366,25 +462,34 @@ namespace api.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "LiveStreams");
+                name: "LiveStreamParticipants");
 
             migrationBuilder.DropTable(
-                name: "UserInterests");
+                name: "Media");
 
             migrationBuilder.DropTable(
-                name: "UserLifeStyles");
+                name: "UserProfileInterests");
+
+            migrationBuilder.DropTable(
+                name: "UserProfileLifeStyles");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
+                name: "LiveStreams");
+
+            migrationBuilder.DropTable(
                 name: "Interests");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
+                name: "LifeStyles");
 
             migrationBuilder.DropTable(
-                name: "LifeStyles");
+                name: "UserProfiles");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUsers");
         }
     }
 }
