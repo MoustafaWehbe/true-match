@@ -1,4 +1,4 @@
-using api.Dtos.UserProfile;
+using api.Dtos;
 using api.Models;
 
 namespace api.Mappers
@@ -34,6 +34,9 @@ namespace api.Mappers
             return new UserProfile
             {
                 Bio = userProfileDto.Bio,
+                Gender = userProfileDto.Gender,
+                Nationality = userProfileDto.Nationality,
+                PlaceToLive = userProfileDto.PlaceToLive,
                 Height = userProfileDto.Height,
                 RelationshipGoal = userProfileDto.RelationshipGoal,
                 Education = userProfileDto.Education,

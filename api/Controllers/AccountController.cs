@@ -1,8 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using api.Dtos.Account;
+using api.Dtos;
+using api.Helpers;
 using api.Interfaces;
 using api.Models;
 using Microsoft.AspNetCore.Identity;
@@ -11,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace api.Controllers
 {
-    [Route("api/account")]
+    [Route("api/[controller]")]
     [ApiController]
     public class AccountController : ControllerBase
     {
@@ -29,24 +26,26 @@ namespace api.Controllers
         public async Task<IActionResult> Login(LoginDto loginDto)
         {
             if (!ModelState.IsValid)
+            {
                 return BadRequest(ModelState);
+            }
 
-            var user = await _userManager.Users.FirstOrDefaultAsync(x => x.UserName == loginDto.Username.ToLower());
+            var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Email == loginDto.Email.ToLower());
 
-            if (user == null) return Unauthorized("Invalid username!");
+            if (user == null)
+            {
+                return Unauthorized("Invalid email!");
+            }
 
             var result = await _signinManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
 
             if (!result.Succeeded) return Unauthorized("Username not found and/or password incorrect");
 
-            return Ok(
-                new NewUserDto
-                {
-                    UserName = user.UserName,
-                    Email = user.Email,
-                    Token = _tokenService.CreateToken(user)
-                }
-            );
+            return Ok(ResponseHelper.CreateSuccessResponse(new NewUserDto
+            {
+                Email = user.Email!,
+                Token = _tokenService.CreateToken(user)
+            }));
         }
 
         [HttpPost("register")]
@@ -56,11 +55,13 @@ namespace api.Controllers
             {
                 if (!ModelState.IsValid)
                     return BadRequest(ModelState);
-                
+
                 var user = new User
                 {
-                    UserName = registerDto.Username,
-                    Email = registerDto.Email
+                    Email = registerDto.Email,
+                    FirstName = registerDto.FirstName,
+                    LastName = registerDto.LastName,
+                    UserName = registerDto.Email
                 };
 
                 var createdUser = await _userManager.CreateAsync(user, registerDto.Password);
@@ -70,14 +71,11 @@ namespace api.Controllers
                     var roleResult = await _userManager.AddToRoleAsync(user, "User");
                     if (roleResult.Succeeded)
                     {
-                        return Ok(
-                            new NewUserDto
-                            {
-                                UserName = user.UserName,
-                                Email = user.Email,
-                                Token = _tokenService.CreateToken(user)
-                            }
-                        );
+                        return Ok(ResponseHelper.CreateSuccessResponse(new NewUserDto
+                        {
+                            Email = user.Email!,
+                            Token = _tokenService.CreateToken(user)
+                        }));
                     }
                     else
                     {

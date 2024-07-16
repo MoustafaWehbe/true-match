@@ -15,9 +15,14 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
+builder.Services.AddControllers().AddNewtonsoftJson(options =>
+{
+    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+});
+
 builder.Services.AddDbContext<ApplicationDBContext>(options =>
 {
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")).EnableSensitiveDataLogging();
 });
 
 builder.Services.AddIdentity<User, IdentityRole>(options =>
@@ -27,6 +32,7 @@ builder.Services.AddIdentity<User, IdentityRole>(options =>
     options.Password.RequireUppercase = true;
     options.Password.RequireNonAlphanumeric = true;
     options.Password.RequiredLength = 12;
+    options.User.RequireUniqueEmail = true;
 })
 .AddEntityFrameworkStores<ApplicationDBContext>();
 
@@ -48,7 +54,7 @@ builder.Services.AddAuthentication(options =>
         ValidAudience = builder.Configuration["JWT:Audience"],
         ValidateIssuerSigningKey = true,
         IssuerSigningKey = new SymmetricSecurityKey(
-            System.Text.Encoding.UTF8.GetBytes(builder.Configuration["JWT:SigningKey"])
+            System.Text.Encoding.UTF8.GetBytes(builder.Configuration["JWT:SigningKey"]!)
         )
     };
 });
@@ -60,7 +66,10 @@ builder.Services.AddScoped<ILiveStreamRepository, LiveStreamRepository>();
 builder.Services.AddScoped<ILiveStreamParticipantsRepository, LiveStreamParticipantsRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserProfileRepository, UserProfileRepository>();
-
+builder.Services.AddScoped<ILiveStreamContentRepository, LiveStreamContentRepository>();
+builder.Services.AddScoped<IQuestionCategoryRepository, QuestionCategoryRepository>();
+builder.Services.AddScoped<ISystemQuestionRepository, SystemQuestionRepository>();
+builder.Services.AddScoped<IMatchRepository, MatchRepository>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -101,7 +110,10 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c =>
+    {
+        c.ConfigObject.AdditionalItems.Add("persistAuthorization", true);
+    });
 }
 
 app.UseHttpsRedirection();

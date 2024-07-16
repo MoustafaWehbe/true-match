@@ -7,6 +7,7 @@ namespace api.Interfaces
     {
         Task<List<User>> GetAllAsync(UserQueryObject query);
         Task<int> GetTotalUsersAsync();
-        Task<int> GetTotalPagesAsync(int pageSize);
+        int GetTotalPages(int pageSize, int totalUsers);
+        Task<User?> GetByIdAsync(string userId);
     }
 }

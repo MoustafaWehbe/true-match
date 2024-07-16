@@ -1,4 +1,4 @@
-using api.Dtos.LiveStream;
+using api.Dtos;
 using api.Models;
 
 namespace api.Mappers
@@ -14,6 +14,8 @@ namespace api.Mappers
                 HasStarted = liveStreamModel.HasStarted,
                 ScheduledAt = liveStreamModel.ScheduledAt,
                 FinishedAt = liveStreamModel.FinishedAt,
+                LiveStreamParticipants = liveStreamModel.LiveStreamParticipants,
+                User = liveStreamModel.User?.ToUserDto(),
                 CreatedAt = liveStreamModel.CreatedAt,
                 UpdatedAt = liveStreamModel.UpdatedAt,
             };

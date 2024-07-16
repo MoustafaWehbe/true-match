@@ -1,4 +1,4 @@
-namespace api.Dtos.LiveStream
+namespace api.Dtos
 {
     public class CreateLiveStreamDto
     {

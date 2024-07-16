@@ -1,4 +1,4 @@
-using api.Dtos.UserProfile;
+using api.Dtos;
 using api.Extensions;
 using api.Helpers;
 using api.Interfaces;
@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controllers
 {
-    [Route("api/userProfile")]
+    [Route("api/[controller]")]
     [ApiController]
     public class UserProfileController : ControllerBase
     {
@@ -37,8 +37,12 @@ namespace api.Controllers
                 return BadRequest("Invalid live stream data.");
             }
 
-            var username = User.GetUsername();
-            var user = await _userManager.FindByNameAsync(username);
+            var user = await _userManager.FindByEmailAsync(User.GetEmail());
+
+            if (user == null)
+            {
+                return NotFound("User was not found.");
+            }
 
             var userProfile = userProfileDto.ToUserProfileFromCreate(user.Id);
 
@@ -75,7 +79,7 @@ namespace api.Controllers
                 return NotFound();
             }
 
-            return Ok(userProfile);
+            return Ok(ResponseHelper.CreateSuccessResponse(userProfile));
         }
     }
 }

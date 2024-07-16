@@ -10,7 +10,7 @@ namespace api.Models
 
         [Required]
         [MaxLength(255)]
-        public string Url { get; set; }
+        public string? Url { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
@@ -19,9 +19,9 @@ namespace api.Models
         [Required]
         public MediaType MediaType { get; set; }
 
-        public string UserId { get; set; }
+        public required string UserId { get; set; }
 
         [ForeignKey("UserId")]
-        public User User { get; set; }
+        public User? User { get; set; }
     }
 }

@@ -1,5 +1,5 @@
 
-namespace api.Dtos.UserProfile
+namespace api.Dtos
 {
     public class UserProfileInterestDto
     {

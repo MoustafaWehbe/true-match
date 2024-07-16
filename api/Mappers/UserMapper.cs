@@ -1,4 +1,4 @@
-using api.Dtos.User;
+using api.Dtos;
 using api.Models;
 
 namespace api.Mappers
@@ -9,12 +9,10 @@ namespace api.Mappers
         {
             return new UserDto
             {
-                UserName = userModel.UserName,
                 LiveStreams = userModel.LiveStreams,
                 Media = userModel.Media,
-                UserProfile = userModel.UserProfile
+                UserProfile = userModel.UserProfile,
             };
         }
-
     }
 }

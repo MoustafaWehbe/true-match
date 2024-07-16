@@ -1,3 +1,4 @@
+using api.Helpers;
 using api.Interfaces;
 using api.Mappers;
 using Microsoft.AspNetCore.Authorization;
@@ -5,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controllers
 {
-    [Route("api/lifeStyles")]
+    [Route("api/[controller]")]
     [ApiController]
     public class LifeStyleController : ControllerBase
     {
@@ -20,13 +21,15 @@ namespace api.Controllers
         public async Task<IActionResult> GetAll()
         {
             if (!ModelState.IsValid)
+            {
                 return BadRequest(ModelState);
+            }
 
             var lifeStyles = await _lifeStyleRepo.GetAllAsync();
 
             var lifeStyleDto = lifeStyles.Select(s => s.ToLifeStyleDto());
 
-            return Ok(lifeStyleDto);
+            return Ok(ResponseHelper.CreateSuccessResponse(lifeStyleDto));
         }
     }
 }

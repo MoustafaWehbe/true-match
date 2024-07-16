@@ -2,7 +2,7 @@
 
 import { Box } from '@chakra-ui/react';
 
-import Content from './Content';
+import Content from './DrawerContent';
 
 export default function Sidebar() {
   return (

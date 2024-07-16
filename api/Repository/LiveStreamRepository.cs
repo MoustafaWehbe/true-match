@@ -1,4 +1,5 @@
 using api.Data;
+using api.Dtos;
 using api.Interfaces;
 using api.Models;
 using Microsoft.EntityFrameworkCore;
@@ -22,12 +23,37 @@ namespace api.Repository
 
         public async Task<List<LiveStream>> GetAllAsync()
         {
-            return await _context.LiveStreams.ToListAsync();
+            return await _context.LiveStreams
+                .Include(ls => ls.User)
+                .Include(ls => ls.LiveStreamParticipants)
+                .ToListAsync();
         }
 
         public async Task<LiveStream?> GetByIdAsync(int id)
         {
-            return await _context.LiveStreams.Include(a => a.User).FirstOrDefaultAsync(c => c.Id == id);
+            return await _context.LiveStreams
+                .Include(ls => ls.User)
+                .Include(ls => ls.LiveStreamParticipants)
+                .FirstOrDefaultAsync(c => c.Id == id);
+        }
+
+        public async Task<LiveStream?> UpdateAsync(int id, UpdateLiveStreamDto liveStreamDto)
+        {
+            var existingLiveStream = await _context.LiveStreams.FirstOrDefaultAsync(x => x.Id == id);
+
+            if (existingLiveStream == null)
+            {
+                return null;
+            }
+
+            existingLiveStream.Title = liveStreamDto.Title;
+            existingLiveStream.Description = liveStreamDto.Description;
+            existingLiveStream.ScheduledAt = liveStreamDto.ScheduledAt;
+            existingLiveStream.UpdatedAt = DateTime.Now;
+
+            await _context.SaveChangesAsync();
+
+            return existingLiveStream;
         }
     }
 }

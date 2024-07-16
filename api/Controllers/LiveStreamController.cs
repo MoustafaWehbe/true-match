@@ -1,5 +1,6 @@
-using api.Dtos.LiveStream;
+using api.Dtos;
 using api.Extensions;
+using api.Helpers;
 using api.Interfaces;
 using api.Mappers;
 using api.Models;
@@ -9,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controllers
 {
-    [Route("api/liveStreams")]
+    [Route("api/[controller]")]
     [ApiController]
     public class LiveStreamController : ControllerBase
     {
@@ -33,7 +34,7 @@ namespace api.Controllers
 
             var liveStreamDto = liveStreams.Select(s => s.ToLiveStreamDto());
 
-            return Ok(liveStreamDto);
+            return Ok(ResponseHelper.CreateSuccessResponse(liveStreamDto));
         }
 
         [HttpPost]
@@ -50,8 +51,12 @@ namespace api.Controllers
                 return BadRequest("Invalid live stream data.");
             }
 
-            var username = User.GetUsername();
-            var user = await _userManager.FindByNameAsync(username);
+            var user = await _userManager.FindByEmailAsync(User.GetEmail());
+
+            if (user == null)
+            {
+                return NotFound("User was not found.");
+            }
 
             var liveStream = liveStreamDto.ToLiveStreamFromCreate(user.Id);
 
@@ -60,7 +65,38 @@ namespace api.Controllers
             return CreatedAtAction(nameof(GetLiveStreamById), new { id = createdLiveStream.Id }, liveStream.ToLiveStreamDto());
         }
 
-        [HttpGet("{id:int}")]
+        [HttpPut]
+        [Route("{id:int}")]
+        [Authorize]
+        public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateLiveStreamDto updateStreamDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var liveStream = await _liveStreamRepo.UpdateAsync(id, updateStreamDto);
+            var user = await _userManager.FindByEmailAsync(User.GetEmail());
+
+            if (user == null)
+            {
+                return NotFound("User was not found.");
+            }
+
+            if (liveStream == null)
+            {
+                return NotFound();
+            }
+
+            if (user.Id != liveStream.UserId)
+            {
+                return Unauthorized("Action not allowed");
+            }
+
+            return Ok(ResponseHelper.CreateSuccessResponse(liveStream.ToLiveStreamDto()));
+        }
+
+        [HttpGet("{id}")]
         [Authorize]
         public async Task<ActionResult<LiveStream>> GetLiveStreamById(int id)
         {
@@ -75,7 +111,7 @@ namespace api.Controllers
                 return NotFound();
             }
 
-            return Ok(liveStream.ToLiveStreamDto());
+            return Ok(ResponseHelper.CreateSuccessResponse(liveStream.ToLiveStreamDto()));
         }
 
     }

@@ -7,7 +7,7 @@ namespace api.Models
     {
         public int UserProfileId { get; set; }
         public int InterestId { get; set; }
-        public UserProfile UserProfile { get; set; }
-        public Interest Interest { get; set; }
+        public UserProfile? UserProfile { get; set; }
+        public Interest? Interest { get; set; }
     }
 }

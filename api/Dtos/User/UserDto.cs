@@ -1,13 +1,14 @@
 
-namespace api.Dtos.User
+using api.Models;
+
+namespace api.Dtos
 {
     public class UserDto
     {
-        public string? UserName { get; set; }
-        public List<Models.UserProfileInterest> UserProfileInterests { get; set; } = new List<Models.UserProfileInterest>();
-        public List<Models.UserProfileLifeStyle> UserProfileLifeStyles { get; set; } = new List<Models.UserProfileLifeStyle>();
-        public List<Models.LiveStream> LiveStreams { get; set; } = new List<Models.LiveStream>();
-        public List<Models.Media> Media { get; set; } = new List<Models.Media>();
-        public Models.UserProfile UserProfile { get; set; }
+        public List<UserProfileInterest> UserProfileInterests { get; set; } = new List<UserProfileInterest>();
+        public List<UserProfileLifeStyle> UserProfileLifeStyles { get; set; } = new List<UserProfileLifeStyle>();
+        public List<LiveStream> LiveStreams { get; set; } = new List<LiveStream>();
+        public List<Media> Media { get; set; } = new List<Media>();
+        public UserProfile? UserProfile { get; set; }
     }
 }

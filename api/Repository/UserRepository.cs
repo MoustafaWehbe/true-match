@@ -2,7 +2,6 @@ using api.Data;
 using api.Helpers;
 using api.Interfaces;
 using api.Models;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace api.Repository
@@ -28,9 +27,9 @@ namespace api.Repository
                 .Include(u => u.Media)
                 .Include(u => u.UserProfile)
                 .Include(u => u.UserProfile)
-                    .ThenInclude(up => up.UserProfileInterests)
+                    .ThenInclude(up => up!.UserProfileInterests)
                 .Include(u => u.UserProfile)
-                    .ThenInclude(up => up.UserProfileLifeStyles)
+                    .ThenInclude(up => up!.UserProfileLifeStyles)
                 .Skip((query.PageNumber - 1) * query.PageSize)
                 .Take(query.PageSize)
                 .ToListAsync();
@@ -40,15 +39,28 @@ namespace api.Repository
             return await _context.Users.CountAsync();
         }
 
-        public async Task<int> GetTotalPagesAsync(int pageSize)
+        public int GetTotalPages(int pageSize, int totalUsers)
         {
             if (pageSize <= 0)
             {
                 throw new ArgumentException("Page size must be greater than zero.");
             }
 
-            var totalUsers = await GetTotalUsersAsync();
             return (int)Math.Ceiling(totalUsers / (double)pageSize);
+        }
+
+        public async Task<User?> GetByIdAsync(string userId)
+        {
+            return await _context.Users
+                .Include(u => u.LiveStreams)
+                    .ThenInclude(ls => ls.LiveStreamParticipants)
+                .Include(u => u.Media)
+                .Include(u => u.UserProfile)
+                .Include(u => u.UserProfile)
+                    .ThenInclude(up => up!.UserProfileInterests)
+                .Include(u => u.UserProfile)
+                    .ThenInclude(up => up!.UserProfileLifeStyles)
+                .FirstOrDefaultAsync(u => u.Id == userId);
         }
     }
 }

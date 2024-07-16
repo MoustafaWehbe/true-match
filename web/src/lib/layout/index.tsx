@@ -11,7 +11,9 @@ export type LayoutProps = {
 };
 
 const Layout = ({ children }: LayoutProps) => {
-  return AUTH_ROUTES.includes(window.location.pathname.slice(1)) ? (
+  return AUTH_ROUTES.includes(
+    window ? window.location.pathname.slice(1) : ''
+  ) ? (
     <AuthLayout children={children} />
   ) : (
     <MainLayout children={children} />

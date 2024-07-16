@@ -1,3 +1,4 @@
+using api.Helpers;
 using api.Interfaces;
 using api.Mappers;
 using Microsoft.AspNetCore.Authorization;
@@ -5,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controllers
 {
-    [Route("api/interest")]
+    [Route("api/[controller]")]
     [ApiController]
     public class InteresetController : ControllerBase
     {
@@ -26,7 +27,7 @@ namespace api.Controllers
 
             var interestDto = interests.Select(s => s.ToInterestDto());
 
-            return Ok(interestDto);
+            return Ok(ResponseHelper.CreateSuccessResponse(interestDto));
         }
     }
 }

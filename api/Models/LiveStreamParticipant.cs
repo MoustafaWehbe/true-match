@@ -11,10 +11,8 @@ namespace api.Models
 
         [Key, Column(Order = 1)]
         public required string UserId { get; set; }
-
         public bool IsInterested { get; set; } = false;
         public bool Attended { get; set; } = false;
-
         public DateTime? AttendedFromTime { get; set; } = null;
         public DateTime? AttendedToTime { get; set; } = null;
 
@@ -22,9 +20,9 @@ namespace api.Models
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 
         [ForeignKey("LiveStreamId")]
-        public LiveStream LiveStream { get; set; }
+        public LiveStream? LiveStream { get; set; }
 
         [ForeignKey("UserId")]
-        public User User { get; set; }
+        public User? User { get; set; }
     }
 }

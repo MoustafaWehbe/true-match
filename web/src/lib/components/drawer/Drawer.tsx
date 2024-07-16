@@ -11,7 +11,7 @@ import {
   Input,
   useDisclosure,
 } from '@chakra-ui/react';
-import Content from './Content';
+import Content from './DrawerContent';
 
 function DrawerExample({ children, ...rest }: PropsWithChildren) {
   const { onClose } = useDisclosure();

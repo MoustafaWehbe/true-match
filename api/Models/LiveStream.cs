@@ -18,7 +18,7 @@ namespace api.Models
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 
         [ForeignKey("UserId")]
-        public string? UserId { get; set; }
+        public required string UserId { get; set; }
         public User? User { get; set; }
 
         public ICollection<LiveStreamParticipant> LiveStreamParticipants { get; set; } = new List<LiveStreamParticipant>();
