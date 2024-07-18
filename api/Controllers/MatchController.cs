@@ -4,10 +4,11 @@ using api.Data;
 using api.Extensions;
 using Microsoft.AspNetCore.Identity;
 using api.Mappers;
-using api.Repository;
 using api.Interfaces;
 using api.Dtos;
 using Microsoft.AspNetCore.Authorization;
+using api.Dtos.Match;
+using api.Helpers;
 
 namespace api.Controllers
 {
@@ -19,7 +20,7 @@ namespace api.Controllers
         private readonly UserManager<User> _userManager;
         private readonly IMatchRepository _matchRepo;
 
-        public MatchController(ApplicationDBContext context, UserManager<User> userManager, MatchRepository matchRepo)
+        public MatchController(ApplicationDBContext context, UserManager<User> userManager, IMatchRepository matchRepo)
         {
             _context = context;
             _userManager = userManager;
@@ -45,15 +46,12 @@ namespace api.Controllers
 
             var createdMatch = await _matchRepo.CreateAsync(match);
 
-            _context.Matches.Add(match);
-            await _context.SaveChangesAsync();
-
             return CreatedAtAction(nameof(GetMatch), new { id = match.Id }, match.ToMatchDto());
         }
 
         [HttpGet("{id}")]
         [Authorize]
-        public async Task<ActionResult<Match>> GetMatch(int id)
+        public async Task<IActionResult> GetMatch(int id)
         {
             var match = await _matchRepo.GetByIdAsync(id);
 
@@ -62,9 +60,8 @@ namespace api.Controllers
                 return NotFound();
             }
 
-            return match;
+            return Ok(ResponseHelper.CreateSuccessResponse(match.ToMatchDto()));
         }
-
 
         [HttpGet("myMatches")]
         [Authorize]

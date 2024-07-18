@@ -12,10 +12,11 @@ namespace api.Mappers
                 Id = liveStreamModel.Id,
                 Description = liveStreamModel.Description,
                 HasStarted = liveStreamModel.HasStarted,
+                Title = liveStreamModel.Title,
                 ScheduledAt = liveStreamModel.ScheduledAt,
                 FinishedAt = liveStreamModel.FinishedAt,
                 LiveStreamParticipants = liveStreamModel.LiveStreamParticipants,
-                User = liveStreamModel.User?.ToUserDto(),
+                User = liveStreamModel.User?.ToUserSimplifiedDto(),
                 CreatedAt = liveStreamModel.CreatedAt,
                 UpdatedAt = liveStreamModel.UpdatedAt,
             };

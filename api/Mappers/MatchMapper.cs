@@ -8,11 +8,13 @@ namespace api.Mappers
     {
         public static MatchDto ToMatchDto(this Match matchModel)
         {
+            Console.WriteLine("TESt");
+            Console.WriteLine(matchModel.User2?.FirstName);
             return new MatchDto
             {
                 Id = matchModel.Id,
-                User1 = matchModel.User1,
-                User2 = matchModel.User2,
+                User1 = matchModel.User1?.ToUserSimplifiedDto(),
+                User2 = matchModel.User2?.ToUserSimplifiedDto(),
                 Origin = matchModel.Origin,
                 CreatedAt = matchModel.CreatedAt,
                 UpdatedAt = matchModel.UpdatedAt,

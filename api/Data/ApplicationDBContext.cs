@@ -34,13 +34,6 @@ namespace api.Data
             builder.ApplyConfiguration(new UserConfiguration());
             builder.ApplyConfiguration(new MatchConfiguration());
 
-            // builder.Entity<SystemQuestion>()
-            //     .HasOne(sq => sq.Category)
-            //     .WithMany(c => c.SystemQuestions)  // A category can have many questions
-            //     .HasForeignKey(sq => sq.CategoryId)  // Foreign key property in SystemQuestion
-            //     .IsRequired();  // CategoryId is required in SystemQuestion
-
-
             SeedData.Seed(builder);
         }
     }

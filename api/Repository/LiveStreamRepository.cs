@@ -49,7 +49,7 @@ namespace api.Repository
             existingLiveStream.Title = liveStreamDto.Title;
             existingLiveStream.Description = liveStreamDto.Description;
             existingLiveStream.ScheduledAt = liveStreamDto.ScheduledAt;
-            existingLiveStream.UpdatedAt = DateTime.Now;
+            existingLiveStream.UpdatedAt = DateTime.UtcNow;
 
             await _context.SaveChangesAsync();
 

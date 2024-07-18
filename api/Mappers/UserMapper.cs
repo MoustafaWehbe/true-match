@@ -12,6 +12,17 @@ namespace api.Mappers
                 LiveStreams = userModel.LiveStreams,
                 Media = userModel.Media,
                 UserProfile = userModel.UserProfile,
+                FirstName = userModel.FirstName,
+                LastName = userModel.LastName,
+            };
+        }
+
+        public static UserSimplifiedDto ToUserSimplifiedDto(this User userModel)
+        {
+            return new UserSimplifiedDto
+            {
+                FirstName = userModel.FirstName,
+                LastName = userModel.LastName
             };
         }
     }

@@ -12,7 +12,7 @@ namespace api.Dtos
         public DateTime? FinishedAt { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
-        public UserDto? User { get; set; }
+        public UserSimplifiedDto? User { get; set; }
         public ICollection<LiveStreamParticipant> LiveStreamParticipants { get; set; } = new List<LiveStreamParticipant>();
     }
 }

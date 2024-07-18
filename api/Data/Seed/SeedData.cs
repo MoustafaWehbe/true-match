@@ -8,14 +8,35 @@ namespace api.Data
     {
         public static void Seed(ModelBuilder builder)
         {
-            // Seed roles
+            seedRoles(builder);
+            seedInterests(builder);
+            seedLifeStyles(builder);
+            seedQuestionsAndQuestionCategories(builder);
+            seedLiveStreamContent(builder);
+        }
+
+        private static void seedLiveStreamContent(ModelBuilder builder)
+        {
+            builder.Entity<LiveStreamContent>().HasData(new List<LiveStreamContent> {
+                new LiveStreamContent{Id = 1, Title = "Meet & Greet", Description = "Give us the scoop on the person behind the screen!", Duration = 10, Order = 1},
+                new LiveStreamContent{Id = 2, Title = "Hobby Showcase & Fun Fact Extravaganza", Description = "Share your passions and two quirky facts about yourself!", Duration = 2 * 60, Order = 2},
+                new LiveStreamContent{Id = 3, Title = "Random Question Roulette", Description = "Brace yourself for some off-the-wall questions and give your best answers within the time limit!", Duration = 5 * 60, Order = 3},
+                new LiveStreamContent{Id = 4, Title = "Spotlight Q&A", Description = "Get ready to field questions from your adoring audience!", Duration = 5 * 60, Order = 4},
+                new LiveStreamContent{Id = 5, Title = "The Final Rose", Description = "Pop your best question to the remaining contenders, and whoever nails it gets the match!", Duration = 60, Order = 5}
+            });
+        }
+
+        private static void seedRoles(ModelBuilder builder)
+        {
             builder.Entity<IdentityRole>().HasData(new List<IdentityRole>
             {
                 new IdentityRole { Name = "Admin", NormalizedName = "ADMIN" },
                 new IdentityRole { Name = "User", NormalizedName = "USER" },
             });
+        }
 
-            // Seed interests
+        private static void seedInterests(ModelBuilder builder)
+        {
             builder.Entity<Interest>().HasData(new List<Interest>
             {
                 new Interest { Id = 1, Name = "Travel" },
@@ -24,8 +45,10 @@ namespace api.Data
                 new Interest { Id = 4, Name = "Music" },
                 new Interest { Id = 5, Name = "Movies" },
             });
+        }
 
-            // Seed lifestyles
+        private static void seedLifeStyles(ModelBuilder builder)
+        {
             builder.Entity<LifeStyle>().HasData(new List<LifeStyle>
             {
                 new LifeStyle { Id = 1, Name = "Smoking" },
@@ -33,8 +56,6 @@ namespace api.Data
                 new LifeStyle { Id = 3, Name = "Drinking" },
                 new LifeStyle { Id = 4, Name = "Pets" },
             });
-
-            seedQuestionsAndQuestionCategories(builder);
         }
 
         private static void seedQuestionsAndQuestionCategories(ModelBuilder builder)
