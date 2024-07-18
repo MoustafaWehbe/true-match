@@ -12,7 +12,7 @@ namespace api.Models
     [JsonConverter(typeof(StringEnumConverter))]
     public enum MatchOrigin
     {
-        LiveStream,
+        Room,
         Swipe
     }
     [JsonConverter(typeof(StringEnumConverter))]

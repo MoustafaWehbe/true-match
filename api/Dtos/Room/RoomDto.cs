@@ -2,7 +2,7 @@ using api.Models;
 
 namespace api.Dtos
 {
-    public class LiveStreamDto
+    public class RoomDto
     {
         public int Id { get; set; }
         public string Title { get; set; } = string.Empty;
@@ -13,6 +13,6 @@ namespace api.Dtos
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
         public UserSimplifiedDto? User { get; set; }
-        public ICollection<LiveStreamParticipant> LiveStreamParticipants { get; set; } = new List<LiveStreamParticipant>();
+        public ICollection<RoomParticipant> RoomParticipants { get; set; } = new List<RoomParticipant>();
     }
 }

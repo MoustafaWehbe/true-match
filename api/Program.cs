@@ -62,11 +62,11 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IInterestRepository, InterestRepository>();
 builder.Services.AddScoped<ILifeStyleRepository, LifeStyleRepository>();
-builder.Services.AddScoped<ILiveStreamRepository, LiveStreamRepository>();
-builder.Services.AddScoped<ILiveStreamParticipantsRepository, LiveStreamParticipantsRepository>();
+builder.Services.AddScoped<IRoomRepository, RoomRepository>();
+builder.Services.AddScoped<IRoomParticipantsRepository, RoomParticipantsRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserProfileRepository, UserProfileRepository>();
-builder.Services.AddScoped<ILiveStreamContentRepository, LiveStreamContentRepository>();
+builder.Services.AddScoped<IRoomContentRepository, RoomContentRepository>();
 builder.Services.AddScoped<IQuestionCategoryRepository, QuestionCategoryRepository>();
 builder.Services.AddScoped<ISystemQuestionRepository, SystemQuestionRepository>();
 builder.Services.AddScoped<IMatchRepository, MatchRepository>();

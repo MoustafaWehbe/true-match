@@ -3,8 +3,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace api.Models
 {
-    [Table("LiveStreamContent")]
-    public class LiveStreamContent
+    [Table("RoomContent")]
+    public class RoomContent
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

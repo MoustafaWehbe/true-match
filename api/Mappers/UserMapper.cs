@@ -9,7 +9,7 @@ namespace api.Mappers
         {
             return new UserDto
             {
-                LiveStreams = userModel.LiveStreams,
+                Rooms = userModel.Rooms,
                 Media = userModel.Media,
                 UserProfile = userModel.UserProfile,
                 FirstName = userModel.FirstName,

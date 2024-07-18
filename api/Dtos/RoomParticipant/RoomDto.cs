@@ -1,6 +1,6 @@
 namespace api.Dtos
 {
-    public class LiveStreamParticipantDto
+    public class RoomParticipantDto
     {
         public bool IsInterested { get; set; } = false;
         public bool Attended { get; set; } = false;

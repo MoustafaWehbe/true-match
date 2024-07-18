@@ -1,6 +1,6 @@
 namespace api.Dtos
 {
-    public class LiveStreamContentDto
+    public class RoomContentDto
     {
         public int Id { get; set; }
         public string Title { get; set; } = string.Empty;

@@ -12,14 +12,14 @@ namespace api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class LiveStreamController : ControllerBase
+    public class RoomController : ControllerBase
     {
-        private readonly ILiveStreamRepository _liveStreamRepo;
+        private readonly IRoomRepository _roomRepo;
         private readonly UserManager<User> _userManager;
 
-        public LiveStreamController(ILiveStreamRepository liveStreamRepo, UserManager<User> userManager)
+        public RoomController(IRoomRepository roomRepo, UserManager<User> userManager)
         {
-            _liveStreamRepo = liveStreamRepo;
+            _roomRepo = roomRepo;
             _userManager = userManager;
         }
 
@@ -30,23 +30,23 @@ namespace api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var liveStreams = await _liveStreamRepo.GetAllAsync();
+            var rooms = await _roomRepo.GetAllAsync();
 
-            var liveStreamDto = liveStreams.Select(s => s.ToLiveStreamDto());
+            var roomDto = rooms.Select(s => s.ToRoomDto());
 
-            return Ok(ResponseHelper.CreateSuccessResponse(liveStreamDto));
+            return Ok(ResponseHelper.CreateSuccessResponse(roomDto));
         }
 
         [HttpPost]
         [Authorize]
-        public async Task<ActionResult<LiveStream>> CreateLiveStream([FromBody] CreateLiveStreamDto liveStreamDto)
+        public async Task<ActionResult<Room>> CreateRoom([FromBody] CreateRoomDto roomDto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (liveStreamDto == null)
+            if (roomDto == null)
             {
                 return BadRequest("Invalid live stream data.");
             }
@@ -58,24 +58,24 @@ namespace api.Controllers
                 return NotFound("User was not found.");
             }
 
-            var liveStream = liveStreamDto.ToLiveStreamFromCreate(user.Id);
+            var room = roomDto.ToRoomFromCreate(user.Id);
 
-            var createdLiveStream = await _liveStreamRepo.CreateAsync(liveStream);
+            var createdRoom = await _roomRepo.CreateAsync(room);
 
-            return CreatedAtAction(nameof(GetLiveStreamById), new { id = createdLiveStream.Id }, liveStream.ToLiveStreamDto());
+            return CreatedAtAction(nameof(GetRoomById), new { id = createdRoom.Id }, room.ToRoomDto());
         }
 
         [HttpPut]
         [Route("{id:int}")]
         [Authorize]
-        public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateLiveStreamDto updateStreamDto)
+        public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateRoomDto updateStreamDto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var liveStream = await _liveStreamRepo.UpdateAsync(id, updateStreamDto);
+            var room = await _roomRepo.UpdateAsync(id, updateStreamDto);
             var user = await _userManager.FindByEmailAsync(User.GetEmail());
 
             if (user == null)
@@ -83,35 +83,35 @@ namespace api.Controllers
                 return NotFound("User was not found.");
             }
 
-            if (liveStream == null)
+            if (room == null)
             {
                 return NotFound();
             }
 
-            if (user.Id != liveStream.UserId)
+            if (user.Id != room.UserId)
             {
                 return Unauthorized("Action not allowed");
             }
 
-            return Ok(ResponseHelper.CreateSuccessResponse(liveStream.ToLiveStreamDto()));
+            return Ok(ResponseHelper.CreateSuccessResponse(room.ToRoomDto()));
         }
 
         [HttpGet("{id}")]
         [Authorize]
-        public async Task<ActionResult<LiveStream>> GetLiveStreamById(int id)
+        public async Task<ActionResult<Room>> GetRoomById(int id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var liveStream = await _liveStreamRepo.GetByIdAsync(id);
+            var room = await _roomRepo.GetByIdAsync(id);
 
-            if (liveStream == null)
+            if (room == null)
             {
                 return NotFound();
             }
 
-            return Ok(ResponseHelper.CreateSuccessResponse(liveStream.ToLiveStreamDto()));
+            return Ok(ResponseHelper.CreateSuccessResponse(room.ToRoomDto()));
         }
 
     }

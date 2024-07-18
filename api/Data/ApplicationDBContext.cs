@@ -15,9 +15,9 @@ namespace api.Data
         public DbSet<UserProfileLifeStyle> userProfileLifeStyles { get; set; }
         public DbSet<LifeStyle> LifeStyles { get; set; }
         public DbSet<Interest> Interests { get; set; }
-        public DbSet<LiveStream> LiveStreams { get; set; }
-        public DbSet<LiveStreamContent> LiveStreamContent { get; set; }
-        public DbSet<LiveStreamParticipant> LiveStreamParticipants { get; set; }
+        public DbSet<Room> Rooms { get; set; }
+        public DbSet<RoomContent> RoomContent { get; set; }
+        public DbSet<RoomParticipant> RoomParticipants { get; set; }
         public DbSet<UserProfile> UserProfiles { get; set; }
         public List<Media> Media { get; set; } = new List<Media>();
         public DbSet<Match> Matches { get; set; }
@@ -30,7 +30,7 @@ namespace api.Data
 
             builder.ApplyConfiguration(new UserProfileInterestConfiguration());
             builder.ApplyConfiguration(new UserProfileLifeStyleConfiguration());
-            builder.ApplyConfiguration(new LiveStreamParticipantConfiguration());
+            builder.ApplyConfiguration(new RoomParticipantConfiguration());
             builder.ApplyConfiguration(new UserConfiguration());
             builder.ApplyConfiguration(new MatchConfiguration());
 

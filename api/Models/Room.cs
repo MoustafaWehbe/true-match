@@ -3,8 +3,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace api.Models
 {
-    [Table("LiveStreams")]
-    public class LiveStream
+    [Table("Rooms")]
+    public class Room
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -21,6 +21,6 @@ namespace api.Models
         public required string UserId { get; set; }
         public User? User { get; set; }
 
-        public ICollection<LiveStreamParticipant> LiveStreamParticipants { get; set; } = new List<LiveStreamParticipant>();
+        public ICollection<RoomParticipant> RoomParticipants { get; set; } = new List<RoomParticipant>();
     }
 }

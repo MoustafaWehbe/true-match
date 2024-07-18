@@ -9,7 +9,7 @@ namespace api.Data
         public void Configure(EntityTypeBuilder<User> builder)
         {
             builder
-            .HasMany(u => u.LiveStreams)
+            .HasMany(u => u.Rooms)
             .WithOne(l => l.User)
             .HasForeignKey(l => l.UserId);
 

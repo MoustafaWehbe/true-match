@@ -22,8 +22,8 @@ namespace api.Repository
             }
 
             return await _context.Users
-                .Include(u => u.LiveStreams)
-                    .ThenInclude(ls => ls.LiveStreamParticipants)
+                .Include(u => u.Rooms)
+                    .ThenInclude(ls => ls.RoomParticipants)
                 .Include(u => u.Media)
                 .Include(u => u.UserProfile)
                 .Include(u => u.UserProfile)
@@ -52,8 +52,8 @@ namespace api.Repository
         public async Task<User?> GetByIdAsync(string userId)
         {
             return await _context.Users
-                .Include(u => u.LiveStreams)
-                    .ThenInclude(ls => ls.LiveStreamParticipants)
+                .Include(u => u.Rooms)
+                    .ThenInclude(ls => ls.RoomParticipants)
                 .Include(u => u.Media)
                 .Include(u => u.UserProfile)
                 .Include(u => u.UserProfile)

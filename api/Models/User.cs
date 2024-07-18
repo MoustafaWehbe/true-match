@@ -11,8 +11,8 @@ namespace api.Models
         [Column(TypeName = "VARCHAR(50)")]
         public required string LastName { get; set; }
 
-        public List<LiveStream> LiveStreams { get; set; } = new List<LiveStream>();
-        public List<LiveStreamParticipant> LiveStreamParticipants { get; set; } = new List<LiveStreamParticipant>();
+        public List<Room> Rooms { get; set; } = new List<Room>();
+        public List<RoomParticipant> RoomParticipants { get; set; } = new List<RoomParticipant>();
         public List<Media> Media { get; set; } = new List<Media>();
         public UserProfile? UserProfile { get; set; }
         public List<Match> MatchesAsUser1 { get; set; } = new List<Match>();
