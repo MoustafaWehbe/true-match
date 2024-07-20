@@ -77,7 +77,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddSwaggerGen(option =>
 {
-    option.SwaggerDoc("v1", new OpenApiInfo { Title = "Demo API", Version = "v1" });
+    option.SwaggerDoc("v1", new OpenApiInfo { Title = "Dapp Api", Version = "v1" });
     option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         In = ParameterLocation.Header,
@@ -112,8 +112,17 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI(c =>
     {
         c.ConfigObject.AdditionalItems.Add("persistAuthorization", true);
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Dapp Api V1");
     });
 }
+
+app.UseCors(x => x
+     .AllowAnyMethod()
+     .AllowAnyHeader()
+      //.AllowCredentials()
+      .AllowAnyOrigin()
+    //.WithOrigins("https://localhost:44351", "http://localhost:3000"));
+    .SetIsOriginAllowed(origin => true));
 
 app.UseHttpsRedirection();
 

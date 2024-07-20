@@ -11,7 +11,7 @@ namespace api.Mappers
             {
                 Rooms = userModel.Rooms,
                 Media = userModel.Media,
-                UserProfile = userModel.UserProfile,
+                UserProfile = userModel.UserProfile?.ToUserProfileDto(),
                 FirstName = userModel.FirstName,
                 LastName = userModel.LastName,
             };

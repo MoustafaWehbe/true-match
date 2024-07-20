@@ -28,6 +28,7 @@
 3. Then, run the development server:
 
 ```bash
+pnpm run generate-types
 pnpm dev
 ```
 

@@ -11,13 +11,14 @@ export type LayoutProps = {
 };
 
 const Layout = ({ children }: LayoutProps) => {
-  return AUTH_ROUTES.includes(
-    window ? window.location.pathname.slice(1) : ''
-  ) ? (
-    <AuthLayout children={children} />
-  ) : (
-    <MainLayout children={children} />
-  );
+  if (typeof window !== 'undefined') {
+    return AUTH_ROUTES.includes(window.location.pathname.slice(1)) ? (
+      <AuthLayout children={children} />
+    ) : (
+      <MainLayout children={children} />
+    );
+  }
+  return <AuthLayout children={children} />;
 };
 
 export default Layout;

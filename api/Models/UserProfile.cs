@@ -20,7 +20,7 @@ namespace api.Models
         [Column(TypeName = "VARCHAR(255)")]
         public string? Bio { get; set; }
 
-        [Column(TypeName = "decimal(3, 2)")]
+        [Column(TypeName = "decimal(5, 2)")]
         public decimal Height { get; set; }
 
         [Column(TypeName = "VARCHAR(50)")]

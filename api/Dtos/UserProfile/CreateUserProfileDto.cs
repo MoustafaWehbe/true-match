@@ -18,7 +18,7 @@ namespace api.Dtos
         public string Bio { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Height is required")]
-        [Range(0, 3.0, ErrorMessage = "Height must be between 0 and 3 meters")]
+        [Range(0, 300.0, ErrorMessage = "Height must be between 0 and 3 meters")]
         public decimal Height { get; set; }
 
         [Required(ErrorMessage = "Relationship goal is required")]
@@ -33,10 +33,7 @@ namespace api.Dtos
         [Required(ErrorMessage = "Love style is required")]
         public string LoveStyle { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "User ID is required")]
-        public string UserId { get; set; } = string.Empty;
-
-        public List<UserProfileInterest> UserProfileInterests { get; set; } = new List<UserProfileInterest>();
-        public List<UserProfileLifeStyle> UserProfileLifeStyles { get; set; } = new List<UserProfileLifeStyle>();
+        public List<UserProfileInterestDto> UserProfileInterests { get; set; } = new List<UserProfileInterestDto>();
+        public List<UserProfileLifeStyleDto> UserProfileLifeStyles { get; set; } = new List<UserProfileLifeStyleDto>();
     }
 }

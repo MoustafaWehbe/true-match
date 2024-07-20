@@ -13,10 +13,32 @@ import {
 } from '@chakra-ui/react';
 import { FormControl, FormErrorMessage, useToast } from '@chakra-ui/react';
 import { useFormik } from 'formik';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import * as Yup from 'yup';
+import { AppDispatch, RootState } from '~/lib/state/store';
+import { registerUser } from '~/lib/state/user/userSlice';
 
 function SignupForm() {
   const toast = useToast();
+  const dispatch = useDispatch<AppDispatch>();
+  const { loading, error, user } = useSelector(
+    (state: RootState) => state.user
+  );
+
+  console.log(user);
+
+  useEffect(() => {
+    if (error) {
+      toast({
+        title: 'Registration Error',
+        description: error,
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      });
+    }
+  }, [error, toast]);
 
   const formik = useFormik({
     initialValues: {
@@ -26,13 +48,11 @@ function SignupForm() {
       password: '',
     },
     onSubmit: (values) => {
-      toast({
-        title: 'Account created.',
-        description: `Hey, ${values.firstName + ' ' + values.lastName}. We've created your account for you.`,
-        status: 'success',
-        duration: 3000,
-        isClosable: true,
-      });
+      dispatch(
+        registerUser({
+          ...values,
+        })
+      );
       formik.handleReset({});
     },
     validationSchema: Yup.object({
@@ -156,8 +176,10 @@ function SignupForm() {
                     bg: 'pink.500',
                   }}
                   type="submit"
+                  isLoading={loading}
+                  loadingText={'Registering'}
                 >
-                  Sign in
+                  Register
                 </Button>
                 <Stack
                   direction={{ base: 'column', sm: 'row' }}
