@@ -13,10 +13,48 @@ import {
 } from '@chakra-ui/react';
 import { FormControl, FormErrorMessage, useToast } from '@chakra-ui/react';
 import { useFormik } from 'formik';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import * as Yup from 'yup';
+import { AppDispatch, RootState } from '~/lib/state/store';
+import { loginUser } from '~/lib/state/user/userSlice';
 
 function SignupForm() {
   const toast = useToast();
+  const dispatch = useDispatch<AppDispatch>();
+  const { loginLoading, loginError, loginResult } = useSelector(
+    (state: RootState) => state.user
+  );
+  const router = useRouter();
+
+  useEffect(() => {
+    if (loginResult?.statusCode === 200) {
+      toast({
+        title: 'Registration Succeeded!',
+        status: 'success',
+        duration: 5000,
+        isClosable: true,
+      });
+      if (window) {
+        window.location.href = '/';
+      } else {
+        router.push('/');
+      }
+    }
+  }, [loginResult]);
+
+  useEffect(() => {
+    if (loginError) {
+      toast({
+        title: 'Login Error',
+        description: loginError,
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      });
+    }
+  }, [loginError, toast]);
 
   const formik = useFormik({
     initialValues: {
@@ -24,12 +62,11 @@ function SignupForm() {
       password: '',
     },
     onSubmit: (values) => {
-      toast({
-        title: 'Account created.',
-        status: 'success',
-        duration: 3000,
-        isClosable: true,
-      });
+      dispatch(
+        loginUser({
+          ...values,
+        })
+      );
       formik.handleReset({});
     },
     validationSchema: Yup.object({
@@ -111,6 +148,8 @@ function SignupForm() {
                     bg: 'pink.500',
                   }}
                   type="submit"
+                  isLoading={loginLoading}
+                  loadingText={'Loging in...'}
                 >
                   Sign in
                 </Button>

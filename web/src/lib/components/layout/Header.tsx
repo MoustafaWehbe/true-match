@@ -9,8 +9,19 @@ import {
 import { CiUser } from 'react-icons/ci';
 
 import HeaderPopover from '../header/HeaderPopover';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '~/lib/state/store';
+import { logout } from '~/lib/state/user/userSlice';
 
 const Header = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  const { user } = useSelector((state: RootState) => state.user);
+
+  const onLogout = () => {
+    dispatch(logout());
+    window.location.href = '/login';
+  };
+
   return (
     <Flex
       as="nav"
@@ -35,7 +46,7 @@ const Header = () => {
           <Icon as={CiUser} />
         </InputRightAddon>
       </InputGroup>
-      <HeaderPopover />
+      {user && <HeaderPopover onLogout={onLogout} user={user} />}
     </Flex>
   );
 };

@@ -1,4 +1,3 @@
-.openapi-generator-ignore
 apis/AccountApi.ts
 apis/InteresetApi.ts
 apis/LifeStyleApi.ts
@@ -28,10 +27,12 @@ models/QuestionCategoryDto.ts
 models/RegisterDto.ts
 models/Room.ts
 models/RoomParticipant.ts
+models/StringApiResponse.ts
 models/SystemQuestion.ts
 models/UpdateRoomDto.ts
 models/UpdateSystemQuestionDto.ts
 models/User.ts
+models/UserApiResponse.ts
 models/UserProfile.ts
 models/UserProfileInterest.ts
 models/UserProfileInterestDto.ts

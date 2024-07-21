@@ -1,8 +1,6 @@
 require('dotenv').config({ path: '.env.local' });
 const { exec } = require('child_process');
 
-console.log(process.env);
-
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 if (!apiUrl) {

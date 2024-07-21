@@ -13,6 +13,7 @@ import {
 } from '@chakra-ui/react';
 import { FormControl, FormErrorMessage, useToast } from '@chakra-ui/react';
 import { useFormik } from 'formik';
+import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Yup from 'yup';
@@ -22,23 +23,38 @@ import { registerUser } from '~/lib/state/user/userSlice';
 function SignupForm() {
   const toast = useToast();
   const dispatch = useDispatch<AppDispatch>();
-  const { loading, error, user } = useSelector(
+  const { registerLoading, registerError, registerResult } = useSelector(
     (state: RootState) => state.user
   );
-
-  console.log(user);
+  const router = useRouter();
 
   useEffect(() => {
-    if (error) {
+    if (registerResult?.statusCode === 200) {
+      toast({
+        title: 'Registration Succeeded!',
+        status: 'success',
+        duration: 5000,
+        isClosable: true,
+      });
+      if (window) {
+        window.location.href = '/';
+      } else {
+        router.push('/');
+      }
+    }
+  }, [registerResult]);
+
+  useEffect(() => {
+    if (registerError) {
       toast({
         title: 'Registration Error',
-        description: error,
+        description: registerError,
         status: 'error',
         duration: 5000,
         isClosable: true,
       });
     }
-  }, [error, toast]);
+  }, [registerError, toast]);
 
   const formik = useFormik({
     initialValues: {
@@ -176,8 +192,8 @@ function SignupForm() {
                     bg: 'pink.500',
                   }}
                   type="submit"
-                  isLoading={loading}
-                  loadingText={'Registering'}
+                  isLoading={registerLoading}
+                  loadingText={'Registering...'}
                 >
                   Register
                 </Button>

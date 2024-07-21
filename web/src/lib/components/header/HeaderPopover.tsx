@@ -12,14 +12,21 @@ import {
 } from '@chakra-ui/react';
 import { CiUser } from 'react-icons/ci';
 import { IoIosLogOut } from 'react-icons/io';
-import ThemeToggle from '~/lib/components/theme/ThemeToggle';
 
-const HeaderPopover = () => (
+import ThemeToggle from '~/lib/components/theme/ThemeToggle';
+import { User } from '~/lib/openApiGen';
+
+type Props = {
+  onLogout: () => void;
+  user: User;
+};
+
+const HeaderPopover = ({ onLogout, user }: Props) => (
   <Popover trigger="hover" placement="top-end">
     <PopoverTrigger>
       <Avatar
         size={'sm'}
-        name="mario"
+        name={user.firstName!}
         backgroundColor="teal"
         color={'white'}
         cursor={'pointer'}
@@ -50,6 +57,7 @@ const HeaderPopover = () => (
             colorScheme="teal"
             variant="link"
             leftIcon={<Icon as={IoIosLogOut} />}
+            onClick={onLogout}
           >
             Logout
           </Button>
