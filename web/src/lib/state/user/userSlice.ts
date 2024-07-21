@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { LoginDto, RegisterDto, User, UserApiResponse } from '~/lib/openApiGen';
 import axiosInstance from '~/lib/utils/api/axiosConfig';
-import { TOKEN } from '~/lib/utils/localStorage';
+import { TOKEN } from '~/lib/consts/localStorage';
 
 export interface UserState {
   loginResult: UserApiResponse | null;
