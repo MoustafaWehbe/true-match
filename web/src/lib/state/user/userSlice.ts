@@ -1,6 +1,13 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { LoginDto, RegisterDto, User, UserApiResponse } from '~/lib/openApiGen';
+import {
+  LoginDto,
+  RegisterDto,
+  SimpleApiResponse,
+  SimpleApiResponseApiResponse,
+  User,
+  UserApiResponse,
+} from '~/lib/openApiGen';
 import axiosInstance from '~/lib/utils/api/axiosConfig';
 import { TOKEN } from '~/lib/consts/localStorage';
 
@@ -12,6 +19,7 @@ export interface UserState {
   loginError: string | null;
   registerError: string | null;
   user: User | null;
+  logoutResponseMessage: string;
 }
 
 export interface ExtendedUserApiResponse extends Omit<UserApiResponse, 'data'> {
@@ -49,8 +57,27 @@ export const loginUser = createAsyncThunk<
       '/api/Account/login',
       userData
     );
-    // const result = response.data as ExtendedUserApiResponse;
     localStorage.setItem(TOKEN, response.data.data.token);
+    return response.data;
+  } catch (error) {
+    let errorMessage = 'Something went wrong!';
+    if (axios.isAxiosError(error) && error.response) {
+      errorMessage = error.response.data.message || errorMessage;
+    }
+    return rejectWithValue(errorMessage);
+  }
+});
+
+export const logoutUser = createAsyncThunk<
+  SimpleApiResponseApiResponse,
+  undefined,
+  { rejectValue: string }
+>('user/logoutUser', async (userData, { rejectWithValue }) => {
+  try {
+    const response = await axiosInstance.post<SimpleApiResponseApiResponse>(
+      '/api/Account/logout'
+    );
+    localStorage.removeItem(TOKEN);
     return response.data;
   } catch (error) {
     let errorMessage = 'Something went wrong!';
@@ -86,23 +113,13 @@ const initialState: UserState = {
   loginError: null,
   registerError: null,
   user: null,
+  logoutResponseMessage: '',
 };
 
 const userSlice = createSlice({
   name: 'user',
   initialState,
-  reducers: {
-    logout(state) {
-      state.user = null;
-      state.registerError = null;
-      state.loginError = null;
-      state.loginResult = null;
-      state.registerResult = null;
-      state.registerLoading = false;
-      state.loginLoading = false;
-      localStorage.removeItem(TOKEN);
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(registerUser.pending, (state) => {
@@ -147,9 +164,21 @@ const userSlice = createSlice({
         (state, action: PayloadAction<User | null>) => {
           state.user = action.payload;
         }
+      )
+      .addCase(
+        logoutUser.fulfilled,
+        (state, action: PayloadAction<SimpleApiResponseApiResponse>) => {
+          state.user = null;
+          state.registerError = null;
+          state.loginError = null;
+          state.loginResult = null;
+          state.registerResult = null;
+          state.registerLoading = false;
+          state.loginLoading = false;
+          state.logoutResponseMessage = action.payload.data?.message ?? '';
+        }
       );
   },
 });
 
 export default userSlice.reducer;
-export const { logout } = userSlice.actions;

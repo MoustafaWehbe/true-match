@@ -15,10 +15,13 @@
 
 import * as runtime from '../runtime';
 import type {
+  ProblemDetails,
   QuestionCategory,
   QuestionCategoryDto,
 } from '../models/index';
 import {
+    ProblemDetailsFromJSON,
+    ProblemDetailsToJSON,
     QuestionCategoryFromJSON,
     QuestionCategoryToJSON,
     QuestionCategoryDtoFromJSON,

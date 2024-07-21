@@ -16,12 +16,15 @@
 import * as runtime from '../runtime';
 import type {
   CreateSystemQuestionDto,
+  ProblemDetails,
   SystemQuestion,
   UpdateSystemQuestionDto,
 } from '../models/index';
 import {
     CreateSystemQuestionDtoFromJSON,
     CreateSystemQuestionDtoToJSON,
+    ProblemDetailsFromJSON,
+    ProblemDetailsToJSON,
     SystemQuestionFromJSON,
     SystemQuestionToJSON,
     UpdateSystemQuestionDtoFromJSON,

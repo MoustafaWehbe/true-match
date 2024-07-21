@@ -2,6 +2,7 @@ using api.Dtos;
 using api.Helpers;
 using api.Interfaces;
 using api.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -48,6 +49,15 @@ namespace api.Controllers
                 Email = user.Email!,
                 Token = _tokenService.CreateToken(user)
             }));
+        }
+
+        [HttpPost("logout")]
+        [ProducesResponseType(typeof(ApiResponse<SimpleApiResponse>), 200)]
+        [Authorize]
+        public async Task<IActionResult> Logout()
+        {
+            await _signinManager.SignOutAsync();
+            return Ok(ResponseHelper.CreateSuccessResponse(new { message = "Successfully logged out." }));
         }
 
         [HttpPost("register")]

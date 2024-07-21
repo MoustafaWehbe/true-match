@@ -58,6 +58,9 @@ namespace api.Controllers
 
         [HttpPut("{id}")]
         [Authorize(Roles = "Admin")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(403)]
+        [ProducesResponseType(404)]
         public async Task<IActionResult> UpdateSystemQuestion(int id, UpdateSystemQuestionDto systemQuestionDto)
         {
             var systemQuestion = await _systemQuestionRepository.GetByIdAsync(id);
@@ -77,6 +80,9 @@ namespace api.Controllers
 
         [HttpDelete("{id}")]
         [Authorize(Roles = "Admin")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(403)]
+        [ProducesResponseType(404)]
         public async Task<IActionResult> DeleteSystemQuestion(int id)
         {
             var question = await _systemQuestionRepository.GetByIdAsync(id);

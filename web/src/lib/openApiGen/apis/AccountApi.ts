@@ -17,6 +17,7 @@ import * as runtime from '../runtime';
 import type {
   LoginDto,
   RegisterDto,
+  SimpleApiResponseApiResponse,
   StringApiResponse,
   UserApiResponse,
 } from '../models/index';
@@ -25,6 +26,8 @@ import {
     LoginDtoToJSON,
     RegisterDtoFromJSON,
     RegisterDtoToJSON,
+    SimpleApiResponseApiResponseFromJSON,
+    SimpleApiResponseApiResponseToJSON,
     StringApiResponseFromJSON,
     StringApiResponseToJSON,
     UserApiResponseFromJSON,
@@ -76,6 +79,38 @@ export class AccountApi extends runtime.BaseAPI {
      */
     async apiAccountLoginPost(requestParameters: ApiAccountLoginPostRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserApiResponse> {
         const response = await this.apiAccountLoginPostRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     */
+    async apiAccountLogoutPostRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<SimpleApiResponseApiResponse>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("Bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/api/Account/logout`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => SimpleApiResponseApiResponseFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async apiAccountLogoutPost(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SimpleApiResponseApiResponse> {
+        const response = await this.apiAccountLogoutPostRaw(initOverrides);
         return await response.value();
     }
 

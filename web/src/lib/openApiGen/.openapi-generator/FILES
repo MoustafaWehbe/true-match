@@ -22,11 +22,14 @@ models/Match.ts
 models/MatchOrigin.ts
 models/Media.ts
 models/MediaType.ts
+models/ProblemDetails.ts
 models/QuestionCategory.ts
 models/QuestionCategoryDto.ts
 models/RegisterDto.ts
 models/Room.ts
 models/RoomParticipant.ts
+models/SimpleApiResponse.ts
+models/SimpleApiResponseApiResponse.ts
 models/StringApiResponse.ts
 models/SystemQuestion.ts
 models/UpdateRoomDto.ts

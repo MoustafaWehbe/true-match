@@ -11,15 +11,23 @@ import { CiUser } from 'react-icons/ci';
 import HeaderPopover from '../header/HeaderPopover';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '~/lib/state/store';
-import { logout } from '~/lib/state/user/userSlice';
+import { logoutUser } from '~/lib/state/user/userSlice';
+import { useEffect } from 'react';
 
 const Header = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { user } = useSelector((state: RootState) => state.user);
+  const { user, logoutResponseMessage } = useSelector(
+    (state: RootState) => state.user
+  );
+
+  useEffect(() => {
+    if (logoutResponseMessage) {
+      window.location.href = '/login';
+    }
+  });
 
   const onLogout = () => {
-    dispatch(logout());
-    window.location.href = '/login';
+    dispatch(logoutUser());
   };
 
   return (

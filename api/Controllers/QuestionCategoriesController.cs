@@ -56,6 +56,9 @@ namespace api.Controllers
 
         [HttpPut("{id}")]
         [Authorize(Roles = "Admin")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(403)]
+        [ProducesResponseType(404)]
         public async Task<IActionResult> UpdateQuestionCategory(int id, QuestionCategoryDto categoryDto)
         {
             var category = await _questionCategoryRepository.GetByIdAsync(id);
@@ -74,6 +77,9 @@ namespace api.Controllers
 
         [HttpDelete("{id}")]
         [Authorize(Roles = "Admin")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(403)]
+        [ProducesResponseType(404)]
         public async Task<IActionResult> DeleteQuestionCategory(int id)
         {
             var category = await _questionCategoryRepository.GetByIdAsync(id);
