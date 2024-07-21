@@ -10,6 +10,7 @@ import {
   Link,
   Stack,
   Text,
+  useColorModeValue,
 } from '@chakra-ui/react';
 import { FormControl, FormErrorMessage, useToast } from '@chakra-ui/react';
 import { useFormik } from 'formik';
@@ -78,6 +79,13 @@ function SignupForm() {
     validateOnChange: true,
   });
 
+  const containerBg = useColorModeValue('whiteAlpha.900', 'gray.800');
+  const headingColor = useColorModeValue('gray.800', 'white');
+  const textColor = useColorModeValue('gray.600', 'gray.400');
+  const linkColor = useColorModeValue('pink.400', 'pink.300');
+  const buttonBg = useColorModeValue('pink.400', 'pink.500');
+  const buttonHoverBg = useColorModeValue('pink.500', 'pink.400');
+
   return (
     <Container maxW="lg" pb="20px">
       <Stack
@@ -86,15 +94,15 @@ function SignupForm() {
         maxW="lg"
         py={8}
         px={6}
-        bg="whiteAlpha.900"
+        bg={containerBg}
         borderRadius="lg"
         boxShadow="xl"
       >
         <Stack align="center">
-          <Heading fontSize="4xl" color="gray.800">
+          <Heading fontSize="4xl" color={headingColor}>
             Sign in to your account
           </Heading>
-          <Text fontSize="lg" color="gray.600">
+          <Text fontSize="lg" color={textColor}>
             to find your perfect match ❤️
           </Text>
         </Stack>
@@ -114,6 +122,12 @@ function SignupForm() {
                   placeholder="Email Address"
                   value={formik.values.email}
                   onChange={formik.handleChange}
+                  bg={useColorModeValue('white', 'gray.700')}
+                  color={useColorModeValue('gray.800', 'white')}
+                  borderColor={useColorModeValue('gray.300', 'gray.600')}
+                  _placeholder={{
+                    color: useColorModeValue('gray.500', 'gray.400'),
+                  }}
                 />
                 {formik.touched.email && formik.errors.email && (
                   <FormErrorMessage>{formik.errors.email}</FormErrorMessage>
@@ -134,6 +148,12 @@ function SignupForm() {
                   placeholder="Password"
                   value={formik.values.password}
                   onChange={formik.handleChange}
+                  bg={useColorModeValue('white', 'gray.700')}
+                  color={useColorModeValue('gray.800', 'white')}
+                  borderColor={useColorModeValue('gray.300', 'gray.600')}
+                  _placeholder={{
+                    color: useColorModeValue('gray.500', 'gray.400'),
+                  }}
                 />
                 {formik.touched.password && formik.errors.password && (
                   <FormErrorMessage>{formik.errors.password}</FormErrorMessage>
@@ -142,14 +162,12 @@ function SignupForm() {
 
               <Stack spacing={10} mt={10}>
                 <Button
-                  bg="pink.400"
+                  bg={buttonBg}
                   color="white"
-                  _hover={{
-                    bg: 'pink.500',
-                  }}
+                  _hover={{ bg: buttonHoverBg }}
                   type="submit"
                   isLoading={loginLoading}
-                  loadingText={'Loging in...'}
+                  loadingText="Logging in..."
                 >
                   Sign in
                 </Button>
@@ -158,8 +176,8 @@ function SignupForm() {
                   align="start"
                   justify="space-between"
                 >
-                  <Link color="pink.400">Forgot password?</Link>
-                  <Link color="pink.400" href="signup">
+                  <Link color={linkColor}>Forgot password?</Link>
+                  <Link color={linkColor} href="signup">
                     Create an account
                   </Link>
                 </Stack>

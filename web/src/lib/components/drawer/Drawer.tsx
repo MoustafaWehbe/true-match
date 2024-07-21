@@ -1,16 +1,7 @@
 'use client';
 
 import type { PropsWithChildren } from 'react';
-import {
-  Drawer,
-  DrawerBody,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerContent,
-  Button,
-  Input,
-  useDisclosure,
-} from '@chakra-ui/react';
+import { Drawer, DrawerContent, useDisclosure } from '@chakra-ui/react';
 import Content from './DrawerContent';
 
 function DrawerExample({ children, ...rest }: PropsWithChildren) {

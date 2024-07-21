@@ -1,10 +1,18 @@
 import {
+  Avatar,
+  Box,
+  Button,
   Flex,
   Heading,
   Icon,
   Input,
   InputGroup,
   InputRightAddon,
+  keyframes,
+  Link,
+  Stack,
+  Text,
+  useColorModeValue,
 } from '@chakra-ui/react';
 import { CiUser } from 'react-icons/ci';
 
@@ -29,6 +37,19 @@ const Header = () => {
   const onLogout = () => {
     dispatch(logoutUser());
   };
+  const bgColor = useColorModeValue('whiteAlpha.900', 'gray.700');
+  const textColor = useColorModeValue('gray.800', 'whiteAlpha.900');
+  const hoverColor = useColorModeValue('pink.500', 'pink.300');
+  const borderColor = useColorModeValue('gray.200', 'gray.600');
+
+  const bounceAnimation = keyframes`
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-5px);
+    }
+  `;
 
   return (
     <Flex
@@ -37,23 +58,25 @@ const Header = () => {
       mb="3px"
       alignItems="center"
       width="full"
-      align="center"
-      height={'60px'}
-      justifyContent={'space-between'}
+      height="60px"
+      justifyContent="space-between"
+      bg={bgColor}
       boxShadow="rgba(0, 0, 0, 0.12) 0px 1px 1px"
+      borderRadius="lg"
+      border={`1px solid ${borderColor}`}
     >
-      <Heading as="h1" fontSize="1.5em">
-        DAPP
-      </Heading>
-      <InputGroup size="md" flex={1} maxWidth={'40%'}>
-        <Input placeholder="mysite" rounded={'25px'} />
-        <InputRightAddon
-          borderBottomRightRadius={'25px'}
-          borderTopRightRadius={'25px'}
+      <Box animation={`${bounceAnimation} 2s infinite`}>
+        <Heading
+          as={Link}
+          href="/"
+          fontSize="1.5em"
+          color={textColor}
+          _hover={{ textDecoration: 'none', color: hoverColor }}
         >
-          <Icon as={CiUser} />
-        </InputRightAddon>
-      </InputGroup>
+          DAPP
+        </Heading>
+      </Box>
+
       {user && <HeaderPopover onLogout={onLogout} user={user} />}
     </Flex>
   );

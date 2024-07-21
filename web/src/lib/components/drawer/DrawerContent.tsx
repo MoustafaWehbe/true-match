@@ -1,5 +1,15 @@
-import { List, ListItem, ListIcon, Link, Box, Avatar } from '@chakra-ui/react';
-import { CalendarIcon, EditIcon, AtSignIcon } from '@chakra-ui/icons';
+import {
+  List,
+  ListItem,
+  ListIcon,
+  Link,
+  Avatar,
+  Box,
+  Stack,
+  Heading,
+  useColorModeValue,
+  useColorMode,
+} from '@chakra-ui/react';
 import { RiCalendarScheduleLine } from 'react-icons/ri';
 import { MdOutlineLiveTv } from 'react-icons/md';
 import { GrSchedulePlay } from 'react-icons/gr';
@@ -7,83 +17,77 @@ import { BsEmojiHeartEyes } from 'react-icons/bs';
 import { BsChatDots } from 'react-icons/bs';
 
 const DrawerContent = () => {
+  const bgColor = useColorModeValue('whiteAlpha.900', 'gray.700');
+  const headingColor = useColorModeValue('gray.800', 'whiteAlpha.900');
+  const linkColor = useColorModeValue('gray.800', 'whiteAlpha.900');
+  const hoverColor = useColorModeValue('pink.500', 'pink.300');
+  const iconColor = useColorModeValue('pink.400', 'pink.200');
+
   return (
-    <List fontSize="1.2em" spacing={4}>
-      <ListItem>
-        <Link href="create">
-          <ListIcon as={RiCalendarScheduleLine} />
-          Upcoming events
-        </Link>
-      </ListItem>
-      <ListItem>
-        <Link href="create">
-          <ListIcon as={MdOutlineLiveTv} />
-          Live events
-        </Link>
-      </ListItem>
-      <ListItem>
-        <Link href="/">
-          <ListIcon as={GrSchedulePlay} />
-          Schedule an event
-        </Link>
-      </ListItem>
-      <ListItem>
-        <Link href="/">
-          <ListIcon as={BsEmojiHeartEyes} />
-          Matches
-        </Link>
-      </ListItem>
-      <ListItem>
-        <Link href="/">
-          <ListIcon as={BsChatDots} />
-          Chat
-        </Link>
-      </ListItem>
-      <ListItem>
-        <Link href="profile">
-          <Avatar
-            size={'sm'}
-            name="mario"
-            backgroundColor="teal"
-            color={'white'}
-            cursor={'pointer'}
-            mr="20px"
-          />
-          Profile
-        </Link>
-      </ListItem>
-    </List>
+    <Box bg={bgColor} p={6} borderRadius="lg" boxShadow="xl">
+      <Stack spacing={6} align="center" mb={6}>
+        <Heading fontSize="2xl" color={headingColor}>
+          Menu
+        </Heading>
+      </Stack>
+      <List fontSize="1.2em" spacing={4} color={linkColor}>
+        <ListItem>
+          <Link
+            href="create"
+            _hover={{ textDecoration: 'none', color: hoverColor }}
+          >
+            <ListIcon as={RiCalendarScheduleLine} color={iconColor} />
+            Upcoming events
+          </Link>
+        </ListItem>
+        <ListItem>
+          <Link
+            href="create"
+            _hover={{ textDecoration: 'none', color: hoverColor }}
+          >
+            <ListIcon as={MdOutlineLiveTv} color={iconColor} />
+            Live events
+          </Link>
+        </ListItem>
+        <ListItem>
+          <Link href="/" _hover={{ textDecoration: 'none', color: hoverColor }}>
+            <ListIcon as={GrSchedulePlay} color={iconColor} />
+            Schedule an event
+          </Link>
+        </ListItem>
+        <ListItem>
+          <Link href="/" _hover={{ textDecoration: 'none', color: hoverColor }}>
+            <ListIcon as={BsEmojiHeartEyes} color={iconColor} />
+            Matches
+          </Link>
+        </ListItem>
+        <ListItem>
+          <Link href="/" _hover={{ textDecoration: 'none', color: hoverColor }}>
+            <ListIcon as={BsChatDots} color={iconColor} />
+            Chat
+          </Link>
+        </ListItem>
+        <ListItem>
+          <Link
+            href="profile"
+            display="flex"
+            alignItems="center"
+            _hover={{ textDecoration: 'none', color: hoverColor }}
+          >
+            <Avatar
+              size={'xs'}
+              name="mario"
+              backgroundColor="pink.500"
+              color={'white'}
+              cursor={'pointer'}
+              mr="20px"
+            />
+            Profile
+          </Link>
+        </ListItem>
+      </List>
+    </Box>
   );
 };
 
 export default DrawerContent;
-
-// introduction
-// 2 Fun facts and Hobbies
-// system questions with timing
-// users question
-// the person should ask a question and choose to match with one person from the call
-
-// my weird but true story is...
-// the first item on my bucket list is...
-// My parents will like you if...
-// the key to my heart is...
-// My favrotie playlist is...
-// A surprising thing about me is...
-// If I'm not home, you can find me...
-// My biography would probably be called...
-// The hottest thing you can do is...
-// My go-to Karaoke song is...
-// My hidden talent is...
-// I can beat you in a game of...
-// My dream job is...
-// People would describe as...
-// My worst midnight snack habit...
-// ME: I'm a grown up. Also me:
-// If I have 20 mins left to live, I would...
-// First date wish list:
-// Perks of dating me...
-// I want someone who...
-// Two truths and a lie
-// My weakness is...
-// Life's too short to...
