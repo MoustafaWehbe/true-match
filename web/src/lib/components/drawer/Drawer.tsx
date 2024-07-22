@@ -1,27 +1,40 @@
 'use client';
 
-import type { PropsWithChildren } from 'react';
-import { Drawer, DrawerContent, useDisclosure } from '@chakra-ui/react';
+import { useRef, type PropsWithChildren } from 'react';
+import {
+  Button,
+  Drawer,
+  DrawerBody,
+  DrawerCloseButton,
+  DrawerContent,
+  useDisclosure,
+} from '@chakra-ui/react';
 import Content from './DrawerContent';
 
 function DrawerExample({ children, ...rest }: PropsWithChildren) {
-  const { onClose } = useDisclosure();
+  const { onClose, isOpen, onOpen } = useDisclosure();
+  const btnRef = useRef<any>();
 
   return (
-    <Drawer
-      {...rest}
-      isOpen={true}
-      placement="left"
-      onClose={onClose}
-      blockScrollOnMount={false}
-      autoFocus={false}
-      closeOnEsc={false}
-      lockFocusAcrossFrames={false}
-    >
-      <DrawerContent motionProps={{ transition: { duration: 0 } }}>
-        <Content />
-      </DrawerContent>
-    </Drawer>
+    <>
+      <Button ref={btnRef} colorScheme="teal" onClick={onOpen}>
+        Open
+      </Button>
+      <Drawer
+        {...rest}
+        isOpen={isOpen}
+        placement="left"
+        onClose={onClose}
+        initialFocusRef={btnRef}
+      >
+        <DrawerContent>
+          <DrawerCloseButton />
+          <DrawerBody>
+            <Content />
+          </DrawerBody>
+        </DrawerContent>
+      </Drawer>
+    </>
   );
 }
 

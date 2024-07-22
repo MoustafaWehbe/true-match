@@ -7,10 +7,7 @@ const { definePartsStyle, defineMultiStyleConfig } =
 const baseStyle = definePartsStyle({
   dialog: {
     borderRadius: 'md',
-    transition: 'none',
-    transform: 'none!important',
     width: 'var(--chakra-sizes-md)',
-    maxWidth: 'unset',
   },
   dialogContainer: {
     width: 'auto',
