@@ -1,7 +1,7 @@
 import { Box } from '@chakra-ui/react';
 import SignupForm from '~/lib/components/auth/SignupForm';
 
-const Signup = () => {
+const SignupPage = () => {
   return (
     <Box>
       <SignupForm />
@@ -9,4 +9,4 @@ const Signup = () => {
   );
 };
 
-export default Signup;
+export default SignupPage;

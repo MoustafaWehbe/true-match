@@ -37,18 +37,13 @@ namespace api.Repository
                 .FirstOrDefaultAsync(c => c.Id == id);
         }
 
-        public async Task<Room?> UpdateAsync(int id, UpdateRoomDto roomDto)
+        public async Task<Room> UpdateAsync(int id, UpdateRoomDto roomDto, Room existingRoom)
         {
-            var existingRoom = await _context.Rooms.FirstOrDefaultAsync(x => x.Id == id);
-
-            if (existingRoom == null)
-            {
-                return null;
-            }
-
             existingRoom.Title = roomDto.Title;
             existingRoom.Description = roomDto.Description;
             existingRoom.ScheduledAt = roomDto.ScheduledAt;
+            existingRoom.FinishedAt = roomDto.FinishedAt;
+            existingRoom.HasStarted = roomDto.HasStarted;
             existingRoom.UpdatedAt = DateTime.UtcNow;
 
             await _context.SaveChangesAsync();

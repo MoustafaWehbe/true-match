@@ -33,7 +33,7 @@ export const registerUser = createAsyncThunk<
 >('user/registerUser', async (userData, { rejectWithValue }) => {
   try {
     const response = await axiosInstance.post<ExtendedUserApiResponse>(
-      '/api/Account/register',
+      '/api/account/register',
       userData
     );
     localStorage.setItem(TOKEN, response.data.data.token);
@@ -54,7 +54,7 @@ export const loginUser = createAsyncThunk<
 >('user/loginUser', async (userData, { rejectWithValue }) => {
   try {
     const response = await axiosInstance.post<ExtendedUserApiResponse>(
-      '/api/Account/login',
+      '/api/account/login',
       userData
     );
     localStorage.setItem(TOKEN, response.data.data.token);
@@ -75,7 +75,7 @@ export const logoutUser = createAsyncThunk<
 >('user/logoutUser', async (userData, { rejectWithValue }) => {
   try {
     const response = await axiosInstance.post<SimpleApiResponseApiResponse>(
-      '/api/Account/logout'
+      '/api/account/logout'
     );
     localStorage.removeItem(TOKEN);
     return response.data;

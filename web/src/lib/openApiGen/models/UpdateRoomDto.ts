@@ -37,6 +37,18 @@ export interface UpdateRoomDto {
      * @memberof UpdateRoomDto
      */
     scheduledAt?: Date | null;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof UpdateRoomDto
+     */
+    hasStarted?: boolean;
+    /**
+     * 
+     * @type {Date}
+     * @memberof UpdateRoomDto
+     */
+    finishedAt?: Date | null;
 }
 
 /**
@@ -59,6 +71,8 @@ export function UpdateRoomDtoFromJSONTyped(json: any, ignoreDiscriminator: boole
         'title': json['title'] == null ? undefined : json['title'],
         'description': json['description'] == null ? undefined : json['description'],
         'scheduledAt': json['scheduledAt'] == null ? undefined : (new Date(json['scheduledAt'])),
+        'hasStarted': json['hasStarted'] == null ? undefined : json['hasStarted'],
+        'finishedAt': json['finishedAt'] == null ? undefined : (new Date(json['finishedAt'])),
     };
 }
 
@@ -71,6 +85,8 @@ export function UpdateRoomDtoToJSON(value?: UpdateRoomDto | null): any {
         'title': value['title'],
         'description': value['description'],
         'scheduledAt': value['scheduledAt'] == null ? undefined : ((value['scheduledAt'] as any).toISOString()),
+        'hasStarted': value['hasStarted'],
+        'finishedAt': value['finishedAt'] == null ? undefined : ((value['finishedAt'] as any).toISOString()),
     };
 }
 

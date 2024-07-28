@@ -1,3 +1,4 @@
+using api.Dtos;
 using api.Helpers;
 using api.Interfaces;
 using api.Mappers;
@@ -6,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/room-content")]
     [ApiController]
     public class RoomContentController : ControllerBase
     {
@@ -18,6 +19,7 @@ namespace api.Controllers
 
         [HttpGet]
         [Authorize]
+        [ProducesResponseType(typeof(ApiResponse<List<RoomContentDto>>), 200)]
         public async Task<IActionResult> GetAll()
         {
             if (!ModelState.IsValid)

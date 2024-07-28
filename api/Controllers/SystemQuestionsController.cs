@@ -8,7 +8,7 @@ using Microsoft.OpenApi.Any;
 
 namespace api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/system-question")]
     [ApiController]
     public class SystemQuestionsController : ControllerBase
     {

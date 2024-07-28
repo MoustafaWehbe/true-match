@@ -61,7 +61,7 @@ export class MatchApi extends runtime.BaseAPI {
             }
         }
         const response = await this.request({
-            path: `/api/Match/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            path: `/api/match/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -92,7 +92,7 @@ export class MatchApi extends runtime.BaseAPI {
             }
         }
         const response = await this.request({
-            path: `/api/Match/myMatches`,
+            path: `/api/match/myMatches`,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -125,7 +125,7 @@ export class MatchApi extends runtime.BaseAPI {
             }
         }
         const response = await this.request({
-            path: `/api/Match`,
+            path: `/api/match`,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,

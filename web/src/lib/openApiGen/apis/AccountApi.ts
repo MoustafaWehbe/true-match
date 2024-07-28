@@ -34,11 +34,11 @@ import {
     UserApiResponseToJSON,
 } from '../models/index';
 
-export interface ApiAccountLoginPostRequest {
+export interface ApiAcountLoginPostRequest {
     loginDto?: LoginDto;
 }
 
-export interface ApiAccountRegisterPostRequest {
+export interface ApiAcountRegisterPostRequest {
     registerDto?: RegisterDto;
 }
 
@@ -49,7 +49,7 @@ export class AccountApi extends runtime.BaseAPI {
 
     /**
      */
-    async apiAccountLoginPostRaw(requestParameters: ApiAccountLoginPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UserApiResponse>> {
+    async apiAcountLoginPostRaw(requestParameters: ApiAcountLoginPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UserApiResponse>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -65,7 +65,7 @@ export class AccountApi extends runtime.BaseAPI {
             }
         }
         const response = await this.request({
-            path: `/api/Account/login`,
+            path: `/api/acount/login`,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
@@ -77,14 +77,14 @@ export class AccountApi extends runtime.BaseAPI {
 
     /**
      */
-    async apiAccountLoginPost(requestParameters: ApiAccountLoginPostRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserApiResponse> {
-        const response = await this.apiAccountLoginPostRaw(requestParameters, initOverrides);
+    async apiAcountLoginPost(requestParameters: ApiAcountLoginPostRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserApiResponse> {
+        const response = await this.apiAcountLoginPostRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async apiAccountLogoutPostRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<SimpleApiResponseApiResponse>> {
+    async apiAcountLogoutPostRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<SimpleApiResponseApiResponse>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -98,7 +98,7 @@ export class AccountApi extends runtime.BaseAPI {
             }
         }
         const response = await this.request({
-            path: `/api/Account/logout`,
+            path: `/api/acount/logout`,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
@@ -109,14 +109,14 @@ export class AccountApi extends runtime.BaseAPI {
 
     /**
      */
-    async apiAccountLogoutPost(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SimpleApiResponseApiResponse> {
-        const response = await this.apiAccountLogoutPostRaw(initOverrides);
+    async apiAcountLogoutPost(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SimpleApiResponseApiResponse> {
+        const response = await this.apiAcountLogoutPostRaw(initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async apiAccountRegisterPostRaw(requestParameters: ApiAccountRegisterPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UserApiResponse>> {
+    async apiAcountRegisterPostRaw(requestParameters: ApiAcountRegisterPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UserApiResponse>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -132,7 +132,7 @@ export class AccountApi extends runtime.BaseAPI {
             }
         }
         const response = await this.request({
-            path: `/api/Account/register`,
+            path: `/api/acount/register`,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
@@ -144,8 +144,8 @@ export class AccountApi extends runtime.BaseAPI {
 
     /**
      */
-    async apiAccountRegisterPost(requestParameters: ApiAccountRegisterPostRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserApiResponse> {
-        const response = await this.apiAccountRegisterPostRaw(requestParameters, initOverrides);
+    async apiAcountRegisterPost(requestParameters: ApiAcountRegisterPostRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserApiResponse> {
+        const response = await this.apiAcountRegisterPostRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

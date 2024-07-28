@@ -1,0 +1,31 @@
+{
+  "name": "webrtc-server",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "author": "Moustafa Wehbe <moustafawehbe102@gmail.com>",
+  "scripts": {
+    "build": "tsc --project ./",
+    "start:dev": "nodemon src/server.ts",
+    "start:prod": "node dist/server.js",
+    "generate-types": "node src/scripts/generate-types.js"
+  },
+  "dependencies": {
+    "axios": "^1.7.2",
+    "dotenv": "^16.4.5",
+    "env-var": "^7.5.0",
+    "express": "^4.19.2",
+    "mkcert": "^3.2.0",
+    "socket.io": "^4.7.5",
+    "ts-node-dev": "^2.0.0"
+  },
+  "devDependencies": {
+    "@openapitools/openapi-generator-cli": "^2.13.4",
+    "@types/axios": "^0.14.0",
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.14.12",
+    "nodemon": "^3.1.4",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.4"
+  }
+}

@@ -7,7 +7,7 @@ namespace api.Models
     public class RoomParticipant
     {
         [Key, Column(Order = 0)]
-        public int RoomId { get; set; }
+        public required int RoomId { get; set; }
 
         [Key, Column(Order = 1)]
         public required string UserId { get; set; }

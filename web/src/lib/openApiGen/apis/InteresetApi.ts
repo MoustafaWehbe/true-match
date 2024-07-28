@@ -22,7 +22,7 @@ export class InteresetApi extends runtime.BaseAPI {
 
     /**
      */
-    async apiInteresetGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async apiInterestGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -36,7 +36,7 @@ export class InteresetApi extends runtime.BaseAPI {
             }
         }
         const response = await this.request({
-            path: `/api/Intereset`,
+            path: `/api/interest`,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -47,8 +47,8 @@ export class InteresetApi extends runtime.BaseAPI {
 
     /**
      */
-    async apiInteresetGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.apiInteresetGetRaw(initOverrides);
+    async apiInterestGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.apiInterestGetRaw(initOverrides);
     }
 
 }

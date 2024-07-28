@@ -8,6 +8,6 @@ namespace api.Interfaces
         Task<List<Room>> GetAllAsync();
         Task<Room> CreateAsync(Room room);
         Task<Room?> GetByIdAsync(int id);
-        Task<Room?> UpdateAsync(int id, UpdateRoomDto stockDto);
+        Task<Room> UpdateAsync(int id, UpdateRoomDto stockDto, Room existingRoom);
     }
 }

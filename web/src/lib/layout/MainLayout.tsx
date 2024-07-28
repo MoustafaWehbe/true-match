@@ -22,7 +22,10 @@ const MainLayout = ({ children }: LayoutProps) => {
           width={'100%'}
           maxWidth={800}
           transition="0.5s ease-out"
-          height={'100vh'}
+          height={'90vh'}
+          display={'flex'}
+          flexDirection={'column'}
+          justifyContent={'space-between'}
         >
           <Box margin="8">
             <Box as="main" marginY={22}>

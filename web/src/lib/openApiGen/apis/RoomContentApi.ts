@@ -14,6 +14,13 @@
 
 
 import * as runtime from '../runtime';
+import type {
+  RoomContentDtoListApiResponse,
+} from '../models/index';
+import {
+    RoomContentDtoListApiResponseFromJSON,
+    RoomContentDtoListApiResponseToJSON,
+} from '../models/index';
 
 /**
  * 
@@ -22,7 +29,7 @@ export class RoomContentApi extends runtime.BaseAPI {
 
     /**
      */
-    async apiRoomContentGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async apiRoomContentGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<RoomContentDtoListApiResponse>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -36,19 +43,20 @@ export class RoomContentApi extends runtime.BaseAPI {
             }
         }
         const response = await this.request({
-            path: `/api/RoomContent`,
+            path: `/api/room-content`,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => RoomContentDtoListApiResponseFromJSON(jsonValue));
     }
 
     /**
      */
-    async apiRoomContentGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.apiRoomContentGetRaw(initOverrides);
+    async apiRoomContentGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RoomContentDtoListApiResponse> {
+        const response = await this.apiRoomContentGetRaw(initOverrides);
+        return await response.value();
     }
 
 }

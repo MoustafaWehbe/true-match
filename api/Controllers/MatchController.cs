@@ -7,12 +7,11 @@ using api.Mappers;
 using api.Interfaces;
 using api.Dtos;
 using Microsoft.AspNetCore.Authorization;
-using api.Dtos.Match;
 using api.Helpers;
 
 namespace api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/match")]
     [ApiController]
     public class MatchController : ControllerBase
     {

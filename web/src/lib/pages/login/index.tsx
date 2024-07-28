@@ -1,7 +1,7 @@
 import { Box } from '@chakra-ui/react';
 import LoginForm from '~/lib/components/auth/LoginForm';
 
-const Login = () => {
+const LoginPage = () => {
   return (
     <Box>
       <LoginForm />
@@ -9,4 +9,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default LoginPage;

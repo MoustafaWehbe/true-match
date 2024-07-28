@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/room")]
     [ApiController]
     public class RoomController : ControllerBase
     {
@@ -25,6 +25,7 @@ namespace api.Controllers
 
         [HttpGet]
         [Authorize]
+        [ProducesResponseType(typeof(ApiResponse<RoomDto>), 200)]
         public async Task<IActionResult> GetAll()
         {
             if (!ModelState.IsValid)
@@ -39,7 +40,8 @@ namespace api.Controllers
 
         [HttpPost]
         [Authorize]
-        public async Task<ActionResult<Room>> CreateRoom([FromBody] CreateRoomDto roomDto)
+        [ProducesResponseType(typeof(ApiResponse<RoomDto>), 200)]
+        public async Task<ActionResult<RoomDto>> CreateRoom([FromBody] CreateRoomDto roomDto)
         {
             if (!ModelState.IsValid)
             {
@@ -67,6 +69,7 @@ namespace api.Controllers
 
         [HttpPut]
         [Route("{id:int}")]
+        [ProducesResponseType(typeof(ApiResponse<RoomDto>), 200)]
         [Authorize]
         public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateRoomDto updateStreamDto)
         {
@@ -75,7 +78,7 @@ namespace api.Controllers
                 return BadRequest(ModelState);
             }
 
-            var room = await _roomRepo.UpdateAsync(id, updateStreamDto);
+            var existingRoom = await _roomRepo.GetByIdAsync(id);
             var user = await _userManager.FindByEmailAsync(User.GetEmail());
 
             if (user == null)
@@ -83,20 +86,23 @@ namespace api.Controllers
                 return NotFound("User was not found.");
             }
 
-            if (room == null)
+            if (existingRoom == null)
             {
                 return NotFound();
             }
 
-            if (user.Id != room.UserId)
+            if (user.Id != existingRoom.UserId)
             {
                 return Unauthorized("Action not allowed");
             }
+
+            var room = await _roomRepo.UpdateAsync(id, updateStreamDto, existingRoom);
 
             return Ok(ResponseHelper.CreateSuccessResponse(room.ToRoomDto()));
         }
 
         [HttpGet("{id}")]
+        [ProducesResponseType(typeof(ApiResponse<RoomDto>), 200)]
         [Authorize]
         public async Task<ActionResult<Room>> GetRoomById(int id)
         {

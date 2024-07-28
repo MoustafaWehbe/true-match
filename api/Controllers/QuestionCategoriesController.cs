@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/question-category")]
     [ApiController]
     public class QuestionCategoriesController : ControllerBase
     {

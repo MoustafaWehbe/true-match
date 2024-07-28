@@ -1,3 +1,4 @@
+.openapi-generator-ignore
 apis/AccountApi.ts
 apis/InteresetApi.ts
 apis/LifeStyleApi.ts
@@ -5,6 +6,7 @@ apis/MatchApi.ts
 apis/QuestionCategoriesApi.ts
 apis/RoomApi.ts
 apis/RoomContentApi.ts
+apis/RoomParticipantApi.ts
 apis/SystemQuestionsApi.ts
 apis/UserApi.ts
 apis/UserProfileApi.ts
@@ -27,12 +29,19 @@ models/QuestionCategory.ts
 models/QuestionCategoryDto.ts
 models/RegisterDto.ts
 models/Room.ts
+models/RoomContentDto.ts
+models/RoomContentDtoListApiResponse.ts
+models/RoomDto.ts
+models/RoomDtoApiResponse.ts
 models/RoomParticipant.ts
+models/RoomParticipantDto.ts
+models/RoomParticipantDtoApiResponse.ts
 models/SimpleApiResponse.ts
 models/SimpleApiResponseApiResponse.ts
 models/StringApiResponse.ts
 models/SystemQuestion.ts
 models/UpdateRoomDto.ts
+models/UpdateRoomParticipantDto.ts
 models/UpdateSystemQuestionDto.ts
 models/User.ts
 models/UserApiResponse.ts
@@ -41,5 +50,6 @@ models/UserProfileInterest.ts
 models/UserProfileInterestDto.ts
 models/UserProfileLifeStyle.ts
 models/UserProfileLifeStyleDto.ts
+models/UserSimplifiedDto.ts
 models/index.ts
 runtime.ts

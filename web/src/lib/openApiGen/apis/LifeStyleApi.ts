@@ -36,7 +36,7 @@ export class LifeStyleApi extends runtime.BaseAPI {
             }
         }
         const response = await this.request({
-            path: `/api/LifeStyle`,
+            path: `/api/life-style`,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
