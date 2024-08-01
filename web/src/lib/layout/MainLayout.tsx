@@ -20,14 +20,14 @@ const MainLayout = ({ children }: LayoutProps) => {
         <Box
           margin="0 auto"
           width={'100%'}
-          maxWidth={800}
+          maxWidth={'80vw'}
           transition="0.5s ease-out"
           height={'90vh'}
           display={'flex'}
           flexDirection={'column'}
           justifyContent={'space-between'}
         >
-          <Box margin="8">
+          <Box>
             <Box as="main" marginY={22}>
               {children}
             </Box>

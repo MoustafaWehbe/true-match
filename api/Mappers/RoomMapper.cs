@@ -11,7 +11,7 @@ namespace api.Mappers
             {
                 Id = roomModel.Id,
                 Description = roomModel.Description,
-                HasStarted = roomModel.HasStarted,
+                Status = roomModel.Status,
                 Title = roomModel.Title,
                 ScheduledAt = roomModel.ScheduledAt,
                 FinishedAt = roomModel.FinishedAt,
@@ -19,6 +19,7 @@ namespace api.Mappers
                 User = roomModel.User?.ToUserSimplifiedDto(),
                 CreatedAt = roomModel.CreatedAt,
                 UpdatedAt = roomModel.UpdatedAt,
+                Offers = roomModel.Offers
             };
         }
 

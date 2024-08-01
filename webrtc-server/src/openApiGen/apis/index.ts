@@ -7,6 +7,7 @@ export * from './MatchApi';
 export * from './QuestionCategoriesApi';
 export * from './RoomApi';
 export * from './RoomContentApi';
+export * from './RoomParticipantApi';
 export * from './SystemQuestionsApi';
 export * from './UserApi';
 export * from './UserProfileApi';

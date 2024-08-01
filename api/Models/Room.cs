@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json;
 
 namespace api.Models
 {
@@ -11,11 +12,12 @@ namespace api.Models
         public int Id { get; set; }
         public string Title { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
-        public bool HasStarted { get; set; } = false;
+        public RoomStatus Status { get; set; } = RoomStatus.Pending;
         public DateTime? ScheduledAt { get; set; }
         public DateTime? FinishedAt { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+        public JsonDocument? Offers { get; set; }
 
         [ForeignKey("UserId")]
         public required string UserId { get; set; }

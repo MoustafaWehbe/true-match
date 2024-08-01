@@ -13,6 +13,12 @@
  */
 
 import { mapValues } from '../runtime';
+import type { RoomStatus } from './RoomStatus';
+import {
+    RoomStatusFromJSON,
+    RoomStatusFromJSONTyped,
+    RoomStatusToJSON,
+} from './RoomStatus';
 import type { User } from './User';
 import {
     UserFromJSON,
@@ -52,10 +58,10 @@ export interface Room {
     description?: string | null;
     /**
      * 
-     * @type {boolean}
+     * @type {RoomStatus}
      * @memberof Room
      */
-    hasStarted?: boolean;
+    status?: RoomStatus;
     /**
      * 
      * @type {Date}
@@ -80,6 +86,12 @@ export interface Room {
      * @memberof Room
      */
     updatedAt?: Date;
+    /**
+     * 
+     * @type {any}
+     * @memberof Room
+     */
+    offers?: any | null;
     /**
      * 
      * @type {string}
@@ -120,11 +132,12 @@ export function RoomFromJSONTyped(json: any, ignoreDiscriminator: boolean): Room
         'id': json['id'] == null ? undefined : json['id'],
         'title': json['title'] == null ? undefined : json['title'],
         'description': json['description'] == null ? undefined : json['description'],
-        'hasStarted': json['hasStarted'] == null ? undefined : json['hasStarted'],
+        'status': json['status'] == null ? undefined : RoomStatusFromJSON(json['status']),
         'scheduledAt': json['scheduledAt'] == null ? undefined : (new Date(json['scheduledAt'])),
         'finishedAt': json['finishedAt'] == null ? undefined : (new Date(json['finishedAt'])),
         'createdAt': json['createdAt'] == null ? undefined : (new Date(json['createdAt'])),
         'updatedAt': json['updatedAt'] == null ? undefined : (new Date(json['updatedAt'])),
+        'offers': json['offers'] == null ? undefined : json['offers'],
         'userId': json['userId'] == null ? undefined : json['userId'],
         'user': json['user'] == null ? undefined : UserFromJSON(json['user']),
         'roomParticipants': json['roomParticipants'] == null ? undefined : ((json['roomParticipants'] as Array<any>).map(RoomParticipantFromJSON)),
@@ -140,11 +153,12 @@ export function RoomToJSON(value?: Room | null): any {
         'id': value['id'],
         'title': value['title'],
         'description': value['description'],
-        'hasStarted': value['hasStarted'],
+        'status': RoomStatusToJSON(value['status']),
         'scheduledAt': value['scheduledAt'] == null ? undefined : ((value['scheduledAt'] as any).toISOString()),
         'finishedAt': value['finishedAt'] == null ? undefined : ((value['finishedAt'] as any).toISOString()),
         'createdAt': value['createdAt'] == null ? undefined : ((value['createdAt']).toISOString()),
         'updatedAt': value['updatedAt'] == null ? undefined : ((value['updatedAt']).toISOString()),
+        'offers': value['offers'],
         'userId': value['userId'],
         'user': UserToJSON(value['user']),
         'roomParticipants': value['roomParticipants'] == null ? undefined : ((value['roomParticipants'] as Array<any>).map(RoomParticipantToJSON)),

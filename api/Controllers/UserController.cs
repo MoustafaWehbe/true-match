@@ -26,7 +26,9 @@ namespace api.Controllers
         public async Task<IActionResult> GetAll([FromQuery] UserQueryObject query)
         {
             if (!ModelState.IsValid)
+            {
                 return BadRequest(ModelState);
+            }
 
             var users = await _userRepo.GetAllAsync(query);
             var totalUsers = await _userRepo.GetTotalUsersAsync();

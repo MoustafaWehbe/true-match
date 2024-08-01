@@ -21,4 +21,11 @@ namespace api.Models
         Man,
         Woman
     }
+    [JsonConverter(typeof(StringEnumConverter))]
+    public enum RoomStatus
+    {
+        Pending,
+        InProgress,
+        Canceled
+    }
 }

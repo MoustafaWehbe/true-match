@@ -25,17 +25,23 @@ namespace api.Controllers
 
         [HttpGet]
         [Authorize]
-        [ProducesResponseType(typeof(ApiResponse<RoomDto>), 200)]
-        public async Task<IActionResult> GetAll()
+        [ProducesResponseType(typeof(PagedResponse<RoomDto>), 200)]
+        public async Task<IActionResult> GetAll([FromQuery] RoomQueryObject query)
         {
             if (!ModelState.IsValid)
+            {
                 return BadRequest(ModelState);
+            }
 
-            var rooms = await _roomRepo.GetAllAsync();
+            var rooms = await _roomRepo.GetAllAsync(query);
 
-            var roomDto = rooms.Select(s => s.ToRoomDto());
+            var totalRooms = await _roomRepo.GetTotalRoomsAsync(query);
+            var totalPages = _roomRepo.GetTotalPages(query.PageSize, totalRooms);
 
-            return Ok(ResponseHelper.CreateSuccessResponse(roomDto));
+            var roomDtos = rooms.Select(s => s.ToRoomDto()).ToList();
+            var response = ResponseHelper.CreatePagedResponse(totalRooms, totalPages, query.PageNumber, query.PageSize, roomDtos);
+
+            return Ok(response);
         }
 
         [HttpPost]
@@ -64,7 +70,7 @@ namespace api.Controllers
 
             var createdRoom = await _roomRepo.CreateAsync(room);
 
-            return CreatedAtAction(nameof(GetRoomById), new { id = createdRoom.Id }, room.ToRoomDto());
+            return CreatedAtAction(nameof(GetRoomById), new { id = createdRoom.Id }, ResponseHelper.CreateSuccessResponse(room.ToRoomDto()));
         }
 
         [HttpPut]

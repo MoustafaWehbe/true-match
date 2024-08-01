@@ -33,9 +33,11 @@ models/RoomContentDto.ts
 models/RoomContentDtoListApiResponse.ts
 models/RoomDto.ts
 models/RoomDtoApiResponse.ts
+models/RoomDtoPagedResponse.ts
 models/RoomParticipant.ts
 models/RoomParticipantDto.ts
 models/RoomParticipantDtoApiResponse.ts
+models/RoomStatus.ts
 models/SimpleApiResponse.ts
 models/SimpleApiResponseApiResponse.ts
 models/StringApiResponse.ts

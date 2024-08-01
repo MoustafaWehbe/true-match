@@ -16,18 +16,39 @@ import {
   Link,
 } from '@chakra-ui/react';
 import { useFormik } from 'formik';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import * as Yup from 'yup';
 
 import ContentModal from './ContentModal';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '~/lib/state/store';
+import { createRoom } from '~/lib/state/room/roomSlice';
 
 function ScheduleRoom() {
   const toast = useToast();
-  const [loading, setLoading] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const bg = useColorModeValue('whiteAlpha.900', 'gray.700');
   const textColor = useColorModeValue('gray.800', 'whiteAlpha.900');
+
+  const dispatch = useDispatch<AppDispatch>();
+  const { createRoomLoading, createdRoom } = useSelector(
+    (state: RootState) => state.room
+  );
+
+  useEffect(() => {
+    if (createdRoom?.id && !createRoomLoading && formik.values.title) {
+      toast({
+        title: 'Room created.',
+        description: 'Your room has been created successfully.',
+        status: 'success',
+        duration: 5000,
+        isClosable: true,
+      });
+      formik.resetForm({});
+      setIsChecked(false);
+    }
+  }, [createdRoom, createRoomLoading]);
 
   const formik = useFormik({
     initialValues: {
@@ -38,7 +59,9 @@ function ScheduleRoom() {
     validationSchema: Yup.object({
       title: Yup.string().required('Title is required'),
       description: Yup.string().required('Description is required'),
-      scheduledAt: Yup.date().required('Scheduled time is required'),
+      scheduledAt: Yup.date()
+        .required('Scheduled time is required')
+        .min(new Date(), 'Date must be in the future'),
     }),
     onSubmit: async (values) => {
       if (!isChecked) {
@@ -52,29 +75,13 @@ function ScheduleRoom() {
         });
         return;
       }
-
-      setLoading(true);
-      try {
-        // Replace with your API call
-        await new Promise((resolve) => setTimeout(resolve, 2000));
-        toast({
-          title: 'Room created.',
-          description: 'Your room has been created successfully.',
-          status: 'success',
-          duration: 5000,
-          isClosable: true,
-        });
-      } catch (error) {
-        toast({
-          title: 'An error occurred.',
-          description: 'Unable to create room.',
-          status: 'error',
-          duration: 5000,
-          isClosable: true,
-        });
-      } finally {
-        setLoading(false);
-      }
+      dispatch(
+        createRoom({
+          title: values.title,
+          description: values.description,
+          scheduledAt: new Date(values.scheduledAt),
+        })
+      );
     },
   });
 
@@ -177,7 +184,7 @@ function ScheduleRoom() {
             <Button
               type="submit"
               colorScheme="pink"
-              isLoading={loading}
+              isLoading={createRoomLoading}
               loadingText="Creating..."
               width="full"
               mt={5}

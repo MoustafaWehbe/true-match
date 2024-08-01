@@ -17,6 +17,8 @@ import * as runtime from '../runtime';
 import type {
   CreateRoomDto,
   RoomDtoApiResponse,
+  RoomDtoPagedResponse,
+  RoomStatus,
   UpdateRoomDto,
 } from '../models/index';
 import {
@@ -24,9 +26,19 @@ import {
     CreateRoomDtoToJSON,
     RoomDtoApiResponseFromJSON,
     RoomDtoApiResponseToJSON,
+    RoomDtoPagedResponseFromJSON,
+    RoomDtoPagedResponseToJSON,
+    RoomStatusFromJSON,
+    RoomStatusToJSON,
     UpdateRoomDtoFromJSON,
     UpdateRoomDtoToJSON,
 } from '../models/index';
+
+export interface ApiRoomGetRequest {
+    pageNumber?: number;
+    pageSize?: number;
+    status?: RoomStatus;
+}
 
 export interface ApiRoomIdGetRequest {
     id: number;
@@ -48,8 +60,20 @@ export class RoomApi extends runtime.BaseAPI {
 
     /**
      */
-    async apiRoomGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<RoomDtoApiResponse>> {
+    async apiRoomGetRaw(requestParameters: ApiRoomGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<RoomDtoPagedResponse>> {
         const queryParameters: any = {};
+
+        if (requestParameters['pageNumber'] != null) {
+            queryParameters['PageNumber'] = requestParameters['pageNumber'];
+        }
+
+        if (requestParameters['pageSize'] != null) {
+            queryParameters['PageSize'] = requestParameters['pageSize'];
+        }
+
+        if (requestParameters['status'] != null) {
+            queryParameters['Status'] = requestParameters['status'];
+        }
 
         const headerParameters: runtime.HTTPHeaders = {};
 
@@ -68,13 +92,13 @@ export class RoomApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => RoomDtoApiResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => RoomDtoPagedResponseFromJSON(jsonValue));
     }
 
     /**
      */
-    async apiRoomGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RoomDtoApiResponse> {
-        const response = await this.apiRoomGetRaw(initOverrides);
+    async apiRoomGet(requestParameters: ApiRoomGetRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RoomDtoPagedResponse> {
+        const response = await this.apiRoomGetRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

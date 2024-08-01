@@ -38,4 +38,21 @@ const updateRoom = async (
   }
 };
 
-export { getRoomById, updateRoom };
+const joinRoom = async (
+  token: string,
+  roomId: number
+): Promise<RoomDtoApiResponse> => {
+  try {
+    const response = await axiosInstance.post<RoomDtoApiResponse>(
+      `/room?roomId=${roomId}`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    handleError(error);
+  }
+};
+
+export { getRoomById, updateRoom, joinRoom };

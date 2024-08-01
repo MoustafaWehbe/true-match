@@ -1,3 +1,4 @@
+using System.Text.Json;
 using api.Models;
 
 namespace api.Dtos
@@ -7,7 +8,8 @@ namespace api.Dtos
         public int Id { get; set; }
         public string Title { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
-        public bool HasStarted { get; set; } = false;
+        public JsonDocument? Offers { get; set; }
+        public RoomStatus Status { get; set; } = RoomStatus.Pending;
         public DateTime? ScheduledAt { get; set; }
         public DateTime? FinishedAt { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;

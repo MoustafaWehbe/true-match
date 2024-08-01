@@ -40,7 +40,6 @@ class SocketHandler {
     this.io.on("connection", async (socket: Socket) => {
       // console.log("Someone has connected");
       const token = socket.handshake.auth.token as string;
-      console.log(token);
       let user: UserApiResponse | null = null;
       try {
         user = await userService.verifyUser(token);
@@ -51,13 +50,14 @@ class SocketHandler {
         socket.disconnect(true);
         throw Error("Unauthorized!");
       }
+      const userName = user.data.firstName + " " + user.data.lastName;
 
       socket.on("startRoom", async (roomId) => {
         try {
           const room = await roomService.getRoomById(token, roomId);
           if (room) {
             socket.join(roomId);
-            room.data.hasStarted = true;
+            room.data.status = 1;
             await roomService.updateRoom(token, room.data, roomId);
           }
         } catch {
@@ -70,12 +70,9 @@ class SocketHandler {
         try {
           const room = await roomService.getRoomById(token, roomId);
           if (room) {
+            await roomService.joinRoom(token, roomId);
             socket.join(roomId);
-            await client.query(
-              "INSERT INTO RoomParticipants (room_id, user_id) VALUES ($1, $2)",
-              [roomId, user.id]
-            );
-            socket.emit("availableOffers", room.offers);
+            socket.emit("availableOffers", room.data.offers);
           }
         } finally {
           socket.disconnect(true);
@@ -94,9 +91,9 @@ class SocketHandler {
       //   socket.emit("availableOffers", this.offers);
       // }
 
-      // socket.on("newOffer", (newOffer: any) =>
-      //   this.handleNewOffer(socket, newOffer, userName)
-      // );
+      socket.on("newOffer", (newOffer: { offer: any; roomId: number }) =>
+        this.handleNewOffer(socket, newOffer, userName, token, roomId)
+      );
       // socket.on("newAnswer", (offerObj: Offer, ackFunction: Function) =>
       //   this.handleNewAnswer(socket, offerObj, ackFunction, userName)
       // );
@@ -106,24 +103,28 @@ class SocketHandler {
     });
   }
 
-  // private handleNewOffer(
-  //   socket: Socket,
-  //   newOffer: any,
-  //   userName: string
-  // ): void {
-  //   this.offers.push({
-  //     offererUserName: userName,
-  //     offer: newOffer,
-  //     offerIceCandidates: [],
-  //     answererUserName: null,
-  //     answer: null,
-  //     answererIceCandidates: [],
-  //   });
+  private async handleNewOffer(
+    socket: Socket,
+    newOffer: { offer: any; roomId: number },
+    userName: string,
+    token: string,
+    roomId: number
+  ): Promise<void> {
+    const offerObj: any = {
+      offererUserName: userName,
+      offer: newOffer,
+      offerIceCandidates: [],
+      answererUserName: null,
+      answer: null,
+      answererIceCandidates: [],
+    };
 
-  //   // console.log(newOffer.sdp.slice(50))
-  //   //send out to all connected sockets EXCEPT the caller
-  //   socket.broadcast.emit("newOfferAwaiting", this.offers.slice(-1));
-  // }
+    await roomService.updateRoom(token, room.data, roomId);
+
+    // console.log(newOffer.sdp.slice(50))
+    //send out to all connected sockets EXCEPT the caller
+    socket.broadcast.emit("newOfferAwaiting", this.offers.slice(-1));
+  }
 
   // private handleNewAnswer(
   //   socket: Socket,

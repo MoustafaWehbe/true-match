@@ -31,20 +31,20 @@ import {
     UpdateSystemQuestionDtoToJSON,
 } from '../models/index';
 
-export interface ApiSystemQuestionsIdDeleteRequest {
+export interface ApiSystemQuestionIdDeleteRequest {
     id: number;
 }
 
-export interface ApiSystemQuestionsIdGetRequest {
+export interface ApiSystemQuestionIdGetRequest {
     id: number;
 }
 
-export interface ApiSystemQuestionsIdPutRequest {
+export interface ApiSystemQuestionIdPutRequest {
     id: number;
     updateSystemQuestionDto?: UpdateSystemQuestionDto;
 }
 
-export interface ApiSystemQuestionsPostRequest {
+export interface ApiSystemQuestionPostRequest {
     createSystemQuestionDto?: CreateSystemQuestionDto;
 }
 
@@ -55,7 +55,7 @@ export class SystemQuestionsApi extends runtime.BaseAPI {
 
     /**
      */
-    async apiSystemQuestionsGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<SystemQuestion>>> {
+    async apiSystemQuestionGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<SystemQuestion>>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -69,7 +69,7 @@ export class SystemQuestionsApi extends runtime.BaseAPI {
             }
         }
         const response = await this.request({
-            path: `/api/SystemQuestions`,
+            path: `/api/system-question`,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -80,18 +80,18 @@ export class SystemQuestionsApi extends runtime.BaseAPI {
 
     /**
      */
-    async apiSystemQuestionsGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<SystemQuestion>> {
-        const response = await this.apiSystemQuestionsGetRaw(initOverrides);
+    async apiSystemQuestionGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<SystemQuestion>> {
+        const response = await this.apiSystemQuestionGetRaw(initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async apiSystemQuestionsIdDeleteRaw(requestParameters: ApiSystemQuestionsIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async apiSystemQuestionIdDeleteRaw(requestParameters: ApiSystemQuestionIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
-                'Required parameter "id" was null or undefined when calling apiSystemQuestionsIdDelete().'
+                'Required parameter "id" was null or undefined when calling apiSystemQuestionIdDelete().'
             );
         }
 
@@ -108,7 +108,7 @@ export class SystemQuestionsApi extends runtime.BaseAPI {
             }
         }
         const response = await this.request({
-            path: `/api/SystemQuestions/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            path: `/api/system-question/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
             method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,
@@ -119,17 +119,17 @@ export class SystemQuestionsApi extends runtime.BaseAPI {
 
     /**
      */
-    async apiSystemQuestionsIdDelete(requestParameters: ApiSystemQuestionsIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.apiSystemQuestionsIdDeleteRaw(requestParameters, initOverrides);
+    async apiSystemQuestionIdDelete(requestParameters: ApiSystemQuestionIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.apiSystemQuestionIdDeleteRaw(requestParameters, initOverrides);
     }
 
     /**
      */
-    async apiSystemQuestionsIdGetRaw(requestParameters: ApiSystemQuestionsIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<SystemQuestion>> {
+    async apiSystemQuestionIdGetRaw(requestParameters: ApiSystemQuestionIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<SystemQuestion>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
-                'Required parameter "id" was null or undefined when calling apiSystemQuestionsIdGet().'
+                'Required parameter "id" was null or undefined when calling apiSystemQuestionIdGet().'
             );
         }
 
@@ -146,7 +146,7 @@ export class SystemQuestionsApi extends runtime.BaseAPI {
             }
         }
         const response = await this.request({
-            path: `/api/SystemQuestions/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            path: `/api/system-question/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -157,18 +157,18 @@ export class SystemQuestionsApi extends runtime.BaseAPI {
 
     /**
      */
-    async apiSystemQuestionsIdGet(requestParameters: ApiSystemQuestionsIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SystemQuestion> {
-        const response = await this.apiSystemQuestionsIdGetRaw(requestParameters, initOverrides);
+    async apiSystemQuestionIdGet(requestParameters: ApiSystemQuestionIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SystemQuestion> {
+        const response = await this.apiSystemQuestionIdGetRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async apiSystemQuestionsIdPutRaw(requestParameters: ApiSystemQuestionsIdPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async apiSystemQuestionIdPutRaw(requestParameters: ApiSystemQuestionIdPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
-                'Required parameter "id" was null or undefined when calling apiSystemQuestionsIdPut().'
+                'Required parameter "id" was null or undefined when calling apiSystemQuestionIdPut().'
             );
         }
 
@@ -187,7 +187,7 @@ export class SystemQuestionsApi extends runtime.BaseAPI {
             }
         }
         const response = await this.request({
-            path: `/api/SystemQuestions/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            path: `/api/system-question/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
@@ -199,13 +199,13 @@ export class SystemQuestionsApi extends runtime.BaseAPI {
 
     /**
      */
-    async apiSystemQuestionsIdPut(requestParameters: ApiSystemQuestionsIdPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.apiSystemQuestionsIdPutRaw(requestParameters, initOverrides);
+    async apiSystemQuestionIdPut(requestParameters: ApiSystemQuestionIdPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.apiSystemQuestionIdPutRaw(requestParameters, initOverrides);
     }
 
     /**
      */
-    async apiSystemQuestionsPostRaw(requestParameters: ApiSystemQuestionsPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<SystemQuestion>> {
+    async apiSystemQuestionPostRaw(requestParameters: ApiSystemQuestionPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<SystemQuestion>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -221,7 +221,7 @@ export class SystemQuestionsApi extends runtime.BaseAPI {
             }
         }
         const response = await this.request({
-            path: `/api/SystemQuestions`,
+            path: `/api/system-question`,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
@@ -233,8 +233,8 @@ export class SystemQuestionsApi extends runtime.BaseAPI {
 
     /**
      */
-    async apiSystemQuestionsPost(requestParameters: ApiSystemQuestionsPostRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SystemQuestion> {
-        const response = await this.apiSystemQuestionsPostRaw(requestParameters, initOverrides);
+    async apiSystemQuestionPost(requestParameters: ApiSystemQuestionPostRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SystemQuestion> {
+        const response = await this.apiSystemQuestionPostRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

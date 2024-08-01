@@ -13,6 +13,13 @@
  */
 
 import { mapValues } from '../runtime';
+import type { RoomStatus } from './RoomStatus';
+import {
+    RoomStatusFromJSON,
+    RoomStatusFromJSONTyped,
+    RoomStatusToJSON,
+} from './RoomStatus';
+
 /**
  * 
  * @export
@@ -39,10 +46,10 @@ export interface UpdateRoomDto {
     scheduledAt?: Date | null;
     /**
      * 
-     * @type {boolean}
+     * @type {RoomStatus}
      * @memberof UpdateRoomDto
      */
-    hasStarted?: boolean;
+    status?: RoomStatus;
     /**
      * 
      * @type {Date}
@@ -71,7 +78,7 @@ export function UpdateRoomDtoFromJSONTyped(json: any, ignoreDiscriminator: boole
         'title': json['title'] == null ? undefined : json['title'],
         'description': json['description'] == null ? undefined : json['description'],
         'scheduledAt': json['scheduledAt'] == null ? undefined : (new Date(json['scheduledAt'])),
-        'hasStarted': json['hasStarted'] == null ? undefined : json['hasStarted'],
+        'status': json['status'] == null ? undefined : RoomStatusFromJSON(json['status']),
         'finishedAt': json['finishedAt'] == null ? undefined : (new Date(json['finishedAt'])),
     };
 }
@@ -85,7 +92,7 @@ export function UpdateRoomDtoToJSON(value?: UpdateRoomDto | null): any {
         'title': value['title'],
         'description': value['description'],
         'scheduledAt': value['scheduledAt'] == null ? undefined : ((value['scheduledAt'] as any).toISOString()),
-        'hasStarted': value['hasStarted'],
+        'status': RoomStatusToJSON(value['status']),
         'finishedAt': value['finishedAt'] == null ? undefined : ((value['finishedAt'] as any).toISOString()),
     };
 }

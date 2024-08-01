@@ -9,8 +9,10 @@ import {
 import { CalendarIcon, TimeIcon } from '@chakra-ui/icons';
 import { useState } from 'react';
 import { socket } from '~/lib/utils/socket/socket';
+import { RoomDto } from '~/lib/openApiGen';
+import { format } from 'date-fns';
 
-const RoomCard = ({ event }: { event: any }) => {
+const RoomCard = ({ room }: { room: RoomDto }) => {
   const cardBg = useColorModeValue('white', 'gray.700');
   const cardTextColor = useColorModeValue('gray.800', 'whiteAlpha.900');
   const [isConnected, setIsConnected] = useState(socket.connected);
@@ -20,6 +22,8 @@ const RoomCard = ({ event }: { event: any }) => {
   const join = () => {
     socket.connect();
   };
+
+  console.log(room);
 
   return (
     <Box
@@ -31,20 +35,22 @@ const RoomCard = ({ event }: { event: any }) => {
       transition="transform 0.2s"
       _hover={{ transform: 'scale(1.05)' }}
     >
-      <Image src={event.imageUrl} alt={event.title} />
+      <Image src={'https://via.placeholder.com/150'} alt={room.title || ''} />
       <Box p={6}>
         <Stack spacing={4}>
           <Text fontWeight="bold" fontSize="2xl">
-            {event.title}
+            {room.title}
           </Text>
-          <Text>{event.description}</Text>
+          <Text>{room.description}</Text>
           <Stack direction="row" align="center">
             <CalendarIcon />
-            <Text>{event.date}</Text>
+            <Text>
+              {format(new Date(room.scheduledAt!), 'MMMM do, yyyy h:mm:ss a')}
+            </Text>
           </Stack>
           <Stack direction="row" align="center">
             <TimeIcon />
-            <Text>{event.time}</Text>
+            <Text>{20} mins</Text>
           </Stack>
           <Button colorScheme="pink" variant="outline" mt={4} onClick={join}>
             Join Room

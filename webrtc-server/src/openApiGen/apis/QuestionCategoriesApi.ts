@@ -28,20 +28,20 @@ import {
     QuestionCategoryDtoToJSON,
 } from '../models/index';
 
-export interface ApiQuestionCategoriesIdDeleteRequest {
+export interface ApiQuestionCategoryIdDeleteRequest {
     id: number;
 }
 
-export interface ApiQuestionCategoriesIdGetRequest {
+export interface ApiQuestionCategoryIdGetRequest {
     id: number;
 }
 
-export interface ApiQuestionCategoriesIdPutRequest {
+export interface ApiQuestionCategoryIdPutRequest {
     id: number;
     questionCategoryDto?: QuestionCategoryDto;
 }
 
-export interface ApiQuestionCategoriesPostRequest {
+export interface ApiQuestionCategoryPostRequest {
     questionCategoryDto?: QuestionCategoryDto;
 }
 
@@ -52,7 +52,7 @@ export class QuestionCategoriesApi extends runtime.BaseAPI {
 
     /**
      */
-    async apiQuestionCategoriesGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<QuestionCategory>>> {
+    async apiQuestionCategoryGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<QuestionCategory>>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -66,7 +66,7 @@ export class QuestionCategoriesApi extends runtime.BaseAPI {
             }
         }
         const response = await this.request({
-            path: `/api/QuestionCategories`,
+            path: `/api/question-category`,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -77,18 +77,18 @@ export class QuestionCategoriesApi extends runtime.BaseAPI {
 
     /**
      */
-    async apiQuestionCategoriesGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<QuestionCategory>> {
-        const response = await this.apiQuestionCategoriesGetRaw(initOverrides);
+    async apiQuestionCategoryGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<QuestionCategory>> {
+        const response = await this.apiQuestionCategoryGetRaw(initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async apiQuestionCategoriesIdDeleteRaw(requestParameters: ApiQuestionCategoriesIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async apiQuestionCategoryIdDeleteRaw(requestParameters: ApiQuestionCategoryIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
-                'Required parameter "id" was null or undefined when calling apiQuestionCategoriesIdDelete().'
+                'Required parameter "id" was null or undefined when calling apiQuestionCategoryIdDelete().'
             );
         }
 
@@ -105,7 +105,7 @@ export class QuestionCategoriesApi extends runtime.BaseAPI {
             }
         }
         const response = await this.request({
-            path: `/api/QuestionCategories/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            path: `/api/question-category/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
             method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,
@@ -116,17 +116,17 @@ export class QuestionCategoriesApi extends runtime.BaseAPI {
 
     /**
      */
-    async apiQuestionCategoriesIdDelete(requestParameters: ApiQuestionCategoriesIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.apiQuestionCategoriesIdDeleteRaw(requestParameters, initOverrides);
+    async apiQuestionCategoryIdDelete(requestParameters: ApiQuestionCategoryIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.apiQuestionCategoryIdDeleteRaw(requestParameters, initOverrides);
     }
 
     /**
      */
-    async apiQuestionCategoriesIdGetRaw(requestParameters: ApiQuestionCategoriesIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<QuestionCategory>> {
+    async apiQuestionCategoryIdGetRaw(requestParameters: ApiQuestionCategoryIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<QuestionCategory>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
-                'Required parameter "id" was null or undefined when calling apiQuestionCategoriesIdGet().'
+                'Required parameter "id" was null or undefined when calling apiQuestionCategoryIdGet().'
             );
         }
 
@@ -143,7 +143,7 @@ export class QuestionCategoriesApi extends runtime.BaseAPI {
             }
         }
         const response = await this.request({
-            path: `/api/QuestionCategories/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            path: `/api/question-category/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -154,18 +154,18 @@ export class QuestionCategoriesApi extends runtime.BaseAPI {
 
     /**
      */
-    async apiQuestionCategoriesIdGet(requestParameters: ApiQuestionCategoriesIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<QuestionCategory> {
-        const response = await this.apiQuestionCategoriesIdGetRaw(requestParameters, initOverrides);
+    async apiQuestionCategoryIdGet(requestParameters: ApiQuestionCategoryIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<QuestionCategory> {
+        const response = await this.apiQuestionCategoryIdGetRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async apiQuestionCategoriesIdPutRaw(requestParameters: ApiQuestionCategoriesIdPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async apiQuestionCategoryIdPutRaw(requestParameters: ApiQuestionCategoryIdPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
-                'Required parameter "id" was null or undefined when calling apiQuestionCategoriesIdPut().'
+                'Required parameter "id" was null or undefined when calling apiQuestionCategoryIdPut().'
             );
         }
 
@@ -184,7 +184,7 @@ export class QuestionCategoriesApi extends runtime.BaseAPI {
             }
         }
         const response = await this.request({
-            path: `/api/QuestionCategories/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            path: `/api/question-category/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
@@ -196,13 +196,13 @@ export class QuestionCategoriesApi extends runtime.BaseAPI {
 
     /**
      */
-    async apiQuestionCategoriesIdPut(requestParameters: ApiQuestionCategoriesIdPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.apiQuestionCategoriesIdPutRaw(requestParameters, initOverrides);
+    async apiQuestionCategoryIdPut(requestParameters: ApiQuestionCategoryIdPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.apiQuestionCategoryIdPutRaw(requestParameters, initOverrides);
     }
 
     /**
      */
-    async apiQuestionCategoriesPostRaw(requestParameters: ApiQuestionCategoriesPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<QuestionCategory>> {
+    async apiQuestionCategoryPostRaw(requestParameters: ApiQuestionCategoryPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<QuestionCategory>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -218,7 +218,7 @@ export class QuestionCategoriesApi extends runtime.BaseAPI {
             }
         }
         const response = await this.request({
-            path: `/api/QuestionCategories`,
+            path: `/api/question-category`,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
@@ -230,8 +230,8 @@ export class QuestionCategoriesApi extends runtime.BaseAPI {
 
     /**
      */
-    async apiQuestionCategoriesPost(requestParameters: ApiQuestionCategoriesPostRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<QuestionCategory> {
-        const response = await this.apiQuestionCategoriesPostRaw(requestParameters, initOverrides);
+    async apiQuestionCategoryPost(requestParameters: ApiQuestionCategoryPostRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<QuestionCategory> {
+        const response = await this.apiQuestionCategoryPostRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

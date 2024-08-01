@@ -61,7 +61,7 @@ export class UserProfileApi extends runtime.BaseAPI {
             }
         }
         const response = await this.request({
-            path: `/api/UserProfile/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            path: `/api/user-profile/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -95,7 +95,7 @@ export class UserProfileApi extends runtime.BaseAPI {
             }
         }
         const response = await this.request({
-            path: `/api/UserProfile`,
+            path: `/api/user-profile`,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
