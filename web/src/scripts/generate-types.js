@@ -8,7 +8,7 @@ if (!apiUrl) {
   process.exit(1);
 }
 
-const command = `pnpm openapi-generator-cli generate -i ${apiUrl}/swagger/v1/swagger.json -g typescript-fetch -o ./src/lib/openApiGen`;
+const command = `pnpm openapi-generator-cli generate -i ${apiUrl}/swagger/v1/swagger.json -g typescript-fetch -o ./src/lib/openApiGen --type-mappings=RoomStatus=string`;
 
 exec(command, (err, stdout, stderr) => {
   if (err) {

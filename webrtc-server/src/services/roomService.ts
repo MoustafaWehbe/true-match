@@ -1,4 +1,8 @@
-import { RoomDtoApiResponse, RoomDto } from "../openApiGen";
+import {
+  RoomDtoApiResponse,
+  RoomDto,
+  RoomParticipantDtoApiResponse,
+} from "../openApiGen";
 import axiosInstance from "./axiosInstance";
 import { handleError } from "./errorHandler";
 
@@ -40,11 +44,16 @@ const updateRoom = async (
 
 const joinRoom = async (
   token: string,
-  roomId: number
-): Promise<RoomDtoApiResponse> => {
+  roomId: number,
+  socketId: string
+): Promise<RoomParticipantDtoApiResponse> => {
   try {
-    const response = await axiosInstance.post<RoomDtoApiResponse>(
-      `/room?roomId=${roomId}`,
+    const response = await axiosInstance.post<RoomParticipantDtoApiResponse>(
+      `/room-participant?roomId=${roomId}`,
+      {
+        roomId,
+        socketId,
+      },
       {
         headers: { Authorization: `Bearer ${token}` },
       }

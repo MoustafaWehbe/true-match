@@ -3,7 +3,7 @@ import env from '~/lib/consts/env';
 import { TOKEN } from '~/lib/consts/localStorage';
 
 export const socket = io(env.socketServerUrl!, {
-  autoConnect: false,
+  autoConnect: true,
   auth: {
     token: localStorage.getItem(TOKEN),
   },

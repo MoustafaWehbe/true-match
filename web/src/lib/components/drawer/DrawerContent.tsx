@@ -48,6 +48,14 @@ const DrawerContent = () => {
           </NextLink>
         </ListItem>
         <ListItem>
+          <NextLink href="/my-rooms" passHref>
+            <Link _hover={{ textDecoration: 'none', color: hoverColor }}>
+              <ListIcon as={MdOutlineLiveTv} color={iconColor} />
+              My rooms
+            </Link>
+          </NextLink>
+        </ListItem>
+        <ListItem>
           <NextLink href="/schedule-room" passHref>
             <Link _hover={{ textDecoration: 'none', color: hoverColor }}>
               <ListIcon as={GrSchedulePlay} color={iconColor} />

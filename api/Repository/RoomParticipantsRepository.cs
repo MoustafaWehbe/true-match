@@ -19,18 +19,19 @@ namespace api.Repository
             return await _context.RoomParticipants.Where(rp => rp.UserId == user.Id).ToListAsync();
         }
 
-        public async Task<RoomParticipant?> joinRoomAsync(User user, int roomId)
+        public async Task<RoomParticipant?> joinRoomAsync(User user, CreateRoomParticipantDto createRoomParticipantDto)
         {
             var roomParticipants = await GetRoomParticipantsAsync(user);
 
-            if (roomParticipants.Any(rp => rp.RoomId == roomId))
+            if (roomParticipants.Any(rp => rp.RoomId == createRoomParticipantDto.RoomId))
             {
-                var alreadyParticipatedRoom = roomParticipants.Where(rp => rp.RoomId == roomId).FirstOrDefault();
+                var alreadyParticipatedRoom = roomParticipants.Where(rp => rp.RoomId == createRoomParticipantDto.RoomId).FirstOrDefault();
                 if (alreadyParticipatedRoom != null)
                 {
                     alreadyParticipatedRoom.IsInterested = true;
                     alreadyParticipatedRoom.Attended = true;
                     alreadyParticipatedRoom.AttendedFromTime = DateTime.UtcNow;
+                    alreadyParticipatedRoom.SocketId = createRoomParticipantDto.SocketId;
                     await _context.SaveChangesAsync();
                 }
                 return alreadyParticipatedRoom;
@@ -39,11 +40,12 @@ namespace api.Repository
             {
                 var newRoomParticipant = new RoomParticipant
                 {
-                    RoomId = roomId,
+                    RoomId = createRoomParticipantDto.RoomId,
                     UserId = user.Id,
                     IsInterested = true,
                     Attended = true,
                     AttendedFromTime = DateTime.UtcNow,
+                    SocketId = createRoomParticipantDto.SocketId
 
                 };
                 await _context.RoomParticipants.AddAsync(newRoomParticipant);

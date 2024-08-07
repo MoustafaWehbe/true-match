@@ -18,7 +18,6 @@ import type {
   CreateRoomDto,
   RoomDtoApiResponse,
   RoomDtoPagedResponse,
-  RoomStatus,
   UpdateRoomDto,
 } from '../models/index';
 import {
@@ -28,8 +27,6 @@ import {
     RoomDtoApiResponseToJSON,
     RoomDtoPagedResponseFromJSON,
     RoomDtoPagedResponseToJSON,
-    RoomStatusFromJSON,
-    RoomStatusToJSON,
     UpdateRoomDtoFromJSON,
     UpdateRoomDtoToJSON,
 } from '../models/index';
@@ -37,7 +34,7 @@ import {
 export interface ApiRoomGetRequest {
     pageNumber?: number;
     pageSize?: number;
-    status?: RoomStatus;
+    status?: string;
 }
 
 export interface ApiRoomIdGetRequest {

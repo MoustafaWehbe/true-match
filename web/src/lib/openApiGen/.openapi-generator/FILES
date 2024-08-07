@@ -1,4 +1,3 @@
-.openapi-generator-ignore
 apis/AccountApi.ts
 apis/InteresetApi.ts
 apis/LifeStyleApi.ts
@@ -14,6 +13,7 @@ apis/index.ts
 index.ts
 models/CreateMatchDto.ts
 models/CreateRoomDto.ts
+models/CreateRoomParticipantDto.ts
 models/CreateSystemQuestionDto.ts
 models/CreateUserProfileDto.ts
 models/Gender.ts

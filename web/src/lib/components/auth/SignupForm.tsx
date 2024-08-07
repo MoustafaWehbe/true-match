@@ -43,7 +43,7 @@ function SignupForm() {
         router.push('/');
       }
     }
-  }, [registerResult]);
+  }, [registerResult, router, toast]);
 
   useEffect(() => {
     if (registerError) {

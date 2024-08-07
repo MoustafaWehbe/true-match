@@ -54,6 +54,12 @@ export interface RoomParticipantDto {
      * @type {string}
      * @memberof RoomParticipantDto
      */
+    socketId?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof RoomParticipantDto
+     */
     userId?: string | null;
 }
 
@@ -79,6 +85,7 @@ export function RoomParticipantDtoFromJSONTyped(json: any, ignoreDiscriminator: 
         'attendedFromTime': json['attendedFromTime'] == null ? undefined : (new Date(json['attendedFromTime'])),
         'attendedToTime': json['attendedToTime'] == null ? undefined : (new Date(json['attendedToTime'])),
         'roomId': json['roomId'] == null ? undefined : json['roomId'],
+        'socketId': json['socketId'] == null ? undefined : json['socketId'],
         'userId': json['userId'] == null ? undefined : json['userId'],
     };
 }
@@ -94,6 +101,7 @@ export function RoomParticipantDtoToJSON(value?: RoomParticipantDto | null): any
         'attendedFromTime': value['attendedFromTime'] == null ? undefined : ((value['attendedFromTime'] as any).toISOString()),
         'attendedToTime': value['attendedToTime'] == null ? undefined : ((value['attendedToTime'] as any).toISOString()),
         'roomId': value['roomId'],
+        'socketId': value['socketId'],
         'userId': value['userId'],
     };
 }

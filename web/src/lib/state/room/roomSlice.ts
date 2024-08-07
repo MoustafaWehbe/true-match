@@ -15,8 +15,8 @@ export interface RoomSate {
   createdRoom?: RoomDto;
   roomContentLoading: boolean;
   createRoomLoading: boolean;
-  getLiveRoomsLoading: boolean;
-  liveRooms: RoomDtoPagedResponse | null;
+  getRoomsLoading: boolean;
+  rooms: RoomDtoPagedResponse | null;
 }
 
 export const getRoomContent = createAsyncThunk<
@@ -39,12 +39,12 @@ export const getRoomContent = createAsyncThunk<
   }
 });
 
-export const getLiveRooms = createAsyncThunk<
+export const getRooms = createAsyncThunk<
   RoomDtoPagedResponse,
   { PageNumber: number; PageSize: number; Status: number },
   { rejectValue: string }
 >(
-  'room/getLiveRooms',
+  'room/getRooms',
   async ({ PageNumber, PageSize, Status }, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.get<RoomDtoPagedResponse>(
@@ -88,8 +88,8 @@ const initialState: RoomSate = {
   roomContent: null,
   roomContentLoading: false,
   createRoomLoading: false,
-  getLiveRoomsLoading: false,
-  liveRooms: null,
+  getRoomsLoading: false,
+  rooms: null,
 };
 
 const roomSlice = createSlice({
@@ -124,18 +124,18 @@ const roomSlice = createSlice({
       .addCase(createRoom.rejected, (state) => {
         state.createRoomLoading = false;
       })
-      .addCase(getLiveRooms.pending, (state) => {
-        state.getLiveRoomsLoading = true;
+      .addCase(getRooms.pending, (state) => {
+        state.getRoomsLoading = true;
       })
       .addCase(
-        getLiveRooms.fulfilled,
+        getRooms.fulfilled,
         (state, action: PayloadAction<RoomDtoPagedResponse | null>) => {
-          state.getLiveRoomsLoading = false;
-          state.liveRooms = action.payload;
+          state.getRoomsLoading = false;
+          state.rooms = action.payload;
         }
       )
-      .addCase(getLiveRooms.rejected, (state) => {
-        state.getLiveRoomsLoading = false;
+      .addCase(getRooms.rejected, (state) => {
+        state.getRoomsLoading = false;
       });
   },
 });

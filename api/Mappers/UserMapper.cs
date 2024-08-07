@@ -9,6 +9,7 @@ namespace api.Mappers
         {
             return new UserDto
             {
+                Id = userModel.Id,
                 Rooms = userModel.Rooms,
                 Media = userModel.Media,
                 UserProfile = userModel.UserProfile?.ToUserProfileDto(),
@@ -21,6 +22,7 @@ namespace api.Mappers
         {
             return new UserSimplifiedDto
             {
+                Id = userModel.Id,
                 FirstName = userModel.FirstName,
                 LastName = userModel.LastName
             };

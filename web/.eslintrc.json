@@ -1,17 +1,3 @@
 {
-  "extends": [
-    "sznm/react",
-    "plugin:react/jsx-runtime",
-    "plugin:@next/next/recommended"
-  ],
-  "import/extensions": [
-    "error",
-    "ignorePackages",
-    {
-      "js": "never",
-      "jsx": "never",
-      "ts": "never",
-      "tsx": "never"
-    }
- ]
+  "extends": "next/core-web-vitals"
 }

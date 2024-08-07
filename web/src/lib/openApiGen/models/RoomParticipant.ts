@@ -70,6 +70,12 @@ export interface RoomParticipant {
     attendedToTime?: Date | null;
     /**
      * 
+     * @type {string}
+     * @memberof RoomParticipant
+     */
+    socketId?: string | null;
+    /**
+     * 
      * @type {Date}
      * @memberof RoomParticipant
      */
@@ -117,6 +123,7 @@ export function RoomParticipantFromJSONTyped(json: any, ignoreDiscriminator: boo
         'attended': json['attended'] == null ? undefined : json['attended'],
         'attendedFromTime': json['attendedFromTime'] == null ? undefined : (new Date(json['attendedFromTime'])),
         'attendedToTime': json['attendedToTime'] == null ? undefined : (new Date(json['attendedToTime'])),
+        'socketId': json['socketId'] == null ? undefined : json['socketId'],
         'createdAt': json['createdAt'] == null ? undefined : (new Date(json['createdAt'])),
         'updatedAt': json['updatedAt'] == null ? undefined : (new Date(json['updatedAt'])),
         'room': json['room'] == null ? undefined : RoomFromJSON(json['room']),
@@ -136,6 +143,7 @@ export function RoomParticipantToJSON(value?: RoomParticipant | null): any {
         'attended': value['attended'],
         'attendedFromTime': value['attendedFromTime'] == null ? undefined : ((value['attendedFromTime'] as any).toISOString()),
         'attendedToTime': value['attendedToTime'] == null ? undefined : ((value['attendedToTime'] as any).toISOString()),
+        'socketId': value['socketId'],
         'createdAt': value['createdAt'] == null ? undefined : ((value['createdAt']).toISOString()),
         'updatedAt': value['updatedAt'] == null ? undefined : ((value['updatedAt']).toISOString()),
         'room': RoomToJSON(value['room']),

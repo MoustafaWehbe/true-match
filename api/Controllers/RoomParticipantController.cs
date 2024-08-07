@@ -28,11 +28,11 @@ namespace api.Controllers
         [HttpPost]
         [Authorize]
         [ProducesResponseType(typeof(ApiResponse<RoomParticipantDto>), 200)]
-        public async Task<IActionResult> joinRoom(int roomId)
+        public async Task<IActionResult> joinRoom([FromBody] CreateRoomParticipantDto createRoomParticipantDto)
         {
             var user = await _userManager.FindByEmailAsync(User.GetEmail());
 
-            var room = await _roomRepo.GetByIdAsync(roomId);
+            var room = await _roomRepo.GetByIdAsync(createRoomParticipantDto.RoomId);
 
             if (room == null)
             {
@@ -44,7 +44,7 @@ namespace api.Controllers
                 return BadRequest("User does not exist");
             }
 
-            var roomParticipant = await _roomParticipantRepo.joinRoomAsync(user, roomId);
+            var roomParticipant = await _roomParticipantRepo.joinRoomAsync(user, createRoomParticipantDto);
 
             if (roomParticipant == null)
             {

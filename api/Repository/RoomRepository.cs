@@ -65,6 +65,7 @@ namespace api.Repository
             existingRoom.FinishedAt = roomDto.FinishedAt;
             existingRoom.Status = roomDto.Status;
             existingRoom.UpdatedAt = DateTime.UtcNow;
+            existingRoom.Offers = roomDto.Offers;
 
             await _context.SaveChangesAsync();
 

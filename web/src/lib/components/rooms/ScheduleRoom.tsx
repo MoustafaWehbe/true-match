@@ -36,20 +36,6 @@ function ScheduleRoom() {
     (state: RootState) => state.room
   );
 
-  useEffect(() => {
-    if (createdRoom?.id && !createRoomLoading && formik.values.title) {
-      toast({
-        title: 'Room created.',
-        description: 'Your room has been created successfully.',
-        status: 'success',
-        duration: 5000,
-        isClosable: true,
-      });
-      formik.resetForm({});
-      setIsChecked(false);
-    }
-  }, [createdRoom, createRoomLoading]);
-
   const formik = useFormik({
     initialValues: {
       title: '',
@@ -84,6 +70,20 @@ function ScheduleRoom() {
       );
     },
   });
+
+  useEffect(() => {
+    if (createdRoom?.id && !createRoomLoading && formik.values.title) {
+      toast({
+        title: 'Room created.',
+        description: 'Your room has been created successfully.',
+        status: 'success',
+        duration: 5000,
+        isClosable: true,
+      });
+      formik.resetForm({});
+      setIsChecked(false);
+    }
+  }, [createdRoom, createRoomLoading, formik, toast]);
 
   return (
     <Container>

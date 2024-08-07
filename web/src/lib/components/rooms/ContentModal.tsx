@@ -32,12 +32,13 @@ const ContentModal = ({ isModalOpen, setIsModalOpen }: Props) => {
   const { roomContent, roomContentLoading } = useSelector(
     (state: RootState) => state.room
   );
+  const listItemBgColor = useColorModeValue('gray.100', 'gray.600');
 
   useEffect(() => {
     if (!roomContent && !roomContentLoading) {
       dispatch(getRoomContent());
     }
-  }, []);
+  }, [dispatch, roomContent, roomContentLoading]);
 
   return (
     <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
@@ -52,7 +53,7 @@ const ContentModal = ({ isModalOpen, setIsModalOpen }: Props) => {
                 key={content.id}
                 p={4}
                 borderRadius="md"
-                bg={useColorModeValue('gray.100', 'gray.600')}
+                bg={listItemBgColor}
               >
                 <ListIcon as={MdCheckCircle} color="green.500" />
                 <Text fontSize="lg" fontWeight="bold">

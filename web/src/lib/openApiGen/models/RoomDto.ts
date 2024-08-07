@@ -19,12 +19,6 @@ import {
     UserSimplifiedDtoFromJSONTyped,
     UserSimplifiedDtoToJSON,
 } from './UserSimplifiedDto';
-import type { RoomStatus } from './RoomStatus';
-import {
-    RoomStatusFromJSON,
-    RoomStatusFromJSONTyped,
-    RoomStatusToJSON,
-} from './RoomStatus';
 import type { RoomParticipant } from './RoomParticipant';
 import {
     RoomParticipantFromJSON,
@@ -58,10 +52,16 @@ export interface RoomDto {
     description?: string | null;
     /**
      * 
-     * @type {RoomStatus}
+     * @type {any}
      * @memberof RoomDto
      */
-    status?: RoomStatus;
+    offers?: any | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof RoomDto
+     */
+    status?: string;
     /**
      * 
      * @type {Date}
@@ -120,7 +120,8 @@ export function RoomDtoFromJSONTyped(json: any, ignoreDiscriminator: boolean): R
         'id': json['id'] == null ? undefined : json['id'],
         'title': json['title'] == null ? undefined : json['title'],
         'description': json['description'] == null ? undefined : json['description'],
-        'status': json['status'] == null ? undefined : RoomStatusFromJSON(json['status']),
+        'offers': json['offers'] == null ? undefined : json['offers'],
+        'status': json['status'] == null ? undefined : json['status'],
         'scheduledAt': json['scheduledAt'] == null ? undefined : (new Date(json['scheduledAt'])),
         'finishedAt': json['finishedAt'] == null ? undefined : (new Date(json['finishedAt'])),
         'createdAt': json['createdAt'] == null ? undefined : (new Date(json['createdAt'])),
@@ -139,7 +140,8 @@ export function RoomDtoToJSON(value?: RoomDto | null): any {
         'id': value['id'],
         'title': value['title'],
         'description': value['description'],
-        'status': RoomStatusToJSON(value['status']),
+        'offers': value['offers'],
+        'status': value['status'],
         'scheduledAt': value['scheduledAt'] == null ? undefined : ((value['scheduledAt'] as any).toISOString()),
         'finishedAt': value['finishedAt'] == null ? undefined : ((value['finishedAt'] as any).toISOString()),
         'createdAt': value['createdAt'] == null ? undefined : ((value['createdAt']).toISOString()),

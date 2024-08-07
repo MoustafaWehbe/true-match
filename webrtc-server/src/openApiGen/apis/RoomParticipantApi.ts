@@ -15,10 +15,13 @@
 
 import * as runtime from '../runtime';
 import type {
+  CreateRoomParticipantDto,
   RoomParticipantDtoApiResponse,
   UpdateRoomParticipantDto,
 } from '../models/index';
 import {
+    CreateRoomParticipantDtoFromJSON,
+    CreateRoomParticipantDtoToJSON,
     RoomParticipantDtoApiResponseFromJSON,
     RoomParticipantDtoApiResponseToJSON,
     UpdateRoomParticipantDtoFromJSON,
@@ -31,7 +34,7 @@ export interface ApiRoomParticipantIdPutRequest {
 }
 
 export interface ApiRoomParticipantPostRequest {
-    roomId?: number;
+    createRoomParticipantDto?: CreateRoomParticipantDto;
 }
 
 /**
@@ -86,11 +89,9 @@ export class RoomParticipantApi extends runtime.BaseAPI {
     async apiRoomParticipantPostRaw(requestParameters: ApiRoomParticipantPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<RoomParticipantDtoApiResponse>> {
         const queryParameters: any = {};
 
-        if (requestParameters['roomId'] != null) {
-            queryParameters['roomId'] = requestParameters['roomId'];
-        }
-
         const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json-patch+json';
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -105,6 +106,7 @@ export class RoomParticipantApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
+            body: CreateRoomParticipantDtoToJSON(requestParameters['createRoomParticipantDto']),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => RoomParticipantDtoApiResponseFromJSON(jsonValue));

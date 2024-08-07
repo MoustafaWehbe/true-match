@@ -15,6 +15,7 @@ namespace api.Mappers
                 AttendedToTime = roomParticipantModel.AttendedToTime,
                 RoomId = roomParticipantModel.RoomId,
                 UserId = roomParticipantModel.UserId,
+                SocketId = roomParticipantModel.SocketId
             };
         }
 

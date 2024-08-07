@@ -2,6 +2,7 @@
 /* eslint-disable */
 export * from './CreateMatchDto';
 export * from './CreateRoomDto';
+export * from './CreateRoomParticipantDto';
 export * from './CreateSystemQuestionDto';
 export * from './CreateUserProfileDto';
 export * from './Gender';

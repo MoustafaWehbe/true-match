@@ -24,6 +24,12 @@ export interface UserSimplifiedDto {
      * @type {string}
      * @memberof UserSimplifiedDto
      */
+    id?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof UserSimplifiedDto
+     */
     firstName?: string | null;
     /**
      * 
@@ -50,6 +56,7 @@ export function UserSimplifiedDtoFromJSONTyped(json: any, ignoreDiscriminator: b
     }
     return {
         
+        'id': json['id'] == null ? undefined : json['id'],
         'firstName': json['firstName'] == null ? undefined : json['firstName'],
         'lastName': json['lastName'] == null ? undefined : json['lastName'],
     };
@@ -61,6 +68,7 @@ export function UserSimplifiedDtoToJSON(value?: UserSimplifiedDto | null): any {
     }
     return {
         
+        'id': value['id'],
         'firstName': value['firstName'],
         'lastName': value['lastName'],
     };
