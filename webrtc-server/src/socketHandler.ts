@@ -42,31 +42,37 @@ class SocketHandler {
       console.log("New client connected");
 
       socket.on("join", (room) => {
-        console.log(room);
         if (!this.rooms[room]) {
           this.rooms[room] = [];
         }
         this.rooms[room].push(socket.id);
         socket.join(room);
-
-        console.log(this.rooms[room]);
-
-        const otherUsers = this.rooms[room].filter(
-          (id: any) => id !== socket.id
-        );
-        socket.emit("all-users", otherUsers);
+        socket.broadcast.to(room).emit("user-joined", socket.id);
       });
 
+      //payload:
+      // {
+      //   target,
+      //   user,
+      //   sdp,
+      // }
       socket.on("offer", (payload) => {
         this.io.to(payload.target).emit("offer", payload);
       });
 
+      //payload:
+      // target,
+      // sdp,
       socket.on("answer", (payload) => {
         this.io.to(payload.target).emit("answer", payload);
       });
 
+      // incoming:
+      // target: userToSignal,
+      // user,
+      // candidate: event.candidate,
       socket.on("ice-candidate", (incoming) => {
-        this.io.to(incoming.target).emit("ice-candidate", incoming.candidate);
+        this.io.to(incoming.target).emit("ice-candidate", incoming);
       });
 
       socket.on("disconnect", () => {

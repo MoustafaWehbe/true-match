@@ -1,4 +1,3 @@
-import { Box, Heading } from '@chakra-ui/react';
 import Room from '~/lib/components/rooms/Room';
 
 const RoomPage = (props: {
@@ -6,6 +5,10 @@ const RoomPage = (props: {
   search: Object;
 }) => {
   const id = props.params['id'];
+
+  if (!id) {
+    return null;
+  }
 
   return <Room roomId={id as string} />;
 };

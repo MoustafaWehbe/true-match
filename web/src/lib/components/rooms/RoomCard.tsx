@@ -44,8 +44,6 @@ const RoomCard = ({
   const isLive = room.status === 'InProgress' && !room.finishedAt;
   const isUpcoming = room.status === 'Pending';
 
-  console.log(typeof room.status);
-
   const join = () => {
     socket.connect();
   };

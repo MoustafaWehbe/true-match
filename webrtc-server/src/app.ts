@@ -3,6 +3,7 @@ import https, { Server as HTTPSServer } from "https";
 import fs from "fs";
 import { Server as SocketIOServer } from "socket.io";
 import SocketHandler from "./socketHandler";
+import { instrument } from "@socket.io/admin-ui";
 
 class App {
   public server: Application;
@@ -34,11 +35,14 @@ class App {
         origin: [
           "https://localhost",
           "http://localhost:3000",
+          "https://admin.socket.io",
           "https://192.168.43.149", //if using a phone or another computer
         ],
+        credentials: true,
         methods: ["GET", "POST"],
       },
     });
+    instrument(this.io, { auth: false });
     new SocketHandler(this.io);
   }
 
