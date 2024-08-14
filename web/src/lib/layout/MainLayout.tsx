@@ -5,7 +5,7 @@ import { Box, Flex, useMediaQuery } from '@chakra-ui/react';
 import Footer from '../components/layout/Footer';
 import Header from '../components/layout/Header';
 import Sidebar from '../components/drawer/Sidebar';
-import DrawerExample from '../components/drawer/Drawer';
+import DrawerMobile from '../components/drawer/DrawerMobile';
 import { size } from '../consts';
 import { LayoutProps } from '.';
 
@@ -16,11 +16,11 @@ const MainLayout = ({ children }: LayoutProps) => {
     <Box>
       <Header />
       <Flex>
-        {isTabletOrMobile ? <DrawerExample /> : <Sidebar />}
+        {isTabletOrMobile ? <DrawerMobile /> : <Sidebar />}
         <Box
           margin="0 auto"
           width={'100%'}
-          maxWidth={'80vw'}
+          maxWidth={{ base: '100vw', md: '80vw' }} // 100vw for base (screens < 768px), 80vw for md (screens >= 768px)
           transition="0.5s ease-out"
           height={'90vh'}
           display={'flex'}

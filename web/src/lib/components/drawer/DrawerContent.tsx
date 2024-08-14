@@ -32,6 +32,14 @@ const DrawerContent = () => {
       </Stack>
       <List fontSize="1.2em" spacing={4} color={linkColor}>
         <ListItem>
+          <NextLink href="/swipe-to-match" passHref>
+            <Link _hover={{ textDecoration: 'none', color: hoverColor }}>
+              <ListIcon as={RiCalendarScheduleLine} color={iconColor} />
+              Swipe to match
+            </Link>
+          </NextLink>
+        </ListItem>
+        <ListItem>
           <NextLink href="/upcoming-rooms" passHref>
             <Link _hover={{ textDecoration: 'none', color: hoverColor }}>
               <ListIcon as={RiCalendarScheduleLine} color={iconColor} />

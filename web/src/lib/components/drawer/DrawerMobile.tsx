@@ -2,24 +2,32 @@
 
 import { useRef, type PropsWithChildren } from 'react';
 import {
+  Box,
   Button,
   Drawer,
   DrawerBody,
   DrawerCloseButton,
   DrawerContent,
+  IconButton,
   useDisclosure,
 } from '@chakra-ui/react';
 import Content from './DrawerContent';
+import { HamburgerIcon } from '@chakra-ui/icons';
 
-function DrawerExample({ children, ...rest }: PropsWithChildren) {
+function DrawerMobile({ children, ...rest }: PropsWithChildren) {
   const { onClose, isOpen, onOpen } = useDisclosure();
   const btnRef = useRef<any>();
 
   return (
-    <>
-      <Button ref={btnRef} colorScheme="teal" onClick={onOpen}>
-        Open
-      </Button>
+    <Box position={'absolute'}>
+      <IconButton
+        ref={btnRef}
+        aria-label="Add to friends"
+        icon={<HamburgerIcon />}
+        onClick={onOpen}
+        variant="ghost"
+      />
+
       <Drawer
         {...rest}
         isOpen={isOpen}
@@ -34,8 +42,8 @@ function DrawerExample({ children, ...rest }: PropsWithChildren) {
           </DrawerBody>
         </DrawerContent>
       </Drawer>
-    </>
+    </Box>
   );
 }
 
-export default DrawerExample;
+export default DrawerMobile;

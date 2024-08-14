@@ -64,6 +64,13 @@ const Header = () => {
       boxShadow="rgba(0, 0, 0, 0.12) 0px 1px 1px"
       borderRadius="lg"
       border={`1px solid ${borderColor}`}
+      // bgImage={useColorModeValue(
+      //   'url(/images/pink-hearts.jpg)',
+      //   'url(/images/pink-hearts.jpg)'
+      // )}
+      // bgSize="cover"
+      // bgRepeat="repeat"
+      // bgPosition="center"
     >
       <Box animation={`${bounceAnimation} 2s infinite`}>
         <Heading

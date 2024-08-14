@@ -2,13 +2,13 @@
 
 import {
   Box,
+  Grid,
   Heading,
-  SimpleGrid,
   Stack,
   Text,
   useColorModeValue,
 } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import RoomCard from './RoomCard';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '~/lib/state/store';
@@ -40,9 +40,17 @@ function LiveRooms() {
           Join us for these exciting live rooms happening soon!
         </Text>
       </Stack>
-      <SimpleGrid columns={{ base: 1, sm: 2, md: 3 }} spacing={8} mt={8}>
+      <Grid
+        templateColumns={{
+          base: 'repeat(1, 1fr)', // For screens less than 48em (768px)
+          md: 'repeat(2, 1fr)', // For screens between 48em (768px) and 74em (1184px)
+          lg: 'repeat(3, 1fr)', // For screens larger than 74em (1184px)
+        }}
+        gap={8}
+        mt={8}
+      >
         {rooms?.data?.map((room) => <RoomCard key={room.id} room={room} />)}
-      </SimpleGrid>
+      </Grid>
     </Box>
   );
 }
