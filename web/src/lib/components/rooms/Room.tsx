@@ -1,43 +1,11 @@
 'use client';
 
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Box, Button, Flex, Text, useColorModeValue } from '@chakra-ui/react';
 import { socket } from '~/lib/utils/socket/socket';
 import RoomSettings from './RoomSettings';
 import { WebRTCHandler } from '~/lib/utils/webrtc/WebRTCHandler';
-
-const peerConfiguration = {
-  iceServers: [
-    {
-      urls: ['stun:stun.l.google.com:19302', 'stun:stun1.l.google.com:19302'],
-    },
-  ],
-};
-
-const Video: React.FC<{ peer?: RTCPeerConnection }> = ({ peer }) => {
-  const ref = useRef<HTMLVideoElement>(null);
-
-  useEffect(() => {
-    if (peer) {
-      peer.ontrack = (event) => {
-        if (ref.current) {
-          ref.current.srcObject = event.streams[0];
-        }
-      };
-    }
-  }, [peer]);
-
-  return (
-    <video
-      ref={ref}
-      autoPlay
-      playsInline
-      width="100%"
-      height="auto"
-      style={{ borderRadius: '10px', marginTop: '10px' }}
-    />
-  );
-};
+import PeerVideo from './PeerVideo';
 
 const Room = ({ roomId: roomID }: { roomId: string }) => {
   const cardBg = useColorModeValue('white', 'gray.700');
@@ -50,8 +18,6 @@ const Room = ({ roomId: roomID }: { roomId: string }) => {
   const [peers, setPeers] = useState<
     { peerID: string; peer: RTCPeerConnection }[]
   >([]);
-
-  // const { localVideoRef, peers } = useRoomHook(roomID);
 
   useEffect(() => {
     webRTCHandler.current = new WebRTCHandler(roomID, setPeers);
@@ -100,7 +66,9 @@ const Room = ({ roomId: roomID }: { roomId: string }) => {
           width="100%"
           style={{ borderRadius: '10px', height: '300px', width: '100%' }}
         />
-        {peers?.map((peer, index) => <Video key={index} peer={peer.peer} />)}
+        {peers?.map((peer, index) => (
+          <PeerVideo key={index} peer={peer.peer} />
+        ))}
         {peers?.length === 0 && (
           <Flex
             direction="column"
