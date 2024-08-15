@@ -1,5 +1,5 @@
-import { Box } from '@chakra-ui/react';
-import Swipe from '~/lib/components/swipe/Swipe';
+import { Box } from "@chakra-ui/react";
+import Swipe from "~/lib/components/swipe/Swipe";
 
 const SwipeToMatchPage = () => {
   return (

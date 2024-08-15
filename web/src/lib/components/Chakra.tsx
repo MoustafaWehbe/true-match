@@ -2,9 +2,9 @@ import {
   ChakraProvider,
   ColorModeScript,
   cookieStorageManager,
-} from '@chakra-ui/react';
+} from "@chakra-ui/react";
 
-import customTheme from '~/lib/styles/theme/index';
+import customTheme from "~/lib/styles/theme/index";
 
 type ChakraProps = {
   children: React.ReactNode;

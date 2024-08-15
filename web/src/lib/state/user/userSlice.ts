@@ -1,5 +1,5 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import axios from 'axios';
+import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+import axios from "axios";
 import {
   LoginDto,
   RegisterDto,
@@ -7,9 +7,9 @@ import {
   SimpleApiResponseApiResponse,
   User,
   UserApiResponse,
-} from '~/lib/openApiGen';
-import axiosInstance from '~/lib/utils/api/axiosConfig';
-import { TOKEN } from '~/lib/consts/localStorage';
+} from "~/lib/openApiGen";
+import axiosInstance from "~/lib/utils/api/axiosConfig";
+import { TOKEN } from "~/lib/consts/localStorage";
 
 export interface UserState {
   loginResult: UserApiResponse | null;
@@ -22,7 +22,7 @@ export interface UserState {
   logoutResponseMessage: string;
 }
 
-export interface ExtendedUserApiResponse extends Omit<UserApiResponse, 'data'> {
+export interface ExtendedUserApiResponse extends Omit<UserApiResponse, "data"> {
   data: User & { token: string };
 }
 
@@ -30,16 +30,16 @@ export const registerUser = createAsyncThunk<
   ExtendedUserApiResponse, // Return type of the payload creator
   RegisterDto, // First argument to the payload creator
   { rejectValue: string } // Type for rejectWithValue
->('user/registerUser', async (userData, { rejectWithValue }) => {
+>("user/registerUser", async (userData, { rejectWithValue }) => {
   try {
     const response = await axiosInstance.post<ExtendedUserApiResponse>(
-      '/api/account/register',
+      "/api/account/register",
       userData
     );
     localStorage.setItem(TOKEN, response.data.data.token);
     return response.data;
   } catch (error) {
-    let errorMessage = 'Something went wrong!';
+    let errorMessage = "Something went wrong!";
     if (axios.isAxiosError(error) && error.response) {
       errorMessage = error.response.data.message || errorMessage;
     }
@@ -51,16 +51,16 @@ export const loginUser = createAsyncThunk<
   ExtendedUserApiResponse,
   LoginDto,
   { rejectValue: string }
->('user/loginUser', async (userData, { rejectWithValue }) => {
+>("user/loginUser", async (userData, { rejectWithValue }) => {
   try {
     const response = await axiosInstance.post<ExtendedUserApiResponse>(
-      '/api/account/login',
+      "/api/account/login",
       userData
     );
     localStorage.setItem(TOKEN, response.data.data.token);
     return response.data;
   } catch (error) {
-    let errorMessage = 'Something went wrong!';
+    let errorMessage = "Something went wrong!";
     if (axios.isAxiosError(error) && error.response) {
       errorMessage = error.response.data.message || errorMessage;
     }
@@ -72,15 +72,15 @@ export const logoutUser = createAsyncThunk<
   SimpleApiResponseApiResponse,
   undefined,
   { rejectValue: string }
->('user/logoutUser', async (userData, { rejectWithValue }) => {
+>("user/logoutUser", async (userData, { rejectWithValue }) => {
   try {
     const response = await axiosInstance.post<SimpleApiResponseApiResponse>(
-      '/api/account/logout'
+      "/api/account/logout"
     );
     localStorage.removeItem(TOKEN);
     return response.data;
   } catch (error) {
-    let errorMessage = 'Something went wrong!';
+    let errorMessage = "Something went wrong!";
     if (axios.isAxiosError(error) && error.response) {
       errorMessage = error.response.data.message || errorMessage;
     }
@@ -92,12 +92,12 @@ export const fetchUser = createAsyncThunk<
   User | null, // Return type
   void, // Argument type
   { rejectValue: string } // Error type
->('user/fetchUser', async (_, { rejectWithValue }) => {
+>("user/fetchUser", async (_, { rejectWithValue }) => {
   try {
-    const response = await axiosInstance.get<UserApiResponse>('/me');
+    const response = await axiosInstance.get<UserApiResponse>("/me");
     return response.data.data ?? null;
   } catch (error) {
-    let errorMessage = 'Something went wrong!';
+    let errorMessage = "Something went wrong!";
     if (axios.isAxiosError(error) && error.response) {
       errorMessage = error.response.data.message || errorMessage;
     }
@@ -113,11 +113,11 @@ const initialState: UserState = {
   loginError: null,
   registerError: null,
   user: null,
-  logoutResponseMessage: '',
+  logoutResponseMessage: "",
 };
 
 const userSlice = createSlice({
-  name: 'user',
+  name: "user",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -131,14 +131,14 @@ const userSlice = createSlice({
         (state, action: PayloadAction<ExtendedUserApiResponse>) => {
           state.registerLoading = false;
           state.registerResult = action.payload;
-          localStorage.setItem('token', action.payload.data.token);
+          localStorage.setItem("token", action.payload.data.token);
         }
       )
       .addCase(
         registerUser.rejected,
         (state, action: PayloadAction<string | undefined>) => {
           state.registerLoading = false;
-          state.registerError = action.payload || 'Unknown error';
+          state.registerError = action.payload || "Unknown error";
         }
       )
       .addCase(loginUser.pending, (state) => {
@@ -156,7 +156,7 @@ const userSlice = createSlice({
         loginUser.rejected,
         (state, action: PayloadAction<string | undefined>) => {
           state.loginLoading = false;
-          state.loginError = action.payload || 'Unknown error';
+          state.loginError = action.payload || "Unknown error";
         }
       )
       .addCase(
@@ -175,7 +175,7 @@ const userSlice = createSlice({
           state.registerResult = null;
           state.registerLoading = false;
           state.loginLoading = false;
-          state.logoutResponseMessage = action.payload.data?.message ?? '';
+          state.logoutResponseMessage = action.payload.data?.message ?? "";
         }
       );
   },

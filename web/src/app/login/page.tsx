@@ -1,3 +1,3 @@
-import Login from '~/lib/pages/login';
+import Login from "~/lib/pages/login";
 
 export default Login;

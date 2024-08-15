@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import React, { useEffect } from 'react';
+import React, { useEffect } from "react";
 
 import {
   List,
@@ -16,11 +16,11 @@ import {
   ModalFooter,
   Button,
   useColorModeValue,
-} from '@chakra-ui/react';
-import { MdCheckCircle } from 'react-icons/md';
-import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '~/lib/state/store';
-import { getRoomContent } from '~/lib/state/room/roomSlice';
+} from "@chakra-ui/react";
+import { MdCheckCircle } from "react-icons/md";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "~/lib/state/store";
+import { getRoomContent } from "~/lib/state/room/roomSlice";
 
 type Props = {
   isModalOpen: boolean;
@@ -32,7 +32,7 @@ const ContentModal = ({ isModalOpen, setIsModalOpen }: Props) => {
   const { roomContent, roomContentLoading } = useSelector(
     (state: RootState) => state.room
   );
-  const listItemBgColor = useColorModeValue('gray.100', 'gray.600');
+  const listItemBgColor = useColorModeValue("gray.100", "gray.600");
 
   useEffect(() => {
     if (!roomContent && !roomContentLoading) {
@@ -61,7 +61,7 @@ const ContentModal = ({ isModalOpen, setIsModalOpen }: Props) => {
                 </Text>
                 <Text>{content.description}</Text>
                 <Text fontSize="sm" color="gray.500">
-                  Duration: {Math.floor((content.duration || 0) / 60)} mins{' '}
+                  Duration: {Math.floor((content.duration || 0) / 60)} mins{" "}
                   {(content.duration || 0) % 60} secs
                 </Text>
               </ListItem>

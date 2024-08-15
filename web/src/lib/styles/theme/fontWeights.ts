@@ -1,6 +1,6 @@
-import type { DeepPartial, Theme } from '@chakra-ui/react';
+import type { DeepPartial, Theme } from "@chakra-ui/react";
 
-export const fontWeights: DeepPartial<Theme['fontWeights']> = {
+export const fontWeights: DeepPartial<Theme["fontWeights"]> = {
   hairline: 100,
   thin: 200,
   light: 300,

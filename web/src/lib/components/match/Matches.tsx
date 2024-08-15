@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { Container } from '@chakra-ui/react';
+import { Container } from "@chakra-ui/react";
 
 function Matches() {
   return (

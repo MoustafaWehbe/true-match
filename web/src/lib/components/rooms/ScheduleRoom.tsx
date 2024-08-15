@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import {
   Box,
@@ -14,22 +14,22 @@ import {
   Container,
   Checkbox,
   Link,
-} from '@chakra-ui/react';
-import { useFormik } from 'formik';
-import { useEffect, useState } from 'react';
-import * as Yup from 'yup';
+} from "@chakra-ui/react";
+import { useFormik } from "formik";
+import { useEffect, useState } from "react";
+import * as Yup from "yup";
 
-import ContentModal from './ContentModal';
-import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '~/lib/state/store';
-import { createRoom } from '~/lib/state/room/roomSlice';
+import ContentModal from "./ContentModal";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "~/lib/state/store";
+import { createRoom } from "~/lib/state/room/roomSlice";
 
 function ScheduleRoom() {
   const toast = useToast();
   const [isChecked, setIsChecked] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const bg = useColorModeValue('whiteAlpha.900', 'gray.700');
-  const textColor = useColorModeValue('gray.800', 'whiteAlpha.900');
+  const bg = useColorModeValue("whiteAlpha.900", "gray.700");
+  const textColor = useColorModeValue("gray.800", "whiteAlpha.900");
 
   const dispatch = useDispatch<AppDispatch>();
   const { createRoomLoading, createdRoom } = useSelector(
@@ -38,24 +38,24 @@ function ScheduleRoom() {
 
   const formik = useFormik({
     initialValues: {
-      title: '',
-      description: '',
-      scheduledAt: '',
+      title: "",
+      description: "",
+      scheduledAt: "",
     },
     validationSchema: Yup.object({
-      title: Yup.string().required('Title is required'),
-      description: Yup.string().required('Description is required'),
+      title: Yup.string().required("Title is required"),
+      description: Yup.string().required("Description is required"),
       scheduledAt: Yup.date()
-        .required('Scheduled time is required')
-        .min(new Date(), 'Date must be in the future'),
+        .required("Scheduled time is required")
+        .min(new Date(), "Date must be in the future"),
     }),
     onSubmit: async (values) => {
       if (!isChecked) {
         toast({
-          title: 'Agreement required',
+          title: "Agreement required",
           description:
-            'Please read and check the room content agreement before creating the room.',
-          status: 'warning',
+            "Please read and check the room content agreement before creating the room.",
+          status: "warning",
           duration: 5000,
           isClosable: true,
         });
@@ -74,9 +74,9 @@ function ScheduleRoom() {
   useEffect(() => {
     if (createdRoom?.id && !createRoomLoading && formik.values.title) {
       toast({
-        title: 'Room created.',
-        description: 'Your room has been created successfully.',
-        status: 'success',
+        title: "Room created.",
+        description: "Your room has been created successfully.",
+        status: "success",
         duration: 5000,
         isClosable: true,
       });

@@ -5,10 +5,10 @@ import {
   forwardRef,
   Text,
   useColorModeValue,
-} from '@chakra-ui/react';
-import SwipeCardCore from './SwipeCardCore';
-import { InfoIcon } from '@chakra-ui/icons';
-import { sharedCardContainerStyles } from './SwipeCard';
+} from "@chakra-ui/react";
+import SwipeCardCore from "./SwipeCardCore";
+import { InfoIcon } from "@chakra-ui/icons";
+import { sharedCardContainerStyles } from "./SwipeCard";
 
 interface CardSwipeableProps {
   user: any;
@@ -21,18 +21,18 @@ interface CardSwipeableProps {
 
 const CardSwipeable = forwardRef<CardSwipeableProps, any>(
   ({ user, index, isActive, outOfFrame, handleIsExpanded, onSwipe }, ref) => {
-    const cardBg = useColorModeValue('white', 'gray.700');
-    const cardTextColor = useColorModeValue('gray.800', 'whiteAlpha.900');
+    const cardBg = useColorModeValue("white", "gray.700");
+    const cardTextColor = useColorModeValue("gray.800", "whiteAlpha.900");
 
     return (
       <Box sx={sharedCardContainerStyles} style={{ zIndex: isActive ? 1 : -1 }}>
         <SwipeCardCore
-          preventSwipe={['up', 'down']}
+          preventSwipe={["up", "down"]}
           ref={ref}
           onCardLeftScreen={() => outOfFrame(index)}
           onSwipe={() => onSwipe(index)}
           style={{
-            height: '100%',
+            height: "100%",
           }}
           swipeRequirementType="distance"
         >
@@ -50,7 +50,7 @@ const CardSwipeable = forwardRef<CardSwipeableProps, any>(
           >
             <Box
               h="80%"
-              bgImage={'url(/images/default-user-image-female.jpg)'}
+              bgImage={"url(/images/default-user-image-female.jpg)"}
               bgSize="cover"
               bgPosition="center"
               borderRadius="20px"
@@ -72,7 +72,7 @@ const CardSwipeable = forwardRef<CardSwipeableProps, any>(
                   <InfoIcon />
                 </Button>
               </Flex>
-              <Text noOfLines={2}>{'user.description'}</Text>
+              <Text noOfLines={2}>{"user.description"}</Text>
             </Box>
           </Box>
         </SwipeCardCore>
@@ -81,5 +81,5 @@ const CardSwipeable = forwardRef<CardSwipeableProps, any>(
   }
 );
 
-CardSwipeable.displayName = 'CardSwipeable';
+CardSwipeable.displayName = "CardSwipeable";
 export default CardSwipeable;

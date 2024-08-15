@@ -1,4 +1,4 @@
-const { useState, useEffect } = require('react');
+const { useState, useEffect } = require("react");
 
 // this hook ensures that window size is only updated on the client and not on the server when using Next.js
 function useWindowSize() {
@@ -14,10 +14,10 @@ function useWindowSize() {
         height: window.innerHeight,
       });
     }
-    window.addEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
     handleResize();
 
-    return () => window.removeEventListener('resize', handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
   return windowSize;
 }

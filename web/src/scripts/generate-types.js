@@ -1,10 +1,10 @@
-require('dotenv').config({ path: '.env.local' });
-const { exec } = require('child_process');
+require("dotenv").config({ path: ".env.local" });
+const { exec } = require("child_process");
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 if (!apiUrl) {
-  console.error('API_BASE_URL is not defined in .env');
+  console.error("API_BASE_URL is not defined in .env");
   process.exit(1);
 }
 

@@ -1,4 +1,4 @@
-import * as Yup from 'yup';
+import * as Yup from "yup";
 
 const envSchema = Yup.object().shape({
   NEXT_PUBLIC_API_URL: Yup.string().required(),
@@ -17,6 +17,6 @@ envSchema.validateSync(envVars);
 
 export default {
   apiUrl: envVars.NEXT_PUBLIC_API_URL,
-  isProd: envVars.NODE_ENV === 'production',
+  isProd: envVars.NODE_ENV === "production",
   socketServerUrl: envVars.NEXT_PUBLIC_SOCKET_SERVER_URL,
 };

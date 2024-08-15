@@ -1,10 +1,10 @@
-import Room from '~/lib/components/rooms/Room';
+import Room from "~/lib/components/rooms/Room";
 
 const RoomPage = (props: {
   params: { [key: string]: string };
   search: Object;
 }) => {
-  const id = props.params['id'];
+  const id = props.params["id"];
 
   if (!id) {
     return null;

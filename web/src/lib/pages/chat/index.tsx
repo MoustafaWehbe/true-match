@@ -1,5 +1,5 @@
-import { Box } from '@chakra-ui/react';
-import Chat from '~/lib/components/chat/Chat';
+import { Box } from "@chakra-ui/react";
+import Chat from "~/lib/components/chat/Chat";
 
 const ChatPage = () => {
   return (

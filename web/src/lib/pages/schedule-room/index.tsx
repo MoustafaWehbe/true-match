@@ -1,5 +1,5 @@
-import { Box } from '@chakra-ui/react';
-import ScheduleRoom from '~/lib/components/rooms/ScheduleRoom';
+import { Box } from "@chakra-ui/react";
+import ScheduleRoom from "~/lib/components/rooms/ScheduleRoom";
 
 const ScheduleRoomPage = () => {
   return (

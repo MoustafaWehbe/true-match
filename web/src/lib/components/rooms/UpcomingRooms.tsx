@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import {
   Box,
@@ -7,16 +7,16 @@ import {
   Stack,
   Text,
   useColorModeValue,
-} from '@chakra-ui/react';
-import { useEffect } from 'react';
-import RoomCard from './RoomCard';
-import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '~/lib/state/store';
-import { getRooms } from '~/lib/state/room/roomSlice';
+} from "@chakra-ui/react";
+import { useEffect } from "react";
+import RoomCard from "./RoomCard";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "~/lib/state/store";
+import { getRooms } from "~/lib/state/room/roomSlice";
 
 function UpcomingRooms() {
-  const bg = useColorModeValue('gray.50', 'gray.800');
-  const textColor = useColorModeValue('gray.800', 'whiteAlpha.900');
+  const bg = useColorModeValue("gray.50", "gray.800");
+  const textColor = useColorModeValue("gray.800", "whiteAlpha.900");
   const dispatch = useDispatch<AppDispatch>();
   const { rooms, getRoomsLoading } = useSelector(
     (state: RootState) => state.room
@@ -42,9 +42,9 @@ function UpcomingRooms() {
       </Stack>
       <Grid
         templateColumns={{
-          base: 'repeat(1, 1fr)', // For screens less than 48em (768px)
-          md: 'repeat(2, 1fr)', // For screens between 48em (768px) and 74em (1184px)
-          lg: 'repeat(3, 1fr)', // For screens larger than 74em (1184px)
+          base: "repeat(1, 1fr)", // For screens less than 48em (768px)
+          md: "repeat(2, 1fr)", // For screens between 48em (768px) and 74em (1184px)
+          lg: "repeat(3, 1fr)", // For screens larger than 74em (1184px)
         }}
         gap={8}
         mt={8}

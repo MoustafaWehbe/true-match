@@ -1,1 +1,1 @@
-export const AUTH_ROUTES = ['signup', 'login'];
+export const AUTH_ROUTES = ["signup", "login"];

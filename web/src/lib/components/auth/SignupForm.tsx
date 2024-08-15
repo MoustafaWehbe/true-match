@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import {
   Box,
@@ -11,15 +11,15 @@ import {
   Stack,
   Text,
   useColorModeValue,
-} from '@chakra-ui/react';
-import { FormControl, FormErrorMessage, useToast } from '@chakra-ui/react';
-import { useFormik } from 'formik';
-import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import * as Yup from 'yup';
-import { AppDispatch, RootState } from '~/lib/state/store';
-import { registerUser } from '~/lib/state/user/userSlice';
+} from "@chakra-ui/react";
+import { FormControl, FormErrorMessage, useToast } from "@chakra-ui/react";
+import { useFormik } from "formik";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import * as Yup from "yup";
+import { AppDispatch, RootState } from "~/lib/state/store";
+import { registerUser } from "~/lib/state/user/userSlice";
 
 function SignupForm() {
   const toast = useToast();
@@ -32,15 +32,15 @@ function SignupForm() {
   useEffect(() => {
     if (registerResult?.statusCode === 200) {
       toast({
-        title: 'Registration Succeeded!',
-        status: 'success',
+        title: "Registration Succeeded!",
+        status: "success",
         duration: 5000,
         isClosable: true,
       });
       if (window) {
-        window.location.href = '/';
+        window.location.href = "/";
       } else {
-        router.push('/');
+        router.push("/");
       }
     }
   }, [registerResult, router, toast]);
@@ -48,9 +48,9 @@ function SignupForm() {
   useEffect(() => {
     if (registerError) {
       toast({
-        title: 'Registration Error',
+        title: "Registration Error",
         description: registerError,
-        status: 'error',
+        status: "error",
         duration: 5000,
         isClosable: true,
       });
@@ -59,10 +59,10 @@ function SignupForm() {
 
   const formik = useFormik({
     initialValues: {
-      firstName: '',
-      lastName: '',
-      email: '',
-      password: '',
+      firstName: "",
+      lastName: "",
+      email: "",
+      password: "",
     },
     onSubmit: (values) => {
       dispatch(
@@ -73,22 +73,22 @@ function SignupForm() {
       formik.handleReset({});
     },
     validationSchema: Yup.object({
-      firstName: Yup.string().required('First Name cannot be empty'),
-      lastName: Yup.string().required('Last Name cannot be empty'),
+      firstName: Yup.string().required("First Name cannot be empty"),
+      lastName: Yup.string().required("Last Name cannot be empty"),
       email: Yup.string()
-        .required('Email Address cannot be empty')
-        .email('Looks like this is not an email'),
-      password: Yup.string().required('Password cannot be empty'),
+        .required("Email Address cannot be empty")
+        .email("Looks like this is not an email"),
+      password: Yup.string().required("Password cannot be empty"),
     }),
     validateOnChange: true,
   });
 
-  const containerBg = useColorModeValue('whiteAlpha.900', 'gray.800');
-  const headingColor = useColorModeValue('gray.800', 'white');
-  const textColor = useColorModeValue('gray.600', 'gray.400');
-  const linkColor = useColorModeValue('pink.400', 'pink.300');
-  const buttonBg = useColorModeValue('pink.400', 'pink.500');
-  const buttonHoverBg = useColorModeValue('pink.500', 'pink.400');
+  const containerBg = useColorModeValue("whiteAlpha.900", "gray.800");
+  const headingColor = useColorModeValue("gray.800", "white");
+  const textColor = useColorModeValue("gray.600", "gray.400");
+  const linkColor = useColorModeValue("pink.400", "pink.300");
+  const buttonBg = useColorModeValue("pink.400", "pink.500");
+  const buttonHoverBg = useColorModeValue("pink.500", "pink.400");
 
   return (
     <Container minW="lg" pb="20px">
@@ -129,15 +129,15 @@ function SignupForm() {
                   placeholder="First Name"
                   value={formik.values.firstName}
                   onChange={formik.handleChange}
-                  bg={useColorModeValue('white', 'gray.700')}
-                  color={useColorModeValue('gray.800', 'white')}
-                  borderColor={useColorModeValue('gray.300', 'gray.600')}
+                  bg={useColorModeValue("white", "gray.700")}
+                  color={useColorModeValue("gray.800", "white")}
+                  borderColor={useColorModeValue("gray.300", "gray.600")}
                   _placeholder={{
-                    color: useColorModeValue('gray.500', 'gray.400'),
+                    color: useColorModeValue("gray.500", "gray.400"),
                   }}
                   transition="border-color 0.2s ease-in-out"
                   _focus={{
-                    borderColor: useColorModeValue('pink.400', 'pink.300'),
+                    borderColor: useColorModeValue("pink.400", "pink.300"),
                   }}
                 />
                 {formik.touched.firstName && formik.errors.firstName && (
@@ -159,15 +159,15 @@ function SignupForm() {
                   placeholder="Last Name"
                   value={formik.values.lastName}
                   onChange={formik.handleChange}
-                  bg={useColorModeValue('white', 'gray.700')}
-                  color={useColorModeValue('gray.800', 'white')}
-                  borderColor={useColorModeValue('gray.300', 'gray.600')}
+                  bg={useColorModeValue("white", "gray.700")}
+                  color={useColorModeValue("gray.800", "white")}
+                  borderColor={useColorModeValue("gray.300", "gray.600")}
                   _placeholder={{
-                    color: useColorModeValue('gray.500', 'gray.400'),
+                    color: useColorModeValue("gray.500", "gray.400"),
                   }}
                   transition="border-color 0.2s ease-in-out"
                   _focus={{
-                    borderColor: useColorModeValue('pink.400', 'pink.300'),
+                    borderColor: useColorModeValue("pink.400", "pink.300"),
                   }}
                 />
                 {formik.touched.lastName && formik.errors.lastName && (
@@ -187,15 +187,15 @@ function SignupForm() {
                   placeholder="Email Address"
                   value={formik.values.email}
                   onChange={formik.handleChange}
-                  bg={useColorModeValue('white', 'gray.700')}
-                  color={useColorModeValue('gray.800', 'white')}
-                  borderColor={useColorModeValue('gray.300', 'gray.600')}
+                  bg={useColorModeValue("white", "gray.700")}
+                  color={useColorModeValue("gray.800", "white")}
+                  borderColor={useColorModeValue("gray.300", "gray.600")}
                   _placeholder={{
-                    color: useColorModeValue('gray.500', 'gray.400'),
+                    color: useColorModeValue("gray.500", "gray.400"),
                   }}
                   transition="border-color 0.2s ease-in-out"
                   _focus={{
-                    borderColor: useColorModeValue('pink.400', 'pink.300'),
+                    borderColor: useColorModeValue("pink.400", "pink.300"),
                   }}
                 />
                 {formik.touched.email && formik.errors.email && (
@@ -217,15 +217,15 @@ function SignupForm() {
                   placeholder="Password"
                   value={formik.values.password}
                   onChange={formik.handleChange}
-                  bg={useColorModeValue('white', 'gray.700')}
-                  color={useColorModeValue('gray.800', 'white')}
-                  borderColor={useColorModeValue('gray.300', 'gray.600')}
+                  bg={useColorModeValue("white", "gray.700")}
+                  color={useColorModeValue("gray.800", "white")}
+                  borderColor={useColorModeValue("gray.300", "gray.600")}
                   _placeholder={{
-                    color: useColorModeValue('gray.500', 'gray.400'),
+                    color: useColorModeValue("gray.500", "gray.400"),
                   }}
                   transition="border-color 0.2s ease-in-out"
                   _focus={{
-                    borderColor: useColorModeValue('pink.400', 'pink.300'),
+                    borderColor: useColorModeValue("pink.400", "pink.300"),
                   }}
                 />
                 {formik.touched.password && formik.errors.password && (
@@ -245,7 +245,7 @@ function SignupForm() {
                   Register
                 </Button>
                 <Stack
-                  direction={{ base: 'column', sm: 'row' }}
+                  direction={{ base: "column", sm: "row" }}
                   align="start"
                   justify="space-between"
                 >

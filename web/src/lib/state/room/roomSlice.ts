@@ -1,5 +1,5 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import axios from 'axios';
+import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+import axios from "axios";
 import {
   RoomContentDto,
   RoomContentDtoListApiResponse,
@@ -7,8 +7,8 @@ import {
   RoomDtoApiResponse,
   CreateRoomDto,
   RoomDtoPagedResponse,
-} from '~/lib/openApiGen';
-import axiosInstance from '~/lib/utils/api/axiosConfig';
+} from "~/lib/openApiGen";
+import axiosInstance from "~/lib/utils/api/axiosConfig";
 
 export interface RoomSate {
   roomContent: Array<RoomContentDto> | null;
@@ -23,15 +23,15 @@ export const getRoomContent = createAsyncThunk<
   Array<RoomContentDto> | null,
   undefined,
   { rejectValue: string }
->('room/getAll', async (_, { rejectWithValue }) => {
+>("room/getAll", async (_, { rejectWithValue }) => {
   try {
     const response =
       await axiosInstance.get<RoomContentDtoListApiResponse>(
-        '/api/room-content'
+        "/api/room-content"
       );
     return response.data.data ?? null;
   } catch (error) {
-    let errorMessage = 'Something went wrong!';
+    let errorMessage = "Something went wrong!";
     if (axios.isAxiosError(error) && error.response) {
       errorMessage = error.response.data.message || errorMessage;
     }
@@ -44,18 +44,18 @@ export const getRooms = createAsyncThunk<
   { PageNumber: number; PageSize: number; Status: number },
   { rejectValue: string }
 >(
-  'room/getRooms',
+  "room/getRooms",
   async ({ PageNumber, PageSize, Status }, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.get<RoomDtoPagedResponse>(
-        '/api/room',
+        "/api/room",
         {
           params: { PageNumber, PageSize, Status },
         }
       );
       return response.data ?? null;
     } catch (error) {
-      let errorMessage = 'Something went wrong!';
+      let errorMessage = "Something went wrong!";
       if (axios.isAxiosError(error) && error.response) {
         errorMessage = error.response.data.message || errorMessage;
       }
@@ -68,15 +68,15 @@ export const createRoom = createAsyncThunk<
   RoomDto | undefined,
   CreateRoomDto,
   { rejectValue: string }
->('room/create', async (roomData, { rejectWithValue }) => {
+>("room/create", async (roomData, { rejectWithValue }) => {
   try {
     const response = await axiosInstance.post<RoomDtoApiResponse>(
-      '/api/room',
+      "/api/room",
       roomData
     );
     return response.data.data;
   } catch (error) {
-    let errorMessage = 'Something went wrong!';
+    let errorMessage = "Something went wrong!";
     if (axios.isAxiosError(error) && error.response) {
       errorMessage = error.response.data.message || errorMessage;
     }
@@ -93,7 +93,7 @@ const initialState: RoomSate = {
 };
 
 const roomSlice = createSlice({
-  name: 'room',
+  name: "room",
   initialState,
   reducers: {},
   extraReducers: (builder) => {

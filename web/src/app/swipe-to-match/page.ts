@@ -1,3 +1,3 @@
-import SwipeToMatch from '~/lib/pages/swipe-to-match';
+import SwipeToMatch from "~/lib/pages/swipe-to-match";
 
 export default SwipeToMatch;

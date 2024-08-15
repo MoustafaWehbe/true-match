@@ -1,13 +1,13 @@
-import type { DeepPartial, Theme } from '@chakra-ui/react';
-import { Figtree as FontBody } from 'next/font/google';
+import type { DeepPartial, Theme } from "@chakra-ui/react";
+import { Figtree as FontBody } from "next/font/google";
 
 export const fontBody = FontBody({
-  subsets: ['latin'],
-  variable: '--font-body',
+  subsets: ["latin"],
+  variable: "--font-body",
 });
 
-export const fonts: DeepPartial<Theme['fonts']> = {
+export const fonts: DeepPartial<Theme["fonts"]> = {
   heading: fontBody.style.fontFamily,
   body: fontBody.style.fontFamily,
-  mono: 'Menlo, monospace',
+  mono: "Menlo, monospace",
 };

@@ -1,10 +1,10 @@
-import { Button, Stack } from '@chakra-ui/react';
+import { Button, Stack } from "@chakra-ui/react";
 import {
   FaMicrophone,
   FaMicrophoneSlash,
   FaVideo,
   FaVideoSlash,
-} from 'react-icons/fa';
+} from "react-icons/fa";
 
 interface RoomSettings {
   onToggleMic: () => void;
@@ -26,14 +26,14 @@ const RoomSettings = ({
         leftIcon={isMicOn ? <FaMicrophone /> : <FaMicrophoneSlash />}
         variant="outline"
       >
-        {isMicOn ? 'Mute' : 'Unmute'}
+        {isMicOn ? "Mute" : "Unmute"}
       </Button>
       <Button
         onClick={onToggleVideo}
         leftIcon={isVideoOn ? <FaVideo /> : <FaVideoSlash />}
         variant="outline"
       >
-        {isVideoOn ? 'Turn Off Video' : 'Turn On Video'}
+        {isVideoOn ? "Turn Off Video" : "Turn On Video"}
       </Button>
     </Stack>
   );

@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import { CacheProvider } from '@chakra-ui/next-js';
-import { Provider } from 'react-redux';
+import { CacheProvider } from "@chakra-ui/next-js";
+import { Provider } from "react-redux";
 
-import { Chakra as ChakraProvider } from '~/lib/components/Chakra';
-import { store } from '~/lib/state/store';
+import { Chakra as ChakraProvider } from "~/lib/components/Chakra";
+import { store } from "~/lib/state/store";
 
 const Providers = ({ children }: { children: React.ReactNode }) => {
   return (

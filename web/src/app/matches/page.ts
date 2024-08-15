@@ -1,3 +1,3 @@
-import Matches from '~/lib/pages/matches';
+import Matches from "~/lib/pages/matches";
 
 export default Matches;

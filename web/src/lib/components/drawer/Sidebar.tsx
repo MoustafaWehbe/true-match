@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { Box } from '@chakra-ui/react';
+import { Box } from "@chakra-ui/react";
 
-import Content from './DrawerContent';
+import Content from "./DrawerContent";
 
 export default function Sidebar() {
   return (

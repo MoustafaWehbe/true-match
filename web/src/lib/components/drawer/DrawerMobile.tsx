@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { useRef, type PropsWithChildren } from 'react';
+import { useRef, type PropsWithChildren } from "react";
 import {
   Box,
   Button,
@@ -10,16 +10,16 @@ import {
   DrawerContent,
   IconButton,
   useDisclosure,
-} from '@chakra-ui/react';
-import Content from './DrawerContent';
-import { HamburgerIcon } from '@chakra-ui/icons';
+} from "@chakra-ui/react";
+import Content from "./DrawerContent";
+import { HamburgerIcon } from "@chakra-ui/icons";
 
 function DrawerMobile({ children, ...rest }: PropsWithChildren) {
   const { onClose, isOpen, onOpen } = useDisclosure();
   const btnRef = useRef<any>();
 
   return (
-    <Box position={'absolute'}>
+    <Box position={"absolute"}>
       <IconButton
         ref={btnRef}
         aria-label="Add to friends"

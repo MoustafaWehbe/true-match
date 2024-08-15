@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef } from "react";
 
 const PeerVideo: React.FC<{ peer?: RTCPeerConnection }> = ({ peer }) => {
   const ref = useRef<HTMLVideoElement>(null);
@@ -20,7 +20,7 @@ const PeerVideo: React.FC<{ peer?: RTCPeerConnection }> = ({ peer }) => {
       playsInline
       width="100%"
       height="auto"
-      style={{ borderRadius: '10px', marginTop: '10px' }}
+      style={{ borderRadius: "10px", marginTop: "10px" }}
     />
   );
 };

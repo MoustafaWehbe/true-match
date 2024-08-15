@@ -1,3 +1,3 @@
-import Signup from '~/lib/pages/signup';
+import Signup from "~/lib/pages/signup";
 
 export default Signup;

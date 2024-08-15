@@ -12,12 +12,12 @@ import {
   PopoverTrigger,
   useColorMode,
   useColorModeValue,
-} from '@chakra-ui/react';
-import { CiUser } from 'react-icons/ci';
-import { IoIosLogOut } from 'react-icons/io';
-import { RiMoonFill, RiSunLine } from 'react-icons/ri';
+} from "@chakra-ui/react";
+import { CiUser } from "react-icons/ci";
+import { IoIosLogOut } from "react-icons/io";
+import { RiMoonFill, RiSunLine } from "react-icons/ri";
 
-import { User } from '~/lib/openApiGen';
+import { User } from "~/lib/openApiGen";
 
 type Props = {
   onLogout: () => void;
@@ -34,9 +34,9 @@ const bounceAnimation = keyframes`
 `;
 
 const HeaderPopover = ({ onLogout, user }: Props) => {
-  const bgColor = useColorModeValue('whiteAlpha.900', 'gray.700');
-  const textColor = useColorModeValue('gray.800', 'whiteAlpha.900');
-  const hoverColor = useColorModeValue('pink.500', 'pink.300');
+  const bgColor = useColorModeValue("whiteAlpha.900", "gray.700");
+  const textColor = useColorModeValue("gray.800", "whiteAlpha.900");
+  const hoverColor = useColorModeValue("pink.500", "pink.300");
   const { colorMode, toggleColorMode } = useColorMode();
 
   return (
@@ -55,7 +55,7 @@ const HeaderPopover = ({ onLogout, user }: Props) => {
       <PopoverContent
         width="170px"
         bg={bgColor}
-        borderColor={useColorModeValue('gray.200', 'gray.600')}
+        borderColor={useColorModeValue("gray.200", "gray.600")}
       >
         <PopoverArrow />
         <PopoverBody>
@@ -75,13 +75,13 @@ const HeaderPopover = ({ onLogout, user }: Props) => {
             <Button
               aria-label="theme toggle"
               variant="link"
-              leftIcon={colorMode === 'light' ? <RiMoonFill /> : <RiSunLine />}
+              leftIcon={colorMode === "light" ? <RiMoonFill /> : <RiSunLine />}
               onClick={toggleColorMode}
               color={textColor}
               _hover={{ color: hoverColor }}
               animation={`${bounceAnimation} 2s infinite`}
             >
-              {colorMode === 'light' ? 'Dark mode' : 'Light mode'}
+              {colorMode === "light" ? "Dark mode" : "Light mode"}
             </Button>
           </Box>
         </PopoverBody>

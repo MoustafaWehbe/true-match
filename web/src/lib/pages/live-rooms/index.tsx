@@ -1,5 +1,5 @@
-import { Box } from '@chakra-ui/react';
-import LiveRooms from '~/lib/components/rooms/LiveRooms';
+import { Box } from "@chakra-ui/react";
+import LiveRooms from "~/lib/components/rooms/LiveRooms";
 
 const LiveRoomsPage = () => {
   return (

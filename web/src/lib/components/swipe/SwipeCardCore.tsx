@@ -3,9 +3,9 @@ import React, {
   useImperativeHandle,
   useLayoutEffect,
   useRef,
-} from 'react';
-import { useSpring, animated } from '@react-spring/web';
-import useWindowSize from '~/lib/hooks/useWindowSize';
+} from "react";
+import { useSpring, animated } from "@react-spring/web";
+import useWindowSize from "~/lib/hooks/useWindowSize";
 
 interface Settings {
   maxTilt: number;
@@ -48,7 +48,7 @@ interface SwipeCardCoreProps {
   onCardLeftScreen?: (dir: string) => void;
   className?: string;
   preventSwipe?: string[];
-  swipeRequirementType?: 'velocity' | 'distance';
+  swipeRequirementType?: "velocity" | "distance";
   swipeThreshold?: number;
   onSwipeRequirementFulfilled?: (dir: string) => void;
   onSwipeRequirementUnfulfilled?: () => void;
@@ -125,18 +125,18 @@ const animateBack = (setSpringTarget: any) => {
 const getSwipeDirection = (property: Vector): string => {
   if (Math.abs(property.x) > Math.abs(property.y)) {
     if (property.x > settings.swipeThreshold) {
-      return 'right';
+      return "right";
     } else if (property.x < -settings.swipeThreshold) {
-      return 'left';
+      return "left";
     }
   } else {
     if (property.y > settings.swipeThreshold) {
-      return 'down';
+      return "down";
     } else if (property.y < -settings.swipeThreshold) {
-      return 'up';
+      return "up";
     }
   }
-  return 'none';
+  return "none";
 };
 
 // must be created outside of the SwipeCardCore forwardRef
@@ -151,7 +151,7 @@ const SwipeCardCore = forwardRef<any, SwipeCardCoreProps>(
       onCardLeftScreen,
       className,
       preventSwipe = [],
-      swipeRequirementType = 'velocity',
+      swipeRequirementType = "velocity",
       swipeThreshold = settings.swipeThreshold,
       onSwipeRequirementFulfilled,
       onSwipeRequirementUnfulfilled,
@@ -168,32 +168,32 @@ const SwipeCardCore = forwardRef<any, SwipeCardCoreProps>(
     settings.swipeThreshold = swipeThreshold;
 
     useImperativeHandle(ref, () => ({
-      async swipe(dir = 'right') {
+      async swipe(dir = "right") {
         if (onSwipe) onSwipe(dir);
         const power = 1.3;
         const disturbance = (Math.random() - 0.5) / 2;
-        if (dir === 'right') {
+        if (dir === "right") {
           await animateOut(
             { x: power, y: disturbance },
             setSpringTarget,
             width,
             height
           );
-        } else if (dir === 'left') {
+        } else if (dir === "left") {
           await animateOut(
             { x: -power, y: disturbance },
             setSpringTarget,
             width,
             height
           );
-        } else if (dir === 'up') {
+        } else if (dir === "up") {
           await animateOut(
             { x: disturbance, y: -power },
             setSpringTarget,
             width,
             height
           );
-        } else if (dir === 'down') {
+        } else if (dir === "down") {
           await animateOut(
             { x: disturbance, y: power },
             setSpringTarget,
@@ -212,17 +212,17 @@ const SwipeCardCore = forwardRef<any, SwipeCardCoreProps>(
       async (setSpringTarget: any, gesture: GestureState) => {
         // Check if this is a swipe
         const dir = getSwipeDirection({
-          x: swipeRequirementType === 'velocity' ? gesture.vx : gesture.dx,
-          y: swipeRequirementType === 'velocity' ? gesture.vy : gesture.dy,
+          x: swipeRequirementType === "velocity" ? gesture.vx : gesture.dx,
+          y: swipeRequirementType === "velocity" ? gesture.vy : gesture.dy,
         });
 
-        if (dir !== 'none') {
+        if (dir !== "none") {
           if (flickOnSwipe) {
             if (!preventSwipe.includes(dir)) {
               if (onSwipe) onSwipe(dir);
 
               await animateOut(
-                swipeRequirementType === 'velocity'
+                swipeRequirementType === "velocity"
                   ? {
                       x: gesture.vx,
                       y: gesture.vy,
@@ -252,7 +252,7 @@ const SwipeCardCore = forwardRef<any, SwipeCardCoreProps>(
       ]
     );
 
-    let swipeThresholdFulfilledDirection = 'none';
+    let swipeThresholdFulfilledDirection = "none";
 
     const gestureStateFromWebEvent = (
       ev: MouseEvent | TouchEvent,
@@ -289,7 +289,7 @@ const SwipeCardCore = forwardRef<any, SwipeCardCoreProps>(
 
       const onTouchStart = (ev) => {
         if (
-          !(ev.target as HTMLElement).className.includes('pressable') &&
+          !(ev.target as HTMLElement).className.includes("pressable") &&
           ev.cancelable
         ) {
           ev.preventDefault();
@@ -305,7 +305,7 @@ const SwipeCardCore = forwardRef<any, SwipeCardCoreProps>(
         startPositon = { x: ev.touches[0].clientX, y: ev.touches[0].clientY };
       };
 
-      element.current?.addEventListener('touchstart', onTouchStart);
+      element.current?.addEventListener("touchstart", onTouchStart);
 
       const onMouseDown = (ev) => {
         isClicking = true;
@@ -319,24 +319,24 @@ const SwipeCardCore = forwardRef<any, SwipeCardCoreProps>(
         startPositon = { x: ev.clientX, y: ev.clientY };
       };
 
-      element.current?.addEventListener('mousedown', onMouseDown);
+      element.current?.addEventListener("mousedown", onMouseDown);
 
       const handleMove = (gestureState: GestureState) => {
         // Check fulfillment
         if (onSwipeRequirementFulfilled || onSwipeRequirementUnfulfilled) {
           const dir = getSwipeDirection({
             x:
-              swipeRequirementType === 'velocity'
+              swipeRequirementType === "velocity"
                 ? gestureState.vx
                 : gestureState.dx,
             y:
-              swipeRequirementType === 'velocity'
+              swipeRequirementType === "velocity"
                 ? gestureState.vy
                 : gestureState.dy,
           });
           if (dir !== swipeThresholdFulfilledDirection) {
             swipeThresholdFulfilledDirection = dir;
-            if (swipeThresholdFulfilledDirection === 'none') {
+            if (swipeThresholdFulfilledDirection === "none") {
               if (onSwipeRequirementUnfulfilled)
                 onSwipeRequirementUnfulfilled();
             } else {
@@ -368,7 +368,7 @@ const SwipeCardCore = forwardRef<any, SwipeCardCoreProps>(
         handleMove(gestureState);
       };
 
-      window.addEventListener('mousemove', onMouseMove);
+      window.addEventListener("mousemove", onMouseMove);
 
       const onMouseUp = (ev: MouseEvent) => {
         if (!isClicking) return;
@@ -378,7 +378,7 @@ const SwipeCardCore = forwardRef<any, SwipeCardCoreProps>(
         lastPosition = { dx: 0, dy: 0, vx: 0, vy: 0, timeStamp: Date.now() };
       };
 
-      window.addEventListener('mouseup', onMouseUp);
+      window.addEventListener("mouseup", onMouseUp);
 
       const onTouchMove = (ev: TouchEvent) => {
         const gestureState = gestureStateFromWebEvent(
@@ -391,7 +391,7 @@ const SwipeCardCore = forwardRef<any, SwipeCardCoreProps>(
         handleMove(gestureState);
       };
 
-      element.current?.addEventListener('touchmove', onTouchMove);
+      element.current?.addEventListener("touchmove", onTouchMove);
 
       const onTouchEnd = (ev: TouchEvent) => {
         handleSwipeReleased(setSpringTarget, lastPosition);
@@ -399,15 +399,15 @@ const SwipeCardCore = forwardRef<any, SwipeCardCoreProps>(
         lastPosition = { dx: 0, dy: 0, vx: 0, vy: 0, timeStamp: Date.now() };
       };
 
-      element.current?.addEventListener('touchend', onTouchEnd);
+      element.current?.addEventListener("touchend", onTouchEnd);
 
       return () => {
-        element.current?.removeEventListener('touchstart', onTouchStart);
-        element.current?.removeEventListener('touchmove', onTouchMove);
-        element.current?.removeEventListener('touchend', onTouchEnd);
-        window.removeEventListener('mousemove', onMouseMove);
-        window.removeEventListener('mouseup', onMouseUp);
-        element.current?.removeEventListener('mousedown', onMouseDown);
+        element.current?.removeEventListener("touchstart", onTouchStart);
+        element.current?.removeEventListener("touchmove", onTouchMove);
+        element.current?.removeEventListener("touchend", onTouchEnd);
+        window.removeEventListener("mousemove", onMouseMove);
+        window.removeEventListener("mouseup", onMouseUp);
+        element.current?.removeEventListener("mousedown", onMouseDown);
       };
     }, [
       handleSwipeReleased,
@@ -435,5 +435,5 @@ const SwipeCardCore = forwardRef<any, SwipeCardCoreProps>(
   }
 );
 
-SwipeCardCore.displayName = 'SwipeCardCore';
+SwipeCardCore.displayName = "SwipeCardCore";
 export default SwipeCardCore;

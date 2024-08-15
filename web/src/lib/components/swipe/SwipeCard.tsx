@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { forwardRef, useState } from 'react';
+import { forwardRef, useState } from "react";
 
-import CardSwipeable from './CardSwipeable';
-import CardStatic from './CardStatic';
+import CardSwipeable from "./CardSwipeable";
+import CardStatic from "./CardStatic";
 
 interface SwipeCardProps {
   user: any;
@@ -15,10 +15,10 @@ interface SwipeCardProps {
 }
 
 export const sharedCardContainerStyles: React.CSSProperties = {
-  position: 'absolute',
-  width: '90vw',
-  maxWidth: '360px',
-  height: '70vh',
+  position: "absolute",
+  width: "90vw",
+  maxWidth: "360px",
+  height: "70vh",
 };
 
 const SwipeCard = forwardRef<any, SwipeCardProps>(
@@ -53,5 +53,5 @@ const SwipeCard = forwardRef<any, SwipeCardProps>(
   }
 );
 
-SwipeCard.displayName = 'SwipeCard';
+SwipeCard.displayName = "SwipeCard";
 export default SwipeCard;

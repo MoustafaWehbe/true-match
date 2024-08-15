@@ -1,17 +1,17 @@
-'use client';
+"use client";
 
-import { Box, Flex, IconButton } from '@chakra-ui/react';
-import SwipeCard from './SwipeCard';
-import { createRef, useMemo, useRef, useState } from 'react';
-import { CloseIcon } from '@chakra-ui/icons';
-import { FaHeart, FaUndoAlt } from 'react-icons/fa';
+import { Box, Flex, IconButton } from "@chakra-ui/react";
+import SwipeCard from "./SwipeCard";
+import { createRef, useMemo, useRef, useState } from "react";
+import { CloseIcon } from "@chakra-ui/icons";
+import { FaHeart, FaUndoAlt } from "react-icons/fa";
 
 const Swipe = () => {
   const users = [
-    { name: 'moustafa wehbe', bio: 'Love hiking and outdoor adventures.' },
-    { name: 'mohamad', bio: 'A foodie at heart and a coffee addict.' },
-    { name: 'Salam salama', bio: 'Welll not sure yet about this one' },
-    { name: 'haidar haidoura', bio: 'I do not work, I am a princes' },
+    { name: "moustafa wehbe", bio: "Love hiking and outdoor adventures." },
+    { name: "mohamad", bio: "A foodie at heart and a coffee addict." },
+    { name: "Salam salama", bio: "Welll not sure yet about this one" },
+    { name: "haidar haidoura", bio: "I do not work, I am a princes" },
   ];
   const [currentIndex, setCurrentIndex] = useState(users.length - 1);
 
@@ -74,15 +74,15 @@ const Swipe = () => {
           isActive={currentIndex === index}
         />
       ))}
-      <Flex justify="space-around" gap={4} position="absolute" bottom={'65px'}>
+      <Flex justify="space-around" gap={4} position="absolute" bottom={"65px"}>
         <IconButton
           aria-label="Swipe Left"
           icon={<CloseIcon />}
           colorScheme="red"
-          onClick={() => swipe('left')}
+          onClick={() => swipe("left")}
           size="lg"
           isRound
-          variant={'outline'}
+          variant={"outline"}
         />
         <IconButton
           aria-label="Undo"
@@ -91,16 +91,16 @@ const Swipe = () => {
           onClick={onUndo}
           size="lg"
           isRound
-          variant={'outline'}
+          variant={"outline"}
         />
         <IconButton
           aria-label="Swipe Right"
           icon={<FaHeart />}
           colorScheme="green"
-          onClick={() => swipe('right')}
+          onClick={() => swipe("right")}
           size="lg"
           isRound
-          variant={'outline'}
+          variant={"outline"}
         />
       </Flex>
     </Box>

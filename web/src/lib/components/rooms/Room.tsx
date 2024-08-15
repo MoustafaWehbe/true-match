@@ -1,16 +1,16 @@
-'use client';
+"use client";
 
-import React, { useEffect, useRef, useState } from 'react';
-import { Box, Button, Flex, Text, useColorModeValue } from '@chakra-ui/react';
-import { socket } from '~/lib/utils/socket/socket';
-import RoomSettings from './RoomSettings';
-import { WebRTCHandler } from '~/lib/utils/webrtc/WebRTCHandler';
-import PeerVideo from './PeerVideo';
+import React, { useEffect, useRef, useState } from "react";
+import { Box, Button, Flex, Text, useColorModeValue } from "@chakra-ui/react";
+import { socket } from "~/lib/utils/socket/socket";
+import RoomSettings from "./RoomSettings";
+import { WebRTCHandler } from "~/lib/utils/webrtc/WebRTCHandler";
+import PeerVideo from "./PeerVideo";
 
 const Room = ({ roomId: roomID }: { roomId: string }) => {
-  const cardBg = useColorModeValue('white', 'gray.700');
-  const cardTextColor = useColorModeValue('gray.800', 'whiteAlpha.900');
-  const userJoinedBg = useColorModeValue('gray.100', 'gray.900');
+  const cardBg = useColorModeValue("white", "gray.700");
+  const cardTextColor = useColorModeValue("gray.800", "whiteAlpha.900");
+  const userJoinedBg = useColorModeValue("gray.100", "gray.900");
   const [isMicOn, setIsMicOn] = useState(true);
   const [isVideoOn, setIsVideoOn] = useState(true);
   const localVideoRef = useRef<HTMLVideoElement>(null);
@@ -64,7 +64,7 @@ const Room = ({ roomId: roomID }: { roomId: string }) => {
           autoPlay
           playsInline
           width="100%"
-          style={{ borderRadius: '10px', height: '300px', width: '100%' }}
+          style={{ borderRadius: "10px", height: "300px", width: "100%" }}
         />
         {peers?.map((peer, index) => (
           <PeerVideo key={index} peer={peer.peer} />
@@ -85,7 +85,7 @@ const Room = ({ roomId: roomID }: { roomId: string }) => {
             </Text>
             <Button
               colorScheme="teal"
-              onClick={() => socket.emit('reconnectUser', { roomID })}
+              onClick={() => socket.emit("reconnectUser", { roomID })}
             >
               Try Reconnecting
             </Button>

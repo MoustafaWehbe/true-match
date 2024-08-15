@@ -1,5 +1,5 @@
-import { Box } from '@chakra-ui/react';
-import SignupForm from '~/lib/components/auth/SignupForm';
+import { Box } from "@chakra-ui/react";
+import SignupForm from "~/lib/components/auth/SignupForm";
 
 const SignupPage = () => {
   return (

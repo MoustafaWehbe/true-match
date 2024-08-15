@@ -1,5 +1,5 @@
-import { Box } from '@chakra-ui/react';
-import UpcomingRooms from '~/lib/components/rooms/UpcomingRooms';
+import { Box } from "@chakra-ui/react";
+import UpcomingRooms from "~/lib/components/rooms/UpcomingRooms";
 
 const UpcomingRoomsPage = () => {
   return (

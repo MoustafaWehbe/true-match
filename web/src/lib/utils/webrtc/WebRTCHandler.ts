@@ -1,4 +1,4 @@
-import { socket } from '~/lib/utils/socket/socket';
+import { socket } from "~/lib/utils/socket/socket";
 
 export class WebRTCHandler {
   private stream: MediaStream | null = null;
@@ -30,16 +30,16 @@ export class WebRTCHandler {
       localVideoRef.current.srcObject = this.stream;
     }
     this.registerSocketEvents();
-    socket.emit('join', this.roomID);
+    socket.emit("join", this.roomID);
   }
 
   closeConnections() {
     this.peers.forEach(({ peer }) => peer.close());
-    socket.emit('leave-room', this.roomID);
-    socket.off('user-joined', this.handleUserJoined);
-    socket.off('offer', this.handleIncomingOffer);
-    socket.off('answer', this.handleAnswer);
-    socket.off('ice-candidate', this.handleICECandidate);
+    socket.emit("leave-room", this.roomID);
+    socket.off("user-joined", this.handleUserJoined);
+    socket.off("offer", this.handleIncomingOffer);
+    socket.off("answer", this.handleAnswer);
+    socket.off("ice-candidate", this.handleICECandidate);
   }
 
   // private method section
@@ -48,17 +48,20 @@ export class WebRTCHandler {
   }
 
   private async fetchUserMedia(): Promise<MediaStream> {
-    return navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+    return navigator.mediaDevices.getUserMedia({
+      video: true,
+      audio: true,
+    });
   }
 
   private createPeerConnection(userToSignal: string): RTCPeerConnection {
     const peer = new RTCPeerConnection({
-      iceServers: [{ urls: 'stun:stun.stunprotocol.org' }],
+      iceServers: [{ urls: "stun:stun.stunprotocol.org" }],
     });
 
     peer.onicecandidate = (event) => {
       if (event.candidate) {
-        socket.emit('ice-candidate', {
+        socket.emit("ice-candidate", {
           target: userToSignal,
           user: socket.id,
           candidate: event.candidate,
@@ -78,7 +81,7 @@ export class WebRTCHandler {
 
     peer.createOffer().then((offer) => {
       peer.setLocalDescription(offer).then(() => {
-        socket.emit('offer', {
+        socket.emit("offer", {
           target: userToSignal,
           user: socket.id!,
           sdp: peer.localDescription,
@@ -100,7 +103,7 @@ export class WebRTCHandler {
       .then(() => {
         peer.createAnswer().then((answer) => {
           peer.setLocalDescription(answer).then(() => {
-            socket.emit('answer', {
+            socket.emit("answer", {
               target: incoming.user,
               user: socket.id,
               sdp: peer.localDescription,
@@ -135,9 +138,9 @@ export class WebRTCHandler {
   }
 
   private registerSocketEvents() {
-    socket.on('user-joined', this.handleUserJoined);
-    socket.on('offer', this.handleIncomingOffer);
-    socket.on('answer', this.handleAnswer);
-    socket.on('ice-candidate', this.handleICECandidate);
+    socket.on("user-joined", this.handleUserJoined);
+    socket.on("offer", this.handleIncomingOffer);
+    socket.on("answer", this.handleAnswer);
+    socket.on("ice-candidate", this.handleICECandidate);
   }
 }
