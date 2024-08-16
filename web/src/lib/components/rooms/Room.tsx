@@ -3,7 +3,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Box, Button, Flex, Text, useColorModeValue } from "@chakra-ui/react";
 import { socket } from "~/lib/utils/socket/socket";
-import RoomSettings from "./RoomSettings";
+import VideoControls from "./VideoControls";
 import { WebRTCHandler } from "~/lib/utils/webrtc/WebRTCHandler";
 import PeerVideo from "./PeerVideo";
 
@@ -58,14 +58,22 @@ const Room = ({ roomId: roomID }: { roomId: string }) => {
       color={cardTextColor}
     >
       <Box borderWidth="1px" borderRadius="lg" p={4} width="full">
-        <video
-          muted
-          ref={localVideoRef}
-          autoPlay
-          playsInline
-          width="100%"
-          style={{ borderRadius: "10px", height: "300px", width: "100%" }}
-        />
+        <Box position={"relative"}>
+          <video
+            muted
+            ref={localVideoRef}
+            autoPlay
+            playsInline
+            width="100%"
+            style={{ borderRadius: "10px", height: "300px", width: "100%" }}
+          />
+          <VideoControls
+            onToggleMic={onToggleMic}
+            onToggleVideo={onToggleVideo}
+            isMicOn={isMicOn}
+            isVideoOn={isVideoOn}
+          />
+        </Box>
         {peers?.map((peer, index) => (
           <PeerVideo key={index} peer={peer.peer} />
         ))}
@@ -92,12 +100,6 @@ const Room = ({ roomId: roomID }: { roomId: string }) => {
           </Flex>
         )}
       </Box>
-      <RoomSettings
-        onToggleMic={onToggleMic}
-        onToggleVideo={onToggleVideo}
-        isMicOn={isMicOn}
-        isVideoOn={isVideoOn}
-      />
     </Flex>
   );
 };

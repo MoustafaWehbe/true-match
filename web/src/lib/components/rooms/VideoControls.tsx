@@ -6,37 +6,35 @@ import {
   FaVideoSlash,
 } from "react-icons/fa";
 
-interface RoomSettings {
+interface VideoControlsProps {
   onToggleMic: () => void;
   onToggleVideo: () => void;
   isMicOn: boolean;
   isVideoOn: boolean;
 }
 
-const RoomSettings = ({
+const VideoControls = ({
   isMicOn,
   isVideoOn,
   onToggleMic,
   onToggleVideo,
-}: RoomSettings) => {
+}: VideoControlsProps) => {
   return (
-    <Stack direction="row" spacing={4} mt={4} mb={8}>
+    <Stack direction="row" spacing={4} top={0} position={"absolute"}>
       <Button
         onClick={onToggleMic}
         leftIcon={isMicOn ? <FaMicrophone /> : <FaMicrophoneSlash />}
-        variant="outline"
-      >
-        {isMicOn ? "Mute" : "Unmute"}
-      </Button>
+        variant="ghost"
+        width={10}
+        height={10}
+      />
       <Button
         onClick={onToggleVideo}
         leftIcon={isVideoOn ? <FaVideo /> : <FaVideoSlash />}
-        variant="outline"
-      >
-        {isVideoOn ? "Turn Off Video" : "Turn On Video"}
-      </Button>
+        variant="ghost"
+      />
     </Stack>
   );
 };
 
-export default RoomSettings;
+export default VideoControls;
