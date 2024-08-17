@@ -23,15 +23,13 @@ const MainLayout = ({ children }: LayoutProps) => {
           maxWidth={{ base: "100vw", md: "80vw" }} // 100vw for base (screens < 768px), 80vw for md (screens >= 768px)
           transition="0.5s ease-out"
           height={"90vh"}
+          as="main"
+          marginY={22}
           display={"flex"}
           flexDirection={"column"}
           justifyContent={"space-between"}
         >
-          <Box>
-            <Box as="main" marginY={22}>
-              {children}
-            </Box>
-          </Box>
+          {children}
           <Footer />
         </Box>
       </Flex>

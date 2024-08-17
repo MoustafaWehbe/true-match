@@ -1,4 +1,4 @@
-import { Button, Stack } from "@chakra-ui/react";
+import { Button, IconButton, Stack } from "@chakra-ui/react";
 import {
   FaMicrophone,
   FaMicrophoneSlash,
@@ -20,18 +20,30 @@ const VideoControls = ({
   onToggleVideo,
 }: VideoControlsProps) => {
   return (
-    <Stack direction="row" spacing={4} top={0} position={"absolute"}>
-      <Button
+    <Stack direction="row" spacing={4} top="74%" position="absolute" zIndex={1}>
+      <IconButton
         onClick={onToggleMic}
-        leftIcon={isMicOn ? <FaMicrophone /> : <FaMicrophoneSlash />}
+        icon={isMicOn ? <FaMicrophone /> : <FaMicrophoneSlash />}
         variant="ghost"
-        width={10}
-        height={10}
+        width={"48px"}
+        height={"48px"}
+        bg="blackAlpha.700"
+        color="white"
+        borderRadius="full"
+        _hover={{ bg: "blackAlpha.800" }}
+        aria-label="toggle mic"
       />
-      <Button
+      <IconButton
         onClick={onToggleVideo}
-        leftIcon={isVideoOn ? <FaVideo /> : <FaVideoSlash />}
+        icon={isVideoOn ? <FaVideo /> : <FaVideoSlash />}
         variant="ghost"
+        width={"48px"}
+        height={"48px"}
+        bg="blackAlpha.700"
+        color="white"
+        borderRadius="full"
+        _hover={{ bg: "blackAlpha.800" }}
+        aria-label="toggle video"
       />
     </Stack>
   );
