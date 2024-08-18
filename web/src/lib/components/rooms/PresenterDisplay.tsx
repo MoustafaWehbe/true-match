@@ -7,6 +7,7 @@ import {
   Flex,
   Grid,
   IconButton,
+  keyframes,
   Text,
   Tooltip,
   useColorModeValue,
@@ -21,6 +22,12 @@ interface PresenterDisplayProps {
   peers: { peerID: string; peer: RTCPeerConnection }[];
   localVideoRef: React.RefObject<HTMLVideoElement>;
 }
+
+const heartBackground = keyframes`
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+`;
 
 const PresenterDisplay = ({ peers, localVideoRef }: PresenterDisplayProps) => {
   const cardBg = useColorModeValue("gray.100", "gray.900");
@@ -68,18 +75,22 @@ const PresenterDisplay = ({ peers, localVideoRef }: PresenterDisplayProps) => {
   }
 
   return (
-    <Flex direction="column">
+    <Flex
+      direction="column"
+      height={"100%"}
+      align="left"
+      justify="space-between"
+    >
       {/* First Row */}
-      <Flex direction="row" height="25%" width="100%" p={4} gap={4}>
+      <Flex direction="row" height="50%" width="100%" gap={4}>
         {/* Left Column (25%) */}
-        <Box width="25%" height="100%" bg={cardBg} color={cardTextColor}>
+        <Box width="25%" height="100%" color={cardTextColor}>
           {/* Add content for the left column here */}
           <Box
             position={"relative"}
             display={"flex"}
             alignItems={"center"}
             justifyContent={"center"}
-            height="100%"
           >
             <VideoControls
               onToggleMic={onToggleMic}
@@ -94,8 +105,6 @@ const PresenterDisplay = ({ peers, localVideoRef }: PresenterDisplayProps) => {
               playsInline
               style={{
                 borderRadius: "10px",
-                height: "100%",
-                width: "100%",
               }}
             />
           </Box>
@@ -104,9 +113,9 @@ const PresenterDisplay = ({ peers, localVideoRef }: PresenterDisplayProps) => {
         {/* Right Column (75%) */}
         <Box
           width="75%"
-          height="auto"
+          height="fit-content"
+          overflow={"auto"}
           p={4}
-          bg={cardBg}
           color={cardTextColor}
           background={
             currentRound !== null
@@ -121,8 +130,6 @@ const PresenterDisplay = ({ peers, localVideoRef }: PresenterDisplayProps) => {
             <Flex
               top="0"
               left="0"
-              width="100%"
-              height="100%"
               color="black"
               direction="column"
               align="center"
@@ -146,20 +153,49 @@ const PresenterDisplay = ({ peers, localVideoRef }: PresenterDisplayProps) => {
                 </Box>
               )}
               {rounds && rounds[currentRound]?.duration && (
-                <CircularProgress
-                  value={(timer / rounds[currentRound].duration) * 100}
-                  size="40px"
-                  thickness="8px"
-                  color="teal.800"
-                  trackColor="gray.200"
-                  animation="spin 2s linear infinite"
+                <Box
+                  position="relative"
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="center"
+                  width="54px"
+                  height="54px"
+                  borderRadius="50%"
+                  overflow="hidden"
                 >
-                  <CircularProgressLabel>
-                    <Text fontSize="sm" color="gray.700">
-                      {timer}s
-                    </Text>
-                  </CircularProgressLabel>
-                </CircularProgress>
+                  <Box
+                    position="absolute"
+                    top="0"
+                    left="0"
+                    width="100%"
+                    height="100%"
+                    bg="url(/images/pink-hearts.jpg)"
+                    backgroundSize="150% 150%"
+                    animation={`${heartBackground} 5s ease infinite`}
+                    zIndex="0" // Ensure it's beneath the progress bar
+                  />
+
+                  <CircularProgress
+                    value={(timer / rounds[currentRound].duration) * 100}
+                    size="60px"
+                    thickness="6px"
+                    color="pink.400"
+                    trackColor="pink.200"
+                    capIsRound
+                    zIndex="1" // Ensure it's above the background and glow
+                  >
+                    <CircularProgressLabel>
+                      <Text
+                        fontSize="lg"
+                        fontWeight="bold"
+                        color="pink.600"
+                        fontFamily="'Pacifico', cursive"
+                      >
+                        {timer}s
+                      </Text>
+                    </CircularProgressLabel>
+                  </CircularProgress>
+                </Box>
               )}
               {currentRound < rounds.length - 1 && (
                 <Box
@@ -167,7 +203,9 @@ const PresenterDisplay = ({ peers, localVideoRef }: PresenterDisplayProps) => {
                   display="flex"
                   alignItems={"center"}
                   justifyContent={"center"}
-                  marginLeft="auto"
+                  position={"absolute"}
+                  top={"15px"}
+                  right={"15px"}
                 >
                   <Tooltip
                     placement="top"
@@ -212,8 +250,9 @@ const PresenterDisplay = ({ peers, localVideoRef }: PresenterDisplayProps) => {
           {currentRound === null && (
             <Button
               colorScheme="red"
-              variant="solid"
+              variant="outline"
               onClick={startRounds}
+              color={"white"}
               float={"right"}
               isDisabled={peers.length === 0}
             >
@@ -229,7 +268,6 @@ const PresenterDisplay = ({ peers, localVideoRef }: PresenterDisplayProps) => {
           direction="column"
           align="center"
           justify="center"
-          bg={userJoinedBg}
           borderRadius="lg"
           p={6}
           mt={4}
@@ -243,9 +281,8 @@ const PresenterDisplay = ({ peers, localVideoRef }: PresenterDisplayProps) => {
         <Grid
           templateColumns="repeat(auto-fill, minmax(200px, 1fr))"
           gap={4}
-          height="75%"
-          p={4}
-          bg={userJoinedBg}
+          height="50%"
+          alignContent={"end"}
         >
           {peers?.map((peer, index) => (
             <PeerVideo key={index} peer={peer.peer} />

@@ -27,14 +27,7 @@ const Room = ({ roomId: roomID }: { roomId: string }) => {
   }, [roomID]);
 
   return (
-    <Flex
-      direction="column"
-      align="center"
-      justify="space-between"
-      height="90%"
-      bg={cardBg}
-      color={cardTextColor}
-    >
+    <Flex height="90%" bg={cardBg} color={cardTextColor} borderRadius="10px">
       <Box position="relative" width="full">
         <PresenterDisplay peers={peers} localVideoRef={localVideoRef} />
       </Box>

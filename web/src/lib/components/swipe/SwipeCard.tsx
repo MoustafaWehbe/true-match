@@ -10,7 +10,7 @@ interface SwipeCardProps {
   index: number;
   isActive: boolean;
   onUndo: () => void;
-  outOfFrame: (idx: number) => void;
+  onCardLeftScreen: (idx: number) => void;
   onSwipe: (idx: number) => void;
 }
 
@@ -22,7 +22,7 @@ export const sharedCardContainerStyles: React.CSSProperties = {
 };
 
 const SwipeCard = forwardRef<any, SwipeCardProps>(
-  ({ user, index, outOfFrame, onSwipe, isActive }, ref) => {
+  ({ user, index, onCardLeftScreen, onSwipe, isActive }, ref) => {
     const [isExpanded, setIsExpanded] = useState(false);
 
     const handleIsExpanded = () => {
@@ -35,7 +35,7 @@ const SwipeCard = forwardRef<any, SwipeCardProps>(
           <CardSwipeable
             user={user}
             index={index}
-            outOfFrame={outOfFrame}
+            onCardLeftScreen={onCardLeftScreen}
             handleIsExpanded={handleIsExpanded}
             onSwipe={onSwipe}
             isActive={isActive}

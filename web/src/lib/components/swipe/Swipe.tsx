@@ -8,10 +8,14 @@ import { FaHeart, FaUndoAlt } from "react-icons/fa";
 
 const Swipe = () => {
   const users = [
-    { name: "moustafa wehbe", bio: "Love hiking and outdoor adventures." },
-    { name: "mohamad", bio: "A foodie at heart and a coffee addict." },
-    { name: "Salam salama", bio: "Welll not sure yet about this one" },
-    { name: "haidar haidoura", bio: "I do not work, I am a princes" },
+    {
+      id: 1,
+      name: "moustafa wehbe",
+      bio: "Love hiking and outdoor adventures.",
+    },
+    { id: 2, name: "mohamad", bio: "A foodie at heart and a coffee addict." },
+    { id: 3, name: "Salam salama", bio: "Welll not sure yet about this one" },
+    { id: 4, name: "haidar haidoura", bio: "I do not work, I am a princes" },
   ];
   const [currentIndex, setCurrentIndex] = useState(users.length - 1);
 
@@ -43,11 +47,11 @@ const Swipe = () => {
 
   const swipe = async (dir) => {
     if (canSwipe && currentIndex < users.length) {
-      await childRefs[currentIndex].current.swipe(dir); // Swipe the card!
+      await childRefs[currentIndex].current.swipe(dir);
     }
   };
 
-  const outOfFrame = (idx: number) => {
+  const onCardLeftScreen = (idx: number) => {
     // handle the case in which go back is pressed before card goes outOfFrame
     currentIndexRef.current >= idx && childRefs[idx].current.restoreCard();
     // TODO: when quickly swipe and restore multiple times the same card,
@@ -55,9 +59,10 @@ const Swipe = () => {
     // during latest swipes. Only the last outOfFrame event should be considered valid
   };
 
-  // set last direction and decrease current index
   const onSwipe = (index: number) => {
-    updateCurrentIndex(index - 1);
+    setTimeout(() => {
+      updateCurrentIndex(index - 1);
+    }, 500);
   };
 
   return (
@@ -68,7 +73,7 @@ const Swipe = () => {
           user={users[index]}
           index={index}
           onUndo={onUndo}
-          outOfFrame={outOfFrame}
+          onCardLeftScreen={onCardLeftScreen}
           ref={childRefs[index]}
           onSwipe={onSwipe}
           isActive={currentIndex === index}

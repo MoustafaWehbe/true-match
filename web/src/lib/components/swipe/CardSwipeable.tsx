@@ -14,13 +14,16 @@ interface CardSwipeableProps {
   user: any;
   index: number;
   isActive: boolean;
-  outOfFrame: (idx: number) => void;
+  onCardLeftScreen: (idx: number) => void;
   handleIsExpanded: () => void;
   onSwipe: (idx: number) => void;
 }
 
 const CardSwipeable = forwardRef<CardSwipeableProps, any>(
-  ({ user, index, isActive, outOfFrame, handleIsExpanded, onSwipe }, ref) => {
+  (
+    { user, index, isActive, onCardLeftScreen, handleIsExpanded, onSwipe },
+    ref
+  ) => {
     const cardBg = useColorModeValue("white", "gray.700");
     const cardTextColor = useColorModeValue("gray.800", "whiteAlpha.900");
 
@@ -29,7 +32,7 @@ const CardSwipeable = forwardRef<CardSwipeableProps, any>(
         <SwipeCardCore
           preventSwipe={["up", "down"]}
           ref={ref}
-          onCardLeftScreen={() => outOfFrame(index)}
+          onCardLeftScreen={() => onCardLeftScreen(index)}
           onSwipe={() => onSwipe(index)}
           style={{
             height: "100%",
