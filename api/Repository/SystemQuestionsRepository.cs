@@ -14,10 +14,14 @@ namespace api.Repository
             _context = context;
         }
 
+        public IQueryable<SystemQuestion> GetAll()
+        {
+            return _context.SystemQuestions.AsQueryable();
+        }
+
         public async Task<IEnumerable<SystemQuestion>> GetAllAsync()
         {
             return await _context.SystemQuestions
-                // .Include(sq => sq.CategoryId)
                 .ToListAsync();
         }
 

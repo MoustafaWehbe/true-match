@@ -1,19 +1,22 @@
-import { useEffect, useRef, useState } from "react";
-import { RoomContentDto } from "../openApiGen";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../state/store";
 import { getRoomContent } from "../state/room/roomSlice";
+import { getSystemQuestions } from "../state/question/questionSlice";
 
 const useRound = () => {
   const [currentRound, setCurrentRound] = useState<number | null>(null);
   const [timer, setTimer] = useState(0);
-  const [questions, setQuestions] = useState<string[]>([]);
   const [isPaused, setIsPaused] = useState(false);
 
   const dispatch = useDispatch<AppDispatch>();
-  const { roomContent: rounds, roomContentLoading } = useSelector(
-    (state: RootState) => state.room
-  );
+  const {
+    roomContent: rounds,
+    roomContentLoading,
+    activeRoom,
+  } = useSelector((state: RootState) => state.room);
+  const { systemQuestions } = useSelector((state: RootState) => state.question);
+
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
@@ -47,22 +50,16 @@ const useRound = () => {
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
     };
-  }, [currentRound, rounds]);
+  }, [currentRound, isPaused, rounds]);
 
-  useEffect(() => {
-    if (currentRound === 2) {
-      const randomQuestions = [
-        "What's your hidden talent?",
-        "If you could travel anywhere, where would it be?",
-        "What's your favorite movie?",
-      ];
-      setQuestions(randomQuestions);
-    }
-  }, [currentRound]);
-
-  const startRounds = () => {
+  const startRounds = useCallback(() => {
     setCurrentRound(0);
-  };
+    if (activeRoom && activeRoom.questionsCategories) {
+      dispatch(
+        getSystemQuestions({ categories: activeRoom.questionsCategories })
+      );
+    }
+  }, [activeRoom, dispatch]);
 
   const pauseRound = () => {
     setIsPaused((prevIsPaused) => {
@@ -94,7 +91,7 @@ const useRound = () => {
 
   return {
     timer,
-    questions,
+    systemQuestions,
     currentRound,
     rounds,
     isPaused,

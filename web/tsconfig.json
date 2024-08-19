@@ -17,6 +17,8 @@
     "paths": {
       "~/*": ["./*"]
     },
+    "noUnusedParameters": true,
+    "noUnusedLocals": true,
     "incremental": true,
     "plugins": [
       {

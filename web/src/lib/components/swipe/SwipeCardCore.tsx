@@ -335,6 +335,7 @@ const SwipeCardCore = forwardRef<any, SwipeCardCoreProps>(
                 : gestureState.dy,
           });
           if (dir !== swipeThresholdFulfilledDirection) {
+            // eslint-disable-next-line react-hooks/exhaustive-deps
             swipeThresholdFulfilledDirection = dir;
             if (swipeThresholdFulfilledDirection === "none") {
               if (onSwipeRequirementUnfulfilled)
@@ -370,7 +371,7 @@ const SwipeCardCore = forwardRef<any, SwipeCardCoreProps>(
 
       window.addEventListener("mousemove", onMouseMove);
 
-      const onMouseUp = (ev: MouseEvent) => {
+      const onMouseUp = (_ev: MouseEvent) => {
         if (!isClicking) return;
         isClicking = false;
         handleSwipeReleased(setSpringTarget, lastPosition);
@@ -393,7 +394,7 @@ const SwipeCardCore = forwardRef<any, SwipeCardCoreProps>(
 
       element.current?.addEventListener("touchmove", onTouchMove);
 
-      const onTouchEnd = (ev: TouchEvent) => {
+      const onTouchEnd = (_ev: TouchEvent) => {
         handleSwipeReleased(setSpringTarget, lastPosition);
         startPositon = { x: 0, y: 0 };
         lastPosition = { dx: 0, dy: 0, vx: 0, vy: 0, timeStamp: Date.now() };
@@ -407,6 +408,7 @@ const SwipeCardCore = forwardRef<any, SwipeCardCoreProps>(
         element.current?.removeEventListener("touchend", onTouchEnd);
         window.removeEventListener("mousemove", onMouseMove);
         window.removeEventListener("mouseup", onMouseUp);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
         element.current?.removeEventListener("mousedown", onMouseDown);
       };
     }, [

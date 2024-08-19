@@ -19,7 +19,8 @@ namespace api.Mappers
                 User = roomModel.User?.ToUserSimplifiedDto(),
                 CreatedAt = roomModel.CreatedAt,
                 UpdatedAt = roomModel.UpdatedAt,
-                Offers = roomModel.Offers
+                Offers = roomModel.Offers,
+                QuestionsCategories = roomModel.QuestionsCategories
             };
         }
 
@@ -30,6 +31,7 @@ namespace api.Mappers
                 Title = roomDto.Title,
                 Description = roomDto.Description,
                 ScheduledAt = roomDto.ScheduledAt,
+                QuestionsCategories = roomDto.QuestionsCategories,
                 UserId = userId
             };
         }

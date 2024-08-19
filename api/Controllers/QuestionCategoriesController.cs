@@ -20,6 +20,7 @@ namespace api.Controllers
 
         [HttpGet]
         [Authorize]
+        [ProducesResponseType(typeof(ApiResponse<List<QuestionCategoryDto>>), 200)]
         public async Task<ActionResult<IEnumerable<QuestionCategory>>> GetQuestionCategories()
         {
             var categories = await _questionCategoryRepository.GetAllAsync();

@@ -39,6 +39,12 @@ export interface UpdateRoomDto {
     offers?: any | null;
     /**
      * 
+     * @type {Array<number>}
+     * @memberof UpdateRoomDto
+     */
+    questionsCategories?: Array<number> | null;
+    /**
+     * 
      * @type {Date}
      * @memberof UpdateRoomDto
      */
@@ -77,6 +83,7 @@ export function UpdateRoomDtoFromJSONTyped(json: any, ignoreDiscriminator: boole
         'title': json['title'] == null ? undefined : json['title'],
         'description': json['description'] == null ? undefined : json['description'],
         'offers': json['offers'] == null ? undefined : json['offers'],
+        'questionsCategories': json['questionsCategories'] == null ? undefined : json['questionsCategories'],
         'scheduledAt': json['scheduledAt'] == null ? undefined : (new Date(json['scheduledAt'])),
         'status': json['status'] == null ? undefined : json['status'],
         'finishedAt': json['finishedAt'] == null ? undefined : (new Date(json['finishedAt'])),
@@ -92,6 +99,7 @@ export function UpdateRoomDtoToJSON(value?: UpdateRoomDto | null): any {
         'title': value['title'],
         'description': value['description'],
         'offers': value['offers'],
+        'questionsCategories': value['questionsCategories'],
         'scheduledAt': value['scheduledAt'] == null ? undefined : ((value['scheduledAt'] as any).toISOString()),
         'status': value['status'],
         'finishedAt': value['finishedAt'] == null ? undefined : ((value['finishedAt'] as any).toISOString()),

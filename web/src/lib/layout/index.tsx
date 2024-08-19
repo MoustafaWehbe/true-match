@@ -32,12 +32,12 @@ const Layout = ({ children }: LayoutProps) => {
 
   if (typeof window !== "undefined") {
     return AUTH_ROUTES.includes(window.location.pathname.slice(1)) ? (
-      <AuthLayout children={children} />
+      <AuthLayout>{children}</AuthLayout>
     ) : (
-      <MainLayout children={children} />
+      <MainLayout>{children}</MainLayout>
     );
   }
-  return <AuthLayout children={children} />;
+  return <AuthLayout>{children}</AuthLayout>;
 };
 
 export default Layout;

@@ -18,6 +18,7 @@ import type {
   ProblemDetails,
   QuestionCategory,
   QuestionCategoryDto,
+  QuestionCategoryDtoListApiResponse,
 } from '../models/index';
 import {
     ProblemDetailsFromJSON,
@@ -26,6 +27,8 @@ import {
     QuestionCategoryToJSON,
     QuestionCategoryDtoFromJSON,
     QuestionCategoryDtoToJSON,
+    QuestionCategoryDtoListApiResponseFromJSON,
+    QuestionCategoryDtoListApiResponseToJSON,
 } from '../models/index';
 
 export interface ApiQuestionCategoryIdDeleteRequest {
@@ -52,7 +55,7 @@ export class QuestionCategoriesApi extends runtime.BaseAPI {
 
     /**
      */
-    async apiQuestionCategoryGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<QuestionCategory>>> {
+    async apiQuestionCategoryGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<QuestionCategoryDtoListApiResponse>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -72,12 +75,12 @@ export class QuestionCategoriesApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(QuestionCategoryFromJSON));
+        return new runtime.JSONApiResponse(response, (jsonValue) => QuestionCategoryDtoListApiResponseFromJSON(jsonValue));
     }
 
     /**
      */
-    async apiQuestionCategoryGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<QuestionCategory>> {
+    async apiQuestionCategoryGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<QuestionCategoryDtoListApiResponse> {
         const response = await this.apiQuestionCategoryGetRaw(initOverrides);
         return await response.value();
     }

@@ -6,7 +6,7 @@ import { WebRTCHandler } from "~/lib/utils/webrtc/WebRTCHandler";
 import PresenterDisplay from "./PresenterDisplay";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "~/lib/state/store";
-import { getRoomContent } from "~/lib/state/room/roomSlice";
+import { getRoomById } from "~/lib/state/room/roomSlice";
 
 const Room = ({ roomId: roomID }: { roomId: string }) => {
   const cardBg = useColorModeValue("gray.100", "gray.900");
@@ -16,6 +16,17 @@ const Room = ({ roomId: roomID }: { roomId: string }) => {
   const [peers, setPeers] = useState<
     { peerID: string; peer: RTCPeerConnection }[]
   >([]);
+
+  const { activeRoom, activeRoomLoading } = useSelector(
+    (state: RootState) => state.room
+  );
+  const dispatch = useDispatch<AppDispatch>();
+
+  useEffect(() => {
+    if (!activeRoom && !activeRoomLoading) {
+      dispatch(getRoomById(parseInt(roomID)));
+    }
+  }, [dispatch, activeRoom, activeRoomLoading, roomID]);
 
   useEffect(() => {
     webRTCHandler.current = new WebRTCHandler(roomID, setPeers);

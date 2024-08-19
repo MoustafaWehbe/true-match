@@ -1,4 +1,4 @@
-import { Button, IconButton, Stack } from "@chakra-ui/react";
+import { IconButton, Stack } from "@chakra-ui/react";
 import {
   FaMicrophone,
   FaMicrophoneSlash,

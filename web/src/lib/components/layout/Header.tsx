@@ -1,20 +1,11 @@
 import {
-  Avatar,
   Box,
-  Button,
   Flex,
   Heading,
-  Icon,
-  Input,
-  InputGroup,
-  InputRightAddon,
   keyframes,
   Link,
-  Stack,
-  Text,
   useColorModeValue,
 } from "@chakra-ui/react";
-import { CiUser } from "react-icons/ci";
 
 import HeaderPopover from "../header/HeaderPopover";
 import { useDispatch, useSelector } from "react-redux";

@@ -18,9 +18,7 @@ function UpcomingRooms() {
   const bg = useColorModeValue("gray.50", "gray.800");
   const textColor = useColorModeValue("gray.800", "whiteAlpha.900");
   const dispatch = useDispatch<AppDispatch>();
-  const { rooms, getRoomsLoading } = useSelector(
-    (state: RootState) => state.room
-  );
+  const { rooms } = useSelector((state: RootState) => state.room);
 
   useEffect(() => {
     dispatch(

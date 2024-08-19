@@ -18,6 +18,7 @@ namespace api.Models
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
         public JsonDocument? Offers { get; set; }
+        public List<int> QuestionsCategories { get; set; } = new List<int>();
 
         [ForeignKey("UserId")]
         public required string UserId { get; set; }

@@ -14,6 +14,9 @@ import {
   Container,
   Checkbox,
   Link,
+  CheckboxGroup,
+  FormErrorMessage,
+  SimpleGrid,
 } from "@chakra-ui/react";
 import { useFormik } from "formik";
 import { useEffect, useState } from "react";
@@ -23,6 +26,7 @@ import ContentModal from "./ContentModal";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "~/lib/state/store";
 import { createRoom } from "~/lib/state/room/roomSlice";
+import { getQuestionCategories } from "~/lib/state/question/questionSlice";
 
 function ScheduleRoom() {
   const toast = useToast();
@@ -36,11 +40,16 @@ function ScheduleRoom() {
     (state: RootState) => state.room
   );
 
+  const { categories, categoriesLoading } = useSelector(
+    (state: RootState) => state.question
+  );
+
   const formik = useFormik({
     initialValues: {
       title: "",
       description: "",
       scheduledAt: "",
+      selectedQuestionCategories: [],
     },
     validationSchema: Yup.object({
       title: Yup.string().required("Title is required"),
@@ -48,6 +57,10 @@ function ScheduleRoom() {
       scheduledAt: Yup.date()
         .required("Scheduled time is required")
         .min(new Date(), "Date must be in the future"),
+      selectedQuestionCategories: Yup.array().min(
+        1,
+        "Select at least one question category"
+      ),
     }),
     onSubmit: async (values) => {
       if (!isChecked) {
@@ -66,10 +79,29 @@ function ScheduleRoom() {
           title: values.title,
           description: values.description,
           scheduledAt: new Date(values.scheduledAt),
+          questionsCategories: values.selectedQuestionCategories.map((e) =>
+            parseInt(e)
+          ),
         })
       );
     },
   });
+
+  useEffect(() => {
+    if (!categories && !categoriesLoading) {
+      dispatch(getQuestionCategories());
+    }
+  }, [dispatch, categories, categoriesLoading]);
+
+  useEffect(() => {
+    if (categories?.length) {
+      formik.setFieldValue(
+        "selectedQuestionCategories",
+        categories?.map((cat) => cat.id!.toString())
+      );
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [categories]);
 
   useEffect(() => {
     if (createdRoom?.id && !createRoomLoading && formik.values.title) {
@@ -163,6 +195,42 @@ function ScheduleRoom() {
               )}
             </FormControl>
 
+            <FormControl
+              isInvalid={
+                !!formik.errors.selectedQuestionCategories &&
+                !!formik.touched.selectedQuestionCategories
+              }
+              mb={10}
+            >
+              <FormLabel htmlFor="selectedQuestionCategories">
+                Choose Question Types
+              </FormLabel>
+              <CheckboxGroup
+                colorScheme="pink"
+                onChange={(values) => {
+                  console.log(values);
+                  formik.setFieldValue("selectedQuestionCategories", values);
+                }}
+                value={formik.values.selectedQuestionCategories}
+                // defaultValue={categories?.map((cat) => cat.id!) || []}
+              >
+                <SimpleGrid columns={[1, 2]} spacing={4}>
+                  {categories?.map((categ) => (
+                    <Checkbox
+                      key={categ.id!}
+                      value={categ.id!.toString()}
+                      isChecked
+                    >
+                      {categ.name}
+                    </Checkbox>
+                  ))}
+                </SimpleGrid>
+              </CheckboxGroup>
+              <FormErrorMessage>
+                {formik.errors.selectedQuestionCategories}
+              </FormErrorMessage>
+            </FormControl>
+
             <FormControl display="flex" alignItems="center" mb={5}>
               <Checkbox
                 isChecked={isChecked}
@@ -187,7 +255,7 @@ function ScheduleRoom() {
               isLoading={createRoomLoading}
               loadingText="Creating..."
               width="full"
-              mt={5}
+              mt={2}
             >
               Create Room
             </Button>

@@ -16,7 +16,7 @@ import VideoControls from "./VideoControls";
 import PeerVideo from "./PeerVideo";
 import useRound from "~/lib/hooks/useRound";
 import AnimatedHeart from "../shared/AnimatedHeart";
-import { FaForward, FaPause, FaPlay } from "react-icons/fa";
+import { FaArrowRight, FaForward, FaPause, FaPlay } from "react-icons/fa";
 
 interface PresenterDisplayProps {
   peers: { peerID: string; peer: RTCPeerConnection }[];
@@ -29,19 +29,18 @@ const heartBackground = keyframes`
   100% { background-position: 0% 50%; }
 `;
 
+const progressCircleThickness = 6;
+const progressCircleSize = 80;
+
 const PresenterDisplay = ({ peers, localVideoRef }: PresenterDisplayProps) => {
-  const cardBg = useColorModeValue("gray.100", "gray.900");
   const cardTextColor = useColorModeValue("gray.800", "whiteAlpha.900");
-  const userJoinedBg = useColorModeValue("gray.100", "gray.900");
   const [isMicOn, setIsMicOn] = useState(true);
   const [isVideoOn, setIsVideoOn] = useState(true);
-  const overlayBg = useColorModeValue(
-    "rgba(255, 255, 255, 0.8)",
-    "rgba(0, 0, 0, 0.8)"
-  );
+  const [currentIndexForSystemQuestion, setCurrentIndexForSystemQuestion] =
+    useState(0);
   const {
     timer,
-    questions,
+    systemQuestions,
     currentRound,
     rounds,
     isPaused,
@@ -68,6 +67,17 @@ const PresenterDisplay = ({ peers, localVideoRef }: PresenterDisplayProps) => {
       });
       setIsVideoOn((prev) => !prev);
     }
+  };
+
+  const onNextQuestionClicked = () => {
+    setCurrentIndexForSystemQuestion((idx) => {
+      if (systemQuestions && idx === systemQuestions?.length - 1) {
+        skipRound();
+        return 0;
+      } else {
+        return idx + 1;
+      }
+    });
   };
 
   if (!rounds) {
@@ -114,6 +124,7 @@ const PresenterDisplay = ({ peers, localVideoRef }: PresenterDisplayProps) => {
         <Box
           width="75%"
           height="fit-content"
+          maxHeight="200px"
           overflow={"auto"}
           p={4}
           color={cardTextColor}
@@ -132,7 +143,8 @@ const PresenterDisplay = ({ peers, localVideoRef }: PresenterDisplayProps) => {
               left="0"
               color="black"
               direction="column"
-              align="center"
+              align="start"
+              maxWidth={"88%"}
               justify="center"
               p={4}
               borderRadius="lg"
@@ -143,23 +155,33 @@ const PresenterDisplay = ({ peers, localVideoRef }: PresenterDisplayProps) => {
               <Text fontSize="md" mb={4}>
                 {rounds[currentRound].description}
               </Text>
-              {currentRound === 2 && (
-                <Box>
-                  {questions.map((question, idx) => (
-                    <Text key={idx} mb={2}>
-                      {question}
-                    </Text>
-                  ))}
+              {currentRound === 2 && systemQuestions && (
+                <Box width={"100%"}>
+                  <Text mb={2}>
+                    {systemQuestions[currentIndexForSystemQuestion].name}
+                  </Text>
+                  <Button
+                    float={"right"}
+                    leftIcon={<FaArrowRight />}
+                    onClick={onNextQuestionClicked}
+                    colorScheme="blue"
+                    color="blue"
+                    variant="ghost"
+                  >
+                    Next question
+                  </Button>
                 </Box>
               )}
               {rounds && rounds[currentRound]?.duration && (
                 <Box
-                  position="relative"
+                  position="absolute"
+                  top={"70px"}
+                  right={"25px"}
                   display="flex"
                   alignItems="center"
                   justifyContent="center"
-                  width="54px"
-                  height="54px"
+                  width={`${progressCircleSize - progressCircleThickness - 2}px`}
+                  height={`${progressCircleSize - progressCircleThickness - 2}px`}
                   borderRadius="50%"
                   overflow="hidden"
                 >
@@ -177,8 +199,8 @@ const PresenterDisplay = ({ peers, localVideoRef }: PresenterDisplayProps) => {
 
                   <CircularProgress
                     value={(timer / rounds[currentRound].duration) * 100}
-                    size="60px"
-                    thickness="6px"
+                    size={`${progressCircleSize}px`}
+                    thickness={`${progressCircleThickness}px`}
                     color="pink.400"
                     trackColor="pink.200"
                     capIsRound

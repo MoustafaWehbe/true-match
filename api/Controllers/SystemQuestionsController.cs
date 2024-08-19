@@ -5,6 +5,8 @@ using api.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using api.Helpers;
 using Microsoft.OpenApi.Any;
+using Microsoft.EntityFrameworkCore;
+using api.Mappers;
 
 namespace api.Controllers
 {
@@ -21,10 +23,31 @@ namespace api.Controllers
 
         [HttpGet]
         [Authorize]
-        public async Task<ActionResult<IEnumerable<SystemQuestion>>> GetSystemQuestions()
+        [ProducesResponseType(typeof(ApiResponse<List<SystemQuestionDto>>), 200)]
+        public async Task<ActionResult<IEnumerable<SystemQuestionDto>>> GetSystemQuestions([FromQuery] List<int> categories)
         {
-            var questions = await _systemQuestionRepository.GetAllAsync();
-            return Ok(ResponseHelper.CreateSuccessResponse(questions));
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (categories != null && categories.Count > 0)
+            {
+                IQueryable<SystemQuestion> query = _systemQuestionRepository.GetAll();
+                query = query.Where(q => categories.Contains(q.CategoryId));
+                var questions = await query.ToListAsync();
+
+                var randomQuestions = questions
+                    .OrderBy(q => Guid.NewGuid())
+                    .Take(10)
+                    .ToList();
+                return Ok(ResponseHelper.CreateSuccessResponse(randomQuestions.Select(q => q.ToSystemQuestionDto())));
+            }
+            else
+            {
+                var questions = await _systemQuestionRepository.GetAllAsync();
+                return Ok(ResponseHelper.CreateSuccessResponse(questions.Select(q => q.ToSystemQuestionDto())));
+            }
         }
 
         [HttpGet("{id}")]

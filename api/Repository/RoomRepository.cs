@@ -66,6 +66,7 @@ namespace api.Repository
             existingRoom.Status = roomDto.Status;
             existingRoom.UpdatedAt = DateTime.UtcNow;
             existingRoom.Offers = roomDto.Offers;
+            existingRoom.QuestionsCategories = roomDto.QuestionsCategories;
 
             await _context.SaveChangesAsync();
 

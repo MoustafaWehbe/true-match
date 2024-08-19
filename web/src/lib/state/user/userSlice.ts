@@ -3,7 +3,6 @@ import axios from "axios";
 import {
   LoginDto,
   RegisterDto,
-  SimpleApiResponse,
   SimpleApiResponseApiResponse,
   User,
   UserApiResponse,
@@ -72,7 +71,7 @@ export const logoutUser = createAsyncThunk<
   SimpleApiResponseApiResponse,
   undefined,
   { rejectValue: string }
->("user/logoutUser", async (userData, { rejectWithValue }) => {
+>("user/logoutUser", async (_, { rejectWithValue }) => {
   try {
     const response = await axiosInstance.post<SimpleApiResponseApiResponse>(
       "/api/account/logout"

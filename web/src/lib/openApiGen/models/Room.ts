@@ -88,6 +88,12 @@ export interface Room {
     offers?: any | null;
     /**
      * 
+     * @type {Array<number>}
+     * @memberof Room
+     */
+    questionsCategories?: Array<number> | null;
+    /**
+     * 
      * @type {string}
      * @memberof Room
      */
@@ -132,6 +138,7 @@ export function RoomFromJSONTyped(json: any, ignoreDiscriminator: boolean): Room
         'createdAt': json['createdAt'] == null ? undefined : (new Date(json['createdAt'])),
         'updatedAt': json['updatedAt'] == null ? undefined : (new Date(json['updatedAt'])),
         'offers': json['offers'] == null ? undefined : json['offers'],
+        'questionsCategories': json['questionsCategories'] == null ? undefined : json['questionsCategories'],
         'userId': json['userId'] == null ? undefined : json['userId'],
         'user': json['user'] == null ? undefined : UserFromJSON(json['user']),
         'roomParticipants': json['roomParticipants'] == null ? undefined : ((json['roomParticipants'] as Array<any>).map(RoomParticipantFromJSON)),
@@ -153,6 +160,7 @@ export function RoomToJSON(value?: Room | null): any {
         'createdAt': value['createdAt'] == null ? undefined : ((value['createdAt']).toISOString()),
         'updatedAt': value['updatedAt'] == null ? undefined : ((value['updatedAt']).toISOString()),
         'offers': value['offers'],
+        'questionsCategories': value['questionsCategories'],
         'userId': value['userId'],
         'user': UserToJSON(value['user']),
         'roomParticipants': value['roomParticipants'] == null ? undefined : ((value['roomParticipants'] as Array<any>).map(RoomParticipantToJSON)),

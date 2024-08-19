@@ -17,6 +17,8 @@ export interface RoomSate {
   createRoomLoading: boolean;
   getRoomsLoading: boolean;
   rooms: RoomDtoPagedResponse | null;
+  activeRoom: RoomDto | null;
+  activeRoomLoading: boolean;
 }
 
 export const getRoomContent = createAsyncThunk<
@@ -84,12 +86,33 @@ export const createRoom = createAsyncThunk<
   }
 });
 
+export const getRoomById = createAsyncThunk<
+  RoomDto | null, // Expected return type (Room data or null)
+  number, // The parameter type (Room ID)
+  { rejectValue: string } // Rejected value type (error message)
+>("room/getRoomById", async (roomId, { rejectWithValue }) => {
+  try {
+    const response = await axiosInstance.get<RoomDtoApiResponse>(
+      `/api/room/${roomId}`
+    );
+    return response.data.data ?? null;
+  } catch (error: any) {
+    let errorMessage = "Something went wrong!";
+    if (axios.isAxiosError(error) && error.response) {
+      errorMessage = error.response.data.message || errorMessage;
+    }
+    return rejectWithValue(errorMessage);
+  }
+});
+
 const initialState: RoomSate = {
   roomContent: null,
   roomContentLoading: false,
   createRoomLoading: false,
   getRoomsLoading: false,
   rooms: null,
+  activeRoom: null,
+  activeRoomLoading: false,
 };
 
 const roomSlice = createSlice({
@@ -136,6 +159,19 @@ const roomSlice = createSlice({
       )
       .addCase(getRooms.rejected, (state) => {
         state.getRoomsLoading = false;
+      })
+      .addCase(getRoomById.pending, (state) => {
+        state.activeRoomLoading = true;
+      })
+      .addCase(
+        getRoomById.fulfilled,
+        (state, action: PayloadAction<RoomDto | null>) => {
+          state.activeRoomLoading = false;
+          state.activeRoom = action.payload;
+        }
+      )
+      .addCase(getRoomById.rejected, (state) => {
+        state.activeRoomLoading = false;
       });
   },
 });

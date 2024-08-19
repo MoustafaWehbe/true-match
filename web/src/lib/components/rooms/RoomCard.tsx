@@ -1,16 +1,12 @@
 import {
   Box,
   Button,
-  HStack,
   Image,
   Stack,
   Text,
   useColorModeValue,
-  useTheme,
 } from "@chakra-ui/react";
 import { CalendarIcon, TimeIcon } from "@chakra-ui/icons";
-import { useState } from "react";
-import { socket } from "~/lib/utils/socket/socket";
 import { RoomDto } from "~/lib/openApiGen";
 import { format } from "date-fns";
 import { RootState } from "~/lib/state/store";
@@ -28,25 +24,18 @@ interface RoomCardProps {
 
 const RoomCard = ({
   room,
-  onJoin,
   onDelete,
   onInterested,
   onUpdate,
 }: RoomCardProps) => {
   const cardBg = useColorModeValue("white", "gray.700");
   const cardTextColor = useColorModeValue("gray.800", "whiteAlpha.900");
-  const [isConnected, setIsConnected] = useState(socket.connected);
   const currentUser = useSelector((state: RootState) => state.user.user);
-  const theme = useTheme();
   const router = useRouter();
 
   const isOwner = currentUser && currentUser.id === room?.user?.id;
   const isLive = room.status === "InProgress" && !room.finishedAt;
   const isUpcoming = room.status === "Pending";
-
-  const join = () => {
-    socket.connect();
-  };
 
   return (
     <Box
