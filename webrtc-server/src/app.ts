@@ -4,6 +4,7 @@ import fs from "fs";
 import { Server as SocketIOServer } from "socket.io";
 import SocketHandler from "./socketHandler";
 import { instrument } from "@socket.io/admin-ui";
+import authMiddleware from "./middlwares/authMiddleware";
 
 class App {
   public server: Application;
@@ -43,6 +44,7 @@ class App {
       },
     });
     instrument(this.io, { auth: false });
+    this.io.use(authMiddleware);
     new SocketHandler(this.io);
   }
 

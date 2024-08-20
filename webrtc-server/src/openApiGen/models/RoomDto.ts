@@ -64,6 +64,12 @@ export interface RoomDto {
     offers?: any | null;
     /**
      * 
+     * @type {Array<number>}
+     * @memberof RoomDto
+     */
+    questionsCategories?: Array<number> | null;
+    /**
+     * 
      * @type {RoomStatus}
      * @memberof RoomDto
      */
@@ -127,6 +133,7 @@ export function RoomDtoFromJSONTyped(json: any, ignoreDiscriminator: boolean): R
         'title': json['title'] == null ? undefined : json['title'],
         'description': json['description'] == null ? undefined : json['description'],
         'offers': json['offers'] == null ? undefined : json['offers'],
+        'questionsCategories': json['questionsCategories'] == null ? undefined : json['questionsCategories'],
         'status': json['status'] == null ? undefined : RoomStatusFromJSON(json['status']),
         'scheduledAt': json['scheduledAt'] == null ? undefined : (new Date(json['scheduledAt'])),
         'finishedAt': json['finishedAt'] == null ? undefined : (new Date(json['finishedAt'])),
@@ -147,6 +154,7 @@ export function RoomDtoToJSON(value?: RoomDto | null): any {
         'title': value['title'],
         'description': value['description'],
         'offers': value['offers'],
+        'questionsCategories': value['questionsCategories'],
         'status': RoomStatusToJSON(value['status']),
         'scheduledAt': value['scheduledAt'] == null ? undefined : ((value['scheduledAt'] as any).toISOString()),
         'finishedAt': value['finishedAt'] == null ? undefined : ((value['finishedAt'] as any).toISOString()),

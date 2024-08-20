@@ -18,6 +18,7 @@ import type {
   CreateSystemQuestionDto,
   ProblemDetails,
   SystemQuestion,
+  SystemQuestionDtoListApiResponse,
   UpdateSystemQuestionDto,
 } from '../models/index';
 import {
@@ -27,9 +28,15 @@ import {
     ProblemDetailsToJSON,
     SystemQuestionFromJSON,
     SystemQuestionToJSON,
+    SystemQuestionDtoListApiResponseFromJSON,
+    SystemQuestionDtoListApiResponseToJSON,
     UpdateSystemQuestionDtoFromJSON,
     UpdateSystemQuestionDtoToJSON,
 } from '../models/index';
+
+export interface ApiSystemQuestionGetRequest {
+    categories?: Array<number>;
+}
 
 export interface ApiSystemQuestionIdDeleteRequest {
     id: number;
@@ -55,8 +62,12 @@ export class SystemQuestionsApi extends runtime.BaseAPI {
 
     /**
      */
-    async apiSystemQuestionGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<SystemQuestion>>> {
+    async apiSystemQuestionGetRaw(requestParameters: ApiSystemQuestionGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<SystemQuestionDtoListApiResponse>> {
         const queryParameters: any = {};
+
+        if (requestParameters['categories'] != null) {
+            queryParameters['categories'] = requestParameters['categories'];
+        }
 
         const headerParameters: runtime.HTTPHeaders = {};
 
@@ -75,13 +86,13 @@ export class SystemQuestionsApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(SystemQuestionFromJSON));
+        return new runtime.JSONApiResponse(response, (jsonValue) => SystemQuestionDtoListApiResponseFromJSON(jsonValue));
     }
 
     /**
      */
-    async apiSystemQuestionGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<SystemQuestion>> {
-        const response = await this.apiSystemQuestionGetRaw(initOverrides);
+    async apiSystemQuestionGet(requestParameters: ApiSystemQuestionGetRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SystemQuestionDtoListApiResponse> {
+        const response = await this.apiSystemQuestionGetRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

@@ -33,6 +33,12 @@ export interface CreateRoomDto {
     description?: string | null;
     /**
      * 
+     * @type {Array<number>}
+     * @memberof CreateRoomDto
+     */
+    questionsCategories?: Array<number> | null;
+    /**
+     * 
      * @type {Date}
      * @memberof CreateRoomDto
      */
@@ -58,6 +64,7 @@ export function CreateRoomDtoFromJSONTyped(json: any, ignoreDiscriminator: boole
         
         'title': json['title'] == null ? undefined : json['title'],
         'description': json['description'] == null ? undefined : json['description'],
+        'questionsCategories': json['questionsCategories'] == null ? undefined : json['questionsCategories'],
         'scheduledAt': json['scheduledAt'] == null ? undefined : (new Date(json['scheduledAt'])),
     };
 }
@@ -70,6 +77,7 @@ export function CreateRoomDtoToJSON(value?: CreateRoomDto | null): any {
         
         'title': value['title'],
         'description': value['description'],
+        'questionsCategories': value['questionsCategories'],
         'scheduledAt': value['scheduledAt'] == null ? undefined : ((value['scheduledAt'] as any).toISOString()),
     };
 }
