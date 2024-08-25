@@ -6,7 +6,7 @@ import {
   SystemQuestionDto,
   SystemQuestionDtoListApiResponse,
 } from "shared/src/types/openApiGen";
-import axiosInstance from "~/lib/utils/api/axiosConfig";
+import axiosInstance, { defaultHeaders } from "~/lib/utils/api/axiosConfig";
 
 export interface QuestionSate {
   categories: Array<QuestionCategoryDto> | null;
@@ -23,7 +23,8 @@ export const getQuestionCategories = createAsyncThunk<
   try {
     const response =
       await axiosInstance.get<QuestionCategoryDtoListApiResponse>(
-        "/api/question-category"
+        "/api/question-category",
+        { headers: defaultHeaders }
       );
     return response.data.data ?? null;
   } catch (error) {
@@ -50,6 +51,7 @@ export const getSystemQuestions = createAsyncThunk<
       "/api/system-question",
       {
         params: searchParams,
+        headers: defaultHeaders,
       }
     );
     return response.data.data ?? null;

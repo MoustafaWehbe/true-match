@@ -40,6 +40,8 @@ export * from './UpdateSystemQuestionDto';
 export * from './User';
 export * from './UserApiResponse';
 export * from './UserProfile';
+export * from './UserProfileDto';
+export * from './UserProfileDtoApiResponse';
 export * from './UserProfileInterest';
 export * from './UserProfileInterestDto';
 export * from './UserProfileLifeStyle';

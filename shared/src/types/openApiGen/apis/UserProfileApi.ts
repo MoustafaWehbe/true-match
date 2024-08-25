@@ -16,13 +16,13 @@
 import * as runtime from '../runtime';
 import type {
   CreateUserProfileDto,
-  UserProfile,
+  UserProfileDtoApiResponse,
 } from '../models/index';
 import {
     CreateUserProfileDtoFromJSON,
     CreateUserProfileDtoToJSON,
-    UserProfileFromJSON,
-    UserProfileToJSON,
+    UserProfileDtoApiResponseFromJSON,
+    UserProfileDtoApiResponseToJSON,
 } from '../models/index';
 
 export interface ApiUserProfileIdGetRequest {
@@ -40,7 +40,7 @@ export class UserProfileApi extends runtime.BaseAPI {
 
     /**
      */
-    async apiUserProfileIdGetRaw(requestParameters: ApiUserProfileIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UserProfile>> {
+    async apiUserProfileIdGetRaw(requestParameters: ApiUserProfileIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UserProfileDtoApiResponse>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
@@ -67,19 +67,19 @@ export class UserProfileApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => UserProfileFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => UserProfileDtoApiResponseFromJSON(jsonValue));
     }
 
     /**
      */
-    async apiUserProfileIdGet(requestParameters: ApiUserProfileIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserProfile> {
+    async apiUserProfileIdGet(requestParameters: ApiUserProfileIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserProfileDtoApiResponse> {
         const response = await this.apiUserProfileIdGetRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async apiUserProfilePostRaw(requestParameters: ApiUserProfilePostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UserProfile>> {
+    async apiUserProfilePostRaw(requestParameters: ApiUserProfilePostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UserProfileDtoApiResponse>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -102,12 +102,12 @@ export class UserProfileApi extends runtime.BaseAPI {
             body: CreateUserProfileDtoToJSON(requestParameters['createUserProfileDto']),
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => UserProfileFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => UserProfileDtoApiResponseFromJSON(jsonValue));
     }
 
     /**
      */
-    async apiUserProfilePost(requestParameters: ApiUserProfilePostRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserProfile> {
+    async apiUserProfilePost(requestParameters: ApiUserProfilePostRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserProfileDtoApiResponse> {
         const response = await this.apiUserProfilePostRaw(requestParameters, initOverrides);
         return await response.value();
     }

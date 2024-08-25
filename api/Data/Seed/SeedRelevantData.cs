@@ -4,7 +4,7 @@ using api.Models;
 
 namespace api.Data
 {
-    public static class SeedData
+    public static class SeedRelevantData
     {
         public static void Seed(ModelBuilder builder)
         {

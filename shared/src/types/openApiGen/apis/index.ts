@@ -4,6 +4,7 @@ export * from './AccountApi';
 export * from './InteresetApi';
 export * from './LifeStyleApi';
 export * from './MatchApi';
+export * from './MediaApi';
 export * from './QuestionCategoriesApi';
 export * from './RoomApi';
 export * from './RoomContentApi';

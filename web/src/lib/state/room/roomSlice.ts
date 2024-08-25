@@ -8,7 +8,7 @@ import {
   CreateRoomDto,
   RoomDtoPagedResponse,
 } from "shared/src/types/openApiGen";
-import axiosInstance from "~/lib/utils/api/axiosConfig";
+import axiosInstance, { defaultHeaders } from "~/lib/utils/api/axiosConfig";
 
 export interface RoomSate {
   roomContent: Array<RoomContentDto> | null;
@@ -28,10 +28,12 @@ export const getRoomContent = createAsyncThunk<
   { rejectValue: string }
 >("room/getAll", async (_, { rejectWithValue }) => {
   try {
-    const response =
-      await axiosInstance.get<RoomContentDtoListApiResponse>(
-        "/api/room-content"
-      );
+    const response = await axiosInstance.get<RoomContentDtoListApiResponse>(
+      "/api/room-content",
+      {
+        headers: defaultHeaders,
+      }
+    );
     return response.data.data ?? null;
   } catch (error) {
     let errorMessage = "Something went wrong!";
@@ -54,6 +56,7 @@ export const getRooms = createAsyncThunk<
         "/api/room",
         {
           params: { PageNumber, PageSize, Status },
+          headers: defaultHeaders,
         }
       );
       return response.data ?? null;
@@ -75,7 +78,8 @@ export const createRoom = createAsyncThunk<
   try {
     const response = await axiosInstance.post<RoomDtoApiResponse>(
       "/api/room",
-      roomData
+      roomData,
+      { headers: defaultHeaders }
     );
     return response.data.data;
   } catch (error) {
@@ -95,7 +99,8 @@ export const startRoom = createAsyncThunk<
   try {
     const response = await axiosInstance.put<RoomDtoApiResponse>(
       `/api/room/${roomData.id}`,
-      roomData
+      roomData,
+      { headers: defaultHeaders }
     );
     return response.data.data;
   } catch (error) {
@@ -114,7 +119,8 @@ export const getRoomById = createAsyncThunk<
 >("room/getRoomById", async (roomId, { rejectWithValue }) => {
   try {
     const response = await axiosInstance.get<RoomDtoApiResponse>(
-      `/api/room/${roomId}`
+      `/api/room/${roomId}`,
+      { headers: defaultHeaders }
     );
     return response.data.data ?? null;
   } catch (error: any) {

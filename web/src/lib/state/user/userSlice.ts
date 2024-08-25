@@ -1,13 +1,16 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 import {
+  CreateUserProfileDto,
   LoginDto,
   RegisterDto,
   SimpleApiResponseApiResponse,
   User,
   UserApiResponse,
+  UserProfileDto,
+  UserProfileDtoApiResponse,
 } from "shared/src/types/openApiGen";
-import axiosInstance from "~/lib/utils/api/axiosConfig";
+import axiosInstance, { defaultHeaders } from "~/lib/utils/api/axiosConfig";
 import { TOKEN } from "~/lib/consts/localStorage";
 
 export interface UserState {
@@ -19,6 +22,8 @@ export interface UserState {
   registerError: string | null;
   user: User | null;
   logoutResponseMessage: string;
+  userProfileCreated: boolean;
+  loadingImages: string[];
 }
 
 export interface ExtendedUserApiResponse extends Omit<UserApiResponse, "data"> {
@@ -33,7 +38,8 @@ export const registerUser = createAsyncThunk<
   try {
     const response = await axiosInstance.post<ExtendedUserApiResponse>(
       "/api/account/register",
-      userData
+      userData,
+      { headers: defaultHeaders }
     );
     localStorage.setItem(TOKEN, response.data.data.token);
     return response.data;
@@ -54,7 +60,8 @@ export const loginUser = createAsyncThunk<
   try {
     const response = await axiosInstance.post<ExtendedUserApiResponse>(
       "/api/account/login",
-      userData
+      userData,
+      { headers: defaultHeaders }
     );
     localStorage.setItem(TOKEN, response.data.data.token);
     return response.data;
@@ -74,7 +81,8 @@ export const logoutUser = createAsyncThunk<
 >("user/logoutUser", async (_, { rejectWithValue }) => {
   try {
     const response = await axiosInstance.post<SimpleApiResponseApiResponse>(
-      "/api/account/logout"
+      "/api/account/logout",
+      { headers: defaultHeaders }
     );
     localStorage.removeItem(TOKEN);
     return response.data;
@@ -93,8 +101,55 @@ export const fetchUser = createAsyncThunk<
   { rejectValue: string } // Error type
 >("user/fetchUser", async (_, { rejectWithValue }) => {
   try {
-    const response = await axiosInstance.get<UserApiResponse>("/me");
+    const response = await axiosInstance.get<UserApiResponse>("/me", {
+      headers: defaultHeaders,
+    });
     return response.data.data ?? null;
+  } catch (error) {
+    let errorMessage = "Something went wrong!";
+    if (axios.isAxiosError(error) && error.response) {
+      errorMessage = error.response.data.message || errorMessage;
+    }
+    return rejectWithValue(errorMessage);
+  }
+});
+
+export const createUserProfile = createAsyncThunk<
+  UserProfileDto | undefined, // Return type of the payload creator
+  CreateUserProfileDto, // First argument to the payload creator
+  { rejectValue: string } // Type for rejectWithValue
+>("userProfile/create", async (userProfileData, { rejectWithValue }) => {
+  try {
+    const response = await axiosInstance.post<UserProfileDtoApiResponse>(
+      "/api/user-profile",
+      userProfileData,
+      { headers: defaultHeaders }
+    );
+    return response.data.data;
+  } catch (error) {
+    let errorMessage = "Something went wrong!";
+    if (axios.isAxiosError(error) && error.response) {
+      errorMessage = error.response.data.message || errorMessage;
+    }
+    return rejectWithValue(errorMessage);
+  }
+});
+
+export const createUserMedia = createAsyncThunk<
+  string, // Return type of the payload creator
+  File, // First argument to the payload creator
+  { rejectValue: string } // Type for rejectWithValue
+>("media/create", async (file, { rejectWithValue }) => {
+  try {
+    const formData = new FormData();
+    formData.append("file", file);
+
+    const response = await axiosInstance.post<string>("/api/media", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return response.data;
   } catch (error) {
     let errorMessage = "Something went wrong!";
     if (axios.isAxiosError(error) && error.response) {
@@ -113,6 +168,8 @@ const initialState: UserState = {
   registerError: null,
   user: null,
   logoutResponseMessage: "",
+  userProfileCreated: false,
+  loadingImages: [],
 };
 
 const userSlice = createSlice({
@@ -176,7 +233,32 @@ const userSlice = createSlice({
           state.loginLoading = false;
           state.logoutResponseMessage = action.payload.data?.message ?? "";
         }
-      );
+      )
+      .addCase(createUserProfile.pending, (state) => {
+        state.userProfileCreated = false;
+      })
+      .addCase(
+        createUserProfile.fulfilled,
+        (state, _action: PayloadAction<UserProfileDto | undefined>) => {
+          state.userProfileCreated = true;
+        }
+      )
+      .addCase(createUserProfile.rejected, (state) => {
+        state.userProfileCreated = false;
+      })
+      .addCase(createUserMedia.pending, (state, action) => {
+        state.loadingImages.push(action.meta.arg.name);
+      })
+      .addCase(createUserMedia.fulfilled, (state, action) => {
+        state.loadingImages = state.loadingImages.filter(
+          (name) => name !== action.meta.arg.name
+        );
+      })
+      .addCase(createUserMedia.rejected, (state, action) => {
+        state.loadingImages = state.loadingImages.filter(
+          (name) => name !== action.meta.arg.name
+        );
+      });
   },
 });
 

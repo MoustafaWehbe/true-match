@@ -25,7 +25,8 @@ namespace api.Controllers
 
         [HttpPost]
         [Authorize]
-        public async Task<ActionResult<UserProfile>> CreateUserProfile([FromBody] CreateUserProfileDto userProfileDto)
+        [ProducesResponseType(typeof(ApiResponse<UserProfileDto>), 200)]
+        public async Task<ActionResult<UserProfileDto>> CreateUserProfile([FromBody] CreateUserProfileDto userProfileDto)
         {
             if (!ModelState.IsValid)
             {
@@ -66,10 +67,11 @@ namespace api.Controllers
 
             var createdUserProfile = await _userProfileRepo.CreateAsync(userProfile);
 
-            return CreatedAtAction(nameof(GetUserProfileById), new { id = createdUserProfile.Id }, createdUserProfile.ToUserProfileDto());
+            return CreatedAtAction(nameof(GetUserProfileById), new { id = createdUserProfile.Id }, ResponseHelper.CreateSuccessResponse(createdUserProfile.ToUserProfileDto()));
         }
 
         [HttpGet("{id}")]
+        [ProducesResponseType(typeof(ApiResponse<UserProfileDto>), 200)]
         public async Task<ActionResult<UserProfile>> GetUserProfileById(int id)
         {
             var userProfile = await _userProfileRepo.GetByIdAsync(id);
@@ -79,7 +81,7 @@ namespace api.Controllers
                 return NotFound();
             }
 
-            return Ok(ResponseHelper.CreateSuccessResponse(userProfile));
+            return Ok(ResponseHelper.CreateSuccessResponse(userProfile.ToUserProfileDto()));
         }
     }
 }

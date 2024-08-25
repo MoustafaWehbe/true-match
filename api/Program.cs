@@ -70,6 +70,7 @@ builder.Services.AddScoped<IRoomContentRepository, RoomContentRepository>();
 builder.Services.AddScoped<IQuestionCategoryRepository, QuestionCategoryRepository>();
 builder.Services.AddScoped<ISystemQuestionRepository, SystemQuestionRepository>();
 builder.Services.AddScoped<IMatchRepository, MatchRepository>();
+builder.Services.AddScoped<IMediaRepository, MediaRepository>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -105,6 +106,20 @@ builder.Services.AddSwaggerGen(option =>
 
 var app = builder.Build();
 
+if (args.Length > 0 && args[0].ToLower() == "seed-random")
+{
+    // Create a scope to access the services
+    using (var scope = app.Services.CreateScope())
+    {
+        var services = scope.ServiceProvider;
+        var dbContext = services.GetRequiredService<ApplicationDBContext>();
+
+        var seeder = new SeedRandomData(dbContext);
+        await seeder.SeedAsync(); // Run your seed logic
+        return; // Exit the application after seeding
+    }
+}
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -126,6 +141,8 @@ app.UseCors(x => x
 
 app.UseHttpsRedirection();
 
+app.UseStaticFiles();
+
 app.UseAuthentication();
 
 app.UseAuthorization();
@@ -133,4 +150,3 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
-

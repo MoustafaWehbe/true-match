@@ -19,7 +19,7 @@ namespace api.Data
         public DbSet<RoomContent> RoomContent { get; set; }
         public DbSet<RoomParticipant> RoomParticipants { get; set; }
         public DbSet<UserProfile> UserProfiles { get; set; }
-        public List<Media> Media { get; set; } = new List<Media>();
+        public DbSet<Media> Media { get; set; }
         public DbSet<Match> Matches { get; set; }
         public DbSet<SystemQuestion> SystemQuestions { get; set; }
         public DbSet<QuestionCategory> QuestionCategories { get; set; }
@@ -34,7 +34,7 @@ namespace api.Data
             builder.ApplyConfiguration(new UserConfiguration());
             builder.ApplyConfiguration(new MatchConfiguration());
 
-            SeedData.Seed(builder);
+            SeedRelevantData.Seed(builder);
         }
     }
 }

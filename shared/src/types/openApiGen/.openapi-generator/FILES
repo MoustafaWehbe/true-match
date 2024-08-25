@@ -1,8 +1,8 @@
-.openapi-generator-ignore
 apis/AccountApi.ts
 apis/InteresetApi.ts
 apis/LifeStyleApi.ts
 apis/MatchApi.ts
+apis/MediaApi.ts
 apis/QuestionCategoriesApi.ts
 apis/RoomApi.ts
 apis/RoomContentApi.ts
@@ -52,6 +52,8 @@ models/UpdateSystemQuestionDto.ts
 models/User.ts
 models/UserApiResponse.ts
 models/UserProfile.ts
+models/UserProfileDto.ts
+models/UserProfileDtoApiResponse.ts
 models/UserProfileInterest.ts
 models/UserProfileInterestDto.ts
 models/UserProfileLifeStyle.ts

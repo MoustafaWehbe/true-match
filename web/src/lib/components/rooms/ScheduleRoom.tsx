@@ -211,7 +211,6 @@ function ScheduleRoom() {
                   formik.setFieldValue("selectedQuestionCategories", values);
                 }}
                 value={formik.values.selectedQuestionCategories}
-                // defaultValue={categories?.map((cat) => cat.id!) || []}
               >
                 <SimpleGrid columns={[1, 2]} spacing={4}>
                   {categories?.map((categ) => (
