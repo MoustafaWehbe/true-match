@@ -64,5 +64,19 @@ namespace api.Repository
 
             return existingRoomParticipant;
         }
+
+        public async Task LeaveRoomAsync(int roomId, string userId)
+        {
+            var participant = await _context.RoomParticipants
+                .Where(rp => rp.RoomId == roomId && rp.UserId == userId && rp.AttendedToTime == null)
+                .OrderByDescending(rp => rp.AttendedFromTime)
+                .FirstOrDefaultAsync();
+
+            if (participant != null)
+            {
+                participant.AttendedToTime = DateTime.UtcNow;
+                await _context.SaveChangesAsync();
+            }
+        }
     }
 }

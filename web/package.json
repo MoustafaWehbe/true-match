@@ -6,22 +6,21 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "turbo": "pnpm dlx turbo@2.0.1",
-    "build:turbo": "pnpm turbo run build",
+    "turbo": "yarn dlx turbo@2.0.1",
+    "build:turbo": "yarn turbo run build",
     "postbuild": "next-sitemap --config next-sitemap.config.js",
     "start": "next start",
     "lint": "next lint",
-    "lint:fix": "eslint src --fix && pnpm format",
+    "lint:fix": "eslint src --fix && yarn format",
     "type-check": "tsc --noEmit",
-    "check:turbo": "pnpm turbo lint type-check",
+    "check:turbo": "yarn turbo lint type-check",
     "test:e2e": "playwright test",
     "format": "prettier --write src",
-    "up-interactive": "pnpm up -i",
-    "up-latest": "pnpm up-interactive -L",
+    "up-interactive": "yarn upgrade-interactive",
+    "up-latest": "yarn upgrade-interactive --latest",
     "release": "cross-env HUSKY=0 standard-version",
     "push-release": "git push --follow-tags origin main",
-    "prepare": "husky",
-    "generate-types": "node src/scripts/generate-types.js"
+    "prepare": "husky install"
   },
   "dependencies": {
     "@chakra-ui/icons": "^2.1.1",
@@ -65,8 +64,8 @@
     "typescript": "^5.4.5"
   },
   "engines": {
-    "node": ">=20.14.x",
-    "pnpm": ">=9"
+    "node": ">=20.9.x",
+    "yarn": ">=1.22"
   },
-  "packageManager": "pnpm@9.1.2"
+  "packageManager": "yarn@1.22.19"
 }

@@ -1,7 +1,4 @@
 import { Server as SocketIOServer, Socket } from "socket.io";
-import { userService } from "./services";
-import { roomService } from "./services";
-import { UserApiResponse } from "./openApiGen";
 
 interface Offer {
   offererUserName: string;

@@ -1,20 +1,21 @@
 import { socket } from "~/lib/utils/socket/socket";
+import { socketEventTypes } from "shared/src/types/custom";
 
 export class WebRTCHandler {
   private stream: MediaStream | null = null;
   private peers: { peerID: string; peer: RTCPeerConnection }[] = [];
-  private roomID: string;
+  private roomId: string;
   private onPeersChanged: (
     peers: { peerID: string; peer: RTCPeerConnection }[]
   ) => void;
 
   constructor(
-    roomID: string,
+    roomId: string,
     onPeersChanged: (
       peers: { peerID: string; peer: RTCPeerConnection }[]
     ) => void
   ) {
-    this.roomID = roomID;
+    this.roomId = roomId;
 
     this.onPeersChanged = onPeersChanged;
 
@@ -30,12 +31,16 @@ export class WebRTCHandler {
       localVideoRef.current.srcObject = this.stream;
     }
     this.registerSocketEvents();
-    socket.emit("join", this.roomID);
+    socket.emit("join", {
+      roomId: parseInt(this.roomId),
+    } as socketEventTypes.JoinRoomPayload);
   }
 
   closeConnections() {
     this.peers.forEach(({ peer }) => peer.close());
-    socket.emit("leave-room", this.roomID);
+    socket.emit("leave-room", {
+      roomId: parseInt(this.roomId),
+    } as socketEventTypes.LeaveRoomPayload);
     socket.off("user-joined", this.handleUserJoined);
     socket.off("offer", this.handleIncomingOffer);
     socket.off("answer", this.handleAnswer);
@@ -62,10 +67,10 @@ export class WebRTCHandler {
     peer.onicecandidate = (event) => {
       if (event.candidate) {
         socket.emit("ice-candidate", {
-          target: userToSignal,
-          user: socket.id,
+          targetSocketId: userToSignal,
+          iceCandidateSenderSocketId: socket.id,
           candidate: event.candidate,
-        });
+        } as socketEventTypes.IceCandidatePayload);
       }
     };
 
@@ -82,10 +87,10 @@ export class WebRTCHandler {
     peer.createOffer().then((offer) => {
       peer.setLocalDescription(offer).then(() => {
         socket.emit("offer", {
-          target: userToSignal,
-          user: socket.id!,
+          targetSocketId: userToSignal,
+          offerSenderSocketId: socket.id!,
           sdp: peer.localDescription,
-        });
+        } as socketEventTypes.OfferPayload);
       });
     });
 
@@ -93,46 +98,40 @@ export class WebRTCHandler {
     this.updatePeers();
   }
 
-  private handleIncomingOffer(incoming: {
-    sdp: RTCSessionDescriptionInit;
-    user: string;
-  }): void {
-    const peer = this.createPeerConnection(incoming.user);
+  private handleIncomingOffer(payload: socketEventTypes.OfferPayload): void {
+    const peer = this.createPeerConnection(payload.offerSenderSocketId);
     peer
-      .setRemoteDescription(new RTCSessionDescription(incoming.sdp))
+      .setRemoteDescription(new RTCSessionDescription(payload.sdp))
       .then(() => {
         peer.createAnswer().then((answer) => {
           peer.setLocalDescription(answer).then(() => {
             socket.emit("answer", {
-              target: incoming.user,
-              user: socket.id,
+              targetSocketId: payload.offerSenderSocketId,
+              answerSenderSocketId: socket.id,
               sdp: peer.localDescription,
-            });
+            } as socketEventTypes.AnswerPayload);
           });
         });
       });
 
-    this.peers.push({ peerID: incoming.user, peer });
+    this.peers.push({ peerID: payload.offerSenderSocketId, peer });
     this.updatePeers();
   }
 
-  private handleAnswer = (message: {
-    sdp: RTCSessionDescriptionInit;
-    user: string;
-  }) => {
-    const item = this.peers.find((p) => p.peerID === message.user);
-    item?.peer.setRemoteDescription(new RTCSessionDescription(message.sdp));
+  private handleAnswer = (payload: socketEventTypes.AnswerPayload) => {
+    const item = this.peers.find(
+      (p) => p.peerID === payload.answerSenderSocketId
+    );
+    item?.peer.setRemoteDescription(new RTCSessionDescription(payload.sdp));
     this.updatePeers();
   };
 
-  private handleICECandidate(incoming: {
-    user: string;
-    target: string;
-    candidate: RTCIceCandidateInit;
-  }) {
-    const item = this.peers.find((p) => p.peerID === incoming.user);
+  private handleICECandidate(payload: socketEventTypes.IceCandidatePayload) {
+    const item = this.peers.find(
+      (p) => p.peerID === payload.iceCandidateSenderSocketId
+    );
     if (item) {
-      const candidate = new RTCIceCandidate(incoming.candidate);
+      const candidate = new RTCIceCandidate(payload.candidate);
       item.peer.addIceCandidate(candidate);
     }
   }

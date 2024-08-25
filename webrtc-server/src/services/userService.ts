@@ -1,4 +1,4 @@
-import { UserApiResponse } from "../openApiGen";
+import { UserApiResponse } from "shared/src/types/openApiGen";
 import axiosInstance from "./axiosInstance";
 import { handleError } from "./errorHandler";
 

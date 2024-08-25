@@ -2,7 +2,7 @@ import {
   RoomDtoApiResponse,
   RoomDto,
   RoomParticipantDtoApiResponse,
-} from "../openApiGen";
+} from "shared/src/types/openApiGen";
 import axiosInstance from "./axiosInstance";
 import { handleError } from "./errorHandler";
 
@@ -12,10 +12,23 @@ const getRoomById = async (
 ): Promise<RoomDtoApiResponse> => {
   try {
     const response = await axiosInstance.get<RoomDtoApiResponse>(
-      `/room/${roomId}`,
+      `api/room/${roomId}`,
       {
         headers: { Authorization: `Bearer ${token}` },
       }
+    );
+    return response.data;
+  } catch (error) {
+    handleError(error);
+  }
+};
+
+const leaveRoom = async (roomId: number, token: string): Promise<void> => {
+  try {
+    const response = await axiosInstance.put<void>(
+      `api/room-participant/leave/${roomId}`,
+      {},
+      { headers: { Authorization: `Bearer ${token}` } }
     );
     return response.data;
   } catch (error) {
@@ -30,7 +43,7 @@ const updateRoom = async (
 ): Promise<RoomDtoApiResponse> => {
   try {
     const response = await axiosInstance.put<RoomDtoApiResponse>(
-      `/room/${roomId}`,
+      `api/room/${roomId}`,
       room,
       {
         headers: { Authorization: `Bearer ${token}` },
@@ -49,7 +62,7 @@ const joinRoom = async (
 ): Promise<RoomParticipantDtoApiResponse> => {
   try {
     const response = await axiosInstance.post<RoomParticipantDtoApiResponse>(
-      `/room-participant?roomId=${roomId}`,
+      `api/room-participant?roomId=${roomId}`,
       {
         roomId,
         socketId,
@@ -64,4 +77,4 @@ const joinRoom = async (
   }
 };
 
-export { getRoomById, updateRoom, joinRoom };
+export { getRoomById, updateRoom, joinRoom, leaveRoom };

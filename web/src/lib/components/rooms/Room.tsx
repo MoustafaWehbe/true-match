@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "~/lib/state/store";
 import { getRoomById } from "~/lib/state/room/roomSlice";
 
-const Room = ({ roomId: roomID }: { roomId: string }) => {
+const Room = ({ roomId: roomId }: { roomId: string }) => {
   const cardBg = useColorModeValue("gray.100", "gray.900");
   const cardTextColor = useColorModeValue("gray.800", "whiteAlpha.900");
   const localVideoRef = useRef<HTMLVideoElement>(null);
@@ -24,18 +24,18 @@ const Room = ({ roomId: roomID }: { roomId: string }) => {
 
   useEffect(() => {
     if (!activeRoom && !activeRoomLoading) {
-      dispatch(getRoomById(parseInt(roomID)));
+      dispatch(getRoomById(parseInt(roomId)));
     }
-  }, [dispatch, activeRoom, activeRoomLoading, roomID]);
+  }, [dispatch, activeRoom, activeRoomLoading, roomId]);
 
   useEffect(() => {
-    webRTCHandler.current = new WebRTCHandler(roomID, setPeers);
+    webRTCHandler.current = new WebRTCHandler(roomId, setPeers);
     webRTCHandler.current.init(localVideoRef);
 
     return () => {
       webRTCHandler.current?.closeConnections();
     };
-  }, [roomID]);
+  }, [roomId]);
 
   return (
     <Flex height="90%" bg={cardBg} color={cardTextColor} borderRadius="10px">

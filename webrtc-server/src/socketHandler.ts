@@ -1,10 +1,9 @@
 import { Server as SocketIOServer, Socket } from "socket.io";
-import { UserApi, UserApiResponse } from "./openApiGen";
-import { userService } from "./services";
+import { roomService } from "./services";
+import { socketEventTypes } from "shared/src/types/custom";
 
 class SocketHandler {
   private io: SocketIOServer;
-  private rooms: any = {};
 
   constructor(io: SocketIOServer) {
     this.io = io;
@@ -15,49 +14,81 @@ class SocketHandler {
     this.io.on("connection", (socket) => {
       console.log("New client connected");
 
-      socket.on("join", (room: string) => this.handleOnJoin(room, socket));
-
-      // payload: { target, user, sdp }
-      socket.on("offer", (payload) => this.handleOffer(payload, socket));
-
-      // payload: { target, sdp }
-      socket.on("answer", (payload) => this.handleAnswer(payload, socket));
-
-      // incoming: { target: userToSignal, user, candidate: event.candidate }
-      socket.on("ice-candidate", (incoming) =>
-        this.handleIceCandidate(incoming, socket)
+      socket.on("join", (payload: socketEventTypes.JoinRoomPayload) =>
+        this.handleOnJoin(payload, socket)
       );
 
-      socket.on("disconnect", () => this.handleDisconnect(socket));
+      socket.on("offer", (payload: socketEventTypes.OfferPayload) =>
+        this.handleOffer(payload, socket)
+      );
+
+      socket.on("answer", (payload: socketEventTypes.AnswerPayload) =>
+        this.handleAnswer(payload, socket)
+      );
+
+      socket.on(
+        "ice-candidate",
+        (payload: socketEventTypes.IceCandidatePayload) =>
+          this.handleIceCandidate(payload, socket)
+      );
+
+      socket.on("leave-room", (payload: socketEventTypes.LeaveRoomPayload) =>
+        this.handleDisconnect(payload, socket)
+      );
     });
   }
 
-  private async handleOnJoin(room: string, socket: Socket) {
-    if (!this.rooms[room]) {
-      this.rooms[room] = [];
+  private async handleOnJoin(
+    { roomId }: socketEventTypes.JoinRoomPayload,
+    socket: Socket
+  ) {
+    const token = socket.handshake.auth.token;
+    try {
+      const room = await roomService.getRoomById(token, roomId);
+      if (room) {
+        await roomService.joinRoom(token, roomId, socket.id);
+        socket.join(roomId.toString());
+        socket.broadcast.to(roomId.toString()).emit("user-joined", socket.id);
+      } else {
+        throw Error("Could not find room");
+      }
+    } catch (e) {
+      socket.disconnect(true);
+      console.error(e);
+      throw Error("Failde to update room!");
     }
-    this.rooms[room].push(socket.id);
-    socket.join(room);
-    socket.broadcast.to(room).emit("user-joined", socket.id);
   }
 
-  private handleOffer(payload: any, socket: Socket) {
-    this.io.to(payload.target).emit("offer", payload);
+  private handleOffer(payload: socketEventTypes.OfferPayload, socket: Socket) {
+    this.io.to(payload.targetSocketId).emit("offer", payload);
   }
 
-  private handleAnswer(payload: any, socket: Socket) {
-    this.io.to(payload.target).emit("answer", payload);
+  private handleAnswer(
+    payload: socketEventTypes.AnswerPayload,
+    socket: Socket
+  ) {
+    this.io.to(payload.targetSocketId).emit("answer", payload);
   }
 
-  private handleIceCandidate(incoming: any, socket: Socket) {
-    this.io.to(incoming.target).emit("ice-candidate", incoming);
+  private handleIceCandidate(
+    payload: socketEventTypes.IceCandidatePayload,
+    socket: Socket
+  ) {
+    this.io.to(payload.targetSocketId).emit("ice-candidate", payload);
   }
 
-  private handleDisconnect(socket: Socket) {
-    for (const room in this.rooms) {
-      this.rooms[room] = this.rooms[room].filter((id: any) => id !== socket.id);
+  private async handleDisconnect(
+    { roomId }: socketEventTypes.LeaveRoomPayload,
+    socket: Socket
+  ) {
+    const token = socket.handshake.auth.token;
+    try {
+      await roomService.leaveRoom(roomId, token);
+      console.log("Client disconnected");
+    } catch {
+      socket.disconnect(true);
+      throw Error("Failde to leave room!");
     }
-    console.log("Client disconnected");
   }
 }
 

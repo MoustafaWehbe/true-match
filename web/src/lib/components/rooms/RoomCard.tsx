@@ -6,14 +6,16 @@ import {
   Text,
   useColorModeValue,
 } from "@chakra-ui/react";
-import { CalendarIcon, TimeIcon } from "@chakra-ui/icons";
-import { RoomDto } from "~/lib/openApiGen";
-import { format } from "date-fns";
-import { RootState } from "~/lib/state/store";
-import { useSelector } from "react-redux";
+import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
+import { useDispatch, useSelector } from "react-redux";
+import { CalendarIcon, TimeIcon } from "@chakra-ui/icons";
+import { format } from "date-fns";
 
+import { RoomDto } from "shared/src/types/openApiGen";
+import { AppDispatch, RootState } from "~/lib/state/store";
+import { startRoom } from "~/lib/state/room/roomSlice";
 interface RoomCardProps {
   room: RoomDto;
   onJoin?: (roomId: number) => void;
@@ -36,6 +38,20 @@ const RoomCard = ({
   const isOwner = currentUser && currentUser.id === room?.user?.id;
   const isLive = room.status === "InProgress" && !room.finishedAt;
   const isUpcoming = room.status === "Pending";
+  const dispatch = useDispatch<AppDispatch>();
+  const { roomStarted } = useSelector((state: RootState) => state.room);
+
+  useEffect(() => {
+    if (roomStarted) {
+      router.push(`rooms/${room.id}`);
+    }
+  }, [room.id, roomStarted, router]);
+
+  const onStart = () => {
+    const newRoom = { ...room };
+    newRoom.status = "InProgress";
+    dispatch(startRoom(newRoom));
+  };
 
   return (
     <Box
@@ -116,7 +132,7 @@ const RoomCard = ({
             _hover={{ bgGradient: "linear(to-r, teal.600, green.600)" }}
             _active={{ bgGradient: "linear(to-r, teal.700, green.700)" }}
             boxShadow="xl"
-            onClick={() => router.push(`rooms/${room.id}`)}
+            onClick={onStart}
           >
             Start Room
           </Button>

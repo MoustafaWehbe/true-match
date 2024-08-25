@@ -57,6 +57,27 @@ namespace api.Controllers
         }
 
         [HttpPut]
+        [Route("leave/{id:int}")]
+        [ProducesResponseType(typeof(ApiResponse<RoomParticipantDto>), 200)]
+        public async Task<IActionResult> LeaveRoom([FromRoute] int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var user = await _userManager.FindByEmailAsync(User.GetEmail());
+
+            if (user == null)
+            {
+                return NotFound("User was not found.");
+            }
+            await _roomParticipantRepo.LeaveRoomAsync(id, user.Id);
+
+            return Ok();
+        }
+
+        [HttpPut]
         [Route("{id:int}")]
         [ProducesResponseType(typeof(ApiResponse<RoomParticipantDto>), 200)]
         public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateRoomParticipantDto updateDto)
@@ -84,6 +105,5 @@ namespace api.Controllers
 
             return Ok(ResponseHelper.CreateSuccessResponse(existingRoomParticipant.ToRoomParticipantDto()));
         }
-
     }
 }

@@ -29,7 +29,7 @@ const useRound = () => {
     if (currentRound !== null && rounds && !isPaused) {
       // Start the round timer when not paused
       const round = rounds[currentRound];
-      setTimer(round.duration!);
+      setTimer((timer) => timer ?? round.duration!);
 
       intervalRef.current = setInterval(() => {
         setTimer((prevTimer) => {
@@ -61,7 +61,7 @@ const useRound = () => {
     }
   }, [activeRoom, dispatch]);
 
-  const pauseRound = () => {
+  const pauseRound = useCallback(() => {
     setIsPaused((prevIsPaused) => {
       if (!prevIsPaused) {
         if (intervalRef.current) clearInterval(intervalRef.current);
@@ -83,7 +83,7 @@ const useRound = () => {
       }
       return !prevIsPaused;
     });
-  };
+  }, [currentRound, rounds]);
 
   const skipRound = () => {
     setCurrentRound((cr) => cr! + 1);

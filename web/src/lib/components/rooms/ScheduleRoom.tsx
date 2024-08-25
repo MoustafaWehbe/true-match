@@ -208,7 +208,6 @@ function ScheduleRoom() {
               <CheckboxGroup
                 colorScheme="pink"
                 onChange={(values) => {
-                  console.log(values);
                   formik.setFieldValue("selectedQuestionCategories", values);
                 }}
                 value={formik.values.selectedQuestionCategories}

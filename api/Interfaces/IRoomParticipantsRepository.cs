@@ -8,5 +8,6 @@ namespace api.Interfaces
         Task<List<RoomParticipant>> GetRoomParticipantsAsync(User user);
         Task<RoomParticipant?> joinRoomAsync(User user, CreateRoomParticipantDto createRoomParticipantDto);
         Task<RoomParticipant?> UpdateRoomParticipantAsync(RoomParticipant existingRoomParticipant, UpdateRoomParticipantDto updateDto);
+        Task LeaveRoomAsync(int roomId, string userId);
     }
 }

@@ -6,7 +6,7 @@ import {
   SimpleApiResponseApiResponse,
   User,
   UserApiResponse,
-} from "~/lib/openApiGen";
+} from "shared/src/types/openApiGen";
 import axiosInstance from "~/lib/utils/api/axiosConfig";
 import { TOKEN } from "~/lib/consts/localStorage";
 

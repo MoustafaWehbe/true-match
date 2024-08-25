@@ -7,8 +7,7 @@
   "scripts": {
     "build": "tsc --project ./",
     "start:dev": "nodemon src/server.ts",
-    "start:prod": "node dist/server.js",
-    "generate-types": "node src/scripts/generate-types.js"
+    "start:prod": "node dist/server.js"
   },
   "dependencies": {
     "@socket.io/admin-ui": "^0.5.1",
