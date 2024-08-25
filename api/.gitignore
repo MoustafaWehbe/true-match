@@ -1,0 +1,6 @@
+/wwwroot/uploads/**
+# exclude everything
+/wwwroot/uploads/*
+
+# exception to the rule
+!/wwwroot/uploads/.gitkeep 
