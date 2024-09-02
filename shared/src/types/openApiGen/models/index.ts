@@ -1,8 +1,8 @@
 /* tslint:disable */
 /* eslint-disable */
+export * from './AllRoomStatus';
 export * from './CreateMatchDto';
 export * from './CreateRoomDto';
-export * from './CreateRoomParticipantDto';
 export * from './CreateSystemQuestionDto';
 export * from './CreateUserProfileDto';
 export * from './Gender';
@@ -13,6 +13,7 @@ export * from './Match';
 export * from './MatchOrigin';
 export * from './Media';
 export * from './MediaType';
+export * from './MyRoomStatus';
 export * from './ProblemDetails';
 export * from './QuestionCategory';
 export * from './QuestionCategoryDto';
@@ -27,7 +28,7 @@ export * from './RoomDtoPagedResponse';
 export * from './RoomParticipant';
 export * from './RoomParticipantDto';
 export * from './RoomParticipantDtoApiResponse';
-export * from './RoomStatus';
+export * from './RoomParticipantEvent';
 export * from './SimpleApiResponse';
 export * from './SimpleApiResponseApiResponse';
 export * from './StringApiResponse';
@@ -35,7 +36,6 @@ export * from './SystemQuestion';
 export * from './SystemQuestionDto';
 export * from './SystemQuestionDtoListApiResponse';
 export * from './UpdateRoomDto';
-export * from './UpdateRoomParticipantDto';
 export * from './UpdateSystemQuestionDto';
 export * from './User';
 export * from './UserApiResponse';

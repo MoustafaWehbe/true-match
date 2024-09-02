@@ -25,14 +25,14 @@ namespace api.Controllers
             _userManager = userManager;
         }
 
-        [HttpPost]
+        [HttpPost("deregister/{id}")]
         [Authorize]
-        [ProducesResponseType(typeof(ApiResponse<RoomParticipantDto>), 200)]
-        public async Task<IActionResult> joinRoom([FromBody] CreateRoomParticipantDto createRoomParticipantDto)
+        [ProducesResponseType(typeof(ApiResponse<SimpleApiResponse>), 200)]
+        public async Task<IActionResult> deregisterRoom(int roomId)
         {
             var user = await _userManager.FindByEmailAsync(User.GetEmail());
 
-            var room = await _roomRepo.GetByIdAsync(createRoomParticipantDto.RoomId);
+            var room = await _roomRepo.GetByIdAsync(roomId);
 
             if (room == null)
             {
@@ -44,66 +44,153 @@ namespace api.Controllers
                 return BadRequest("User does not exist");
             }
 
-            var roomParticipant = await _roomParticipantRepo.joinRoomAsync(user, createRoomParticipantDto);
+            if (room.FinishedAt != null)
+            {
+                return BadRequest("Can't deregister from rooms finished in the past.");
+            }
 
-            if (roomParticipant == null)
+            await _roomParticipantRepo.DeleteAsync(roomId, user.Id);
+
+            return Ok(ResponseHelper.CreateSuccessResponse(new { message = "Successfully deregistered." }));
+        }
+
+
+        [HttpPost("register/{id}")]
+        [Authorize]
+        [ProducesResponseType(typeof(ApiResponse<RoomParticipantDto>), 200)]
+        public async Task<IActionResult> registerRoom(int roomId)
+        {
+            var user = await _userManager.FindByEmailAsync(User.GetEmail());
+
+            var room = await _roomRepo.GetByIdAsync(roomId);
+
+            if (room == null)
             {
-                return StatusCode(500, "Could not join");
+                return BadRequest("Room does not exist");
             }
-            else
+
+            if (user == null)
             {
-                return Ok(ResponseHelper.CreateSuccessResponse(roomParticipant.ToRoomParticipantDto()));
+                return BadRequest("User does not exist");
             }
+
+            if (DateTime.UtcNow >= room.ScheduledAt)
+            {
+                return BadRequest("Could not register. The room already started");
+            }
+
+            var roomParticipants = await _roomParticipantRepo.GetRoomParticipantsAsync(user);
+
+            if (roomParticipants.Any(rp => rp.RoomId == room.Id))
+            {
+                return BadRequest("Already registered");
+            }
+
+            var newRoomParticipant = new RoomParticipant
+            {
+                RoomId = roomId,
+                UserId = user.Id
+            };
+
+            await _roomParticipantRepo.CreateAsync(newRoomParticipant);
+
+            return Ok(ResponseHelper.CreateSuccessResponse(newRoomParticipant.ToRoomParticipantDto()));
+        }
+
+        [HttpPost("join/{id}")]
+        [Authorize]
+        [ProducesResponseType(typeof(ApiResponse<SimpleApiResponse>), 200)]
+        public async Task<IActionResult> joinRoom(int roomId)
+        {
+            var user = await _userManager.FindByEmailAsync(User.GetEmail());
+
+            var room = await _roomRepo.GetByIdAsync(roomId);
+
+            if (room == null)
+            {
+                return BadRequest("Room does not exist");
+            }
+
+            if (user == null)
+            {
+                return BadRequest("User does not exist");
+            }
+
+            if (user.Id != room.UserId && room.StartedAt == null)
+            {
+                return BadRequest("Room has not started yet");
+            }
+
+            var roomParticipants = await _roomParticipantRepo.GetRoomParticipantsAsync(user);
+
+            if (roomParticipants.Any(rp => rp.RoomId == room.Id))
+            {
+                var alreadyParticipatedRoom = roomParticipants.Where(rp => rp.RoomId == roomId).FirstOrDefault();
+
+                if (alreadyParticipatedRoom == null)
+                {
+                    return BadRequest("Can't join");
+                }
+
+                var newRoomParticipantEvent = new RoomParticipantEvent
+                {
+                    RoomParticipantId = alreadyParticipatedRoom.Id,
+                    Left = false,
+                    AttendedFromTime = DateTime.UtcNow,
+                    AttendedToTime = null,
+                    CreatedAt = DateTime.UtcNow
+                };
+                await _roomParticipantRepo.CreateRoomParticipantEventAsync(newRoomParticipantEvent);
+            }
+            return Ok(ResponseHelper.CreateSuccessResponse(new { message = "User joined." }));
         }
 
         [HttpPut]
         [Route("leave/{id:int}")]
-        [ProducesResponseType(typeof(ApiResponse<RoomParticipantDto>), 200)]
-        public async Task<IActionResult> LeaveRoom([FromRoute] int id)
+        [ProducesResponseType(typeof(ApiResponse<SimpleApiResponse>), 200)]
+        public async Task<IActionResult> LeaveRoom([FromRoute] int roomId)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
 
             var user = await _userManager.FindByEmailAsync(User.GetEmail());
 
-            if (user == null)
+            var room = await _roomRepo.GetByIdAsync(roomId);
+
+            if (room == null)
             {
-                return NotFound("User was not found.");
+                return BadRequest("Room does not exist");
             }
-            await _roomParticipantRepo.LeaveRoomAsync(id, user.Id);
-
-            return Ok();
-        }
-
-        [HttpPut]
-        [Route("{id:int}")]
-        [ProducesResponseType(typeof(ApiResponse<RoomParticipantDto>), 200)]
-        public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateRoomParticipantDto updateDto)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var user = await _userManager.FindByEmailAsync(User.GetEmail());
 
             if (user == null)
             {
-                return NotFound("User was not found.");
+                return BadRequest("User does not exist");
             }
 
-            var existingRoomParticipants = await _roomParticipantRepo.GetRoomParticipantsAsync(user);
-            var existingRoomParticipant = existingRoomParticipants.Where(rp => rp.RoomId == id).FirstOrDefault();
-            if (existingRoomParticipant == null)
+            if (user.Id != room.UserId && room.StartedAt == null)
             {
-                return NotFound();
+                return BadRequest("Room has not started yet");
             }
 
-            await _roomParticipantRepo.UpdateRoomParticipantAsync(existingRoomParticipant, updateDto);
+            var roomParticipants = await _roomParticipantRepo.GetRoomParticipantsAsync(user);
 
-            return Ok(ResponseHelper.CreateSuccessResponse(existingRoomParticipant.ToRoomParticipantDto()));
+            if (roomParticipants.Any(rp => rp.RoomId == room.Id))
+            {
+                var alreadyParticipatedRoom = roomParticipants.Where(rp => rp.RoomId == roomId).FirstOrDefault();
+
+                if (alreadyParticipatedRoom == null)
+                {
+                    return BadRequest("Can't join");
+                }
+
+                var newRoomParticipantEvent = new RoomParticipantEvent
+                {
+                    RoomParticipantId = alreadyParticipatedRoom.Id,
+                    Left = true,
+                    AttendedToTime = DateTime.UtcNow,
+                    CreatedAt = DateTime.UtcNow
+                };
+                await _roomParticipantRepo.CreateRoomParticipantEventAsync(newRoomParticipantEvent);
+            }
+            return Ok(ResponseHelper.CreateSuccessResponse(new { message = "User Left." }));
         }
     }
 }

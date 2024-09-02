@@ -1,5 +1,4 @@
 using api.Data;
-using api.Dtos;
 using api.Interfaces;
 using api.Models;
 using Microsoft.EntityFrameworkCore;
@@ -19,64 +18,35 @@ namespace api.Repository
             return await _context.RoomParticipants.Where(rp => rp.UserId == user.Id).ToListAsync();
         }
 
-        public async Task<RoomParticipant?> joinRoomAsync(User user, CreateRoomParticipantDto createRoomParticipantDto)
+        public async Task<RoomParticipantEvent?> CreateRoomParticipantEventAsync(RoomParticipantEvent roomParticipantEvent)
         {
-            var roomParticipants = await GetRoomParticipantsAsync(user);
+            await _context.RoomParticipantEvents.AddAsync(roomParticipantEvent);
+            await _context.SaveChangesAsync();
+            return roomParticipantEvent;
+        }
 
-            if (roomParticipants.Any(rp => rp.RoomId == createRoomParticipantDto.RoomId))
+        public async Task<RoomParticipant?> CreateAsync(RoomParticipant roomParticipant)
+        {
+            await _context.RoomParticipants.AddAsync(roomParticipant);
+            await _context.SaveChangesAsync();
+            return roomParticipant;
+        }
+
+        public async Task DeleteAsync(int roomId, string userId)
+        {
+            var roomParticipant = await _context.RoomParticipants
+                .Where(rp => rp.RoomId == roomId && rp.UserId == userId).FirstOrDefaultAsync();
+
+            if (roomParticipant != null)
             {
-                var alreadyParticipatedRoom = roomParticipants.Where(rp => rp.RoomId == createRoomParticipantDto.RoomId).FirstOrDefault();
-                if (alreadyParticipatedRoom != null)
-                {
-                    alreadyParticipatedRoom.IsInterested = true;
-                    alreadyParticipatedRoom.Attended = true;
-                    alreadyParticipatedRoom.AttendedFromTime = DateTime.UtcNow;
-                    alreadyParticipatedRoom.SocketId = createRoomParticipantDto.SocketId;
-                    await _context.SaveChangesAsync();
-                }
-                return alreadyParticipatedRoom;
+                _context.RoomParticipants.Remove(roomParticipant);
+                await _context.SaveChangesAsync();
             }
             else
             {
-                var newRoomParticipant = new RoomParticipant
-                {
-                    RoomId = createRoomParticipantDto.RoomId,
-                    UserId = user.Id,
-                    IsInterested = true,
-                    Attended = true,
-                    AttendedFromTime = DateTime.UtcNow,
-                    SocketId = createRoomParticipantDto.SocketId
-
-                };
-                await _context.RoomParticipants.AddAsync(newRoomParticipant);
-                await _context.SaveChangesAsync();
-                return newRoomParticipant;
+                throw new KeyNotFoundException("roomParticipant not found.");
             }
         }
 
-        public async Task<RoomParticipant?> UpdateRoomParticipantAsync(RoomParticipant existingRoomParticipant, UpdateRoomParticipantDto updateDto)
-        {
-            existingRoomParticipant.IsInterested = updateDto.IsInterested;
-            existingRoomParticipant.AttendedFromTime = updateDto.AttendedFromTime;
-            existingRoomParticipant.AttendedToTime = updateDto.AttendedToTime;
-
-            await _context.SaveChangesAsync();
-
-            return existingRoomParticipant;
-        }
-
-        public async Task LeaveRoomAsync(int roomId, string userId)
-        {
-            var participant = await _context.RoomParticipants
-                .Where(rp => rp.RoomId == roomId && rp.UserId == userId && rp.AttendedToTime == null)
-                .OrderByDescending(rp => rp.AttendedFromTime)
-                .FirstOrDefaultAsync();
-
-            if (participant != null)
-            {
-                participant.AttendedToTime = DateTime.UtcNow;
-                await _context.SaveChangesAsync();
-            }
-        }
     }
 }

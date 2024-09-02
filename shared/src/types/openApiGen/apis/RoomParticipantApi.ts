@@ -15,30 +15,34 @@
 
 import * as runtime from '../runtime';
 import type {
-  CreateRoomParticipantDto,
   RoomParticipantDtoApiResponse,
-  UpdateRoomParticipantDto,
+  SimpleApiResponseApiResponse,
 } from '../models/index';
 import {
-    CreateRoomParticipantDtoFromJSON,
-    CreateRoomParticipantDtoToJSON,
     RoomParticipantDtoApiResponseFromJSON,
     RoomParticipantDtoApiResponseToJSON,
-    UpdateRoomParticipantDtoFromJSON,
-    UpdateRoomParticipantDtoToJSON,
+    SimpleApiResponseApiResponseFromJSON,
+    SimpleApiResponseApiResponseToJSON,
 } from '../models/index';
 
-export interface ApiRoomParticipantIdPutRequest {
-    id: number;
-    updateRoomParticipantDto?: UpdateRoomParticipantDto;
+export interface ApiRoomParticipantDeregisterIdPostRequest {
+    id: string;
+    roomId?: number;
+}
+
+export interface ApiRoomParticipantJoinIdPostRequest {
+    id: string;
+    roomId?: number;
 }
 
 export interface ApiRoomParticipantLeaveIdPutRequest {
-    id: number;
+    roomId: number;
+    id: string;
 }
 
-export interface ApiRoomParticipantPostRequest {
-    createRoomParticipantDto?: CreateRoomParticipantDto;
+export interface ApiRoomParticipantRegisterIdPostRequest {
+    id: string;
+    roomId?: number;
 }
 
 /**
@@ -48,19 +52,21 @@ export class RoomParticipantApi extends runtime.BaseAPI {
 
     /**
      */
-    async apiRoomParticipantIdPutRaw(requestParameters: ApiRoomParticipantIdPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<RoomParticipantDtoApiResponse>> {
+    async apiRoomParticipantDeregisterIdPostRaw(requestParameters: ApiRoomParticipantDeregisterIdPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<SimpleApiResponseApiResponse>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
-                'Required parameter "id" was null or undefined when calling apiRoomParticipantIdPut().'
+                'Required parameter "id" was null or undefined when calling apiRoomParticipantDeregisterIdPost().'
             );
         }
 
         const queryParameters: any = {};
 
-        const headerParameters: runtime.HTTPHeaders = {};
+        if (requestParameters['roomId'] != null) {
+            queryParameters['roomId'] = requestParameters['roomId'];
+        }
 
-        headerParameters['Content-Type'] = 'application/json-patch+json';
+        const headerParameters: runtime.HTTPHeaders = {};
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -71,26 +77,75 @@ export class RoomParticipantApi extends runtime.BaseAPI {
             }
         }
         const response = await this.request({
-            path: `/api/room-participant/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
-            method: 'PUT',
+            path: `/api/room-participant/deregister/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: UpdateRoomParticipantDtoToJSON(requestParameters['updateRoomParticipantDto']),
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => RoomParticipantDtoApiResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => SimpleApiResponseApiResponseFromJSON(jsonValue));
     }
 
     /**
      */
-    async apiRoomParticipantIdPut(requestParameters: ApiRoomParticipantIdPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RoomParticipantDtoApiResponse> {
-        const response = await this.apiRoomParticipantIdPutRaw(requestParameters, initOverrides);
+    async apiRoomParticipantDeregisterIdPost(requestParameters: ApiRoomParticipantDeregisterIdPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SimpleApiResponseApiResponse> {
+        const response = await this.apiRoomParticipantDeregisterIdPostRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async apiRoomParticipantLeaveIdPutRaw(requestParameters: ApiRoomParticipantLeaveIdPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<RoomParticipantDtoApiResponse>> {
+    async apiRoomParticipantJoinIdPostRaw(requestParameters: ApiRoomParticipantJoinIdPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<SimpleApiResponseApiResponse>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling apiRoomParticipantJoinIdPost().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters['roomId'] != null) {
+            queryParameters['roomId'] = requestParameters['roomId'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("Bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/api/room-participant/join/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => SimpleApiResponseApiResponseFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async apiRoomParticipantJoinIdPost(requestParameters: ApiRoomParticipantJoinIdPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SimpleApiResponseApiResponse> {
+        const response = await this.apiRoomParticipantJoinIdPostRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     */
+    async apiRoomParticipantLeaveIdPutRaw(requestParameters: ApiRoomParticipantLeaveIdPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<SimpleApiResponseApiResponse>> {
+        if (requestParameters['roomId'] == null) {
+            throw new runtime.RequiredError(
+                'roomId',
+                'Required parameter "roomId" was null or undefined when calling apiRoomParticipantLeaveIdPut().'
+            );
+        }
+
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
@@ -111,30 +166,39 @@ export class RoomParticipantApi extends runtime.BaseAPI {
             }
         }
         const response = await this.request({
-            path: `/api/room-participant/leave/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            path: `/api/room-participant/leave/{id}`.replace(`{${"roomId"}}`, encodeURIComponent(String(requestParameters['roomId']))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => RoomParticipantDtoApiResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => SimpleApiResponseApiResponseFromJSON(jsonValue));
     }
 
     /**
      */
-    async apiRoomParticipantLeaveIdPut(requestParameters: ApiRoomParticipantLeaveIdPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RoomParticipantDtoApiResponse> {
+    async apiRoomParticipantLeaveIdPut(requestParameters: ApiRoomParticipantLeaveIdPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SimpleApiResponseApiResponse> {
         const response = await this.apiRoomParticipantLeaveIdPutRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async apiRoomParticipantPostRaw(requestParameters: ApiRoomParticipantPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<RoomParticipantDtoApiResponse>> {
+    async apiRoomParticipantRegisterIdPostRaw(requestParameters: ApiRoomParticipantRegisterIdPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<RoomParticipantDtoApiResponse>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling apiRoomParticipantRegisterIdPost().'
+            );
+        }
+
         const queryParameters: any = {};
 
-        const headerParameters: runtime.HTTPHeaders = {};
+        if (requestParameters['roomId'] != null) {
+            queryParameters['roomId'] = requestParameters['roomId'];
+        }
 
-        headerParameters['Content-Type'] = 'application/json-patch+json';
+        const headerParameters: runtime.HTTPHeaders = {};
 
         if (this.configuration && this.configuration.accessToken) {
             const token = this.configuration.accessToken;
@@ -145,11 +209,10 @@ export class RoomParticipantApi extends runtime.BaseAPI {
             }
         }
         const response = await this.request({
-            path: `/api/room-participant`,
+            path: `/api/room-participant/register/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: CreateRoomParticipantDtoToJSON(requestParameters['createRoomParticipantDto']),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => RoomParticipantDtoApiResponseFromJSON(jsonValue));
@@ -157,8 +220,8 @@ export class RoomParticipantApi extends runtime.BaseAPI {
 
     /**
      */
-    async apiRoomParticipantPost(requestParameters: ApiRoomParticipantPostRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RoomParticipantDtoApiResponse> {
-        const response = await this.apiRoomParticipantPostRaw(requestParameters, initOverrides);
+    async apiRoomParticipantRegisterIdPost(requestParameters: ApiRoomParticipantRegisterIdPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RoomParticipantDtoApiResponse> {
+        const response = await this.apiRoomParticipantRegisterIdPostRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

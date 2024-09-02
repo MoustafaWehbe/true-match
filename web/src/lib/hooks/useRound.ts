@@ -27,10 +27,6 @@ const useRound = () => {
 
   useEffect(() => {
     if (currentRound !== null && rounds && !isPaused) {
-      // Start the round timer when not paused
-      const round = rounds[currentRound];
-      setTimer((timer) => timer ?? round.duration!);
-
       intervalRef.current = setInterval(() => {
         setTimer((prevTimer) => {
           if (prevTimer <= 1) {
@@ -54,12 +50,15 @@ const useRound = () => {
 
   const startRounds = useCallback(() => {
     setCurrentRound(0);
+    if (rounds) {
+      setTimer(rounds[0].duration!);
+    }
     if (activeRoom && activeRoom.questionsCategories) {
       dispatch(
         getSystemQuestions({ categories: activeRoom.questionsCategories })
       );
     }
-  }, [activeRoom, dispatch]);
+  }, [activeRoom, dispatch, rounds]);
 
   const pauseRound = useCallback(() => {
     setIsPaused((prevIsPaused) => {

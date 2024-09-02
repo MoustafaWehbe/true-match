@@ -10,12 +10,12 @@ namespace api.Dtos
         public string Description { get; set; } = string.Empty;
         public JsonDocument? Offers { get; set; }
         public List<int> QuestionsCategories { get; set; } = new List<int>();
-        public RoomStatus Status { get; set; } = RoomStatus.Pending;
         public DateTime? ScheduledAt { get; set; }
         public DateTime? FinishedAt { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
         public UserSimplifiedDto? User { get; set; }
-        public ICollection<RoomParticipant> RoomParticipants { get; set; } = new List<RoomParticipant>();
+        public int ParticipantCount { get; set; }
+        public bool IsParticipanting { get; set; }
     }
 }

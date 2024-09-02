@@ -10,7 +10,7 @@ import { createUserMedia, createUserProfile } from "~/lib/state/user/userSlice";
 import { CreateUserProfileDto } from "shared/src/types/openApiGen";
 
 const CompleteProfile = () => {
-  const [step, setStep] = useState(2);
+  const [step, setStep] = useState(1);
   const dispatch = useDispatch<AppDispatch>();
   const { userProfileCreated } = useSelector((state: RootState) => state.user);
   const toast = useToast();
@@ -22,13 +22,13 @@ const CompleteProfile = () => {
   }, [userProfileCreated]);
 
   const onUserProfileSubmit = (values: CreateUserProfileDto) => {
-    setStep(2);
-
-    // dispatch(
-    //   createUserProfile({
-    //     ...values,
-    //   })
-    // );
+    console.log(values);
+    // setStep(2);
+    dispatch(
+      createUserProfile({
+        ...values,
+      })
+    );
   };
 
   const onUserImagesSubmit = (images: (File | null)[]) => {

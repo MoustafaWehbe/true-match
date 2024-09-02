@@ -51,19 +51,11 @@ export interface UpdateRoomDto {
     scheduledAt?: Date | null;
     /**
      * 
-     * @type {string}
-     * @memberof UpdateRoomDto
-     */
-    status?: string;
-    /**
-     * 
      * @type {Date}
      * @memberof UpdateRoomDto
      */
     finishedAt?: Date | null;
 }
-
-
 
 /**
  * Check if a given object implements the UpdateRoomDto interface.
@@ -87,7 +79,6 @@ export function UpdateRoomDtoFromJSONTyped(json: any, ignoreDiscriminator: boole
         'offers': json['offers'] == null ? undefined : json['offers'],
         'questionsCategories': json['questionsCategories'] == null ? undefined : json['questionsCategories'],
         'scheduledAt': json['scheduledAt'] == null ? undefined : (new Date(json['scheduledAt'])),
-        'status': json['status'] == null ? undefined : json['status'],
         'finishedAt': json['finishedAt'] == null ? undefined : (new Date(json['finishedAt'])),
     };
 }
@@ -103,7 +94,6 @@ export function UpdateRoomDtoToJSON(value?: UpdateRoomDto | null): any {
         'offers': value['offers'],
         'questionsCategories': value['questionsCategories'],
         'scheduledAt': value['scheduledAt'] == null ? undefined : ((value['scheduledAt'] as any).toISOString()),
-        'status': value['status'],
         'finishedAt': value['finishedAt'] == null ? undefined : ((value['finishedAt'] as any).toISOString()),
     };
 }

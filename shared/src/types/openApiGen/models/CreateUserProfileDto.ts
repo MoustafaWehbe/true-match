@@ -19,12 +19,6 @@ import {
     UserProfileLifeStyleDtoFromJSONTyped,
     UserProfileLifeStyleDtoToJSON,
 } from './UserProfileLifeStyleDto';
-import type { Gender } from './Gender';
-import {
-    GenderFromJSON,
-    GenderFromJSONTyped,
-    GenderToJSON,
-} from './Gender';
 import type { UserProfileInterestDto } from './UserProfileInterestDto';
 import {
     UserProfileInterestDtoFromJSON,
@@ -40,10 +34,10 @@ import {
 export interface CreateUserProfileDto {
     /**
      * 
-     * @type {Gender}
+     * @type {string}
      * @memberof CreateUserProfileDto
      */
-    gender: Gender;
+    gender: string;
     /**
      * 
      * @type {string}
@@ -134,7 +128,7 @@ export function CreateUserProfileDtoFromJSONTyped(json: any, ignoreDiscriminator
     }
     return {
         
-        'gender': GenderFromJSON(json['gender']),
+        'gender': json['gender'],
         'nationality': json['nationality'],
         'placeToLive': json['placeToLive'],
         'bio': json['bio'],
@@ -154,7 +148,7 @@ export function CreateUserProfileDtoToJSON(value?: CreateUserProfileDto | null):
     }
     return {
         
-        'gender': GenderToJSON(value['gender']),
+        'gender': value['gender'],
         'nationality': value['nationality'],
         'placeToLive': value['placeToLive'],
         'bio': value['bio'],

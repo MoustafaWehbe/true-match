@@ -12,9 +12,9 @@ apis/UserApi.ts
 apis/UserProfileApi.ts
 apis/index.ts
 index.ts
+models/AllRoomStatus.ts
 models/CreateMatchDto.ts
 models/CreateRoomDto.ts
-models/CreateRoomParticipantDto.ts
 models/CreateSystemQuestionDto.ts
 models/CreateUserProfileDto.ts
 models/Gender.ts
@@ -25,6 +25,7 @@ models/Match.ts
 models/MatchOrigin.ts
 models/Media.ts
 models/MediaType.ts
+models/MyRoomStatus.ts
 models/ProblemDetails.ts
 models/QuestionCategory.ts
 models/QuestionCategoryDto.ts
@@ -39,7 +40,7 @@ models/RoomDtoPagedResponse.ts
 models/RoomParticipant.ts
 models/RoomParticipantDto.ts
 models/RoomParticipantDtoApiResponse.ts
-models/RoomStatus.ts
+models/RoomParticipantEvent.ts
 models/SimpleApiResponse.ts
 models/SimpleApiResponseApiResponse.ts
 models/StringApiResponse.ts
@@ -47,7 +48,6 @@ models/SystemQuestion.ts
 models/SystemQuestionDto.ts
 models/SystemQuestionDtoListApiResponse.ts
 models/UpdateRoomDto.ts
-models/UpdateRoomParticipantDto.ts
 models/UpdateSystemQuestionDto.ts
 models/User.ts
 models/UserApiResponse.ts

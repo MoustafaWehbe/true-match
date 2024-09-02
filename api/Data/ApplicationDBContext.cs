@@ -17,6 +17,7 @@ namespace api.Data
         public DbSet<Interest> Interests { get; set; }
         public DbSet<Room> Rooms { get; set; }
         public DbSet<RoomContent> RoomContent { get; set; }
+        public DbSet<RoomParticipantEvent> RoomParticipantEvents { get; set; }
         public DbSet<RoomParticipant> RoomParticipants { get; set; }
         public DbSet<UserProfile> UserProfiles { get; set; }
         public DbSet<Media> Media { get; set; }

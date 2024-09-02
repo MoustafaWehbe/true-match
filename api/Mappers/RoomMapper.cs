@@ -5,17 +5,17 @@ namespace api.Mappers
 {
     public static class RoomMapper
     {
-        public static RoomDto ToRoomDto(this Room roomModel)
+        public static RoomDto ToRoomDto(this Room roomModel, string userId = "")
         {
             return new RoomDto
             {
                 Id = roomModel.Id,
                 Description = roomModel.Description,
-                Status = roomModel.Status,
                 Title = roomModel.Title,
                 ScheduledAt = roomModel.ScheduledAt,
                 FinishedAt = roomModel.FinishedAt,
-                RoomParticipants = roomModel.RoomParticipants,
+                ParticipantCount = roomModel.RoomParticipants.Count,
+                IsParticipanting = roomModel.RoomParticipants.Any(rp => rp.UserId == userId),
                 User = roomModel.User?.ToUserSimplifiedDto(),
                 CreatedAt = roomModel.CreatedAt,
                 UpdatedAt = roomModel.UpdatedAt,

@@ -19,6 +19,12 @@ import {
     UserFromJSONTyped,
     UserToJSON,
 } from './User';
+import type { RoomParticipantEvent } from './RoomParticipantEvent';
+import {
+    RoomParticipantEventFromJSON,
+    RoomParticipantEventFromJSONTyped,
+    RoomParticipantEventToJSON,
+} from './RoomParticipantEvent';
 import type { Room } from './Room';
 import {
     RoomFromJSON,
@@ -37,6 +43,12 @@ export interface RoomParticipant {
      * @type {number}
      * @memberof RoomParticipant
      */
+    id?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof RoomParticipant
+     */
     roomId?: number;
     /**
      * 
@@ -44,36 +56,6 @@ export interface RoomParticipant {
      * @memberof RoomParticipant
      */
     userId?: string | null;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof RoomParticipant
-     */
-    isInterested?: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof RoomParticipant
-     */
-    attended?: boolean;
-    /**
-     * 
-     * @type {Date}
-     * @memberof RoomParticipant
-     */
-    attendedFromTime?: Date | null;
-    /**
-     * 
-     * @type {Date}
-     * @memberof RoomParticipant
-     */
-    attendedToTime?: Date | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof RoomParticipant
-     */
-    socketId?: string | null;
     /**
      * 
      * @type {Date}
@@ -98,6 +80,12 @@ export interface RoomParticipant {
      * @memberof RoomParticipant
      */
     user?: User;
+    /**
+     * 
+     * @type {Array<RoomParticipantEvent>}
+     * @memberof RoomParticipant
+     */
+    roomParticipantEvents?: Array<RoomParticipantEvent> | null;
 }
 
 /**
@@ -117,17 +105,14 @@ export function RoomParticipantFromJSONTyped(json: any, ignoreDiscriminator: boo
     }
     return {
         
+        'id': json['id'] == null ? undefined : json['id'],
         'roomId': json['roomId'] == null ? undefined : json['roomId'],
         'userId': json['userId'] == null ? undefined : json['userId'],
-        'isInterested': json['isInterested'] == null ? undefined : json['isInterested'],
-        'attended': json['attended'] == null ? undefined : json['attended'],
-        'attendedFromTime': json['attendedFromTime'] == null ? undefined : (new Date(json['attendedFromTime'])),
-        'attendedToTime': json['attendedToTime'] == null ? undefined : (new Date(json['attendedToTime'])),
-        'socketId': json['socketId'] == null ? undefined : json['socketId'],
         'createdAt': json['createdAt'] == null ? undefined : (new Date(json['createdAt'])),
         'updatedAt': json['updatedAt'] == null ? undefined : (new Date(json['updatedAt'])),
         'room': json['room'] == null ? undefined : RoomFromJSON(json['room']),
         'user': json['user'] == null ? undefined : UserFromJSON(json['user']),
+        'roomParticipantEvents': json['roomParticipantEvents'] == null ? undefined : ((json['roomParticipantEvents'] as Array<any>).map(RoomParticipantEventFromJSON)),
     };
 }
 
@@ -137,17 +122,14 @@ export function RoomParticipantToJSON(value?: RoomParticipant | null): any {
     }
     return {
         
+        'id': value['id'],
         'roomId': value['roomId'],
         'userId': value['userId'],
-        'isInterested': value['isInterested'],
-        'attended': value['attended'],
-        'attendedFromTime': value['attendedFromTime'] == null ? undefined : ((value['attendedFromTime'] as any).toISOString()),
-        'attendedToTime': value['attendedToTime'] == null ? undefined : ((value['attendedToTime'] as any).toISOString()),
-        'socketId': value['socketId'],
         'createdAt': value['createdAt'] == null ? undefined : ((value['createdAt']).toISOString()),
         'updatedAt': value['updatedAt'] == null ? undefined : ((value['updatedAt']).toISOString()),
         'room': RoomToJSON(value['room']),
         'user': UserToJSON(value['user']),
+        'roomParticipantEvents': value['roomParticipantEvents'] == null ? undefined : ((value['roomParticipantEvents'] as Array<any>).map(RoomParticipantEventToJSON)),
     };
 }
 

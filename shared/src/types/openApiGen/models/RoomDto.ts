@@ -19,12 +19,6 @@ import {
     UserSimplifiedDtoFromJSONTyped,
     UserSimplifiedDtoToJSON,
 } from './UserSimplifiedDto';
-import type { RoomParticipant } from './RoomParticipant';
-import {
-    RoomParticipantFromJSON,
-    RoomParticipantFromJSONTyped,
-    RoomParticipantToJSON,
-} from './RoomParticipant';
 
 /**
  * 
@@ -64,12 +58,6 @@ export interface RoomDto {
     questionsCategories?: Array<number> | null;
     /**
      * 
-     * @type {string}
-     * @memberof RoomDto
-     */
-    status?: string;
-    /**
-     * 
      * @type {Date}
      * @memberof RoomDto
      */
@@ -100,13 +88,17 @@ export interface RoomDto {
     user?: UserSimplifiedDto;
     /**
      * 
-     * @type {Array<RoomParticipant>}
+     * @type {number}
      * @memberof RoomDto
      */
-    roomParticipants?: Array<RoomParticipant> | null;
+    participantCount?: number;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof RoomDto
+     */
+    isParticipanting?: boolean;
 }
-
-
 
 /**
  * Check if a given object implements the RoomDto interface.
@@ -130,13 +122,13 @@ export function RoomDtoFromJSONTyped(json: any, ignoreDiscriminator: boolean): R
         'description': json['description'] == null ? undefined : json['description'],
         'offers': json['offers'] == null ? undefined : json['offers'],
         'questionsCategories': json['questionsCategories'] == null ? undefined : json['questionsCategories'],
-        'status': json['status'] == null ? undefined : json['status'],
         'scheduledAt': json['scheduledAt'] == null ? undefined : (new Date(json['scheduledAt'])),
         'finishedAt': json['finishedAt'] == null ? undefined : (new Date(json['finishedAt'])),
         'createdAt': json['createdAt'] == null ? undefined : (new Date(json['createdAt'])),
         'updatedAt': json['updatedAt'] == null ? undefined : (new Date(json['updatedAt'])),
         'user': json['user'] == null ? undefined : UserSimplifiedDtoFromJSON(json['user']),
-        'roomParticipants': json['roomParticipants'] == null ? undefined : ((json['roomParticipants'] as Array<any>).map(RoomParticipantFromJSON)),
+        'participantCount': json['participantCount'] == null ? undefined : json['participantCount'],
+        'isParticipanting': json['isParticipanting'] == null ? undefined : json['isParticipanting'],
     };
 }
 
@@ -151,13 +143,13 @@ export function RoomDtoToJSON(value?: RoomDto | null): any {
         'description': value['description'],
         'offers': value['offers'],
         'questionsCategories': value['questionsCategories'],
-        'status': value['status'],
         'scheduledAt': value['scheduledAt'] == null ? undefined : ((value['scheduledAt'] as any).toISOString()),
         'finishedAt': value['finishedAt'] == null ? undefined : ((value['finishedAt'] as any).toISOString()),
         'createdAt': value['createdAt'] == null ? undefined : ((value['createdAt']).toISOString()),
         'updatedAt': value['updatedAt'] == null ? undefined : ((value['updatedAt']).toISOString()),
         'user': UserSimplifiedDtoToJSON(value['user']),
-        'roomParticipants': value['roomParticipants'] == null ? undefined : ((value['roomParticipants'] as Array<any>).map(RoomParticipantToJSON)),
+        'participantCount': value['participantCount'],
+        'isParticipanting': value['isParticipanting'],
     };
 }
 

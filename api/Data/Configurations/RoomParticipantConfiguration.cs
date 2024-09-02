@@ -8,7 +8,7 @@ namespace api.Data
     {
         public void Configure(EntityTypeBuilder<RoomParticipant> builder)
         {
-            builder.HasKey(lsp => new { lsp.RoomId, lsp.UserId });
+            builder.HasKey(lsp => new { lsp.Id });
 
             builder
                 .HasOne(lsp => lsp.Room)

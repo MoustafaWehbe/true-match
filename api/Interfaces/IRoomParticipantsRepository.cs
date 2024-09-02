@@ -6,8 +6,8 @@ namespace api.Interfaces
     public interface IRoomParticipantsRepository
     {
         Task<List<RoomParticipant>> GetRoomParticipantsAsync(User user);
-        Task<RoomParticipant?> joinRoomAsync(User user, CreateRoomParticipantDto createRoomParticipantDto);
-        Task<RoomParticipant?> UpdateRoomParticipantAsync(RoomParticipant existingRoomParticipant, UpdateRoomParticipantDto updateDto);
-        Task LeaveRoomAsync(int roomId, string userId);
+        Task<RoomParticipant?> CreateAsync(RoomParticipant roomParticipant);
+        Task<RoomParticipantEvent?> CreateRoomParticipantEventAsync(RoomParticipantEvent roomParticipantEvent);
+        Task DeleteAsync(int roomId, string userId);
     }
 }

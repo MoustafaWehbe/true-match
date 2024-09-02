@@ -1,5 +1,5 @@
 using api.Data;
-using api.Dtos;
+using api.Extensions;
 using api.Helpers;
 using api.Interfaces;
 using api.Models;
@@ -22,12 +22,25 @@ namespace api.Repository
             return room;
         }
 
-        public async Task<List<Room>> GetAllAsync(RoomQueryObject query)
+        public async Task<List<Room>> GetAllAsync(AllRoomQueryObject query, string userId)
         {
             return await _context.Rooms
-                .Include(ls => ls.User)
-                .Include(ls => ls.RoomParticipants)
-                .Where(r => query.Status == null ? true : r.Status == query.Status)
+                .IncludeRoomDetails()
+                .FindAllRoomByStatus(query.Status, userId)
+                .FindNotDeleted()
+                .OrderByDescending(r => r.CreatedAt)
+                .Skip((query.PageNumber - 1) * query.PageSize)
+                .Take(query.PageSize)
+                .ToListAsync();
+        }
+
+        public async Task<List<Room>> GetMyRoomsAsync(MyRoomQueryObject query, string userId)
+        {
+            return await _context.Rooms
+                .IncludeRoomDetails()
+                .Where(r => r.UserId == userId)
+                .FindMyRoomByStatus(query.Status, userId)
+                .FindNotDeleted()
                 .OrderByDescending(r => r.CreatedAt)
                 .Skip((query.PageNumber - 1) * query.PageSize)
                 .Take(query.PageSize)
@@ -52,25 +65,28 @@ namespace api.Repository
             return (int)Math.Ceiling(totalRooms / (double)pageSize);
         }
 
-        public async Task<int> GetTotalRoomsAsync(RoomQueryObject query)
+        public async Task<int> GetTotalRoomsAsync(AllRoomQueryObject query, string userId)
         {
-            return await _context.Rooms.Where(r => query.Status == null ? true : r.Status == query.Status).CountAsync();
+            return await _context.Rooms
+                .FindNotDeleted()
+                .FindAllRoomByStatus(query.Status, userId)
+                .CountAsync();
         }
 
-        public async Task<Room> UpdateAsync(int id, UpdateRoomDto roomDto, Room existingRoom)
+        public async Task<int> GetTotalMyRoomsAsync(MyRoomQueryObject query, string userId)
         {
-            existingRoom.Title = roomDto.Title;
-            existingRoom.Description = roomDto.Description;
-            existingRoom.ScheduledAt = roomDto.ScheduledAt;
-            existingRoom.FinishedAt = roomDto.FinishedAt;
-            existingRoom.Status = roomDto.Status;
-            existingRoom.UpdatedAt = DateTime.UtcNow;
-            existingRoom.Offers = roomDto.Offers;
-            existingRoom.QuestionsCategories = roomDto.QuestionsCategories;
+            return await _context.Rooms
+                .FindMyRoomByStatus(query.Status, userId)
+                .Where(r => r.UserId == userId)
+                .FindNotDeleted()
+                .CountAsync();
+        }
 
+        public async Task<Room> UpdateAsync(Room room)
+        {
+            _context.Rooms.Update(room);
             await _context.SaveChangesAsync();
-
-            return existingRoom;
+            return room;
         }
     }
 }

@@ -40,6 +40,10 @@ public class SeedRandomData
         var participants = GenerateRoomParticipants(rooms, maxParticipantsPerRoom);
         await _context.RoomParticipants.AddRangeAsync(participants);
         await _context.SaveChangesAsync();
+
+        var participantEvents = GenerateRoomParticipantEvents(participants, 2);
+        await _context.RoomParticipantEvents.AddRangeAsync(participantEvents);
+        await _context.SaveChangesAsync();
     }
 
 
@@ -125,8 +129,8 @@ public class SeedRandomData
         var faker = new Faker<Room>()
             .RuleFor(r => r.Title, f => f.Commerce.ProductName())
             .RuleFor(r => r.Description, f => f.Lorem.Paragraph())
-            .RuleFor(r => r.Status, f => f.PickRandom<RoomStatus>())
             .RuleFor(r => r.CreatedAt, f => f.Date.Past().ToUniversalTime())
+            .RuleFor(r => r.StartedAt, f => f.Date.Past().ToUniversalTime())
             .RuleFor(r => r.UpdatedAt, f => f.Date.Recent().ToUniversalTime())
             .RuleFor(r => r.ScheduledAt, f => f.Date.Future().ToUniversalTime())
             .RuleFor(r => r.User, f => f.PickRandom(users));
@@ -142,17 +146,37 @@ public class SeedRandomData
         foreach (var room in rooms)
         {
             var participantCount = new Random().Next(1, maxParticipantsPerRoom);
-            var selectedUsers = new Faker().PickRandom(users, participantCount).ToList();
+            var selectedUsers = _faker.PickRandom(users, participantCount).ToList();
 
             participants.AddRange(selectedUsers.Select(user => new RoomParticipant
             {
                 RoomId = room.Id,
                 UserId = user.Id,
-                AttendedFromTime = DateTime.UtcNow.AddMinutes(-new Random().Next(0, 120)), // Random join time within 2 hours
-                AttendedToTime = DateTime.UtcNow.AddMinutes(new Random().Next(0, 60))   // Random leave time within 1 hour
             }));
         }
 
         return participants;
+    }
+
+    private List<RoomParticipantEvent> GenerateRoomParticipantEvents(List<RoomParticipant> roomParticipants, int maxParticipantEventsPerParticipant)
+    {
+        var participants = _context.RoomParticipants.ToList();
+        var participantEvents = new List<RoomParticipantEvent>();
+
+        foreach (var room in roomParticipants)
+        {
+            var participantEventCount = new Random().Next(1, maxParticipantEventsPerParticipant);
+            var selectedParticipants = _faker.PickRandom(participants, participantEventCount).ToList();
+
+            participantEvents.AddRange(selectedParticipants.Select(participant => new RoomParticipantEvent
+            {
+                AttendedFromTime = DateTime.UtcNow.AddMinutes(-new Random().Next(0, 120)), // Random join time within 2 hours
+                AttendedToTime = DateTime.UtcNow.AddMinutes(new Random().Next(0, 60)),   // Random leave time within 1 hour
+                Left = _faker.Random.Bool(),
+                RoomParticipantId = participant.Id
+            }));
+        }
+
+        return participantEvents;
     }
 }

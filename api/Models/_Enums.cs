@@ -22,10 +22,17 @@ namespace api.Models
         Woman
     }
     [JsonConverter(typeof(StringEnumConverter))]
-    public enum RoomStatus
+    public enum AllRoomStatus
     {
         Pending,
         InProgress,
-        Canceled
+    }
+
+    [JsonConverter(typeof(StringEnumConverter))]
+    public enum MyRoomStatus
+    {
+        Pending,
+        InProgress,
+        Archived
     }
 }

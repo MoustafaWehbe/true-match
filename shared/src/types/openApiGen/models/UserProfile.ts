@@ -25,12 +25,6 @@ import {
     UserProfileLifeStyleFromJSONTyped,
     UserProfileLifeStyleToJSON,
 } from './UserProfileLifeStyle';
-import type { Gender } from './Gender';
-import {
-    GenderFromJSON,
-    GenderFromJSONTyped,
-    GenderToJSON,
-} from './Gender';
 import type { UserProfileInterest } from './UserProfileInterest';
 import {
     UserProfileInterestFromJSON,
@@ -52,10 +46,10 @@ export interface UserProfile {
     id?: number;
     /**
      * 
-     * @type {Gender}
+     * @type {string}
      * @memberof UserProfile
      */
-    gender?: Gender;
+    gender?: string;
     /**
      * 
      * @type {string}
@@ -162,7 +156,7 @@ export function UserProfileFromJSONTyped(json: any, ignoreDiscriminator: boolean
     return {
         
         'id': json['id'] == null ? undefined : json['id'],
-        'gender': json['gender'] == null ? undefined : GenderFromJSON(json['gender']),
+        'gender': json['gender'] == null ? undefined : json['gender'],
         'nationality': json['nationality'] == null ? undefined : json['nationality'],
         'placeToLive': json['placeToLive'] == null ? undefined : json['placeToLive'],
         'bio': json['bio'] == null ? undefined : json['bio'],
@@ -187,7 +181,7 @@ export function UserProfileToJSON(value?: UserProfile | null): any {
     return {
         
         'id': value['id'],
-        'gender': GenderToJSON(value['gender']),
+        'gender': value['gender'],
         'nationality': value['nationality'],
         'placeToLive': value['placeToLive'],
         'bio': value['bio'],
