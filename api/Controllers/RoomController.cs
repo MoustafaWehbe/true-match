@@ -256,5 +256,32 @@ namespace api.Controllers
             return Ok(ResponseHelper.CreateSuccessResponse(room.ToRoomDto()));
         }
 
+        [HttpPost("hide-room")]
+        [Authorize]
+        [ProducesResponseType(typeof(ApiResponse<SimpleApiResponse>), 200)]
+        public async Task<IActionResult> HideRoom([FromBody] HideRoomDto hideRoomDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var user = await _userManager.FindByEmailAsync(User.GetEmail());
+
+            if (user == null)
+            {
+                return NotFound("User not found.");
+            }
+
+            var room = await _roomRepo.GetByIdAsync(hideRoomDto.RoomId);
+            if (room == null)
+            {
+                return NotFound("Room not found.");
+            }
+
+            await _roomRepo.HideRoom(hideRoomDto, user); ;
+
+            return Ok(ResponseHelper.CreateSuccessResponse(new { message = "Room has been hidden." }));
+        }
     }
 }

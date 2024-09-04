@@ -17,6 +17,7 @@ import * as runtime from '../runtime';
 import type {
   AllRoomStatus,
   CreateRoomDto,
+  HideRoomDto,
   MyRoomStatus,
   RoomDtoApiResponse,
   RoomDtoPagedResponse,
@@ -28,6 +29,8 @@ import {
     AllRoomStatusToJSON,
     CreateRoomDtoFromJSON,
     CreateRoomDtoToJSON,
+    HideRoomDtoFromJSON,
+    HideRoomDtoToJSON,
     MyRoomStatusFromJSON,
     MyRoomStatusToJSON,
     RoomDtoApiResponseFromJSON,
@@ -44,6 +47,10 @@ export interface ApiRoomGetRequest {
     pageNumber?: number;
     pageSize?: number;
     status?: AllRoomStatus;
+}
+
+export interface ApiRoomHideRoomPostRequest {
+    hideRoomDto?: HideRoomDto;
 }
 
 export interface ApiRoomIdDeleteRequest {
@@ -119,6 +126,41 @@ export class RoomApi extends runtime.BaseAPI {
      */
     async apiRoomGet(requestParameters: ApiRoomGetRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RoomDtoPagedResponse> {
         const response = await this.apiRoomGetRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     */
+    async apiRoomHideRoomPostRaw(requestParameters: ApiRoomHideRoomPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<SimpleApiResponseApiResponse>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json-patch+json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("Bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/api/room/hide-room`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: HideRoomDtoToJSON(requestParameters['hideRoomDto']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => SimpleApiResponseApiResponseFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async apiRoomHideRoomPost(requestParameters: ApiRoomHideRoomPostRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SimpleApiResponseApiResponse> {
+        const response = await this.apiRoomHideRoomPostRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

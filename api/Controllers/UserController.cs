@@ -78,5 +78,52 @@ namespace api.Controllers
             }
             return Ok(ResponseHelper.CreateSuccessResponse(me.ToUserDto()));
         }
+
+        [HttpPost("block-user")]
+        [Authorize]
+        [ProducesResponseType(typeof(ApiResponse<SimpleApiResponse>), 200)]
+        public async Task<IActionResult> BlockUser([FromBody] BlockUserDto blockUserDto)
+        {
+            var currentUser = await _userManager.FindByEmailAsync(User.GetEmail());
+
+            if (currentUser == null)
+            {
+                return NotFound("User not found.");
+            }
+
+            var blockedUser = await _userManager.FindByIdAsync(blockUserDto.BlockedUserId);
+
+            if (blockedUser == null)
+            {
+                return NotFound("User to block not found.");
+            }
+
+            var block = new BlockedUser
+            {
+                BlockerUserId = currentUser.Id,
+                BlockedUserId = blockUserDto.BlockedUserId
+            };
+            await _userRepo.BlockUser(block);
+
+            return Ok(ResponseHelper.CreateSuccessResponse(new { message = "User blocked successfully." }));
+        }
+
+
+        [HttpPost("unblock-user")]
+        [Authorize]
+        [ProducesResponseType(typeof(ApiResponse<SimpleApiResponse>), 200)]
+        public async Task<IActionResult> UnblockUser([FromBody] BlockUserDto unblockUserDto)
+        {
+            var currentUser = await _userManager.FindByEmailAsync(User.GetEmail());
+
+            if (currentUser == null)
+            {
+                return NotFound("User not found.");
+            }
+
+            await _userRepo.UnBlockUser(currentUser, unblockUserDto);
+            return Ok(ResponseHelper.CreateSuccessResponse(new { message = "User blocked successfully." }));
+        }
+
     }
 }

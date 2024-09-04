@@ -28,11 +28,11 @@ namespace api.Controllers
         [HttpPost("deregister/{id}")]
         [Authorize]
         [ProducesResponseType(typeof(ApiResponse<SimpleApiResponse>), 200)]
-        public async Task<IActionResult> deregisterRoom(int roomId)
+        public async Task<IActionResult> deregisterRoom([FromRoute] int id)
         {
             var user = await _userManager.FindByEmailAsync(User.GetEmail());
 
-            var room = await _roomRepo.GetByIdAsync(roomId);
+            var room = await _roomRepo.GetByIdAsync(id);
 
             if (room == null)
             {
@@ -49,7 +49,7 @@ namespace api.Controllers
                 return BadRequest("Can't deregister from rooms finished in the past.");
             }
 
-            await _roomParticipantRepo.DeleteAsync(roomId, user.Id);
+            await _roomParticipantRepo.DeleteAsync(id, user.Id);
 
             return Ok(ResponseHelper.CreateSuccessResponse(new { message = "Successfully deregistered." }));
         }
@@ -58,11 +58,11 @@ namespace api.Controllers
         [HttpPost("register/{id}")]
         [Authorize]
         [ProducesResponseType(typeof(ApiResponse<RoomParticipantDto>), 200)]
-        public async Task<IActionResult> registerRoom(int roomId)
+        public async Task<IActionResult> registerRoom([FromRoute] int id)
         {
             var user = await _userManager.FindByEmailAsync(User.GetEmail());
 
-            var room = await _roomRepo.GetByIdAsync(roomId);
+            var room = await _roomRepo.GetByIdAsync(id);
 
             if (room == null)
             {
@@ -88,7 +88,7 @@ namespace api.Controllers
 
             var newRoomParticipant = new RoomParticipant
             {
-                RoomId = roomId,
+                RoomId = id,
                 UserId = user.Id
             };
 

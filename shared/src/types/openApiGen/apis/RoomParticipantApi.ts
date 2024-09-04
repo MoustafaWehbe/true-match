@@ -26,8 +26,7 @@ import {
 } from '../models/index';
 
 export interface ApiRoomParticipantDeregisterIdPostRequest {
-    id: string;
-    roomId?: number;
+    id: number;
 }
 
 export interface ApiRoomParticipantJoinIdPostRequest {
@@ -41,8 +40,7 @@ export interface ApiRoomParticipantLeaveIdPutRequest {
 }
 
 export interface ApiRoomParticipantRegisterIdPostRequest {
-    id: string;
-    roomId?: number;
+    id: number;
 }
 
 /**
@@ -61,10 +59,6 @@ export class RoomParticipantApi extends runtime.BaseAPI {
         }
 
         const queryParameters: any = {};
-
-        if (requestParameters['roomId'] != null) {
-            queryParameters['roomId'] = requestParameters['roomId'];
-        }
 
         const headerParameters: runtime.HTTPHeaders = {};
 
@@ -193,10 +187,6 @@ export class RoomParticipantApi extends runtime.BaseAPI {
         }
 
         const queryParameters: any = {};
-
-        if (requestParameters['roomId'] != null) {
-            queryParameters['roomId'] = requestParameters['roomId'];
-        }
 
         const headerParameters: runtime.HTTPHeaders = {};
 

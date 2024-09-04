@@ -14,8 +14,14 @@ import {
 import RoomCard from "./RoomCard";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "~/lib/state/store";
-import { createRoom, getMyRooms, updateRoom } from "~/lib/state/room/roomSlice";
-import { useEffect, useState } from "react";
+import {
+  clearMyRooms,
+  clearRooms,
+  createRoom,
+  getMyRooms,
+  updateRoom,
+} from "~/lib/state/room/roomSlice";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { MyRoomStatus, RoomDto } from "shared/src/types/openApiGen";
 import CustomSelect, { Option } from "../shared/CustomSelect";
 import { getQuestionCategories } from "~/lib/state/question/questionSlice";
@@ -41,26 +47,25 @@ function MyRooms() {
   const [isAgreementChecked, setIsAgreementChecked] = useState(false);
   const [roomToEdit, setRoomToEdit] = useState<RoomDto>();
   const [isRoomModalOpen, setIsRoomModalOpen] = useState(false);
-  const [page, setPage] = useState(1);
-  const [allRoomsLoaded, setAllRoomsLoaded] = useState(false);
+  const page = useRef(1);
+
+  const loadRooms = useCallback(() => {
+    dispatch(
+      getMyRooms({
+        PageNumber: page.current,
+        PageSize: 10,
+        Status: selectedStatus.value as MyRoomStatus,
+      })
+    );
+  }, [dispatch, selectedStatus.value]);
 
   useEffect(() => {
-    const loadRooms = async (pageNumber: number) => {
-      await dispatch(
-        getMyRooms({
-          PageNumber: pageNumber,
-          PageSize: 10,
-          Status: selectedStatus.value as MyRoomStatus,
-        })
-      );
+    loadRooms();
 
-      // if (response.payload?.data?.length === 0) {
-      //   setAllRoomsLoaded(true); // No more rooms to load
-      // }
+    return () => {
+      dispatch(clearMyRooms());
     };
-
-    loadRooms(page);
-  }, [dispatch, selectedStatus.value, page]);
+  }, [dispatch, selectedStatus.value, page, loadRooms]);
 
   // useEffect(() => {
   //   dispatch(
@@ -79,9 +84,16 @@ function MyRooms() {
   }, [dispatch, categories, categoriesLoading]);
 
   const handleSelect = (option: Option) => {
-    setSelectedStatus(option);
-    setPage(1);
-    setAllRoomsLoaded(false);
+    if (selectedStatus.value !== option.value) {
+      setSelectedStatus(option);
+      page.current = 1;
+      dispatch(clearRooms());
+    }
+  };
+
+  const handleLoadMore = () => {
+    page.current = page.current + 1;
+    loadRooms();
   };
 
   const handleCreateRoom = async (values: any) => {
@@ -103,8 +115,8 @@ function MyRooms() {
       duration: 5000,
       isClosable: true,
     });
-    setPage(1);
-    setAllRoomsLoaded(false);
+    page.current = 1;
+    loadRooms();
   };
 
   const handleUpdateRoom = async (values: any, room: RoomDto) => {
@@ -127,8 +139,6 @@ function MyRooms() {
       duration: 5000,
       isClosable: true,
     });
-    setPage(1);
-    setAllRoomsLoaded(false);
   };
 
   const handleRoomModalSubmit = (values: any, room?: RoomDto) => {
@@ -150,10 +160,6 @@ function MyRooms() {
     setIsRoomModalOpen(false);
     setRoomToEdit(undefined);
     setIsAgreementChecked(false);
-  };
-
-  const handleLoadMore = () => {
-    setPage((prevPage) => prevPage + 1);
   };
 
   return (
@@ -203,18 +209,19 @@ function MyRooms() {
           />
         ))}
       </Grid>
-      {!allRoomsLoaded && (
-        <Flex justify="center" mt={8}>
-          <Button
-            onClick={handleLoadMore}
-            size="md"
-            colorScheme="teal"
-            isLoading={createRoomLoading || updateRoomLoading}
-          >
-            Load More
-          </Button>
-        </Flex>
-      )}
+      {myRooms &&
+        myRooms.pageSize! * myRooms?.currentPage! <= myRooms?.data?.length! && (
+          <Flex justify="center" mt={8}>
+            <Button
+              onClick={handleLoadMore}
+              size="md"
+              colorScheme="teal"
+              isLoading={createRoomLoading || updateRoomLoading}
+            >
+              Load More
+            </Button>
+          </Flex>
+        )}
 
       <RoomModal
         isOpen={isRoomModalOpen}

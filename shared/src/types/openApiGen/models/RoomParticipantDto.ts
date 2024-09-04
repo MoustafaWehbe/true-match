@@ -21,40 +21,10 @@ import { mapValues } from '../runtime';
 export interface RoomParticipantDto {
     /**
      * 
-     * @type {boolean}
-     * @memberof RoomParticipantDto
-     */
-    isInterested?: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof RoomParticipantDto
-     */
-    attended?: boolean;
-    /**
-     * 
-     * @type {Date}
-     * @memberof RoomParticipantDto
-     */
-    attendedFromTime?: Date | null;
-    /**
-     * 
-     * @type {Date}
-     * @memberof RoomParticipantDto
-     */
-    attendedToTime?: Date | null;
-    /**
-     * 
      * @type {number}
      * @memberof RoomParticipantDto
      */
     roomId?: number;
-    /**
-     * 
-     * @type {string}
-     * @memberof RoomParticipantDto
-     */
-    socketId?: string | null;
     /**
      * 
      * @type {string}
@@ -80,12 +50,7 @@ export function RoomParticipantDtoFromJSONTyped(json: any, ignoreDiscriminator: 
     }
     return {
         
-        'isInterested': json['isInterested'] == null ? undefined : json['isInterested'],
-        'attended': json['attended'] == null ? undefined : json['attended'],
-        'attendedFromTime': json['attendedFromTime'] == null ? undefined : (new Date(json['attendedFromTime'])),
-        'attendedToTime': json['attendedToTime'] == null ? undefined : (new Date(json['attendedToTime'])),
         'roomId': json['roomId'] == null ? undefined : json['roomId'],
-        'socketId': json['socketId'] == null ? undefined : json['socketId'],
         'userId': json['userId'] == null ? undefined : json['userId'],
     };
 }
@@ -96,12 +61,7 @@ export function RoomParticipantDtoToJSON(value?: RoomParticipantDto | null): any
     }
     return {
         
-        'isInterested': value['isInterested'],
-        'attended': value['attended'],
-        'attendedFromTime': value['attendedFromTime'] == null ? undefined : ((value['attendedFromTime'] as any).toISOString()),
-        'attendedToTime': value['attendedToTime'] == null ? undefined : ((value['attendedToTime'] as any).toISOString()),
         'roomId': value['roomId'],
-        'socketId': value['socketId'],
         'userId': value['userId'],
     };
 }

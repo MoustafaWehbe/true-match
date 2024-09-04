@@ -1,11 +1,13 @@
 /* tslint:disable */
 /* eslint-disable */
 export * from './AllRoomStatus';
+export * from './BlockUserDto';
 export * from './CreateMatchDto';
 export * from './CreateRoomDto';
 export * from './CreateSystemQuestionDto';
 export * from './CreateUserProfileDto';
 export * from './Gender';
+export * from './HideRoomDto';
 export * from './Interest';
 export * from './LifeStyle';
 export * from './LoginDto';

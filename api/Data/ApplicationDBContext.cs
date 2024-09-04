@@ -24,7 +24,8 @@ namespace api.Data
         public DbSet<Match> Matches { get; set; }
         public DbSet<SystemQuestion> SystemQuestions { get; set; }
         public DbSet<QuestionCategory> QuestionCategories { get; set; }
-
+        public DbSet<BlockedUser> BlockedUsers { get; set; }
+        public DbSet<HiddenRoom> HiddenRooms { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

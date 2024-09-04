@@ -37,7 +37,7 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
       <ModalContent>
         <ModalHeader>{title}</ModalHeader>
         <ModalBody>
-          <Text>{description}</Text>
+          <Text dangerouslySetInnerHTML={{ __html: description }} />
         </ModalBody>
         <ModalFooter>
           <Button variant="ghost" mr={3} onClick={onClose}>

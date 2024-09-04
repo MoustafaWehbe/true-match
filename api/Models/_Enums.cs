@@ -26,6 +26,7 @@ namespace api.Models
     {
         Coming,
         InProgress,
+        InterestedIn
     }
 
     [JsonConverter(typeof(StringEnumConverter))]

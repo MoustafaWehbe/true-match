@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 import {
+  BlockUserDto,
   CreateUserProfileDto,
   LoginDto,
   RegisterDto,
@@ -24,6 +25,8 @@ export interface UserState {
   logoutResponseMessage: string;
   userProfileCreated: boolean;
   loadingImages: string[];
+  isBlockingUser: boolean;
+  isUnBlockingUser: boolean;
 }
 
 export interface ExtendedUserApiResponse extends Omit<UserApiResponse, "data"> {
@@ -159,6 +162,48 @@ export const createUserMedia = createAsyncThunk<
   }
 });
 
+export const blockUser = createAsyncThunk<
+  SimpleApiResponseApiResponse,
+  BlockUserDto,
+  { rejectValue: string }
+>("room/blockUser", async (blockUserDto, { rejectWithValue }) => {
+  try {
+    const response = await axiosInstance.post<SimpleApiResponseApiResponse>(
+      "/api/user/block-user/",
+      blockUserDto,
+      { headers: defaultHeaders }
+    );
+    return response.data;
+  } catch (error) {
+    let errorMessage = "Something went wrong!";
+    if (axios.isAxiosError(error) && error.response) {
+      errorMessage = error.response.data.message || errorMessage;
+    }
+    return rejectWithValue(errorMessage);
+  }
+});
+
+export const unBlockUser = createAsyncThunk<
+  SimpleApiResponseApiResponse,
+  BlockUserDto,
+  { rejectValue: string }
+>("room/unblockUser", async (unblockUserDto, { rejectWithValue }) => {
+  try {
+    const response = await axiosInstance.post<SimpleApiResponseApiResponse>(
+      "/api/user/unblock-user/",
+      unblockUserDto,
+      { headers: defaultHeaders }
+    );
+    return response.data;
+  } catch (error) {
+    let errorMessage = "Something went wrong!";
+    if (axios.isAxiosError(error) && error.response) {
+      errorMessage = error.response.data.message || errorMessage;
+    }
+    return rejectWithValue(errorMessage);
+  }
+});
+
 const initialState: UserState = {
   loginResult: null,
   registerResult: null,
@@ -170,6 +215,8 @@ const initialState: UserState = {
   logoutResponseMessage: "",
   userProfileCreated: false,
   loadingImages: [],
+  isBlockingUser: false,
+  isUnBlockingUser: false,
 };
 
 const userSlice = createSlice({
@@ -258,6 +305,24 @@ const userSlice = createSlice({
         state.loadingImages = state.loadingImages.filter(
           (name) => name !== action.meta.arg.name
         );
+      })
+      .addCase(blockUser.pending, (state) => {
+        state.isBlockingUser = true;
+      })
+      .addCase(blockUser.fulfilled, (state) => {
+        state.isBlockingUser = false;
+      })
+      .addCase(blockUser.rejected, (state) => {
+        state.isBlockingUser = false;
+      })
+      .addCase(unBlockUser.pending, (state) => {
+        state.isUnBlockingUser = true;
+      })
+      .addCase(unBlockUser.fulfilled, (state) => {
+        state.isUnBlockingUser = false;
+      })
+      .addCase(unBlockUser.rejected, (state) => {
+        state.isUnBlockingUser = false;
       });
   },
 });

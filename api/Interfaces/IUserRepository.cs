@@ -9,5 +9,7 @@ namespace api.Interfaces
         Task<int> GetTotalUsersAsync();
         int GetTotalPages(int pageSize, int totalUsers);
         Task<User?> GetByIdAsync(string userId);
+        Task<BlockedUser?> BlockUser(BlockedUser blockedUser);
+        Task<bool> UnBlockUser(User currentUser, BlockUserDto unblockUserDto);
     }
 }

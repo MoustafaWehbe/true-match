@@ -14,6 +14,20 @@
 
 
 import * as runtime from '../runtime';
+import type {
+  BlockUserDto,
+  SimpleApiResponseApiResponse,
+} from '../models/index';
+import {
+    BlockUserDtoFromJSON,
+    BlockUserDtoToJSON,
+    SimpleApiResponseApiResponseFromJSON,
+    SimpleApiResponseApiResponseToJSON,
+} from '../models/index';
+
+export interface ApiUserBlockUserPostRequest {
+    blockUserDto?: BlockUserDto;
+}
 
 export interface ApiUserGetRequest {
     pageNumber?: number;
@@ -24,10 +38,49 @@ export interface ApiUserIdGetRequest {
     id: string;
 }
 
+export interface ApiUserUnblockUserPostRequest {
+    blockUserDto?: BlockUserDto;
+}
+
 /**
  * 
  */
 export class UserApi extends runtime.BaseAPI {
+
+    /**
+     */
+    async apiUserBlockUserPostRaw(requestParameters: ApiUserBlockUserPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<SimpleApiResponseApiResponse>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json-patch+json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("Bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/api/user/block-user`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: BlockUserDtoToJSON(requestParameters['blockUserDto']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => SimpleApiResponseApiResponseFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async apiUserBlockUserPost(requestParameters: ApiUserBlockUserPostRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SimpleApiResponseApiResponse> {
+        const response = await this.apiUserBlockUserPostRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
 
     /**
      */
@@ -104,6 +157,41 @@ export class UserApi extends runtime.BaseAPI {
      */
     async apiUserIdGet(requestParameters: ApiUserIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.apiUserIdGetRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     */
+    async apiUserUnblockUserPostRaw(requestParameters: ApiUserUnblockUserPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<SimpleApiResponseApiResponse>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json-patch+json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("Bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/api/user/unblock-user`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: BlockUserDtoToJSON(requestParameters['blockUserDto']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => SimpleApiResponseApiResponseFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async apiUserUnblockUserPost(requestParameters: ApiUserUnblockUserPostRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SimpleApiResponseApiResponse> {
+        const response = await this.apiUserUnblockUserPostRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**

@@ -13,11 +13,13 @@ apis/UserProfileApi.ts
 apis/index.ts
 index.ts
 models/AllRoomStatus.ts
+models/BlockUserDto.ts
 models/CreateMatchDto.ts
 models/CreateRoomDto.ts
 models/CreateSystemQuestionDto.ts
 models/CreateUserProfileDto.ts
 models/Gender.ts
+models/HideRoomDto.ts
 models/Interest.ts
 models/LifeStyle.ts
 models/LoginDto.ts

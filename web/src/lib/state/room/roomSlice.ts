@@ -11,6 +11,9 @@ import {
   MyRoomStatus,
   SimpleApiResponseApiResponse,
   UpdateRoomDto,
+  RoomParticipantDtoApiResponse,
+  RoomParticipantDto,
+  HideRoomDto,
 } from "shared/src/types/openApiGen";
 import axiosInstance, { defaultHeaders } from "~/lib/utils/api/axiosConfig";
 
@@ -26,6 +29,10 @@ export interface RoomSate {
   activeRoomLoading: boolean;
   updateRoomLoading: boolean;
   deletingRoom: boolean;
+  isRegistering: boolean;
+  isdeRegistering: boolean;
+  ishidingRoom: boolean;
+  actionPerformedOnRoomId: number | null;
 }
 
 export const getRoomContent = createAsyncThunk<
@@ -123,6 +130,69 @@ export const createRoom = createAsyncThunk<
   }
 });
 
+export const registerRoom = createAsyncThunk<
+  RoomParticipantDto | undefined,
+  number,
+  { rejectValue: string }
+>("room/registerRoom", async (roomId, { rejectWithValue }) => {
+  try {
+    const response = await axiosInstance.post<RoomParticipantDtoApiResponse>(
+      `/api/room-participant/register/${roomId}`,
+      {},
+      { headers: defaultHeaders }
+    );
+    return response.data.data;
+  } catch (error) {
+    let errorMessage = "Something went wrong!";
+    if (axios.isAxiosError(error) && error.response) {
+      errorMessage = error.response.data.message || errorMessage;
+    }
+    return rejectWithValue(errorMessage);
+  }
+});
+
+export const deregisterRoom = createAsyncThunk<
+  SimpleApiResponseApiResponse,
+  number,
+  { rejectValue: string }
+>("room/deregisterRoom", async (roomId, { rejectWithValue }) => {
+  try {
+    const response = await axiosInstance.post<SimpleApiResponseApiResponse>(
+      `/api/room-participant/deregister/${roomId}`,
+      {},
+      { headers: defaultHeaders }
+    );
+    return response.data;
+  } catch (error) {
+    let errorMessage = "Something went wrong!";
+    if (axios.isAxiosError(error) && error.response) {
+      errorMessage = error.response.data.message || errorMessage;
+    }
+    return rejectWithValue(errorMessage);
+  }
+});
+
+export const hideRoom = createAsyncThunk<
+  SimpleApiResponseApiResponse,
+  HideRoomDto,
+  { rejectValue: string }
+>("room/hideRoom", async (roomDto, { rejectWithValue }) => {
+  try {
+    const response = await axiosInstance.post<SimpleApiResponseApiResponse>(
+      `/api/room/hide-room`,
+      roomDto,
+      { headers: defaultHeaders }
+    );
+    return response.data;
+  } catch (error) {
+    let errorMessage = "Something went wrong!";
+    if (axios.isAxiosError(error) && error.response) {
+      errorMessage = error.response.data.message || errorMessage;
+    }
+    return rejectWithValue(errorMessage);
+  }
+});
+
 export const updateRoom = createAsyncThunk<
   RoomDto | undefined,
   UpdateRoomDto & { id: number },
@@ -195,6 +265,10 @@ const initialState: RoomSate = {
   myRooms: null,
   getMyRoomsLoading: false,
   deletingRoom: false,
+  isRegistering: false,
+  isdeRegistering: false,
+  ishidingRoom: false,
+  actionPerformedOnRoomId: null,
 };
 
 const roomSlice = createSlice({
@@ -203,6 +277,9 @@ const roomSlice = createSlice({
   reducers: {
     clearRooms(state) {
       state.rooms = null;
+    },
+    clearMyRooms(state) {
+      state.myRooms = null;
     },
   },
   extraReducers: (builder) => {
@@ -250,19 +327,6 @@ const roomSlice = createSlice({
               data: [...state.rooms?.data, ...action.payload?.data],
             };
           }
-          // if (
-          //   state.rooms?.currentPage &&
-          //   state.rooms.currentPage >= 2 &&
-          //   action.payload?.data &&
-          //   state.rooms?.data
-          // ) {
-          //   state.rooms = {
-          //     ...action.payload,
-          //     data: [...state.rooms?.data, ...action.payload?.data],
-          //   };
-          // } else {
-          //   state.rooms = action.payload;
-          // }
         }
       )
       .addCase(getRooms.rejected, (state) => {
@@ -324,10 +388,70 @@ const roomSlice = createSlice({
       })
       .addCase(deleteRoom.rejected, (state) => {
         state.deletingRoom = false;
+      })
+      .addCase(registerRoom.pending, (state, action) => {
+        state.isRegistering = true;
+        state.actionPerformedOnRoomId = action.meta.arg;
+      })
+      .addCase(registerRoom.fulfilled, (state, action) => {
+        state.isRegistering = false;
+        if (state.rooms?.data?.length) {
+          const roomIndex = state.rooms.data.findIndex(
+            (r) => r.id === action.meta.arg
+          );
+          if (roomIndex !== -1) {
+            const room = state.rooms.data[roomIndex];
+            room.participantCount = room.participantCount
+              ? room.participantCount + 1
+              : 1;
+            room.isParticipanting = true;
+          }
+        }
+      })
+      .addCase(registerRoom.rejected, (state) => {
+        state.isRegistering = false;
+      })
+      .addCase(deregisterRoom.pending, (state, action) => {
+        state.isdeRegistering = true;
+        state.actionPerformedOnRoomId = action.meta.arg;
+      })
+      .addCase(deregisterRoom.fulfilled, (state, action) => {
+        state.isdeRegistering = false;
+        if (state.rooms?.data?.length) {
+          const roomIndex = state.rooms.data.findIndex(
+            (r) => r.id === action.meta.arg
+          );
+          if (roomIndex !== -1) {
+            const room = state.rooms.data[roomIndex];
+            room.participantCount = room.participantCount
+              ? room.participantCount - 1
+              : 0;
+            room.isParticipanting = false;
+          }
+        }
+      })
+      .addCase(deregisterRoom.rejected, (state) => {
+        state.isdeRegistering = false;
+      })
+      .addCase(hideRoom.pending, (state, action) => {
+        state.ishidingRoom = true;
+        state.actionPerformedOnRoomId = action.meta.arg.roomId;
+      })
+      .addCase(hideRoom.fulfilled, (state, action) => {
+        state.ishidingRoom = false;
+        if (state.rooms?.data?.length) {
+          state.rooms.data = state.rooms.data.filter(
+            (r) => r.id !== action.meta.arg.roomId
+          );
+        }
+      })
+      .addCase(hideRoom.rejected, (state) => {
+        state.ishidingRoom = false;
       });
   },
 });
 
 export const { clearRooms } = roomSlice.actions;
+export const { clearMyRooms } = roomSlice.actions;
 
 export default roomSlice.reducer;

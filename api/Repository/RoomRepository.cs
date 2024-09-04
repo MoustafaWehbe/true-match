@@ -24,9 +24,21 @@ namespace api.Repository
 
         public async Task<List<Room>> GetAllAsync(AllRoomQueryObject query, string userId)
         {
+            var blockedUsersIds = _context.BlockedUsers
+                .Where(b => b.BlockerUserId == userId)
+                .Select(b => b.BlockedUserId)
+                .ToList();
+
+            var hiddenRoomIds = await _context.HiddenRooms
+                .Where(hr => hr.UserId == userId)
+                .Select(hr => hr.RoomId)
+                .ToListAsync();
+
             return await _context.Rooms
                 .IncludeRoomDetails()
                 .FindAllRoomByStatus(query.Status, userId)
+                .Where(r => r.UserId != userId && !blockedUsersIds.Contains(r.UserId) &&
+                    !hiddenRoomIds.Contains(r.Id))
                 .FindNotDeleted()
                 .OrderByDescending(r => r.CreatedAt)
                 .Skip((query.PageNumber - 1) * query.PageSize)
@@ -67,9 +79,21 @@ namespace api.Repository
 
         public async Task<int> GetTotalRoomsAsync(AllRoomQueryObject query, string userId)
         {
+            var blockedUsersIds = _context.BlockedUsers
+              .Where(b => b.BlockerUserId == userId)
+              .Select(b => b.BlockedUserId)
+              .ToList();
+
+            var hiddenRoomIds = await _context.HiddenRooms
+                .Where(hr => hr.UserId == userId)
+                .Select(hr => hr.RoomId)
+                .ToListAsync();
+
             return await _context.Rooms
                 .FindNotDeleted()
                 .FindAllRoomByStatus(query.Status, userId)
+                .Where(r => r.UserId != userId && !blockedUsersIds.Contains(r.UserId)
+                    && !hiddenRoomIds.Contains(r.Id))
                 .CountAsync();
         }
 
@@ -88,5 +112,30 @@ namespace api.Repository
             await _context.SaveChangesAsync();
             return room;
         }
+
+        public async Task<HideRoomDto> HideRoom(HideRoomDto hideRoomDto, User user)
+        {
+            // Check if the room is already hidden
+            var existingHiddenRoom = await _context.HiddenRooms
+                .FirstOrDefaultAsync(hr => hr.UserId == user.Id && hr.RoomId == hideRoomDto.RoomId);
+
+            if (existingHiddenRoom != null)
+            {
+                throw new InvalidDataException("Room is already hidden.");
+            }
+
+            // Hide the room
+            var hiddenRoom = new HiddenRoom
+            {
+                UserId = user.Id,
+                RoomId = hideRoomDto.RoomId
+            };
+
+            _context.HiddenRooms.Add(hiddenRoom);
+            await _context.SaveChangesAsync();
+
+            return hideRoomDto;
+        }
+
     }
 }

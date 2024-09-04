@@ -18,6 +18,8 @@ namespace api.Extensions
                         );
                 case AllRoomStatus.Coming:
                     return query.Where(r => r.StartedAt == null);
+                case AllRoomStatus.InterestedIn:
+                    return query.Where(r => r.StartedAt == null && r.RoomParticipants.Any(rp => rp.UserId == userId));
                 default:
                     return query;
             }

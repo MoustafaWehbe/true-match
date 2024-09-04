@@ -14,22 +14,39 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import RoomCard from "./RoomCard";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "~/lib/state/store";
-import { clearRooms, getRooms } from "~/lib/state/room/roomSlice";
+import {
+  clearRooms,
+  deregisterRoom,
+  getRooms,
+  hideRoom,
+  registerRoom,
+} from "~/lib/state/room/roomSlice";
 import CustomSelect, { Option } from "../shared/CustomSelect";
 import { AllRoomStatus } from "shared/src/types/openApiGen";
+import { blockUser } from "~/lib/state/user/userSlice";
+import ConfirmDialog from "../shared/ConfirmDialog";
 
 const options: Option[] = [
   { value: 0, label: "Coming up" },
   { value: 1, label: "In progress" },
+  { value: 2, label: "Interested to attend" },
 ];
 
 function BrowseRooms() {
   const bg = useColorModeValue("gray.50", "gray.800");
   const textColor = useColorModeValue("gray.800", "whiteAlpha.900");
   const dispatch = useDispatch<AppDispatch>();
-  const { rooms } = useSelector((state: RootState) => state.room);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const { rooms, getRoomsLoading } = useSelector(
+    (state: RootState) => state.room
+  );
+  const { isBlockingUser } = useSelector((state: RootState) => state.user);
   const [selectedStatus, setSelectedStatus] = useState<Option>(options[0]);
   const page = useRef(1);
+  const [roomIdToBlock, setRoomIdToBlock] = useState<number>();
+
+  const openDialog = () => setIsDialogOpen(true);
+  const closeDialog = () => setIsDialogOpen(false);
 
   const loadRooms = useCallback(() => {
     dispatch(
@@ -42,22 +59,12 @@ function BrowseRooms() {
   }, [dispatch, selectedStatus.value]);
 
   useEffect(() => {
-    // const loadRooms = async (pageNumber: number) => {
-    //   dispatch(
-    //     getRooms({
-    //       PageNumber: pageNumber,
-    //       PageSize: 10,
-    //       Status: selectedStatus.value as AllRoomStatus,
-    //     })
-    //   );
-
-    //   // if (response.payload?.data?.length === 0) {
-    //   //   setAllRoomsLoaded(true); // No more rooms to load
-    //   // }
-    // };
-
     loadRooms();
-  }, [loadRooms]);
+
+    return () => {
+      dispatch(clearRooms());
+    };
+  }, [dispatch, loadRooms]);
 
   const handleSelect = (option: Option) => {
     if (selectedStatus.value !== option.value) {
@@ -68,9 +75,34 @@ function BrowseRooms() {
   };
 
   const handleLoadMore = () => {
-    // setPage((prevPage) => prevPage + 1);
     page.current = page.current + 1;
     loadRooms();
+  };
+
+  const handleOnBlock = async () => {
+    if (!roomIdToBlock) {
+      return;
+    }
+    const room = rooms?.data?.find((r) => r.id === roomIdToBlock);
+    if (room && room.user?.id) {
+      await dispatch(blockUser({ blockedUserId: room.user?.id }));
+      page.current = 1;
+      dispatch(clearRooms());
+      loadRooms();
+      closeDialog();
+    }
+  };
+
+  const handleOnInterested = (roomId: number) => {
+    dispatch(registerRoom(roomId));
+  };
+
+  const handleOnHideRoom = (roomId: number) => {
+    dispatch(hideRoom({ roomId }));
+  };
+
+  const handleOnNotInterestedAnymore = (roomId: number) => {
+    dispatch(deregisterRoom(roomId));
   };
 
   return (
@@ -108,6 +140,13 @@ function BrowseRooms() {
             isInProgress={selectedStatus.value === 1}
             key={room.id}
             room={room}
+            handleOnBlock={(roomId: number) => {
+              openDialog();
+              setRoomIdToBlock(roomId);
+            }}
+            handleOnInterested={handleOnInterested}
+            handleOnHideRoom={handleOnHideRoom}
+            handleOnNotInterestedAnymore={handleOnNotInterestedAnymore}
           />
         ))}
       </Grid>
@@ -118,12 +157,23 @@ function BrowseRooms() {
               onClick={handleLoadMore}
               size="md"
               colorScheme="teal"
-              // isLoading={createRoomLoading || updateRoomLoading}
+              isLoading={getRoomsLoading}
             >
               Load More
             </Button>
           </Flex>
         )}
+      <ConfirmDialog
+        isOpen={isDialogOpen}
+        onClose={closeDialog}
+        onConfirm={handleOnBlock}
+        title="Block User?"
+        description="Are you sure you want to block this user? We will not show you their rooms or profile anymore. 
+        <br/><br/>This action cannot be undone."
+        confirmText="Block"
+        cancelText="Cancel"
+        isLoading={isBlockingUser}
+      />
     </Box>
   );
 }

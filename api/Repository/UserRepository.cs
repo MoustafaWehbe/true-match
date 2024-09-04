@@ -60,5 +60,27 @@ namespace api.Repository
                     .ThenInclude(up => up!.UserProfileLifeStyles)
                 .FirstOrDefaultAsync(u => u.Id == userId);
         }
+
+        public async Task<BlockedUser?> BlockUser(BlockedUser blockedUser)
+        {
+            _context.BlockedUsers.Add(blockedUser);
+            await _context.SaveChangesAsync();
+            return blockedUser;
+        }
+
+        public async Task<bool> UnBlockUser(User currentUser, BlockUserDto unblockUserDto)
+        {
+            var blockedUser = await _context.BlockedUsers
+                .FirstOrDefaultAsync(b => b.BlockerUserId == currentUser.Id && b.BlockedUserId == unblockUserDto.BlockedUserId);
+
+            if (blockedUser == null)
+            {
+                throw new InvalidDataException("Blocked user not found.");
+            }
+
+            _context.BlockedUsers.Remove(blockedUser);
+            await _context.SaveChangesAsync();
+            return true;
+        }
     }
 }

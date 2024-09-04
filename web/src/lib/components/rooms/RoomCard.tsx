@@ -1,22 +1,27 @@
 import {
   Box,
   Button,
+  IconButton,
   Image,
   Stack,
   Text,
+  Tooltip,
   useColorModeValue,
 } from "@chakra-ui/react";
 // import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
-import { CalendarIcon, TimeIcon } from "@chakra-ui/icons";
+import { CalendarIcon, CloseIcon, TimeIcon } from "@chakra-ui/icons";
 import { format } from "date-fns";
 
 import { RoomDto } from "shared/src/types/openApiGen";
 import { AppDispatch, RootState } from "~/lib/state/store";
 // import { startRoom } from "~/lib/state/room/roomSlice";
 import DeleteRoomButton from "./DeleteRoomButton";
+import { FaHeart } from "react-icons/fa";
+import { MdBlock } from "react-icons/md";
+import { LuHeartOff } from "react-icons/lu";
 
 interface RoomCardProps {
   room: RoomDto;
@@ -24,9 +29,12 @@ interface RoomCardProps {
   isInProgress?: boolean;
   isArchived?: boolean;
   onJoin?: (roomId: number) => void;
-  onInterested?: (roomId: number) => void;
   onUpdate?: (roomId: number) => void;
   onDelete?: (roomId: number) => void;
+  handleOnInterested?: (roomId: number) => void;
+  handleOnBlock?: (roomId: number) => void;
+  handleOnHideRoom?: (roomId: number) => void;
+  handleOnNotInterestedAnymore?: (roomId: number) => void;
   onEditClicked?: (room: RoomDto) => void;
 }
 
@@ -35,12 +43,22 @@ const RoomCard = ({
   isArchived,
   isInProgress,
   isComingUp,
-  onInterested,
+  handleOnInterested,
+  handleOnBlock,
+  handleOnHideRoom,
+  handleOnNotInterestedAnymore,
   onEditClicked,
 }: RoomCardProps) => {
   const cardBg = useColorModeValue("white", "gray.700");
   const cardTextColor = useColorModeValue("gray.800", "whiteAlpha.900");
   const currentUser = useSelector((state: RootState) => state.user.user);
+  const {
+    isRegistering,
+    isdeRegistering,
+    ishidingRoom,
+    actionPerformedOnRoomId,
+  } = useSelector((state: RootState) => state.room);
+  const { isBlockingUser } = useSelector((state: RootState) => state.user);
   const router = useRouter();
 
   const isOwner = currentUser && currentUser.id === room?.user?.id;
@@ -94,18 +112,26 @@ const RoomCard = ({
           >
             {room.title}
           </Text>
-          <Text
-            sx={{
-              textOverflow: "ellipsis",
-              overflow: "hidden",
-              lineClamp: "2",
-              display: "-webkit-box",
-              "-webkit-box-orient": "vertical",
-              "-webkit-line-clamp": "1",
-            }}
+          <Tooltip
+            placement="top"
+            hasArrow
+            arrowSize={20}
+            label={room.description}
+            fontSize="md"
           >
-            {room.description}
-          </Text>
+            <Text
+              sx={{
+                textOverflow: "ellipsis",
+                overflow: "hidden",
+                lineClamp: "2",
+                display: "-webkit-box",
+                "-webkit-box-orient": "vertical",
+                "-webkit-line-clamp": "1",
+              }}
+            >
+              {room.description}
+            </Text>
+          </Tooltip>
           <Stack direction="row" align="center">
             <CalendarIcon />
             <Text>
@@ -128,19 +154,117 @@ const RoomCard = ({
               </Button>
               <DeleteRoomButton roomId={room.id!} />
             </Stack>
-          ) : (
+          ) : isInProgress ? (
             <Button
-              colorScheme={isInProgress ? "green" : "pink"}
+              colorScheme="green"
               variant="outline"
               mt={4}
-              onClick={() =>
-                isInProgress
-                  ? router.push(`rooms/${room.id}`)
-                  : onInterested && onInterested(room.id!)
-              }
+              onClick={() => router.push(`rooms/${room.id}`)}
             >
-              {isInProgress ? "Join Room" : "Interested to Attend"}
+              Join Room
             </Button>
+          ) : (
+            <Stack
+              direction="row"
+              spacing={4}
+              mt={4}
+              alignItems={"center"}
+              justifyContent={"space-between"}
+            >
+              <Tooltip
+                placement="top"
+                hasArrow
+                arrowSize={20}
+                label="Do not show rooms from this person again"
+                fontSize="md"
+              >
+                <IconButton
+                  onClick={() => handleOnBlock && handleOnBlock(room.id!)}
+                  colorScheme="red"
+                  color="red"
+                  icon={<MdBlock />}
+                  variant="outline"
+                  width={"48px"}
+                  height={"48px"}
+                  aria-label="Block"
+                />
+              </Tooltip>
+              <Stack direction={"row"} spacing={4} alignItems={"center"}>
+                <Tooltip
+                  placement="top"
+                  hasArrow
+                  arrowSize={20}
+                  label="Hide this room"
+                  fontSize="md"
+                >
+                  <IconButton
+                    onClick={() =>
+                      handleOnHideRoom && handleOnHideRoom(room.id!)
+                    }
+                    colorScheme="yellow"
+                    color="yellow"
+                    icon={<CloseIcon />}
+                    variant="outline"
+                    width={"48px"}
+                    height={"48px"}
+                    aria-label="Hide room"
+                    isLoading={
+                      ishidingRoom && actionPerformedOnRoomId === room.id
+                    }
+                  />
+                </Tooltip>
+                {room.isParticipanting ? (
+                  <Tooltip
+                    placement="top"
+                    hasArrow
+                    arrowSize={20}
+                    label="Not interested anymore"
+                    fontSize="md"
+                  >
+                    <IconButton
+                      onClick={() =>
+                        handleOnNotInterestedAnymore &&
+                        handleOnNotInterestedAnymore(room.id!)
+                      }
+                      colorScheme="pink"
+                      color="pink.400"
+                      icon={<LuHeartOff />}
+                      variant="outline"
+                      width={"48px"}
+                      height={"48px"}
+                      aria-label="Sign me out"
+                      isLoading={
+                        isdeRegistering && actionPerformedOnRoomId === room.id
+                      }
+                    />
+                  </Tooltip>
+                ) : (
+                  <Tooltip
+                    placement="top"
+                    hasArrow
+                    arrowSize={20}
+                    label="Interested to attend this room"
+                    fontSize="md"
+                  >
+                    <IconButton
+                      onClick={() =>
+                        handleOnInterested && handleOnInterested(room.id!)
+                      }
+                      colorScheme="pink"
+                      color="pink.400"
+                      icon={<FaHeart />}
+                      variant="outline"
+                      width={"48px"}
+                      height={"48px"}
+                      aria-label="Sign me in"
+                      isLoading={
+                        isRegistering && actionPerformedOnRoomId === room.id
+                      }
+                    />
+                  </Tooltip>
+                )}
+              </Stack>
+            </Stack>
           )}
         </Stack>
       </Box>
