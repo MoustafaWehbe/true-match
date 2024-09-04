@@ -20,6 +20,7 @@ import {
   getRooms,
   hideRoom,
   registerRoom,
+  removeRoomsByUserId,
 } from "~/lib/state/room/roomSlice";
 import CustomSelect, { Option } from "../shared/CustomSelect";
 import { AllRoomStatus } from "shared/src/types/openApiGen";
@@ -85,11 +86,9 @@ function BrowseRooms() {
     }
     const room = rooms?.data?.find((r) => r.id === roomIdToBlock);
     if (room && room.user?.id) {
-      await dispatch(blockUser({ blockedUserId: room.user?.id }));
-      page.current = 1;
-      dispatch(clearRooms());
-      loadRooms();
+      await dispatch(blockUser({ blockedUserId: room.user.id }));
       closeDialog();
+      dispatch(removeRoomsByUserId(room.user.id));
     }
   };
 

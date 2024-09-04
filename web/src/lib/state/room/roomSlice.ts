@@ -281,6 +281,14 @@ const roomSlice = createSlice({
     clearMyRooms(state) {
       state.myRooms = null;
     },
+    removeRoomsByUserId(state, action) {
+      const userId = action.payload as string;
+      if (state.rooms?.data?.length) {
+        state.rooms.data = state.rooms.data.filter(
+          (r) => r.user?.id !== userId
+        );
+      }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -453,5 +461,6 @@ const roomSlice = createSlice({
 
 export const { clearRooms } = roomSlice.actions;
 export const { clearMyRooms } = roomSlice.actions;
+export const { removeRoomsByUserId } = roomSlice.actions;
 
 export default roomSlice.reducer;
