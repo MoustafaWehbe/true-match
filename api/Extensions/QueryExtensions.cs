@@ -16,7 +16,7 @@ namespace api.Extensions
                         && r.RoomParticipants
                             .Any(rp => rp.UserId == userId)
                         );
-                case AllRoomStatus.Pending:
+                case AllRoomStatus.Coming:
                     return query.Where(r => r.StartedAt == null);
                 default:
                     return query;
@@ -27,14 +27,7 @@ namespace api.Extensions
         {
             switch (roomStatus)
             {
-                case MyRoomStatus.InProgress:
-                    return query.Where(r =>
-                        r.StartedAt != null
-                        && r.FinishedAt == null
-                        && r.RoomParticipants
-                            .Any(rp => rp.UserId == userId)
-                        );
-                case MyRoomStatus.Pending:
+                case MyRoomStatus.Coming:
                     return query.Where(r => r.StartedAt == null);
                 case MyRoomStatus.Archived:
                     return query.Where(r => r.FinishedAt < DateTime.UtcNow);

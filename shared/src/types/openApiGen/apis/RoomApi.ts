@@ -20,7 +20,7 @@ import type {
   MyRoomStatus,
   RoomDtoApiResponse,
   RoomDtoPagedResponse,
-  StringApiResponse,
+  SimpleApiResponseApiResponse,
   UpdateRoomDto,
 } from '../models/index';
 import {
@@ -34,8 +34,8 @@ import {
     RoomDtoApiResponseToJSON,
     RoomDtoPagedResponseFromJSON,
     RoomDtoPagedResponseToJSON,
-    StringApiResponseFromJSON,
-    StringApiResponseToJSON,
+    SimpleApiResponseApiResponseFromJSON,
+    SimpleApiResponseApiResponseToJSON,
     UpdateRoomDtoFromJSON,
     UpdateRoomDtoToJSON,
 } from '../models/index';
@@ -124,7 +124,7 @@ export class RoomApi extends runtime.BaseAPI {
 
     /**
      */
-    async apiRoomIdDeleteRaw(requestParameters: ApiRoomIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StringApiResponse>> {
+    async apiRoomIdDeleteRaw(requestParameters: ApiRoomIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<SimpleApiResponseApiResponse>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
@@ -151,12 +151,12 @@ export class RoomApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => StringApiResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => SimpleApiResponseApiResponseFromJSON(jsonValue));
     }
 
     /**
      */
-    async apiRoomIdDelete(requestParameters: ApiRoomIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StringApiResponse> {
+    async apiRoomIdDelete(requestParameters: ApiRoomIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SimpleApiResponseApiResponse> {
         const response = await this.apiRoomIdDeleteRaw(requestParameters, initOverrides);
         return await response.value();
     }

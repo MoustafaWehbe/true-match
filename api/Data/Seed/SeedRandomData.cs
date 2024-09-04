@@ -130,10 +130,30 @@ public class SeedRandomData
             .RuleFor(r => r.Title, f => f.Commerce.ProductName())
             .RuleFor(r => r.Description, f => f.Lorem.Paragraph())
             .RuleFor(r => r.CreatedAt, f => f.Date.Past().ToUniversalTime())
-            .RuleFor(r => r.StartedAt, f => f.Date.Past().ToUniversalTime())
             .RuleFor(r => r.UpdatedAt, f => f.Date.Recent().ToUniversalTime())
             .RuleFor(r => r.ScheduledAt, f => f.Date.Future().ToUniversalTime())
-            .RuleFor(r => r.User, f => f.PickRandom(users));
+            .RuleFor(r => r.User, f => f.PickRandom(users))
+            .RuleFor(r => r.StartedAt, (f, r) =>
+            {
+                // Sometimes StartedAt is null
+                return f.Random.Bool() ? null : f.Date.Past().ToUniversalTime();
+            })
+            .RuleFor(r => r.FinishedAt, (f, r) =>
+            {
+                // FinishedAt can be null, and if it's not null, StartedAt must not be null
+                if (f.Random.Bool())
+                {
+                    return null;
+                }
+                else
+                {
+                    if (r.StartedAt == null)
+                    {
+                        r.StartedAt = f.Date.Past().ToUniversalTime(); // Ensure StartedAt is set
+                    }
+                    return f.Date.Future().ToUniversalTime();
+                }
+            });
 
         return faker.Generate(count);
     }

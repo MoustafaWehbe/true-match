@@ -24,15 +24,14 @@ namespace api.Models
     [JsonConverter(typeof(StringEnumConverter))]
     public enum AllRoomStatus
     {
-        Pending,
+        Coming,
         InProgress,
     }
 
     [JsonConverter(typeof(StringEnumConverter))]
     public enum MyRoomStatus
     {
-        Pending,
-        InProgress,
+        Coming,
         Archived
     }
 }

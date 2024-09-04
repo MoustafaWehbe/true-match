@@ -137,7 +137,7 @@ namespace api.Controllers
 
         [HttpDelete("{id}")]
         [Authorize]
-        [ProducesResponseType(typeof(ApiResponse<string>), 200)]
+        [ProducesResponseType(typeof(ApiResponse<SimpleApiResponse>), 200)]
         public async Task<IActionResult> SoftDeleteRoom(int id)
         {
             var user = await _userManager.FindByEmailAsync(User.GetEmail());
@@ -162,9 +162,8 @@ namespace api.Controllers
 
             await _roomRepo.UpdateAsync(room);
 
-            return Ok(ResponseHelper.CreateSuccessResponse("Room deleted successfully."));
+            return Ok(ResponseHelper.CreateSuccessResponse(new { message = "Room deleted successfully." }));
         }
-
 
         [HttpPost]
         [Authorize]

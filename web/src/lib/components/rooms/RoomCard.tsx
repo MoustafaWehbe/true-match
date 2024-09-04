@@ -6,7 +6,7 @@ import {
   Text,
   useColorModeValue,
 } from "@chakra-ui/react";
-import { useEffect } from "react";
+// import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
@@ -15,20 +15,28 @@ import { format } from "date-fns";
 
 import { RoomDto } from "shared/src/types/openApiGen";
 import { AppDispatch, RootState } from "~/lib/state/store";
-import { startRoom } from "~/lib/state/room/roomSlice";
+// import { startRoom } from "~/lib/state/room/roomSlice";
+import DeleteRoomButton from "./DeleteRoomButton";
+
 interface RoomCardProps {
   room: RoomDto;
+  isComingUp?: boolean;
+  isInProgress?: boolean;
+  isArchived?: boolean;
   onJoin?: (roomId: number) => void;
   onInterested?: (roomId: number) => void;
   onUpdate?: (roomId: number) => void;
   onDelete?: (roomId: number) => void;
+  onEditClicked?: (room: RoomDto) => void;
 }
 
 const RoomCard = ({
   room,
-  onDelete,
+  isArchived,
+  isInProgress,
+  isComingUp,
   onInterested,
-  onUpdate,
+  onEditClicked,
 }: RoomCardProps) => {
   const cardBg = useColorModeValue("white", "gray.700");
   const cardTextColor = useColorModeValue("gray.800", "whiteAlpha.900");
@@ -36,21 +44,19 @@ const RoomCard = ({
   const router = useRouter();
 
   const isOwner = currentUser && currentUser.id === room?.user?.id;
-  const isLive = room.status === "InProgress" && !room.finishedAt;
-  const isUpcoming = room.status === "Pending";
   const dispatch = useDispatch<AppDispatch>();
-  const { roomStarted } = useSelector((state: RootState) => state.room);
+  // const { roomStarted } = useSelector((state: RootState) => state.room);
 
-  useEffect(() => {
-    if (roomStarted) {
-      router.push(`rooms/${room.id}`);
-    }
-  }, [room.id, roomStarted, router]);
+  // useEffect(() => {
+  //   if (roomStarted) {
+  //     router.push(`rooms/${room.id}`);
+  //   }
+  // }, [room.id, roomStarted, router]);
 
   const onStart = () => {
     const newRoom = { ...room };
-    newRoom.status = "InProgress";
-    dispatch(startRoom(newRoom));
+    // newRoom.status = "InProgress";
+    // dispatch(startRoom(newRoom));
   };
 
   return (
@@ -60,17 +66,46 @@ const RoomCard = ({
       borderRadius="lg"
       boxShadow="lg"
       overflow="hidden"
+      maxHeight={400}
       transition="transform 0.2s"
       _hover={{ transform: "scale(1.05)" }}
       position={"relative"}
+      display={"flex"}
+      flexDirection={"column"}
     >
-      <Image src={"https://via.placeholder.com/150"} alt={room.title || ""} />
-      <Box p={6}>
-        <Stack spacing={4}>
-          <Text fontWeight="bold" fontSize="2xl">
+      <Image
+        src={"https://via.placeholder.com/150"}
+        alt={room.title || ""}
+        height={"30%"}
+      />
+      <Box p={6} flex={8}>
+        <Stack spacing={4} justifyContent={"space-between"} height={"100%"}>
+          <Text
+            fontWeight="bold"
+            fontSize="2xl"
+            sx={{
+              textOverflow: "ellipsis",
+              overflow: "hidden",
+              lineClamp: "2",
+              display: "-webkit-box",
+              "-webkit-box-orient": "vertical",
+              "-webkit-line-clamp": "1",
+            }}
+          >
             {room.title}
           </Text>
-          <Text>{room.description}</Text>
+          <Text
+            sx={{
+              textOverflow: "ellipsis",
+              overflow: "hidden",
+              lineClamp: "2",
+              display: "-webkit-box",
+              "-webkit-box-orient": "vertical",
+              "-webkit-line-clamp": "1",
+            }}
+          >
+            {room.description}
+          </Text>
           <Stack direction="row" align="center">
             <CalendarIcon />
             <Text>
@@ -86,35 +121,30 @@ const RoomCard = ({
               <Button
                 colorScheme="blue"
                 variant="outline"
-                onClick={() => onUpdate && onUpdate(room.id!)}
+                flex={1}
+                onClick={() => onEditClicked && onEditClicked(room)}
               >
                 Edit
               </Button>
-              <Button
-                colorScheme="red"
-                variant="solid"
-                onClick={() => onDelete && onDelete(room.id!)}
-              >
-                Delete
-              </Button>
+              <DeleteRoomButton roomId={room.id!} />
             </Stack>
           ) : (
             <Button
-              colorScheme={isLive ? "green" : "pink"}
+              colorScheme={isInProgress ? "green" : "pink"}
               variant="outline"
               mt={4}
               onClick={() =>
-                isLive
+                isInProgress
                   ? router.push(`rooms/${room.id}`)
                   : onInterested && onInterested(room.id!)
               }
             >
-              {isLive ? "Join Room" : "Interested to Attend"}
+              {isInProgress ? "Join Room" : "Interested to Attend"}
             </Button>
           )}
         </Stack>
       </Box>
-      {isOwner && isUpcoming && (
+      {isOwner && isComingUp && (
         <motion.div
           initial={{ opacity: 0, scale: 0.5 }}
           animate={{ opacity: 1, scale: 1 }}
