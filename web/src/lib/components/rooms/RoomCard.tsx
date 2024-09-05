@@ -22,6 +22,7 @@ import DeleteRoomButton from "./DeleteRoomButton";
 import { FaHeart } from "react-icons/fa";
 import { MdBlock } from "react-icons/md";
 import { LuHeartOff } from "react-icons/lu";
+import CustomTooltip from "../shared/CutsomTooltip";
 
 interface RoomCardProps {
   room: RoomDto;
@@ -112,13 +113,7 @@ const RoomCard = ({
           >
             {room.title}
           </Text>
-          <Tooltip
-            placement="top"
-            hasArrow
-            arrowSize={20}
-            label={room.description}
-            fontSize="md"
-          >
+          <CustomTooltip label={room.description || ""}>
             <Text
               sx={{
                 textOverflow: "ellipsis",
@@ -127,11 +122,12 @@ const RoomCard = ({
                 display: "-webkit-box",
                 "-webkit-box-orient": "vertical",
                 "-webkit-line-clamp": "1",
+                whiteSpace: "nowrap",
               }}
             >
               {room.description}
             </Text>
-          </Tooltip>
+          </CustomTooltip>
           <Stack direction="row" align="center">
             <CalendarIcon />
             <Text>
@@ -171,13 +167,7 @@ const RoomCard = ({
               alignItems={"center"}
               justifyContent={"space-between"}
             >
-              <Tooltip
-                placement="top"
-                hasArrow
-                arrowSize={20}
-                label="Do not show rooms from this person again"
-                fontSize="md"
-              >
+              <CustomTooltip label="Do not show rooms from this person again">
                 <IconButton
                   onClick={() => handleOnBlock && handleOnBlock(room.id!)}
                   colorScheme="red"
@@ -188,15 +178,9 @@ const RoomCard = ({
                   height={"48px"}
                   aria-label="Block"
                 />
-              </Tooltip>
+              </CustomTooltip>
               <Stack direction={"row"} spacing={4} alignItems={"center"}>
-                <Tooltip
-                  placement="top"
-                  hasArrow
-                  arrowSize={20}
-                  label="Hide this room"
-                  fontSize="md"
-                >
+                <CustomTooltip label="Hide this room">
                   <IconButton
                     onClick={() =>
                       handleOnHideRoom && handleOnHideRoom(room.id!)
@@ -212,15 +196,9 @@ const RoomCard = ({
                       ishidingRoom && actionPerformedOnRoomId === room.id
                     }
                   />
-                </Tooltip>
+                </CustomTooltip>
                 {room.isParticipanting ? (
-                  <Tooltip
-                    placement="top"
-                    hasArrow
-                    arrowSize={20}
-                    label="Not interested anymore"
-                    fontSize="md"
-                  >
+                  <CustomTooltip label="Not interested anymore">
                     <IconButton
                       onClick={() =>
                         handleOnNotInterestedAnymore &&
@@ -237,15 +215,9 @@ const RoomCard = ({
                         isdeRegistering && actionPerformedOnRoomId === room.id
                       }
                     />
-                  </Tooltip>
+                  </CustomTooltip>
                 ) : (
-                  <Tooltip
-                    placement="top"
-                    hasArrow
-                    arrowSize={20}
-                    label="Interested to attend this room"
-                    fontSize="md"
-                  >
+                  <CustomTooltip label="Interested to attend this room">
                     <IconButton
                       onClick={() =>
                         handleOnInterested && handleOnInterested(room.id!)
@@ -261,7 +233,7 @@ const RoomCard = ({
                         isRegistering && actionPerformedOnRoomId === room.id
                       }
                     />
-                  </Tooltip>
+                  </CustomTooltip>
                 )}
               </Stack>
             </Stack>

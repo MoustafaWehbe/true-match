@@ -17,6 +17,7 @@ import PeerVideo from "./PeerVideo";
 import useRound from "~/lib/hooks/useRound";
 import AnimatedHeart from "../shared/AnimatedHeart";
 import { FaArrowRight, FaForward, FaPause, FaPlay } from "react-icons/fa";
+import CustomTooltip from "../shared/CutsomTooltip";
 
 interface PresenterDisplayProps {
   peers: { peerID: string; peer: RTCPeerConnection }[];
@@ -229,13 +230,7 @@ const PresenterDisplay = ({ peers, localVideoRef }: PresenterDisplayProps) => {
                   top={"15px"}
                   right={"15px"}
                 >
-                  <Tooltip
-                    placement="top"
-                    hasArrow
-                    arrowSize={15}
-                    label="Skip round"
-                    fontSize="md"
-                  >
+                  <CustomTooltip label="Skip round">
                     <IconButton
                       onClick={skipRound}
                       colorScheme="red"
@@ -246,14 +241,8 @@ const PresenterDisplay = ({ peers, localVideoRef }: PresenterDisplayProps) => {
                       height={"48px"}
                       aria-label="toggle mic"
                     />
-                  </Tooltip>
-                  <Tooltip
-                    placement="top"
-                    hasArrow
-                    arrowSize={15}
-                    label="Pause round"
-                    fontSize="md"
-                  >
+                  </CustomTooltip>
+                  <CustomTooltip label="Pause round">
                     <IconButton
                       onClick={pauseRound}
                       colorScheme="yellow"
@@ -264,7 +253,7 @@ const PresenterDisplay = ({ peers, localVideoRef }: PresenterDisplayProps) => {
                       height={"48px"}
                       aria-label="toggle mic"
                     />
-                  </Tooltip>
+                  </CustomTooltip>
                 </Box>
               )}
             </Flex>
