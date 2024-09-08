@@ -5,7 +5,6 @@ import {
   Image,
   Stack,
   Text,
-  Tooltip,
   useColorModeValue,
 } from "@chakra-ui/react";
 // import { useEffect } from "react";
@@ -85,17 +84,18 @@ const RoomCard = ({
       borderRadius="lg"
       boxShadow="lg"
       overflow="hidden"
-      maxHeight={400}
+      height={600}
       transition="transform 0.2s"
       _hover={{ transform: "scale(1.05)" }}
       position={"relative"}
       display={"flex"}
       flexDirection={"column"}
     >
-      <Image
-        src={"https://via.placeholder.com/150"}
-        alt={room.title || ""}
-        height={"30%"}
+      <Box
+        height={"50%"}
+        bgImage={"url(/images/default-user-image-female.jpg)"}
+        bgSize="cover"
+        bgPosition="center"
       />
       <Box p={6} flex={8}>
         <Stack spacing={4} justifyContent={"space-between"} height={"100%"}>

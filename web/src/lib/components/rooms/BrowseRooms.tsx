@@ -20,6 +20,7 @@ import {
   getRooms,
   hideRoom,
   registerRoom,
+  removeRoomById,
   removeRoomsByUserId,
 } from "~/lib/state/room/roomSlice";
 import CustomSelect, { Option } from "../shared/CustomSelect";
@@ -100,8 +101,11 @@ function BrowseRooms() {
     dispatch(hideRoom({ roomId }));
   };
 
-  const handleOnNotInterestedAnymore = (roomId: number) => {
-    dispatch(deregisterRoom(roomId));
+  const handleOnNotInterestedAnymore = async (roomId: number) => {
+    await dispatch(deregisterRoom(roomId));
+    if (selectedStatus.value === 2) {
+      dispatch(removeRoomById(roomId));
+    }
   };
 
   return (

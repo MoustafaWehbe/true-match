@@ -21,7 +21,7 @@ const Swipe = () => {
 
   const currentIndexRef = useRef(currentIndex);
 
-  const updateCurrentIndex = (val) => {
+  const updateCurrentIndex = (val: number) => {
     setCurrentIndex(val);
     currentIndexRef.current = val;
   };
@@ -45,7 +45,7 @@ const Swipe = () => {
     await childRefs[newIndex].current.restoreCard();
   };
 
-  const swipe = async (dir) => {
+  const swipe = async (dir: string) => {
     if (canSwipe && currentIndex < users.length) {
       await childRefs[currentIndex].current.swipe(dir);
     }

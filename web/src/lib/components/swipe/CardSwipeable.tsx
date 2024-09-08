@@ -56,8 +56,6 @@ const CardSwipeable = forwardRef<CardSwipeableProps, any>(
               bgImage={"url(/images/default-user-image-female.jpg)"}
               bgSize="cover"
               bgPosition="center"
-              borderRadius="20px"
-              border="1px solid transparent"
             />
 
             <Box p={4} transition="height 0.3s ease-in-out">
