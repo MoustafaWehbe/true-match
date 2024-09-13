@@ -26,10 +26,6 @@ namespace api.Repository
                     .ThenInclude(ls => ls.RoomParticipants)
                 .Include(u => u.Media)
                 .Include(u => u.UserProfile)
-                .Include(u => u.UserProfile)
-                    .ThenInclude(up => up!.UserProfileInterests)
-                .Include(u => u.UserProfile)
-                    .ThenInclude(up => up!.UserProfileLifeStyles)
                 .Skip((query.PageNumber - 1) * query.PageSize)
                 .Take(query.PageSize)
                 .ToListAsync();
@@ -54,10 +50,6 @@ namespace api.Repository
             return await _context.Users
                 .Include(u => u.Media)
                 .Include(u => u.UserProfile)
-                .Include(u => u.UserProfile)
-                    .ThenInclude(up => up!.UserProfileInterests)
-                .Include(u => u.UserProfile)
-                    .ThenInclude(up => up!.UserProfileLifeStyles)
                 .FirstOrDefaultAsync(u => u.Id == userId);
         }
 

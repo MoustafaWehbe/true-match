@@ -8,8 +8,6 @@ namespace api.Mappers
     {
         public static MatchDto ToMatchDto(this Match matchModel)
         {
-            Console.WriteLine("TESt");
-            Console.WriteLine(matchModel.User2?.FirstName);
             return new MatchDto
             {
                 Id = matchModel.Id,

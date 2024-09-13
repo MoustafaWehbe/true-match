@@ -1,11 +1,11 @@
+using System.ComponentModel.DataAnnotations;
 using System.Text.Json;
 using api.Models;
 
 namespace api.Dtos
 {
-    public class UserProfileDto
+    public class CreateOrUpdateUserProfileDto
     {
-        public int Id { get; set; }
         public string? PlaceToLive { get; set; }
         public string? Bio { get; set; }
         public string? LoveStyle { get; set; }
@@ -19,6 +19,6 @@ namespace api.Dtos
         public DateTime? BirthDate { get; set; }
         public string? UserId { get; set; }
         public JsonDocument? SelectedDescriptors { get; set; }
-        public List<UserProfileGenderDto> UserProfileGenders { get; set; } = new List<UserProfileGenderDto>();
+        public List<UserProfileGenderDto>? UserProfileGenders { get; set; }
     }
 }

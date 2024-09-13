@@ -26,7 +26,7 @@ namespace api.Controllers
         [HttpPost]
         [Authorize]
         [ProducesResponseType(typeof(ApiResponse<UserProfileDto>), 200)]
-        public async Task<ActionResult<UserProfileDto>> CreateUserProfile([FromBody] CreateUserProfileDto userProfileDto)
+        public async Task<ActionResult<UserProfileDto>> CreateOrUpdateUserProfile([FromBody] CreateOrUpdateUserProfileDto userProfileDto)
         {
             if (!ModelState.IsValid)
             {
@@ -45,27 +45,7 @@ namespace api.Controllers
                 return NotFound("User was not found.");
             }
 
-            var userProfile = userProfileDto.ToUserProfileFromCreate(user.Id);
-
-            foreach (var interestDto in userProfileDto.UserProfileInterests)
-            {
-                userProfile.UserProfileInterests.Add(new UserProfileInterest
-                {
-                    InterestId = interestDto.InterestId,
-                    UserProfile = userProfile
-                });
-            }
-
-            foreach (var lifestyleDto in userProfileDto.UserProfileLifeStyles)
-            {
-                userProfile.UserProfileLifeStyles.Add(new UserProfileLifeStyle
-                {
-                    LifeStyleId = lifestyleDto.LifeStyleId,
-                    UserProfile = userProfile
-                });
-            }
-
-            var createdUserProfile = await _userProfileRepo.CreateAsync(userProfile);
+            var createdUserProfile = await _userProfileRepo.CreateOrUpdateAsync(userProfileDto, user.Id);
 
             return CreatedAtAction(nameof(GetUserProfileById), new { id = createdUserProfile.Id }, ResponseHelper.CreateSuccessResponse(createdUserProfile.ToUserProfileDto()));
         }

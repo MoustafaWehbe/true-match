@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using api.Models;
+using System.Text.Json;
 
 namespace api.Data
 {
@@ -9,10 +10,10 @@ namespace api.Data
         public static void Seed(ModelBuilder builder)
         {
             seedRoles(builder);
-            seedInterests(builder);
-            seedLifeStyles(builder);
             seedQuestionsAndQuestionCategories(builder);
             seedRoomContent(builder);
+            seedGenders(builder);
+            seedAvailableDescriptors(builder);
         }
 
         private static void seedRoomContent(ModelBuilder builder)
@@ -32,29 +33,6 @@ namespace api.Data
             {
                 new IdentityRole { Name = "Admin", NormalizedName = "ADMIN" },
                 new IdentityRole { Name = "User", NormalizedName = "USER" },
-            });
-        }
-
-        private static void seedInterests(ModelBuilder builder)
-        {
-            builder.Entity<Interest>().HasData(new List<Interest>
-            {
-                new Interest { Id = 1, Name = "Travel" },
-                new Interest { Id = 2, Name = "Cooking" },
-                new Interest { Id = 3, Name = "Sports" },
-                new Interest { Id = 4, Name = "Music" },
-                new Interest { Id = 5, Name = "Movies" },
-            });
-        }
-
-        private static void seedLifeStyles(ModelBuilder builder)
-        {
-            builder.Entity<LifeStyle>().HasData(new List<LifeStyle>
-            {
-                new LifeStyle { Id = 1, Name = "Smoking" },
-                new LifeStyle { Id = 2, Name = "Workout" },
-                new LifeStyle { Id = 3, Name = "Drinking" },
-                new LifeStyle { Id = 4, Name = "Pets" },
             });
         }
 
@@ -186,5 +164,54 @@ namespace api.Data
                 new SystemQuestion { Id = 109, Name = "Dine-in or delivery?", CategoryId = dilemmaCategory.Id }
             });
         }
+
+        private static void seedGenders(ModelBuilder builder)
+        {
+            builder.Entity<Gender>().HasData(
+                new Gender { Id = 1, Name = "Man", ParentId = null },
+                new Gender { Id = 2, Name = "Woman", ParentId = null },
+                new Gender { Id = 3, Name = "Beyond binary", ParentId = null },
+
+                new Gender { Id = 4, Name = "Cis man", Description = "A man whose gender aligns with the sex they were assigned at birth.", ParentId = 1 },
+                new Gender { Id = 5, Name = "Intersex man", Description = "A man born with one or more variations in sex characteristics that don’t fit binary ideas of male or female bodies.", ParentId = 1 },
+                new Gender { Id = 6, Name = "Trans man", Description = "A man whose gender is different from his sex assigned at birth.", ParentId = 1 },
+                new Gender { Id = 7, Name = "Transmasculine", Description = "A person who was assigned female at birth, but presents as masculine. This person may or may not see themselves as a man or a transgender man.", ParentId = 1 },
+
+                new Gender { Id = 8, Name = "Cis woman", Description = "A woman whose gender aligns with the sex they were assigned at birth.", ParentId = 2 },
+                new Gender { Id = 9, Name = "Intersex woman", Description = "A woman born with one or more variations in sex characteristics that don’t fit binary ideas of male or female bodies.", ParentId = 2 },
+                new Gender { Id = 10, Name = "Trans woman", Description = "A woman whose gender is different from her sex assigned at birth.", ParentId = 2 },
+                new Gender { Id = 11, Name = "Transfeminine", Description = "A person who was assigned male at birth, but presents as feminine. This person may or may not see themselves as a woman or a transgender woman.", ParentId = 2 },
+
+                new Gender { Id = 12, Name = "Agender", Description = "A person who does not have a gender.", ParentId = 3 },
+                new Gender { Id = 13, Name = "Bigender", Description = "A person who has two or more genders (can be simultaneously or fluid between them).", ParentId = 3 },
+                new Gender { Id = 14, Name = "Gender fluid", Description = "A person who does not have a single fixed gender.", ParentId = 3 },
+                new Gender { Id = 15, Name = "Gender questioning", Description = "A person who is questioning their current gender and/or exploring other genders and expressions.", ParentId = 3 },
+                new Gender { Id = 16, Name = "Genderqueer", Description = "A person who does not identify or express their gender within the gender binary.", ParentId = 3 },
+                new Gender { Id = 17, Name = "Intersex", Description = "An umbrella term that refers to people born with one or more variations in sex characteristics that don’t fit binary ideas of male or female bodies.", ParentId = 3 },
+                new Gender { Id = 18, Name = "Non-binary", Description = "A person whose gender is beyond the exclusive categories of man and woman.", ParentId = 3 },
+                new Gender { Id = 19, Name = "Pangender", Description = "A person who experiences multiple genders either simultaneously or over time.", ParentId = 3 },
+                new Gender { Id = 20, Name = "Trans person", Description = "A person who is transgender and their gender is different from the sex assigned to them at birth.", ParentId = 3 },
+                new Gender { Id = 21, Name = "Transfeminine", Description = "A person who was assigned male at birth, but presents as feminine. This person may or may not see themselves as a woman or a transgender woman.", ParentId = 3 },
+                new Gender { Id = 22, Name = "Transmasculine", Description = "A person who was assigned female at birth, but presents as masculine. This person may or may not see themselves as a man or a transgender man.", ParentId = 3 },
+                new Gender { Id = 23, Name = "Two-Spirit", Description = "An umbrella term used across US Native American and Canadian First Nations communities to honour the sacred role that people who are not exclusively cisgender and/or heterosexual hold.", ParentId = 3 }
+            );
+        }
+
+        private static void seedAvailableDescriptors(ModelBuilder builder)
+        {
+            var jsonPath = Path.Combine("Data", "JsonSchema", "availableDescriptors.json");
+            if (File.Exists(jsonPath))
+            {
+                var jsonString = File.ReadAllText(jsonPath);
+                var availableDescriptorRoot = JsonSerializer.Deserialize<AvailableDescriptorRoot>(jsonString);
+                var availableDescriptors = availableDescriptorRoot?.AvailableDescriptors;
+
+                foreach (var descriptor in availableDescriptors!)
+                {
+                    builder.Entity<AvailableDescriptor>().HasData(descriptor);
+                }
+            }
+        }
+
     }
 }

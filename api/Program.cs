@@ -60,8 +60,6 @@ builder.Services.AddAuthentication(options =>
 });
 
 builder.Services.AddScoped<ITokenService, TokenService>();
-builder.Services.AddScoped<IInterestRepository, InterestRepository>();
-builder.Services.AddScoped<ILifeStyleRepository, LifeStyleRepository>();
 builder.Services.AddScoped<IRoomRepository, RoomRepository>();
 builder.Services.AddScoped<IRoomParticipantsRepository, RoomParticipantsRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
@@ -71,6 +69,7 @@ builder.Services.AddScoped<IQuestionCategoryRepository, QuestionCategoryReposito
 builder.Services.AddScoped<ISystemQuestionRepository, SystemQuestionRepository>();
 builder.Services.AddScoped<IMatchRepository, MatchRepository>();
 builder.Services.AddScoped<IMediaRepository, MediaRepository>();
+builder.Services.AddScoped<IAvailableDescriptorRepository, AvailableDescriptorRepository>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

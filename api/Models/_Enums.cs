@@ -16,12 +16,6 @@ namespace api.Models
         Swipe
     }
     [JsonConverter(typeof(StringEnumConverter))]
-    public enum Gender
-    {
-        Man,
-        Woman
-    }
-    [JsonConverter(typeof(StringEnumConverter))]
     public enum AllRoomStatus
     {
         Coming,
@@ -34,5 +28,13 @@ namespace api.Models
     {
         Coming,
         Archived
+    }
+
+    [JsonConverter(typeof(StringEnumConverter))]
+    public enum DescriptorSelectionType
+    {
+        SingleSelection,
+        MultiSelection,
+        Measurement
     }
 }

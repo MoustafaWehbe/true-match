@@ -1,7 +1,6 @@
 using Bogus;
 using api.Models;
 using api.Data;
-using Microsoft.EntityFrameworkCore;
 
 public class SeedRandomData
 {
@@ -17,16 +16,11 @@ public class SeedRandomData
 
     public async Task SeedAsync(int userCount = 100, int roomCount = 50, int maxParticipantsPerRoom = 10)
     {
-        var interests = await _context.Interests.ToListAsync();
-        var lifeStyles = await _context.LifeStyles.ToListAsync();
-
         var users = GenerateUsers(userCount);
         for (int i = 0; i < userCount; i++)
         {
             var user = users[i];
             var profile = CreateRandomUserProfile(user.Id);
-            profile.UserProfileInterests = GenerateRandomUserProfileInterests(interests, profile.Id);
-            profile.UserProfileLifeStyles = GenerateRandomUserProfileLifeStyles(lifeStyles, profile.Id);
             user.UserProfile = profile;
             user.Media = CreateRandomMedia(user.Id);
             await _context.Users.AddAsync(user);
@@ -52,15 +46,10 @@ public class SeedRandomData
         return new UserProfile
         {
             UserId = userId,
-            Gender = (Gender)_random.Next(0, 2),
-            Nationality = _faker.Address.Country(),
-            PlaceToLive = _faker.Address.City(),
+            Job = _faker.Address.Country(),
+            School = _faker.Address.City(),
             Bio = _faker.Lorem.Sentence(10),
-            Height = (decimal)(_random.Next(150, 200) + _random.NextDouble()),
-            RelationshipGoal = _faker.Lorem.Word(),
-            Education = _faker.Lorem.Word(),
-            Zodiac = _faker.Lorem.Word(),
-            LoveStyle = _faker.Lorem.Word(),
+            BirthDate = _faker.Date.Past(20).ToUniversalTime(),
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow,
         };
@@ -85,31 +74,6 @@ public class SeedRandomData
 
         return mediaList;
     }
-
-    private List<UserProfileInterest> GenerateRandomUserProfileInterests(List<Interest> interests, int profileId)
-    {
-        int count = _random.Next(1, 4);
-        return interests.OrderBy(x => _random.Next())
-            .Take(count)
-            .Select(interest => new UserProfileInterest
-            {
-                UserProfileId = profileId,
-                InterestId = interest.Id
-            }).ToList();
-    }
-
-    private List<UserProfileLifeStyle> GenerateRandomUserProfileLifeStyles(List<LifeStyle> lifeStyles, int profileId)
-    {
-        int count = _random.Next(1, 3);
-        return lifeStyles.OrderBy(x => _random.Next())
-            .Take(count)
-            .Select(lifeStyle => new UserProfileLifeStyle
-            {
-                UserProfileId = profileId,
-                LifeStyleId = lifeStyle.Id
-            }).ToList();
-    }
-
 
     private List<User> GenerateUsers(int count)
     {

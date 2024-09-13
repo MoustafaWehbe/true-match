@@ -10,11 +10,6 @@ namespace api.Data
             : base(dbContextOptions)
         {
         }
-
-        public DbSet<UserProfileInterest> userProfileInterests { get; set; }
-        public DbSet<UserProfileLifeStyle> userProfileLifeStyles { get; set; }
-        public DbSet<LifeStyle> LifeStyles { get; set; }
-        public DbSet<Interest> Interests { get; set; }
         public DbSet<Room> Rooms { get; set; }
         public DbSet<RoomContent> RoomContent { get; set; }
         public DbSet<RoomParticipantEvent> RoomParticipantEvents { get; set; }
@@ -26,15 +21,21 @@ namespace api.Data
         public DbSet<QuestionCategory> QuestionCategories { get; set; }
         public DbSet<BlockedUser> BlockedUsers { get; set; }
         public DbSet<HiddenRoom> HiddenRooms { get; set; }
+        public DbSet<Gender> Genders { get; set; }
+        public DbSet<UserProfileGender> UserProfileGenders { get; set; }
+
+        public DbSet<AvailableDescriptor> AvailableDescriptors { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
 
-            builder.ApplyConfiguration(new UserProfileInterestConfiguration());
-            builder.ApplyConfiguration(new UserProfileLifeStyleConfiguration());
+            builder.ApplyConfiguration(new UserProfileGenderConfiguration());
             builder.ApplyConfiguration(new RoomParticipantConfiguration());
             builder.ApplyConfiguration(new UserConfiguration());
             builder.ApplyConfiguration(new MatchConfiguration());
+            builder.ApplyConfiguration(new GenderConfiguration());
+            builder.ApplyConfiguration(new AvailableDescriptorConfiguration());
 
             SeedRelevantData.Seed(builder);
         }

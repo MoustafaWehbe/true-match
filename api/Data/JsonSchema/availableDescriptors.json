@@ -1,0 +1,3060 @@
+{
+  "availableDescriptors": [
+    {
+      "prompt": "Here’s where you can add your height to your profile",
+      "descriptors": [
+        {
+          "id": "de_30",
+          "prompt": "Here’s where you can add your height to your profile.",
+          "type": "measurement",
+          "iconUrl": "https://static-assets.gotinder.com/icons/descriptors/height@3x.png",
+          "iconUrls": [
+            {
+              "url": "https://static-assets.gotinder.com/icons/descriptors/height@1x.png",
+              "quality": "1x",
+              "width": 16,
+              "height": 16
+            },
+            {
+              "url": "https://static-assets.gotinder.com/icons/descriptors/height@2x.png",
+              "quality": "2x",
+              "width": 32,
+              "height": 32
+            },
+            {
+              "url": "https://static-assets.gotinder.com/icons/descriptors/height@3x.png",
+              "quality": "3x",
+              "width": 48,
+              "height": 48
+            }
+          ],
+          "backgroundText": "Add height",
+          "measurableDetails": {
+            "min": 90,
+            "max": 241,
+            "unitOfMeasure": "cm",
+            "defaultUnitOfMeasure": "cm"
+          },
+          "sectionId": 1,
+          "sectionName": "Height",
+          "matchGroupKey": "height",
+          "discoveryPreferencesEnabled": false
+        }
+      ],
+      "id": 1,
+      "sectionName": "Height",
+      "displayType": "section"
+    },
+    {
+      "prompt": "Tell us about your interests",
+      "descriptors": [
+        {
+          "id": "de_37",
+          "type": "multiSelectionSet",
+          "choices": [
+            {
+              "id": "it_2275",
+              "name": "Harry Potter"
+            },
+            {
+              "id": "it_2033",
+              "name": "’90s kid"
+            },
+            {
+              "id": "it_2396",
+              "name": "SoundCloud"
+            },
+            {
+              "id": "it_2397",
+              "name": "Spa"
+            },
+            {
+              "id": "it_2155",
+              "name": "Self-care"
+            },
+            {
+              "id": "it_2276",
+              "name": "Heavy metal"
+            },
+            {
+              "id": "it_2031",
+              "name": "House parties"
+            },
+            {
+              "id": "it_2152",
+              "name": "Gin & tonic"
+            },
+            {
+              "id": "it_2273",
+              "name": "Gymnastics"
+            },
+            {
+              "id": "it_2279",
+              "name": "Hot yoga"
+            },
+            {
+              "id": "it_2159",
+              "name": "Meditation"
+            },
+            {
+              "id": "it_2398",
+              "name": "Spotify"
+            },
+            {
+              "id": "it_2035",
+              "name": "Sushi"
+            },
+            {
+              "id": "it_2277",
+              "name": "Hockey"
+            },
+            {
+              "id": "it_2156",
+              "name": "Basketball"
+            },
+            {
+              "id": "it_2036",
+              "name": "Slam poetry"
+            },
+            {
+              "id": "it_2278",
+              "name": "Home workouts"
+            },
+            {
+              "id": "it_2157",
+              "name": "Theatre"
+            },
+            {
+              "id": "it_33",
+              "name": "Café hopping"
+            },
+            {
+              "id": "it_36",
+              "name": "Aquarium"
+            },
+            {
+              "id": "it_2039",
+              "name": "Trainers"
+            },
+            {
+              "id": "it_35",
+              "name": "Instagram"
+            },
+            {
+              "id": "it_30",
+              "name": "Hot springs"
+            },
+            {
+              "id": "it_31",
+              "name": "Walking"
+            },
+            {
+              "id": "it_4",
+              "name": "Running"
+            },
+            {
+              "id": "it_7",
+              "name": "Travel"
+            },
+            {
+              "id": "it_6",
+              "name": "Language exchange"
+            },
+            {
+              "id": "it_9",
+              "name": "Films"
+            },
+            {
+              "id": "it_2271",
+              "name": "Guitarists"
+            },
+            {
+              "id": "it_2392",
+              "name": "Social development"
+            },
+            {
+              "id": "it_2272",
+              "name": "Gym"
+            },
+            {
+              "id": "it_2393",
+              "name": "Social media"
+            },
+            {
+              "id": "it_2030",
+              "name": "Hip hop"
+            },
+            {
+              "id": "it_2390",
+              "name": "Skincare"
+            },
+            {
+              "id": "it_2022",
+              "name": "J-Pop"
+            },
+            {
+              "id": "it_2386",
+              "name": "Shisha"
+            },
+            {
+              "id": "it_2023",
+              "name": "Cricket"
+            },
+            {
+              "id": "it_2262",
+              "name": "Freelance"
+            },
+            {
+              "id": "it_2389",
+              "name": "Skateboarding"
+            },
+            {
+              "id": "it_2268",
+              "name": "Gospel"
+            },
+            {
+              "id": "it_27",
+              "name": "K-Pop"
+            },
+            {
+              "id": "it_2027",
+              "name": "Potterhead"
+            },
+            {
+              "id": "it_26",
+              "name": "Trying new things"
+            },
+            {
+              "id": "it_29",
+              "name": "Photography"
+            },
+            {
+              "id": "it_2024",
+              "name": "Bollywood"
+            },
+            {
+              "id": "it_28",
+              "name": "Reading"
+            },
+            {
+              "id": "it_2388",
+              "name": "Singing"
+            },
+            {
+              "id": "it_23",
+              "name": "Sports"
+            },
+            {
+              "id": "it_2028",
+              "name": "Poetry"
+            },
+            {
+              "id": "it_2029",
+              "name": "Stand-up comedy"
+            },
+            {
+              "id": "it_1",
+              "name": "Coffee"
+            },
+            {
+              "id": "it_3",
+              "name": "Karaoke"
+            },
+            {
+              "id": "it_2260",
+              "name": "Fortnite"
+            },
+            {
+              "id": "it_2261",
+              "name": "Free diving"
+            },
+            {
+              "id": "it_2382",
+              "name": "Self-development"
+            },
+            {
+              "id": "it_2055",
+              "name": "Mental health awareness"
+            },
+            {
+              "id": "it_19",
+              "name": "Foodie tour"
+            },
+            {
+              "id": "it_2053",
+              "name": "Voter rights"
+            },
+            {
+              "id": "it_2295",
+              "name": "Jiu-jitsu"
+            },
+            {
+              "id": "it_2054",
+              "name": "Climate change"
+            },
+            {
+              "id": "it_16",
+              "name": "Exhibition"
+            },
+            {
+              "id": "it_15",
+              "name": "Walking my dog"
+            },
+            {
+              "id": "it_2057",
+              "name": "LGBTQIA+ rights"
+            },
+            {
+              "id": "it_2058",
+              "name": "Feminism"
+            },
+            {
+              "id": "it_12",
+              "name": "VR room"
+            },
+            {
+              "id": "it_11",
+              "name": "Escape café"
+            },
+            {
+              "id": "it_14",
+              "name": "Shopping"
+            },
+            {
+              "id": "it_10",
+              "name": "Brunch"
+            },
+            {
+              "id": "it_2290",
+              "name": "Investment"
+            },
+            {
+              "id": "it_2293",
+              "name": "Jet skiing"
+            },
+            {
+              "id": "it_2172",
+              "name": "Reggaeton"
+            },
+            {
+              "id": "it_2051",
+              "name": "Vintage clothing"
+            },
+            {
+              "id": "it_2052",
+              "name": "Black Lives Matter"
+            },
+            {
+              "id": "it_2294",
+              "name": "Jogging"
+            },
+            {
+              "id": "it_2050",
+              "name": "Road trips"
+            },
+            {
+              "id": "it_2171",
+              "name": "Vintage fashion"
+            },
+            {
+              "id": "it_2165",
+              "name": "Voguing"
+            },
+            {
+              "id": "it_2166",
+              "name": "Sofa surfing"
+            },
+            {
+              "id": "it_2163",
+              "name": "Happy hour"
+            },
+            {
+              "id": "it_2285",
+              "name": "Inclusivity"
+            },
+            {
+              "id": "it_2048",
+              "name": "Country music"
+            },
+            {
+              "id": "it_2049",
+              "name": "Football"
+            },
+            {
+              "id": "it_2288",
+              "name": "Rollerblading"
+            },
+            {
+              "id": "it_2289",
+              "name": "Investing"
+            },
+            {
+              "id": "it_2161",
+              "name": "Tennis"
+            },
+            {
+              "id": "it_2282",
+              "name": "Ice cream"
+            },
+            {
+              "id": "it_2283",
+              "name": "Ice skating"
+            },
+            {
+              "id": "it_2280",
+              "name": "Human rights"
+            },
+            {
+              "id": "it_2160",
+              "name": "Exhibitions"
+            },
+            {
+              "id": "it_2352",
+              "name": "Pig roast"
+            },
+            {
+              "id": "it_1021",
+              "name": "Skiing"
+            },
+            {
+              "id": "it_2232",
+              "name": "Canoeing"
+            },
+            {
+              "id": "it_2111",
+              "name": "West End musicals"
+            },
+            {
+              "id": "it_1022",
+              "name": "Snowboarding"
+            },
+            {
+              "id": "it_2353",
+              "name": "Pilates"
+            },
+            {
+              "id": "it_2351",
+              "name": "Pentathlon"
+            },
+            {
+              "id": "it_2230",
+              "name": "Broadway"
+            },
+            {
+              "id": "it_2356",
+              "name": "PlayStation"
+            },
+            {
+              "id": "it_2235",
+              "name": "Cheerleading"
+            },
+            {
+              "id": "it_2236",
+              "name": "Choir"
+            },
+            {
+              "id": "it_2357",
+              "name": "Pole dancing"
+            },
+            {
+              "id": "it_2115",
+              "name": "Five-a-side football"
+            },
+            {
+              "id": "it_2233",
+              "name": "Car racing"
+            },
+            {
+              "id": "it_2354",
+              "name": "Pinterest"
+            },
+            {
+              "id": "it_2113",
+              "name": "Pub quiz"
+            },
+            {
+              "id": "it_1024",
+              "name": "Festivals"
+            },
+            {
+              "id": "it_2234",
+              "name": "Catan"
+            },
+            {
+              "id": "it_2239",
+              "name": "Cosplay"
+            },
+            {
+              "id": "it_2119",
+              "name": "Motor sports"
+            },
+            {
+              "id": "it_2237",
+              "name": "Coffee stands"
+            },
+            {
+              "id": "it_2238",
+              "name": "Content creation"
+            },
+            {
+              "id": "it_2117",
+              "name": "E-sports"
+            },
+            {
+              "id": "it_2220",
+              "name": "Bicycle racing"
+            },
+            {
+              "id": "it_2221",
+              "name": "Binge-watching TV series"
+            },
+            {
+              "id": "it_1011",
+              "name": "Songwriter"
+            },
+            {
+              "id": "it_2224",
+              "name": "Bodycombat"
+            },
+            {
+              "id": "it_1014",
+              "name": "Tattoos"
+            },
+            {
+              "id": "it_2346",
+              "name": "Painting"
+            },
+            {
+              "id": "it_2225",
+              "name": "Bodyjam"
+            },
+            {
+              "id": "it_2343",
+              "name": "Paddle boarding"
+            },
+            {
+              "id": "it_2344",
+              "name": "Padel"
+            },
+            {
+              "id": "it_2223",
+              "name": "Blackpink"
+            },
+            {
+              "id": "it_1013",
+              "name": "Surfing"
+            },
+            {
+              "id": "it_2228",
+              "name": "Bowling"
+            },
+            {
+              "id": "it_2107",
+              "name": "Grime"
+            },
+            {
+              "id": "it_2108",
+              "name": "’90s Britpop"
+            },
+            {
+              "id": "it_2226",
+              "name": "Bodypump"
+            },
+            {
+              "id": "it_2106",
+              "name": "Beach bars"
+            },
+            {
+              "id": "it_2227",
+              "name": "Bodystep"
+            },
+            {
+              "id": "it_2348",
+              "name": "Paragliding"
+            },
+            {
+              "id": "it_2109",
+              "name": "Upcycling"
+            },
+            {
+              "id": "it_2253",
+              "name": "Equality"
+            },
+            {
+              "id": "it_2011",
+              "name": "Astrology"
+            },
+            {
+              "id": "it_2133",
+              "name": "Motorcycles"
+            },
+            {
+              "id": "it_2254",
+              "name": "Equestrian"
+            },
+            {
+              "id": "it_2251",
+              "name": "Entrepreneurship"
+            },
+            {
+              "id": "it_2372",
+              "name": "Sake"
+            },
+            {
+              "id": "it_2131",
+              "name": "BTS"
+            },
+            {
+              "id": "it_2010",
+              "name": "Cooking"
+            },
+            {
+              "id": "it_2252",
+              "name": "Environmental protection"
+            },
+            {
+              "id": "it_2257",
+              "name": "Fencing"
+            },
+            {
+              "id": "it_2015",
+              "name": "Football"
+            },
+            {
+              "id": "it_2378",
+              "name": "Saxophonist"
+            },
+            {
+              "id": "it_2379",
+              "name": "Sci-fi"
+            },
+            {
+              "id": "it_2016",
+              "name": "Dancing"
+            },
+            {
+              "id": "it_2258",
+              "name": "Film festivals"
+            },
+            {
+              "id": "it_2013",
+              "name": "Gardening"
+            },
+            {
+              "id": "it_2135",
+              "name": "Amateur cook"
+            },
+            {
+              "id": "it_2256",
+              "name": "Exchange programmes"
+            },
+            {
+              "id": "it_2377",
+              "name": "Sauna"
+            },
+            {
+              "id": "it_2014",
+              "name": "Art"
+            },
+            {
+              "id": "it_2019",
+              "name": "Politics"
+            },
+            {
+              "id": "it_2259",
+              "name": "Flamenco"
+            },
+            {
+              "id": "it_2017",
+              "name": "Museum"
+            },
+            {
+              "id": "it_2018",
+              "name": "Activism"
+            },
+            {
+              "id": "it_2242",
+              "name": "DAOs"
+            },
+            {
+              "id": "it_2363",
+              "name": "Real estate"
+            },
+            {
+              "id": "it_2121",
+              "name": "Podcasts"
+            },
+            {
+              "id": "it_2243",
+              "name": "Disability rights"
+            },
+            {
+              "id": "it_2362",
+              "name": "Rave"
+            },
+            {
+              "id": "it_2120",
+              "name": "Pimms"
+            },
+            {
+              "id": "it_2246",
+              "name": "Drive-in cinema"
+            },
+            {
+              "id": "it_2367",
+              "name": "Rock climbing"
+            },
+            {
+              "id": "it_2125",
+              "name": "BBQ"
+            },
+            {
+              "id": "it_2004",
+              "name": "Craft beer"
+            },
+            {
+              "id": "it_2126",
+              "name": "Iced tea"
+            },
+            {
+              "id": "it_2247",
+              "name": "Drummer"
+            },
+            {
+              "id": "it_2005",
+              "name": "Tea"
+            },
+            {
+              "id": "it_2002",
+              "name": "Board games"
+            },
+            {
+              "id": "it_2365",
+              "name": "Roblox"
+            },
+            {
+              "id": "it_2123",
+              "name": "Pubs"
+            },
+            {
+              "id": "it_2366",
+              "name": "Rock"
+            },
+            {
+              "id": "it_2124",
+              "name": "Tango"
+            },
+            {
+              "id": "it_2245",
+              "name": "Drawing"
+            },
+            {
+              "id": "it_2003",
+              "name": "Trivia"
+            },
+            {
+              "id": "it_2129",
+              "name": "Pho"
+            },
+            {
+              "id": "it_2008",
+              "name": "Volunteering"
+            },
+            {
+              "id": "it_2009",
+              "name": "Environmentalism"
+            },
+            {
+              "id": "it_2369",
+              "name": "Rollerskating"
+            },
+            {
+              "id": "it_2006",
+              "name": "Wine"
+            },
+            {
+              "id": "it_2248",
+              "name": "Dungeons & Dragons"
+            },
+            {
+              "id": "it_2007",
+              "name": "Vlogging"
+            },
+            {
+              "id": "it_2249",
+              "name": "Electronic music"
+            },
+            {
+              "id": "it_2360",
+              "name": "Ramen"
+            },
+            {
+              "id": "it_2430",
+              "name": "Weightlifting"
+            },
+            {
+              "id": "it_2312",
+              "name": "Live music"
+            },
+            {
+              "id": "it_2433",
+              "name": "Writing"
+            },
+            {
+              "id": "it_2434",
+              "name": "Xbox"
+            },
+            {
+              "id": "it_2431",
+              "name": "World peace"
+            },
+            {
+              "id": "it_2432",
+              "name": "Wrestling"
+            },
+            {
+              "id": "it_2311",
+              "name": "Literature"
+            },
+            {
+              "id": "it_2316",
+              "name": "Manga"
+            },
+            {
+              "id": "it_2437",
+              "name": "Pride"
+            },
+            {
+              "id": "it_2317",
+              "name": "Marathon"
+            },
+            {
+              "id": "it_2314",
+              "name": "Make-up"
+            },
+            {
+              "id": "it_2435",
+              "name": "Youth empowerment"
+            },
+            {
+              "id": "it_2436",
+              "name": "YouTube"
+            },
+            {
+              "id": "it_2318",
+              "name": "Martial arts"
+            },
+            {
+              "id": "it_2319",
+              "name": "Marvel"
+            },
+            {
+              "id": "it_5020",
+              "name": "Luge"
+            },
+            {
+              "id": "it_5021",
+              "name": "Ice hockey"
+            },
+            {
+              "id": "it_5016",
+              "name": "Taekwondo"
+            },
+            {
+              "id": "it_5017",
+              "name": "Trampolining"
+            },
+            {
+              "id": "it_5018",
+              "name": "Water polo"
+            },
+            {
+              "id": "it_5012",
+              "name": "Rhythmic gymnastics"
+            },
+            {
+              "id": "it_2422",
+              "name": "Vegan cooking"
+            },
+            {
+              "id": "it_5013",
+              "name": "Rowing"
+            },
+            {
+              "id": "it_2423",
+              "name": "Vermouth"
+            },
+            {
+              "id": "it_2302",
+              "name": "Korean food"
+            },
+            {
+              "id": "it_5014",
+              "name": "Sports shooting"
+            },
+            {
+              "id": "it_2420",
+              "name": "Twitter"
+            },
+            {
+              "id": "it_5015",
+              "name": "Squash"
+            },
+            {
+              "id": "it_2426",
+              "name": "Volleyball"
+            },
+            {
+              "id": "it_2427",
+              "name": "Walking tours"
+            },
+            {
+              "id": "it_2424",
+              "name": "Vinyasa"
+            },
+            {
+              "id": "it_2425",
+              "name": "Virtual reality"
+            },
+            {
+              "id": "it_2309",
+              "name": "League of Legends"
+            },
+            {
+              "id": "it_5010",
+              "name": "Karate"
+            },
+            {
+              "id": "it_5011",
+              "name": "Lacrosse"
+            },
+            {
+              "id": "it_2334",
+              "name": "NFTs"
+            },
+            {
+              "id": "it_2213",
+              "name": "Pub crawls"
+            },
+            {
+              "id": "it_2335",
+              "name": "Nintendo"
+            },
+            {
+              "id": "it_2214",
+              "name": "Baseball"
+            },
+            {
+              "id": "it_1001",
+              "name": "Parties"
+            },
+            {
+              "id": "it_2211",
+              "name": "Ballet"
+            },
+            {
+              "id": "it_2212",
+              "name": "Bands"
+            },
+            {
+              "id": "it_2338",
+              "name": "Online games"
+            },
+            {
+              "id": "it_2217",
+              "name": "Battle Ground"
+            },
+            {
+              "id": "it_2218",
+              "name": "Beach tennis"
+            },
+            {
+              "id": "it_99",
+              "name": "Nightlife"
+            },
+            {
+              "id": "it_2339",
+              "name": "Online shopping"
+            },
+            {
+              "id": "it_1005",
+              "name": "Sailing"
+            },
+            {
+              "id": "it_2215",
+              "name": "Bassist"
+            },
+            {
+              "id": "it_2337",
+              "name": "Online broker"
+            },
+            {
+              "id": "it_94",
+              "name": "Military"
+            },
+            {
+              "id": "it_2320",
+              "name": "Memes"
+            },
+            {
+              "id": "it_2202",
+              "name": "Among Us"
+            },
+            {
+              "id": "it_2323",
+              "name": "Motorbike racing"
+            },
+            {
+              "id": "it_5155",
+              "name": "Muay Thai"
+            },
+            {
+              "id": "it_2324",
+              "name": "Motorcycling"
+            },
+            {
+              "id": "it_2321",
+              "name": "Metaverse"
+            },
+            {
+              "id": "it_2322",
+              "name": "Mindfulness"
+            },
+            {
+              "id": "it_2201",
+              "name": "Acapella"
+            },
+            {
+              "id": "it_2327",
+              "name": "Playing a musical instrument"
+            },
+            {
+              "id": "it_2206",
+              "name": "Art galleries"
+            },
+            {
+              "id": "it_2328",
+              "name": "Writing musicals"
+            },
+            {
+              "id": "it_88",
+              "name": "Hiking"
+            },
+            {
+              "id": "it_2207",
+              "name": "Artistic gymnastics"
+            },
+            {
+              "id": "it_2325",
+              "name": "Mountains"
+            },
+            {
+              "id": "it_2205",
+              "name": "Archery"
+            },
+            {
+              "id": "it_2208",
+              "name": "Atari"
+            },
+            {
+              "id": "it_2209",
+              "name": "Backpacking"
+            },
+            {
+              "id": "it_86",
+              "name": "Fishing"
+            },
+            {
+              "id": "it_2075",
+              "name": "Clubbing"
+            },
+            {
+              "id": "it_2079",
+              "name": "Street food"
+            },
+            {
+              "id": "it_78",
+              "name": "Crossfit"
+            },
+            {
+              "id": "it_76",
+              "name": "Concerts"
+            },
+            {
+              "id": "it_75",
+              "name": "Climbing"
+            },
+            {
+              "id": "it_70",
+              "name": "Baking"
+            },
+            {
+              "id": "it_72",
+              "name": "Camping"
+            },
+            {
+              "id": "it_71",
+              "name": "Blogging"
+            },
+            {
+              "id": "it_2070",
+              "name": "Collecting"
+            },
+            {
+              "id": "it_2072",
+              "name": "Cars"
+            },
+            {
+              "id": "it_2066",
+              "name": "Start-ups"
+            },
+            {
+              "id": "it_2067",
+              "name": "Boba tea"
+            },
+            {
+              "id": "it_2064",
+              "name": "High-school baseketball league (TW)"
+            },
+            {
+              "id": "it_2069",
+              "name": "Badminton"
+            },
+            {
+              "id": "it_66",
+              "name": "Active lifestyle"
+            },
+            {
+              "id": "it_63",
+              "name": "Fashion"
+            },
+            {
+              "id": "it_62",
+              "name": "Anime"
+            },
+            {
+              "id": "it_2062",
+              "name": "NBA"
+            },
+            {
+              "id": "it_2063",
+              "name": "MLB"
+            },
+            {
+              "id": "it_2099",
+              "name": "Funk music"
+            },
+            {
+              "id": "it_5006",
+              "name": "Diving"
+            },
+            {
+              "id": "it_2097",
+              "name": "Caipirinha"
+            },
+            {
+              "id": "it_5007",
+              "name": "American flag football"
+            },
+            {
+              "id": "it_5008",
+              "name": "Handball"
+            },
+            {
+              "id": "it_5001",
+              "name": "Artistic swimming"
+            },
+            {
+              "id": "it_5002",
+              "name": "Athletics"
+            },
+            {
+              "id": "it_59",
+              "name": "Indoor activities"
+            },
+            {
+              "id": "it_5003",
+              "name": "Softball"
+            },
+            {
+              "id": "it_5004",
+              "name": "Beach volleyball"
+            },
+            {
+              "id": "it_2410",
+              "name": "Tempeh"
+            },
+            {
+              "id": "it_56",
+              "name": "DIY"
+            },
+            {
+              "id": "it_2416",
+              "name": "Town festivities"
+            },
+            {
+              "id": "it_55",
+              "name": "Cycling"
+            },
+            {
+              "id": "it_58",
+              "name": "Outdoors"
+            },
+            {
+              "id": "it_2414",
+              "name": "TikTok"
+            },
+            {
+              "id": "it_57",
+              "name": "Picnicking"
+            },
+            {
+              "id": "it_2419",
+              "name": "Twitch"
+            },
+            {
+              "id": "it_5009",
+              "name": "Judo"
+            },
+            {
+              "id": "it_51",
+              "name": "Comedy"
+            },
+            {
+              "id": "it_2417",
+              "name": "Trap music"
+            },
+            {
+              "id": "it_54",
+              "name": "Music"
+            },
+            {
+              "id": "it_2418",
+              "name": "Triathlon"
+            },
+            {
+              "id": "it_53",
+              "name": "Netflix"
+            },
+            {
+              "id": "it_50",
+              "name": "Disney"
+            },
+            {
+              "id": "it_2090",
+              "name": "Rugby"
+            },
+            {
+              "id": "it_2095",
+              "name": "Açaí"
+            },
+            {
+              "id": "it_2093",
+              "name": "Samba"
+            },
+            {
+              "id": "it_2094",
+              "name": "Tarot"
+            },
+            {
+              "id": "it_2400",
+              "name": "Stock exchange"
+            },
+            {
+              "id": "it_2401",
+              "name": "Stocks"
+            },
+            {
+              "id": "it_48",
+              "name": "Swimming"
+            },
+            {
+              "id": "it_2404",
+              "name": "Table tennis"
+            },
+            {
+              "id": "it_41",
+              "name": "Killing time"
+            },
+            {
+              "id": "it_43",
+              "name": "Working out"
+            },
+            {
+              "id": "it_42",
+              "name": "Yoga"
+            },
+            {
+              "id": "it_2080",
+              "name": "Horror films"
+            },
+            {
+              "id": "it_2081",
+              "name": "Boxing"
+            },
+            {
+              "id": "it_2082",
+              "name": "Chilling at a bar"
+            }
+          ],
+          "iconUrl": "https://static-assets.gotinder.com/icons/descriptors/language@3x.png",
+          "iconUrls": [
+            {
+              "url": "https://static-assets.gotinder.com/icons/descriptors/language@1x.png",
+              "quality": "1x",
+              "width": 22,
+              "height": 22
+            },
+            {
+              "url": "https://static-assets.gotinder.com/icons/descriptors/language@2x.png",
+              "quality": "2x",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "url": "https://static-assets.gotinder.com/icons/descriptors/language@3x.png",
+              "quality": "3x",
+              "width": 66,
+              "height": 66
+            }
+          ],
+          "minSelections": 3,
+          "maxSelections": 5,
+          "backgroundText": "Add interests",
+          "searchBackgroundText": "Search interests",
+          "sectionId": 2,
+          "sectionName": "Interests",
+          "matchGroupKey": "languages",
+          "shouldLocalizeChoices": true,
+          "discoveryPreferencesEnabled": false
+        }
+      ],
+      "id": 2,
+      "sectionName": "Interests",
+      "displayType": "section"
+    },
+    {
+      "descriptors": [
+        {
+          "id": "de_29",
+          "name": "Looking for",
+          "prompt": "What are you looking for?",
+          "type": "choice_selector_v1",
+          "choices": [
+            {
+              "id": "1",
+              "name": "Long-term partner",
+              "style": "purple",
+              "emoji": "💘",
+              "iconUrls": [
+                {
+                  "url": "https://static-assets.gotinder.com/icons/descriptors/relationship_intent_cupid@1x.png",
+                  "quality": "1x",
+                  "width": 50,
+                  "height": 50
+                },
+                {
+                  "url": "https://static-assets.gotinder.com/icons/descriptors/relationship_intent_cupid@2x.png",
+                  "quality": "2x",
+                  "width": 100,
+                  "height": 100
+                },
+                {
+                  "url": "https://static-assets.gotinder.com/icons/descriptors/relationship_intent_cupid@3x.png",
+                  "quality": "3x",
+                  "width": 150,
+                  "height": 150
+                }
+              ],
+              "matchGroupKey": "Serious"
+            },
+            {
+              "id": "2",
+              "name": "Long-term, but short-term OK",
+              "style": "pink",
+              "emoji": "😍",
+              "iconUrls": [
+                {
+                  "url": "https://static-assets.gotinder.com/icons/descriptors/relationship_intent_heart_eyes@1x.png",
+                  "quality": "1x",
+                  "width": 50,
+                  "height": 50
+                },
+                {
+                  "url": "https://static-assets.gotinder.com/icons/descriptors/relationship_intent_heart_eyes@2x.png",
+                  "quality": "2x",
+                  "width": 100,
+                  "height": 100
+                },
+                {
+                  "url": "https://static-assets.gotinder.com/icons/descriptors/relationship_intent_heart_eyes@3x.png",
+                  "quality": "3x",
+                  "width": 150,
+                  "height": 150
+                }
+              ]
+            },
+            {
+              "id": "3",
+              "name": "Short-term, but long-term OK",
+              "style": "yellow",
+              "emoji": "🥂",
+              "iconUrls": [
+                {
+                  "url": "https://static-assets.gotinder.com/icons/descriptors/relationship_intent_clinking_glasses@1x.png",
+                  "quality": "1x",
+                  "width": 50,
+                  "height": 50
+                },
+                {
+                  "url": "https://static-assets.gotinder.com/icons/descriptors/relationship_intent_clinking_glasses@2x.png",
+                  "quality": "2x",
+                  "width": 100,
+                  "height": 100
+                },
+                {
+                  "url": "https://static-assets.gotinder.com/icons/descriptors/relationship_intent_clinking_glasses@3x.png",
+                  "quality": "3x",
+                  "width": 150,
+                  "height": 150
+                }
+              ]
+            },
+            {
+              "id": "4",
+              "name": "Short-term fun",
+              "style": "green",
+              "emoji": "🎉",
+              "iconUrls": [
+                {
+                  "url": "https://static-assets.gotinder.com/icons/descriptors/relationship_intent_tada@1x.png",
+                  "quality": "1x",
+                  "width": 50,
+                  "height": 50
+                },
+                {
+                  "url": "https://static-assets.gotinder.com/icons/descriptors/relationship_intent_tada@2x.png",
+                  "quality": "2x",
+                  "width": 100,
+                  "height": 100
+                },
+                {
+                  "url": "https://static-assets.gotinder.com/icons/descriptors/relationship_intent_tada@3x.png",
+                  "quality": "3x",
+                  "width": 150,
+                  "height": 150
+                }
+              ],
+              "matchGroupKey": "Casual"
+            },
+            {
+              "id": "5",
+              "name": "New friends",
+              "style": "turquoise",
+              "emoji": "👋",
+              "iconUrls": [
+                {
+                  "url": "https://static-assets.gotinder.com/icons/descriptors/relationship_intent_wave@1x.png",
+                  "quality": "1x",
+                  "width": 50,
+                  "height": 50
+                },
+                {
+                  "url": "https://static-assets.gotinder.com/icons/descriptors/relationship_intent_wave@2x.png",
+                  "quality": "2x",
+                  "width": 100,
+                  "height": 100
+                },
+                {
+                  "url": "https://static-assets.gotinder.com/icons/descriptors/relationship_intent_wave@3x.png",
+                  "quality": "3x",
+                  "width": 150,
+                  "height": 150
+                }
+              ],
+              "matchGroupKey": "Friends"
+            },
+            {
+              "id": "6",
+              "name": "Still figuring it out",
+              "style": "blue",
+              "emoji": "🤔",
+              "iconUrls": [
+                {
+                  "url": "https://static-assets.gotinder.com/icons/descriptors/relationship_intent_thinking_face@1x.png",
+                  "quality": "1x",
+                  "width": 50,
+                  "height": 50
+                },
+                {
+                  "url": "https://static-assets.gotinder.com/icons/descriptors/relationship_intent_thinking_face@2x.png",
+                  "quality": "2x",
+                  "width": 100,
+                  "height": 100
+                },
+                {
+                  "url": "https://static-assets.gotinder.com/icons/descriptors/relationship_intent_thinking_face@3x.png",
+                  "quality": "3x",
+                  "width": 150,
+                  "height": 150
+                }
+              ],
+              "matchGroupKey": "DontKnow"
+            }
+          ],
+          "iconUrl": "https://static-assets.gotinder.com/icons/descriptors/looking_for@3x.png",
+          "iconUrls": [
+            {
+              "url": "https://static-assets.gotinder.com/icons/descriptors/looking_for@1x.png",
+              "quality": "1x",
+              "width": 22,
+              "height": 22
+            },
+            {
+              "url": "https://static-assets.gotinder.com/icons/descriptors/looking_for@2x.png",
+              "quality": "2x",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "url": "https://static-assets.gotinder.com/icons/descriptors/looking_for@3x.png",
+              "quality": "3x",
+              "width": 66,
+              "height": 66
+            }
+          ],
+          "subPrompt": "All good if it changes. There’s something for everyone.",
+          "sectionId": 3,
+          "sectionName": "Relationship Goals",
+          "matchGroupKey": "intent",
+          "shouldLocalizeChoices": true,
+          "discoveryPreferencesEnabled": true
+        }
+      ],
+      "id": 3,
+      "sectionName": "Relationship Goals",
+      "displayType": "section"
+    },
+    {
+      "prompt": "Select up to 5 languages you know and add them to your profile",
+      "descriptors": [
+        {
+          "id": "de_37",
+          "type": "multiSelectionSet",
+          "choices": [
+            {
+              "id": "1",
+              "name": "Afrikaans"
+            },
+            {
+              "id": "2",
+              "name": "Albanian"
+            },
+            {
+              "id": "3",
+              "name": "Amharic"
+            },
+            {
+              "id": "4",
+              "name": "Arabic",
+              "matchGroupKey": "Arabic"
+            },
+            {
+              "id": "5",
+              "name": "Armenian",
+              "matchGroupKey": "Armenian"
+            },
+            {
+              "id": "133",
+              "name": "ASL"
+            },
+            {
+              "id": "6",
+              "name": "Assamese"
+            },
+            {
+              "id": "7",
+              "name": "Aymara"
+            },
+            {
+              "id": "8",
+              "name": "Azerbaijani"
+            },
+            {
+              "id": "9",
+              "name": "Bambara"
+            },
+            {
+              "id": "10",
+              "name": "Basque"
+            },
+            {
+              "id": "11",
+              "name": "Belarusian"
+            },
+            {
+              "id": "12",
+              "name": "Bengali",
+              "matchGroupKey": "Bengali"
+            },
+            {
+              "id": "13",
+              "name": "Bhojpuri"
+            },
+            {
+              "id": "14",
+              "name": "Bosnian"
+            },
+            {
+              "id": "134",
+              "name": "Breton"
+            },
+            {
+              "id": "15",
+              "name": "Bulgarian",
+              "matchGroupKey": "Bulgarian"
+            },
+            {
+              "id": "16",
+              "name": "Burmese"
+            },
+            {
+              "id": "17",
+              "name": "Cantonese",
+              "matchGroupKey": "Cantonese"
+            },
+            {
+              "id": "18",
+              "name": "Catalan"
+            },
+            {
+              "id": "19",
+              "name": "Cebuano"
+            },
+            {
+              "id": "20",
+              "name": "Chichewa"
+            },
+            {
+              "id": "21",
+              "name": "Corsican"
+            },
+            {
+              "id": "22",
+              "name": "Croatian"
+            },
+            {
+              "id": "23",
+              "name": "Czech",
+              "matchGroupKey": "Czech"
+            },
+            {
+              "id": "24",
+              "name": "Danish",
+              "matchGroupKey": "Danish"
+            },
+            {
+              "id": "25",
+              "name": "Dhivehi"
+            },
+            {
+              "id": "26",
+              "name": "Dogri"
+            },
+            {
+              "id": "27",
+              "name": "Dutch",
+              "matchGroupKey": "Dutch"
+            },
+            {
+              "id": "28",
+              "name": "English",
+              "matchGroupKey": "English"
+            },
+            {
+              "id": "29",
+              "name": "Esperanto"
+            },
+            {
+              "id": "30",
+              "name": "Estonian"
+            },
+            {
+              "id": "31",
+              "name": "Ewe"
+            },
+            {
+              "id": "32",
+              "name": "Filipino"
+            },
+            {
+              "id": "33",
+              "name": "Finnish",
+              "matchGroupKey": "Finnish"
+            },
+            {
+              "id": "34",
+              "name": "French",
+              "matchGroupKey": "French"
+            },
+            {
+              "id": "35",
+              "name": "Frisian"
+            },
+            {
+              "id": "36",
+              "name": "Galician"
+            },
+            {
+              "id": "37",
+              "name": "Georgian"
+            },
+            {
+              "id": "38",
+              "name": "German",
+              "matchGroupKey": "German"
+            },
+            {
+              "id": "39",
+              "name": "Greek",
+              "matchGroupKey": "Greek"
+            },
+            {
+              "id": "40",
+              "name": "Guaraní"
+            },
+            {
+              "id": "41",
+              "name": "Gujarati",
+              "matchGroupKey": "Gujarati"
+            },
+            {
+              "id": "42",
+              "name": "Haitian Creole"
+            },
+            {
+              "id": "43",
+              "name": "Hausa"
+            },
+            {
+              "id": "44",
+              "name": "Hawaiian"
+            },
+            {
+              "id": "45",
+              "name": "Hebrew",
+              "matchGroupKey": "Hebrew"
+            },
+            {
+              "id": "46",
+              "name": "Hindi",
+              "matchGroupKey": "Hindi"
+            },
+            {
+              "id": "47",
+              "name": "Hmong"
+            },
+            {
+              "id": "48",
+              "name": "Hungarian",
+              "matchGroupKey": "Hungarian"
+            },
+            {
+              "id": "49",
+              "name": "Icelandic"
+            },
+            {
+              "id": "50",
+              "name": "Igbo"
+            },
+            {
+              "id": "51",
+              "name": "Ilocano"
+            },
+            {
+              "id": "52",
+              "name": "Indonesian",
+              "matchGroupKey": "Indonesian"
+            },
+            {
+              "id": "53",
+              "name": "Irish",
+              "matchGroupKey": "Irish"
+            },
+            {
+              "id": "54",
+              "name": "Italian",
+              "matchGroupKey": "Italian"
+            },
+            {
+              "id": "55",
+              "name": "Japanese",
+              "matchGroupKey": "Japanese"
+            },
+            {
+              "id": "56",
+              "name": "Javanese"
+            },
+            {
+              "id": "57",
+              "name": "Kannada"
+            },
+            {
+              "id": "58",
+              "name": "Kazakh"
+            },
+            {
+              "id": "59",
+              "name": "Khmer",
+              "matchGroupKey": "Khmer"
+            },
+            {
+              "id": "60",
+              "name": "Kinyarwanda"
+            },
+            {
+              "id": "61",
+              "name": "Konkani"
+            },
+            {
+              "id": "62",
+              "name": "Korean",
+              "matchGroupKey": "Korean"
+            },
+            {
+              "id": "63",
+              "name": "Krio"
+            },
+            {
+              "id": "64",
+              "name": "Kurdish"
+            },
+            {
+              "id": "65",
+              "name": "Kyrgyz"
+            },
+            {
+              "id": "66",
+              "name": "Lao"
+            },
+            {
+              "id": "67",
+              "name": "Latin"
+            },
+            {
+              "id": "68",
+              "name": "Latvian",
+              "matchGroupKey": "Latvian"
+            },
+            {
+              "id": "69",
+              "name": "Lingala"
+            },
+            {
+              "id": "70",
+              "name": "Lithuanian",
+              "matchGroupKey": "Lithuanian"
+            },
+            {
+              "id": "71",
+              "name": "Luganda"
+            },
+            {
+              "id": "72",
+              "name": "Luxembourgish"
+            },
+            {
+              "id": "73",
+              "name": "Macedonian"
+            },
+            {
+              "id": "74",
+              "name": "Maithili"
+            },
+            {
+              "id": "75",
+              "name": "Malagasy"
+            },
+            {
+              "id": "76",
+              "name": "Malay",
+              "matchGroupKey": "Malay"
+            },
+            {
+              "id": "77",
+              "name": "Malayalam"
+            },
+            {
+              "id": "78",
+              "name": "Maltese"
+            },
+            {
+              "id": "79",
+              "name": "Mandarin Chinese",
+              "matchGroupKey": "Chinese"
+            },
+            {
+              "id": "80",
+              "name": "Manipuri"
+            },
+            {
+              "id": "81",
+              "name": "Maori"
+            },
+            {
+              "id": "82",
+              "name": "Marathi"
+            },
+            {
+              "id": "83",
+              "name": "Mizo"
+            },
+            {
+              "id": "84",
+              "name": "Mongolian"
+            },
+            {
+              "id": "85",
+              "name": "Nepali"
+            },
+            {
+              "id": "86",
+              "name": "Norwegian",
+              "matchGroupKey": "Norwegian"
+            },
+            {
+              "id": "87",
+              "name": "Odia"
+            },
+            {
+              "id": "88",
+              "name": "Oromo"
+            },
+            {
+              "id": "89",
+              "name": "Pashto"
+            },
+            {
+              "id": "90",
+              "name": "Persian",
+              "matchGroupKey": "Persian"
+            },
+            {
+              "id": "91",
+              "name": "Polish",
+              "matchGroupKey": "Polish"
+            },
+            {
+              "id": "92",
+              "name": "Portuguese",
+              "matchGroupKey": "Portuguese"
+            },
+            {
+              "id": "93",
+              "name": "Punjabi",
+              "matchGroupKey": "Punjabi"
+            },
+            {
+              "id": "94",
+              "name": "Quechua"
+            },
+            {
+              "id": "95",
+              "name": "Romanian",
+              "matchGroupKey": "Romanian"
+            },
+            {
+              "id": "96",
+              "name": "Russian",
+              "matchGroupKey": "Russian"
+            },
+            {
+              "id": "97",
+              "name": "Samoan"
+            },
+            {
+              "id": "98",
+              "name": "Sanskrit"
+            },
+            {
+              "id": "99",
+              "name": "Scots Gaelic"
+            },
+            {
+              "id": "100",
+              "name": "Sepedi"
+            },
+            {
+              "id": "101",
+              "name": "Serbian"
+            },
+            {
+              "id": "102",
+              "name": "Sesotho"
+            },
+            {
+              "id": "103",
+              "name": "Shona"
+            },
+            {
+              "id": "104",
+              "name": "Sindhi"
+            },
+            {
+              "id": "105",
+              "name": "Sinhala"
+            },
+            {
+              "id": "106",
+              "name": "Slovak",
+              "matchGroupKey": "Slovak"
+            },
+            {
+              "id": "107",
+              "name": "Slovenian",
+              "matchGroupKey": "Slovenian"
+            },
+            {
+              "id": "108",
+              "name": "Somali"
+            },
+            {
+              "id": "109",
+              "name": "Spanish",
+              "matchGroupKey": "Spanish"
+            },
+            {
+              "id": "110",
+              "name": "Sundanese"
+            },
+            {
+              "id": "111",
+              "name": "Swahili",
+              "matchGroupKey": "Swahili"
+            },
+            {
+              "id": "112",
+              "name": "Swedish",
+              "matchGroupKey": "Swedish"
+            },
+            {
+              "id": "113",
+              "name": "Tajik"
+            },
+            {
+              "id": "114",
+              "name": "Tamil",
+              "matchGroupKey": "Tamil"
+            },
+            {
+              "id": "115",
+              "name": "Tatar"
+            },
+            {
+              "id": "116",
+              "name": "Telugu"
+            },
+            {
+              "id": "117",
+              "name": "Thai",
+              "matchGroupKey": "Thai"
+            },
+            {
+              "id": "118",
+              "name": "Tigrinya"
+            },
+            {
+              "id": "119",
+              "name": "Tsonga"
+            },
+            {
+              "id": "120",
+              "name": "Turkish",
+              "matchGroupKey": "Turkish"
+            },
+            {
+              "id": "121",
+              "name": "Turkmen"
+            },
+            {
+              "id": "122",
+              "name": "Twi"
+            },
+            {
+              "id": "123",
+              "name": "Ukrainian",
+              "matchGroupKey": "Ukranian"
+            },
+            {
+              "id": "124",
+              "name": "Urdu",
+              "matchGroupKey": "Urdu"
+            },
+            {
+              "id": "125",
+              "name": "Uyghur"
+            },
+            {
+              "id": "126",
+              "name": "Uzbek"
+            },
+            {
+              "id": "127",
+              "name": "Vietnamese",
+              "matchGroupKey": "Vietnamese"
+            },
+            {
+              "id": "128",
+              "name": "Welsh"
+            },
+            {
+              "id": "129",
+              "name": "Xhosa"
+            },
+            {
+              "id": "130",
+              "name": "Yiddish"
+            },
+            {
+              "id": "131",
+              "name": "Yoruba"
+            },
+            {
+              "id": "132",
+              "name": "Zulu"
+            }
+          ],
+          "iconUrl": "https://static-assets.gotinder.com/icons/descriptors/language@3x.png",
+          "iconUrls": [
+            {
+              "url": "https://static-assets.gotinder.com/icons/descriptors/language@1x.png",
+              "quality": "1x",
+              "width": 22,
+              "height": 22
+            },
+            {
+              "url": "https://static-assets.gotinder.com/icons/descriptors/language@2x.png",
+              "quality": "2x",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "url": "https://static-assets.gotinder.com/icons/descriptors/language@3x.png",
+              "quality": "3x",
+              "width": 66,
+              "height": 66
+            }
+          ],
+          "minSelections": 1,
+          "maxSelections": 5,
+          "backgroundText": "Add languages",
+          "searchBackgroundText": "Search languages",
+          "sectionId": 4,
+          "sectionName": "Languages I know",
+          "matchGroupKey": "languages",
+          "shouldLocalizeChoices": true,
+          "discoveryPreferencesEnabled": false
+        }
+      ],
+      "id": 4,
+      "sectionName": "Languages I know",
+      "displayType": "section"
+    },
+    {
+      "prompt": "Put your best self forward by adding more about you",
+      "descriptors": [
+        {
+          "id": "de_1",
+          "name": "Zodiac",
+          "prompt": "What’s your star sign?",
+          "type": "single_selection_set",
+          "choices": [
+            {
+              "id": "1",
+              "name": "Capricorn"
+            },
+            {
+              "id": "2",
+              "name": "Aquarius"
+            },
+            {
+              "id": "3",
+              "name": "Pisces"
+            },
+            {
+              "id": "4",
+              "name": "Aries"
+            },
+            {
+              "id": "5",
+              "name": "Taurus"
+            },
+            {
+              "id": "6",
+              "name": "Gemini"
+            },
+            {
+              "id": "7",
+              "name": "Cancer"
+            },
+            {
+              "id": "8",
+              "name": "Leo"
+            },
+            {
+              "id": "9",
+              "name": "Virgo"
+            },
+            {
+              "id": "10",
+              "name": "Libra"
+            },
+            {
+              "id": "11",
+              "name": "Scorpio"
+            },
+            {
+              "id": "12",
+              "name": "Sagittarius"
+            }
+          ],
+          "iconUrl": "https://static-assets.gotinder.com/icons/descriptors/astrological_sign@3x.png",
+          "iconUrls": [
+            {
+              "url": "https://static-assets.gotinder.com/icons/descriptors/astrological_sign@1x.png",
+              "quality": "1x",
+              "width": 22,
+              "height": 22
+            },
+            {
+              "url": "https://static-assets.gotinder.com/icons/descriptors/astrological_sign@2x.png",
+              "quality": "2x",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "url": "https://static-assets.gotinder.com/icons/descriptors/astrological_sign@3x.png",
+              "quality": "3x",
+              "width": 66,
+              "height": 66
+            }
+          ],
+          "sectionId": 5,
+          "sectionName": "More about me",
+          "shouldLocalizeChoices": true,
+          "discoveryPreferencesEnabled": true
+        },
+        {
+          "id": "de_9",
+          "name": "Education",
+          "prompt": "What is your education level?",
+          "type": "single_selection_set",
+          "choices": [
+            {
+              "id": "1",
+              "name": "Bachelor degree",
+              "matchGroupKey": "Bachelors"
+            },
+            {
+              "id": "2",
+              "name": "At uni"
+            },
+            {
+              "id": "3",
+              "name": "High school",
+              "matchGroupKey": "Highschool"
+            },
+            {
+              "id": "4",
+              "name": "PhD",
+              "matchGroupKey": "PhD"
+            },
+            {
+              "id": "5",
+              "name": "On a graduate programme"
+            },
+            {
+              "id": "6",
+              "name": "Master degree",
+              "matchGroupKey": "Masters"
+            },
+            {
+              "id": "7",
+              "name": "Trade school"
+            }
+          ],
+          "iconUrl": "https://static-assets.gotinder.com/icons/descriptors/education@3x.png",
+          "iconUrls": [
+            {
+              "url": "https://static-assets.gotinder.com/icons/descriptors/education@1x.png",
+              "quality": "1x",
+              "width": 22,
+              "height": 22
+            },
+            {
+              "url": "https://static-assets.gotinder.com/icons/descriptors/education@2x.png",
+              "quality": "2x",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "url": "https://static-assets.gotinder.com/icons/descriptors/education@3x.png",
+              "quality": "3x",
+              "width": 66,
+              "height": 66
+            }
+          ],
+          "sectionId": 5,
+          "sectionName": "More about me",
+          "matchGroupKey": "education",
+          "shouldLocalizeChoices": true,
+          "discoveryPreferencesEnabled": true
+        },
+        {
+          "id": "de_33",
+          "name": "Family plans",
+          "prompt": "Do you want children?",
+          "type": "single_selection_set",
+          "choices": [
+            {
+              "id": "1",
+              "name": "I want children",
+              "matchGroupKey": "Yes"
+            },
+            {
+              "id": "2",
+              "name": "I don’t want children",
+              "matchGroupKey": "No"
+            },
+            {
+              "id": "3",
+              "name": "I have children and want more"
+            },
+            {
+              "id": "4",
+              "name": "I have children and don’t want more"
+            },
+            {
+              "id": "5",
+              "name": "Not sure yet",
+              "matchGroupKey": "Maybe"
+            }
+          ],
+          "iconUrl": "https://static-assets.gotinder.com/icons/descriptors/kids@3x.png",
+          "iconUrls": [
+            {
+              "url": "https://static-assets.gotinder.com/icons/descriptors/kids@1x.png",
+              "quality": "1x",
+              "width": 22,
+              "height": 22
+            },
+            {
+              "url": "https://static-assets.gotinder.com/icons/descriptors/kids@2x.png",
+              "quality": "2x",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "url": "https://static-assets.gotinder.com/icons/descriptors/kids@3x.png",
+              "quality": "3x",
+              "width": 66,
+              "height": 66
+            }
+          ],
+          "sectionId": 5,
+          "sectionName": "More about me",
+          "matchGroupKey": "wants_children",
+          "shouldLocalizeChoices": true,
+          "discoveryPreferencesEnabled": true
+        },
+        {
+          "id": "de_34",
+          "name": "COVID vaccine",
+          "prompt": "Are you vaccinated?",
+          "type": "single_selection_set",
+          "choices": [
+            {
+              "id": "1",
+              "name": "Vaccinated"
+            },
+            {
+              "id": "2",
+              "name": "Unvaccinated"
+            },
+            {
+              "id": "3",
+              "name": "Prefer not to say"
+            }
+          ],
+          "iconUrl": "https://static-assets.gotinder.com/icons/descriptors/covid_comfort@3x.png",
+          "iconUrls": [
+            {
+              "url": "https://static-assets.gotinder.com/icons/descriptors/covid_comfort@1x.png",
+              "quality": "1x",
+              "width": 22,
+              "height": 22
+            },
+            {
+              "url": "https://static-assets.gotinder.com/icons/descriptors/covid_comfort@2x.png",
+              "quality": "2x",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "url": "https://static-assets.gotinder.com/icons/descriptors/covid_comfort@3x.png",
+              "quality": "3x",
+              "width": 66,
+              "height": 66
+            }
+          ],
+          "sectionId": 5,
+          "sectionName": "More about me",
+          "shouldLocalizeChoices": true,
+          "discoveryPreferencesEnabled": true
+        },
+        {
+          "id": "de_13",
+          "name": "Personality type",
+          "prompt": "What’s your personality type?",
+          "type": "single_selection_set",
+          "choices": [
+            {
+              "id": "1",
+              "name": "INTJ"
+            },
+            {
+              "id": "2",
+              "name": "INTP"
+            },
+            {
+              "id": "3",
+              "name": "ENTJ"
+            },
+            {
+              "id": "4",
+              "name": "ENTP"
+            },
+            {
+              "id": "5",
+              "name": "INFJ"
+            },
+            {
+              "id": "6",
+              "name": "INFP"
+            },
+            {
+              "id": "7",
+              "name": "ENFJ"
+            },
+            {
+              "id": "8",
+              "name": "ENFP"
+            },
+            {
+              "id": "9",
+              "name": "ISTJ"
+            },
+            {
+              "id": "10",
+              "name": "ISFJ"
+            },
+            {
+              "id": "11",
+              "name": "ESTJ"
+            },
+            {
+              "id": "12",
+              "name": "ESFJ"
+            },
+            {
+              "id": "13",
+              "name": "ISTP"
+            },
+            {
+              "id": "14",
+              "name": "ISFP"
+            },
+            {
+              "id": "15",
+              "name": "ESTP"
+            },
+            {
+              "id": "16",
+              "name": "ESFP"
+            }
+          ],
+          "iconUrl": "https://static-assets.gotinder.com/icons/descriptors/mbti@3x.png",
+          "iconUrls": [
+            {
+              "url": "https://static-assets.gotinder.com/icons/descriptors/mbti@1x.png",
+              "quality": "1x",
+              "width": 22,
+              "height": 22
+            },
+            {
+              "url": "https://static-assets.gotinder.com/icons/descriptors/mbti@2x.png",
+              "quality": "2x",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "url": "https://static-assets.gotinder.com/icons/descriptors/mbti@3x.png",
+              "quality": "3x",
+              "width": 66,
+              "height": 66
+            }
+          ],
+          "sectionId": 5,
+          "sectionName": "More about me",
+          "shouldLocalizeChoices": true,
+          "discoveryPreferencesEnabled": true
+        },
+        {
+          "id": "de_2",
+          "name": "Communication style",
+          "prompt": "What’s your communication style?",
+          "type": "single_selection_set",
+          "choices": [
+            {
+              "id": "1",
+              "name": "Big time texter"
+            },
+            {
+              "id": "3",
+              "name": "Phone caller"
+            },
+            {
+              "id": "2",
+              "name": "Video chatter"
+            },
+            {
+              "id": "4",
+              "name": "Bad texter"
+            },
+            {
+              "id": "5",
+              "name": "Better in person"
+            }
+          ],
+          "iconUrl": "https://static-assets.gotinder.com/icons/descriptors/communication_style@3x.png",
+          "iconUrls": [
+            {
+              "url": "https://static-assets.gotinder.com/icons/descriptors/communication_style@1x.png",
+              "quality": "1x",
+              "width": 22,
+              "height": 22
+            },
+            {
+              "url": "https://static-assets.gotinder.com/icons/descriptors/communication_style@2x.png",
+              "quality": "2x",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "url": "https://static-assets.gotinder.com/icons/descriptors/communication_style@3x.png",
+              "quality": "3x",
+              "width": 66,
+              "height": 66
+            }
+          ],
+          "sectionId": 5,
+          "sectionName": "More about me",
+          "shouldLocalizeChoices": true,
+          "discoveryPreferencesEnabled": true
+        },
+        {
+          "id": "de_35",
+          "name": "Love style",
+          "prompt": "How do you receive love?",
+          "type": "single_selection_set",
+          "choices": [
+            {
+              "id": "1",
+              "name": "Thoughtful gestures"
+            },
+            {
+              "id": "2",
+              "name": "Presents"
+            },
+            {
+              "id": "3",
+              "name": "Touch"
+            },
+            {
+              "id": "4",
+              "name": "Compliments"
+            },
+            {
+              "id": "5",
+              "name": "Time together"
+            }
+          ],
+          "iconUrl": "https://static-assets.gotinder.com/icons/descriptors/love_language@3x.png",
+          "iconUrls": [
+            {
+              "url": "https://static-assets.gotinder.com/icons/descriptors/love_language@1x.png",
+              "quality": "1x",
+              "width": 22,
+              "height": 22
+            },
+            {
+              "url": "https://static-assets.gotinder.com/icons/descriptors/love_language@2x.png",
+              "quality": "2x",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "url": "https://static-assets.gotinder.com/icons/descriptors/love_language@3x.png",
+              "quality": "3x",
+              "width": 66,
+              "height": 66
+            }
+          ],
+          "sectionId": 5,
+          "sectionName": "More about me",
+          "shouldLocalizeChoices": true,
+          "discoveryPreferencesEnabled": true
+        }
+      ],
+      "id": 5,
+      "sectionName": "More about me",
+      "displayType": "section"
+    },
+    {
+      "prompt": "Put your best self forward by adding your lifestyle",
+      "descriptors": [
+        {
+          "id": "de_3",
+          "name": "Pets",
+          "prompt": "Do you have any pets?",
+          "type": "single_selection_set",
+          "choices": [
+            {
+              "id": "1",
+              "name": "Dog",
+              "matchGroupKey": "Dogs"
+            },
+            {
+              "id": "2",
+              "name": "Cat",
+              "matchGroupKey": "Cats"
+            },
+            {
+              "id": "3",
+              "name": "Reptile"
+            },
+            {
+              "id": "4",
+              "name": "Amphibian"
+            },
+            {
+              "id": "8",
+              "name": "Bird"
+            },
+            {
+              "id": "5",
+              "name": "Fish"
+            },
+            {
+              "id": "9",
+              "name": "Don’t have, but love"
+            },
+            {
+              "id": "11",
+              "name": "Other",
+              "matchGroupKey": "Other"
+            },
+            {
+              "id": "12",
+              "name": "Turtle"
+            },
+            {
+              "id": "13",
+              "name": "Hamster"
+            },
+            {
+              "id": "14",
+              "name": "Rabbit"
+            },
+            {
+              "id": "6",
+              "name": "Pet-free"
+            },
+            {
+              "id": "7",
+              "name": "All the pets"
+            },
+            {
+              "id": "16",
+              "name": "Want a pet"
+            },
+            {
+              "id": "17",
+              "name": "Allergic to pets"
+            }
+          ],
+          "iconUrl": "https://static-assets.gotinder.com/icons/descriptors/pets@3x.png",
+          "iconUrls": [
+            {
+              "url": "https://static-assets.gotinder.com/icons/descriptors/pets@1x.png",
+              "quality": "1x",
+              "width": 22,
+              "height": 22
+            },
+            {
+              "url": "https://static-assets.gotinder.com/icons/descriptors/pets@2x.png",
+              "quality": "2x",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "url": "https://static-assets.gotinder.com/icons/descriptors/pets@3x.png",
+              "quality": "3x",
+              "width": 66,
+              "height": 66
+            }
+          ],
+          "sectionId": 6,
+          "sectionName": "Lifestyle",
+          "matchGroupKey": "pets",
+          "shouldLocalizeChoices": true,
+          "discoveryPreferencesEnabled": true
+        },
+        {
+          "id": "de_22",
+          "name": "Drinking",
+          "prompt": "How often do you drink?",
+          "type": "single_selection_set",
+          "choices": [
+            {
+              "id": "8",
+              "name": "Not for me",
+              "matchGroupKey": "No"
+            },
+            {
+              "id": "9",
+              "name": "Newly teetotal"
+            },
+            {
+              "id": "10",
+              "name": "Sober curious"
+            },
+            {
+              "id": "11",
+              "name": "On special occasions",
+              "matchGroupKey": "Sometimes"
+            },
+            {
+              "id": "12",
+              "name": "Socially, at the weekend",
+              "matchGroupKey": "Socially"
+            },
+            {
+              "id": "13",
+              "name": "Most nights",
+              "matchGroupKey": "Yes"
+            }
+          ],
+          "iconUrl": "https://static-assets.gotinder.com/icons/descriptors/drink_of_choice@3x.png",
+          "iconUrls": [
+            {
+              "url": "https://static-assets.gotinder.com/icons/descriptors/drink_of_choice@1x.png",
+              "quality": "1x",
+              "width": 22,
+              "height": 22
+            },
+            {
+              "url": "https://static-assets.gotinder.com/icons/descriptors/drink_of_choice@2x.png",
+              "quality": "2x",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "url": "https://static-assets.gotinder.com/icons/descriptors/drink_of_choice@3x.png",
+              "quality": "3x",
+              "width": 66,
+              "height": 66
+            }
+          ],
+          "sectionId": 6,
+          "sectionName": "Lifestyle",
+          "matchGroupKey": "drinking",
+          "shouldLocalizeChoices": true,
+          "discoveryPreferencesEnabled": true
+        },
+        {
+          "id": "de_11",
+          "name": "How often do you smoke?",
+          "prompt": "How often do you smoke?",
+          "type": "single_selection_set",
+          "choices": [
+            {
+              "id": "1",
+              "name": "Social smoker",
+              "matchGroupKey": "Socially"
+            },
+            {
+              "id": "2",
+              "name": "Smoker when drinking"
+            },
+            {
+              "id": "3",
+              "name": "Non-smoker",
+              "matchGroupKey": "No"
+            },
+            {
+              "id": "4",
+              "name": "Smoker",
+              "matchGroupKey": "Yes"
+            },
+            {
+              "id": "6",
+              "name": "Trying to quit"
+            }
+          ],
+          "iconUrl": "https://static-assets.gotinder.com/icons/descriptors/smoking@3x.png",
+          "iconUrls": [
+            {
+              "url": "https://static-assets.gotinder.com/icons/descriptors/smoking@1x.png",
+              "quality": "1x",
+              "width": 22,
+              "height": 22
+            },
+            {
+              "url": "https://static-assets.gotinder.com/icons/descriptors/smoking@2x.png",
+              "quality": "2x",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "url": "https://static-assets.gotinder.com/icons/descriptors/smoking@3x.png",
+              "quality": "3x",
+              "width": 66,
+              "height": 66
+            }
+          ],
+          "sectionId": 6,
+          "sectionName": "Lifestyle",
+          "matchGroupKey": "drinking",
+          "shouldLocalizeChoices": true,
+          "discoveryPreferencesEnabled": true
+        },
+        {
+          "id": "de_10",
+          "name": "Workout",
+          "prompt": "Do you exercise?",
+          "type": "single_selection_set",
+          "choices": [
+            {
+              "id": "4",
+              "name": "Every day"
+            },
+            {
+              "id": "5",
+              "name": "Often",
+              "matchGroupKey": "Often"
+            },
+            {
+              "id": "6",
+              "name": "Sometimes",
+              "matchGroupKey": "Sometimes"
+            },
+            {
+              "id": "3",
+              "name": "Never",
+              "matchGroupKey": "Never"
+            }
+          ],
+          "iconUrl": "https://static-assets.gotinder.com/icons/descriptors/workout@3x.png",
+          "iconUrls": [
+            {
+              "url": "https://static-assets.gotinder.com/icons/descriptors/workout@1x.png",
+              "quality": "1x",
+              "width": 22,
+              "height": 22
+            },
+            {
+              "url": "https://static-assets.gotinder.com/icons/descriptors/workout@2x.png",
+              "quality": "2x",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "url": "https://static-assets.gotinder.com/icons/descriptors/workout@3x.png",
+              "quality": "3x",
+              "width": 66,
+              "height": 66
+            }
+          ],
+          "sectionId": 6,
+          "sectionName": "Lifestyle",
+          "matchGroupKey": "exercise",
+          "shouldLocalizeChoices": true,
+          "discoveryPreferencesEnabled": true
+        },
+        {
+          "id": "de_7",
+          "name": "Dietary preference",
+          "prompt": "What are your dietary preferences?",
+          "type": "single_selection_set",
+          "choices": [
+            {
+              "id": "1",
+              "name": "Vegan"
+            },
+            {
+              "id": "2",
+              "name": "Vegetarian"
+            },
+            {
+              "id": "3",
+              "name": "Pescatarian"
+            },
+            {
+              "id": "9",
+              "name": "Kosher"
+            },
+            {
+              "id": "10",
+              "name": "Halal"
+            },
+            {
+              "id": "7",
+              "name": "Carnivore"
+            },
+            {
+              "id": "8",
+              "name": "Omnivore"
+            },
+            {
+              "id": "12",
+              "name": "Other"
+            }
+          ],
+          "iconUrl": "https://static-assets.gotinder.com/icons/descriptors/appetite@3x.png",
+          "iconUrls": [
+            {
+              "url": "https://static-assets.gotinder.com/icons/descriptors/appetite@1x.png",
+              "quality": "1x",
+              "width": 22,
+              "height": 22
+            },
+            {
+              "url": "https://static-assets.gotinder.com/icons/descriptors/appetite@2x.png",
+              "quality": "2x",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "url": "https://static-assets.gotinder.com/icons/descriptors/appetite@3x.png",
+              "quality": "3x",
+              "width": 66,
+              "height": 66
+            }
+          ],
+          "sectionId": 6,
+          "sectionName": "Lifestyle",
+          "shouldLocalizeChoices": true,
+          "discoveryPreferencesEnabled": true
+        },
+        {
+          "id": "de_4",
+          "name": "Social media",
+          "prompt": "How active are you on social media?",
+          "type": "single_selection_set",
+          "choices": [
+            {
+              "id": "1",
+              "name": "Influencer status"
+            },
+            {
+              "id": "2",
+              "name": "Socially active"
+            },
+            {
+              "id": "3",
+              "name": "Off the grid"
+            },
+            {
+              "id": "4",
+              "name": "Passive scroller"
+            }
+          ],
+          "iconUrl": "https://static-assets.gotinder.com/icons/descriptors/social_media@3x.png",
+          "iconUrls": [
+            {
+              "url": "https://static-assets.gotinder.com/icons/descriptors/social_media@1x.png",
+              "quality": "1x",
+              "width": 22,
+              "height": 22
+            },
+            {
+              "url": "https://static-assets.gotinder.com/icons/descriptors/social_media@2x.png",
+              "quality": "2x",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "url": "https://static-assets.gotinder.com/icons/descriptors/social_media@3x.png",
+              "quality": "3x",
+              "width": 66,
+              "height": 66
+            }
+          ],
+          "sectionId": 6,
+          "sectionName": "Lifestyle",
+          "shouldLocalizeChoices": true,
+          "discoveryPreferencesEnabled": true
+        },
+        {
+          "id": "de_17",
+          "name": "Sleeping habits",
+          "prompt": "What are your sleeping habits?",
+          "type": "single_selection_set",
+          "choices": [
+            {
+              "id": "1",
+              "name": "Early bird"
+            },
+            {
+              "id": "2",
+              "name": "Night owl"
+            },
+            {
+              "id": "3",
+              "name": "It varies"
+            }
+          ],
+          "iconUrl": "https://static-assets.gotinder.com/icons/descriptors/sleeping_habits@3x.png",
+          "iconUrls": [
+            {
+              "url": "https://static-assets.gotinder.com/icons/descriptors/sleeping_habits@1x.png",
+              "quality": "1x",
+              "width": 22,
+              "height": 22
+            },
+            {
+              "url": "https://static-assets.gotinder.com/icons/descriptors/sleeping_habits@2x.png",
+              "quality": "2x",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "url": "https://static-assets.gotinder.com/icons/descriptors/sleeping_habits@3x.png",
+              "quality": "3x",
+              "width": 66,
+              "height": 66
+            }
+          ],
+          "sectionId": 6,
+          "sectionName": "Lifestyle",
+          "shouldLocalizeChoices": true,
+          "discoveryPreferencesEnabled": true
+        }
+      ],
+      "id": 6,
+      "sectionName": "Lifestyle",
+      "displayType": "section"
+    }
+  ]
+}
