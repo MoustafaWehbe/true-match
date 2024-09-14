@@ -17,15 +17,17 @@ namespace api.Repository
 
         public async Task<UserProfile> CreateOrUpdateAsync(CreateOrUpdateUserProfileDto userProfileDto, string userId)
         {
-            var userProfileAlreadyCreated = await GetByUserId(userId);
-            if (userProfileAlreadyCreated != null)
+            var existingUserProfile = await GetByUserId(userId);
+            if (existingUserProfile != null)
             {
-                userProfileDto.ToUserProfileFromUpdate(userProfileAlreadyCreated, userId);
+                userProfileDto.ToUserProfileFromUpdate(existingUserProfile, userId);
+                _context.UserProfiles.Update(existingUserProfile);
+                await _context.SaveChangesAsync();
 
                 if (userProfileDto.UserProfileGenders != null && userProfileDto.UserProfileGenders.Count() > 0)
                 {
                     var existingUserProfileGenders = await _context.UserProfileGenders
-                        .Where(upg => upg.UserProfileId == userProfileAlreadyCreated.Id)
+                        .Where(upg => upg.UserProfileId == existingUserProfile.Id)
                         .ToListAsync();
                     if (existingUserProfileGenders.Any())
                     {
@@ -34,13 +36,12 @@ namespace api.Repository
 
                     foreach (var upgDto in userProfileDto.UserProfileGenders)
                     {
-                        _context.UserProfileGenders.Add(upgDto.ToUserProfileGenderFromCreate(userProfileAlreadyCreated.Id));
+                        _context.UserProfileGenders.Add(upgDto.ToUserProfileGenderFromCreate(existingUserProfile.Id));
                     }
+                    await _context.SaveChangesAsync();
                 }
 
-                await _context.SaveChangesAsync();
-
-                return userProfileAlreadyCreated;
+                return existingUserProfile;
             }
             else
             {
@@ -86,7 +87,7 @@ namespace api.Repository
             var query = _context.UserProfiles
                 .Include(up => up.UserProfileGenders);
 
-            return await query.AsNoTracking().FirstOrDefaultAsync(up => up.UserId == userId);
+            return await query.FirstOrDefaultAsync(up => up.UserId == userId);
         }
     }
 }
