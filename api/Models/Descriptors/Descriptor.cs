@@ -20,7 +20,7 @@ namespace api.Models
         public string? BackgroundText { get; set; }
         [JsonPropertyName("searchBackgroundText")]
         public string? SearchBackgroundText { get; set; }
-        [JsonPropertyName("measureableDetails")]
+        [JsonPropertyName("measurableDetails")]
         public MeasurableDetails? MeasurableDetails { get; set; }
         [JsonPropertyName("sectionId")]
         public int? SectionId { get; set; }

@@ -1,5 +1,5 @@
 import { Box } from "@chakra-ui/react";
-import Onboarding from "~/lib/components/profile/Onboarding";
+import Onboarding from "~/lib/components/onboarding/Onboarding";
 
 const OnboardingPage = () => {
   return (

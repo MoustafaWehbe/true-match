@@ -91,7 +91,7 @@ export interface Descriptor {
      * @type {MeasurableDetails}
      * @memberof Descriptor
      */
-    measureableDetails?: MeasurableDetails;
+    measurableDetails?: MeasurableDetails;
     /**
      * 
      * @type {number}
@@ -167,7 +167,7 @@ export function DescriptorFromJSONTyped(json: any, ignoreDiscriminator: boolean)
         'iconUrls': json['iconUrls'] == null ? undefined : ((json['iconUrls'] as Array<any>).map(IconUrlFromJSON)),
         'backgroundText': json['backgroundText'] == null ? undefined : json['backgroundText'],
         'searchBackgroundText': json['searchBackgroundText'] == null ? undefined : json['searchBackgroundText'],
-        'measureableDetails': json['measureableDetails'] == null ? undefined : MeasurableDetailsFromJSON(json['measureableDetails']),
+        'measurableDetails': json['measurableDetails'] == null ? undefined : MeasurableDetailsFromJSON(json['measurableDetails']),
         'sectionId': json['sectionId'] == null ? undefined : json['sectionId'],
         'sectionName': json['sectionName'] == null ? undefined : json['sectionName'],
         'matchGroupKey': json['matchGroupKey'] == null ? undefined : json['matchGroupKey'],
@@ -193,7 +193,7 @@ export function DescriptorToJSON(value?: Descriptor | null): any {
         'iconUrls': value['iconUrls'] == null ? undefined : ((value['iconUrls'] as Array<any>).map(IconUrlToJSON)),
         'backgroundText': value['backgroundText'],
         'searchBackgroundText': value['searchBackgroundText'],
-        'measureableDetails': MeasurableDetailsToJSON(value['measureableDetails']),
+        'measurableDetails': MeasurableDetailsToJSON(value['measurableDetails']),
         'sectionId': value['sectionId'],
         'sectionName': value['sectionName'],
         'matchGroupKey': value['matchGroupKey'],
