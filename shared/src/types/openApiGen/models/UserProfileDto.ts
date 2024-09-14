@@ -13,18 +13,18 @@
  */
 
 import { mapValues } from '../runtime';
-import type { UserProfileLifeStyleDto } from './UserProfileLifeStyleDto';
+import type { SelectedDescriptor } from './SelectedDescriptor';
 import {
-    UserProfileLifeStyleDtoFromJSON,
-    UserProfileLifeStyleDtoFromJSONTyped,
-    UserProfileLifeStyleDtoToJSON,
-} from './UserProfileLifeStyleDto';
-import type { UserProfileInterestDto } from './UserProfileInterestDto';
+    SelectedDescriptorFromJSON,
+    SelectedDescriptorFromJSONTyped,
+    SelectedDescriptorToJSON,
+} from './SelectedDescriptor';
+import type { UserProfileGenderDto } from './UserProfileGenderDto';
 import {
-    UserProfileInterestDtoFromJSON,
-    UserProfileInterestDtoFromJSONTyped,
-    UserProfileInterestDtoToJSON,
-} from './UserProfileInterestDto';
+    UserProfileGenderDtoFromJSON,
+    UserProfileGenderDtoFromJSONTyped,
+    UserProfileGenderDtoToJSON,
+} from './UserProfileGenderDto';
 
 /**
  * 
@@ -49,55 +49,67 @@ export interface UserProfileDto {
      * @type {number}
      * @memberof UserProfileDto
      */
-    height?: number;
+    ageFilterMax?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof UserProfileDto
+     */
+    ageFilterMin?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof UserProfileDto
+     */
+    distanceFilter?: number | null;
     /**
      * 
      * @type {string}
      * @memberof UserProfileDto
      */
-    relationshipGoal?: string | null;
+    pos?: string | null;
+    /**
+     * 
+     * @type {any}
+     * @memberof UserProfileDto
+     */
+    location?: any | null;
     /**
      * 
      * @type {string}
      * @memberof UserProfileDto
      */
-    education?: string | null;
+    job?: string | null;
     /**
      * 
      * @type {string}
      * @memberof UserProfileDto
      */
-    zodiac?: string | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof UserProfileDto
-     */
-    loveStyle?: string | null;
+    school?: string | null;
     /**
      * 
      * @type {Date}
      * @memberof UserProfileDto
      */
-    createdAt?: Date;
+    birthDate?: Date | null;
     /**
      * 
-     * @type {Date}
+     * @type {string}
      * @memberof UserProfileDto
      */
-    updatedAt?: Date;
+    userId?: string | null;
     /**
      * 
-     * @type {Array<UserProfileInterestDto>}
+     * @type {Array<SelectedDescriptor>}
      * @memberof UserProfileDto
      */
-    userProfileInterests?: Array<UserProfileInterestDto> | null;
+    selectedDescriptors?: Array<SelectedDescriptor> | null;
     /**
      * 
-     * @type {Array<UserProfileLifeStyleDto>}
+     * @type {Array<UserProfileGenderDto>}
      * @memberof UserProfileDto
      */
-    userProfileLifeStyles?: Array<UserProfileLifeStyleDto> | null;
+    userProfileGenders?: Array<UserProfileGenderDto> | null;
 }
 
 /**
@@ -119,15 +131,17 @@ export function UserProfileDtoFromJSONTyped(json: any, ignoreDiscriminator: bool
         
         'id': json['id'] == null ? undefined : json['id'],
         'bio': json['bio'] == null ? undefined : json['bio'],
-        'height': json['height'] == null ? undefined : json['height'],
-        'relationshipGoal': json['relationshipGoal'] == null ? undefined : json['relationshipGoal'],
-        'education': json['education'] == null ? undefined : json['education'],
-        'zodiac': json['zodiac'] == null ? undefined : json['zodiac'],
-        'loveStyle': json['loveStyle'] == null ? undefined : json['loveStyle'],
-        'createdAt': json['createdAt'] == null ? undefined : (new Date(json['createdAt'])),
-        'updatedAt': json['updatedAt'] == null ? undefined : (new Date(json['updatedAt'])),
-        'userProfileInterests': json['userProfileInterests'] == null ? undefined : ((json['userProfileInterests'] as Array<any>).map(UserProfileInterestDtoFromJSON)),
-        'userProfileLifeStyles': json['userProfileLifeStyles'] == null ? undefined : ((json['userProfileLifeStyles'] as Array<any>).map(UserProfileLifeStyleDtoFromJSON)),
+        'ageFilterMax': json['ageFilterMax'] == null ? undefined : json['ageFilterMax'],
+        'ageFilterMin': json['ageFilterMin'] == null ? undefined : json['ageFilterMin'],
+        'distanceFilter': json['distanceFilter'] == null ? undefined : json['distanceFilter'],
+        'pos': json['pos'] == null ? undefined : json['pos'],
+        'location': json['location'] == null ? undefined : json['location'],
+        'job': json['job'] == null ? undefined : json['job'],
+        'school': json['school'] == null ? undefined : json['school'],
+        'birthDate': json['birthDate'] == null ? undefined : (new Date(json['birthDate'])),
+        'userId': json['userId'] == null ? undefined : json['userId'],
+        'selectedDescriptors': json['selectedDescriptors'] == null ? undefined : ((json['selectedDescriptors'] as Array<any>).map(SelectedDescriptorFromJSON)),
+        'userProfileGenders': json['userProfileGenders'] == null ? undefined : ((json['userProfileGenders'] as Array<any>).map(UserProfileGenderDtoFromJSON)),
     };
 }
 
@@ -139,15 +153,17 @@ export function UserProfileDtoToJSON(value?: UserProfileDto | null): any {
         
         'id': value['id'],
         'bio': value['bio'],
-        'height': value['height'],
-        'relationshipGoal': value['relationshipGoal'],
-        'education': value['education'],
-        'zodiac': value['zodiac'],
-        'loveStyle': value['loveStyle'],
-        'createdAt': value['createdAt'] == null ? undefined : ((value['createdAt']).toISOString()),
-        'updatedAt': value['updatedAt'] == null ? undefined : ((value['updatedAt']).toISOString()),
-        'userProfileInterests': value['userProfileInterests'] == null ? undefined : ((value['userProfileInterests'] as Array<any>).map(UserProfileInterestDtoToJSON)),
-        'userProfileLifeStyles': value['userProfileLifeStyles'] == null ? undefined : ((value['userProfileLifeStyles'] as Array<any>).map(UserProfileLifeStyleDtoToJSON)),
+        'ageFilterMax': value['ageFilterMax'],
+        'ageFilterMin': value['ageFilterMin'],
+        'distanceFilter': value['distanceFilter'],
+        'pos': value['pos'],
+        'location': value['location'],
+        'job': value['job'],
+        'school': value['school'],
+        'birthDate': value['birthDate'] == null ? undefined : ((value['birthDate'] as any).toISOString()),
+        'userId': value['userId'],
+        'selectedDescriptors': value['selectedDescriptors'] == null ? undefined : ((value['selectedDescriptors'] as Array<any>).map(SelectedDescriptorToJSON)),
+        'userProfileGenders': value['userProfileGenders'] == null ? undefined : ((value['userProfileGenders'] as Array<any>).map(UserProfileGenderDtoToJSON)),
     };
 }
 

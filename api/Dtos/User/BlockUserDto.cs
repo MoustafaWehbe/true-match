@@ -1,7 +1,10 @@
 using System.ComponentModel.DataAnnotations;
 
-public class BlockUserDto
+namespace api.Dtos
 {
-    [Required]
-    public required string BlockedUserId { get; set; }
+    public class BlockUserDto
+    {
+        [Required]
+        public required string BlockedUserId { get; set; }
+    }
 }

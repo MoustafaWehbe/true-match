@@ -1,5 +1,3 @@
-using System.Text.Json;
-
 namespace api.Dtos
 {
     public class CreateRoomDto

@@ -2,12 +2,14 @@ import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 import {
   BlockUserDto,
-  CreateUserProfileDto,
+  CreateOrUpdateUserProfileDto,
   LoginDto,
   RegisterDto,
   SimpleApiResponseApiResponse,
   User,
   UserApiResponse,
+  UserDto,
+  UserDtoApiResponse,
   UserProfileDto,
   UserProfileDtoApiResponse,
 } from "shared/src/types/openApiGen";
@@ -21,7 +23,7 @@ export interface UserState {
   loginLoading: boolean;
   loginError: string | null;
   registerError: string | null;
-  user: User | null;
+  user: UserDto | null;
   logoutResponseMessage: string;
   userProfileCreated: boolean;
   loadingImages: string[];
@@ -99,12 +101,12 @@ export const logoutUser = createAsyncThunk<
 });
 
 export const fetchUser = createAsyncThunk<
-  User | null, // Return type
+  UserDto | null, // Return type
   void, // Argument type
   { rejectValue: string } // Error type
 >("user/fetchUser", async (_, { rejectWithValue }) => {
   try {
-    const response = await axiosInstance.get<UserApiResponse>("/me", {
+    const response = await axiosInstance.get<UserDtoApiResponse>("/me", {
       headers: defaultHeaders,
     });
     return response.data.data ?? null;
@@ -117,9 +119,9 @@ export const fetchUser = createAsyncThunk<
   }
 });
 
-export const createUserProfile = createAsyncThunk<
+export const createOrUpdateUserProfile = createAsyncThunk<
   UserProfileDto | undefined, // Return type of the payload creator
-  CreateUserProfileDto, // First argument to the payload creator
+  CreateOrUpdateUserProfileDto, // First argument to the payload creator
   { rejectValue: string } // Type for rejectWithValue
 >("userProfile/create", async (userProfileData, { rejectWithValue }) => {
   try {
@@ -281,16 +283,19 @@ const userSlice = createSlice({
           state.logoutResponseMessage = action.payload.data?.message ?? "";
         }
       )
-      .addCase(createUserProfile.pending, (state) => {
+      .addCase(createOrUpdateUserProfile.pending, (state) => {
         state.userProfileCreated = false;
       })
       .addCase(
-        createUserProfile.fulfilled,
-        (state, _action: PayloadAction<UserProfileDto | undefined>) => {
+        createOrUpdateUserProfile.fulfilled,
+        (state, action: PayloadAction<UserProfileDto | undefined>) => {
           state.userProfileCreated = true;
+          if (state.user) {
+            state.user.userProfile = action.payload;
+          }
         }
       )
-      .addCase(createUserProfile.rejected, (state) => {
+      .addCase(createOrUpdateUserProfile.rejected, (state) => {
         state.userProfileCreated = false;
       })
       .addCase(createUserMedia.pending, (state, action) => {

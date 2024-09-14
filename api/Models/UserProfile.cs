@@ -35,7 +35,6 @@ namespace api.Models
         [ForeignKey("UserId")]
         public User? User { get; set; }
 
-        // {descriptorId: any; selections: [ids];}[]
         public JsonDocument? SelectedDescriptors { get; set; }
         public List<UserProfileGender> UserProfileGenders { get; set; } = new List<UserProfileGender>();
     }

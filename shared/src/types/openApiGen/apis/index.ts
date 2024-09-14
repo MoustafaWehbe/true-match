@@ -1,8 +1,8 @@
 /* tslint:disable */
 /* eslint-disable */
 export * from './AccountApi';
-export * from './InteresetApi';
-export * from './LifeStyleApi';
+export * from './AvailableDescriptorsApi';
+export * from './GenderApi';
 export * from './MatchApi';
 export * from './MediaApi';
 export * from './QuestionCategoriesApi';

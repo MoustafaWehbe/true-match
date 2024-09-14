@@ -1,6 +1,6 @@
 using api.Models;
 
-namespace api.Dtos.Match
+namespace api.Dtos
 {
     public class MatchDto
     {

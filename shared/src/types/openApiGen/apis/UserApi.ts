@@ -17,12 +17,15 @@ import * as runtime from '../runtime';
 import type {
   BlockUserDto,
   SimpleApiResponseApiResponse,
+  UserDtoApiResponse,
 } from '../models/index';
 import {
     BlockUserDtoFromJSON,
     BlockUserDtoToJSON,
     SimpleApiResponseApiResponseFromJSON,
     SimpleApiResponseApiResponseToJSON,
+    UserDtoApiResponseFromJSON,
+    UserDtoApiResponseToJSON,
 } from '../models/index';
 
 export interface ApiUserBlockUserPostRequest {
@@ -196,7 +199,7 @@ export class UserApi extends runtime.BaseAPI {
 
     /**
      */
-    async meGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async meGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UserDtoApiResponse>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -216,13 +219,14 @@ export class UserApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => UserDtoApiResponseFromJSON(jsonValue));
     }
 
     /**
      */
-    async meGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.meGetRaw(initOverrides);
+    async meGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserDtoApiResponse> {
+        const response = await this.meGetRaw(initOverrides);
+        return await response.value();
     }
 
 }

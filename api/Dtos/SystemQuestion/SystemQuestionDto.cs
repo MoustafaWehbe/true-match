@@ -1,4 +1,4 @@
-namespace api.DTOs
+namespace api.Dtos
 {
     public class SystemQuestionDto
     {

@@ -1,7 +1,10 @@
 using System.ComponentModel.DataAnnotations;
 
-public class HideRoomDto
+namespace api.Dtos
 {
-    [Required]
-    public int RoomId { get; set; }
+    public class HideRoomDto
+    {
+        [Required]
+        public int RoomId { get; set; }
+    }
 }

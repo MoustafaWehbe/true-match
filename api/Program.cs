@@ -70,6 +70,7 @@ builder.Services.AddScoped<ISystemQuestionRepository, SystemQuestionRepository>(
 builder.Services.AddScoped<IMatchRepository, MatchRepository>();
 builder.Services.AddScoped<IMediaRepository, MediaRepository>();
 builder.Services.AddScoped<IAvailableDescriptorRepository, AvailableDescriptorRepository>();
+builder.Services.AddScoped<IGenderRepository, GenderRepository>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

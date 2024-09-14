@@ -15,12 +15,12 @@
 
 import * as runtime from '../runtime';
 import type {
-  CreateUserProfileDto,
+  CreateOrUpdateUserProfileDto,
   UserProfileDtoApiResponse,
 } from '../models/index';
 import {
-    CreateUserProfileDtoFromJSON,
-    CreateUserProfileDtoToJSON,
+    CreateOrUpdateUserProfileDtoFromJSON,
+    CreateOrUpdateUserProfileDtoToJSON,
     UserProfileDtoApiResponseFromJSON,
     UserProfileDtoApiResponseToJSON,
 } from '../models/index';
@@ -30,7 +30,7 @@ export interface ApiUserProfileIdGetRequest {
 }
 
 export interface ApiUserProfilePostRequest {
-    createUserProfileDto?: CreateUserProfileDto;
+    createOrUpdateUserProfileDto?: CreateOrUpdateUserProfileDto;
 }
 
 /**
@@ -99,7 +99,7 @@ export class UserProfileApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: CreateUserProfileDtoToJSON(requestParameters['createUserProfileDto']),
+            body: CreateOrUpdateUserProfileDtoToJSON(requestParameters['createOrUpdateUserProfileDto']),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => UserProfileDtoApiResponseFromJSON(jsonValue));

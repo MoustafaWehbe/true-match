@@ -1,4 +1,5 @@
 using api.Data;
+using api.Dtos;
 using api.Helpers;
 using api.Interfaces;
 using api.Models;
@@ -50,6 +51,7 @@ namespace api.Repository
             return await _context.Users
                 .Include(u => u.Media)
                 .Include(u => u.UserProfile)
+                .ThenInclude(up => up.UserProfileGenders)
                 .FirstOrDefaultAsync(u => u.Id == userId);
         }
 

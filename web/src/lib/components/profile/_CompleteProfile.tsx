@@ -2,12 +2,12 @@
 
 import React, { useEffect, useState } from "react";
 import { Box, useToast } from "@chakra-ui/react";
-import UserProfileForm from "./UserProfileForm";
+import UserProfileForm from "./OnboardingFormStep1";
 import UploadImagesForm from "./UploadImageForm";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "~/lib/state/store";
 import { createUserMedia, createUserProfile } from "~/lib/state/user/userSlice";
-import { CreateUserProfileDto } from "shared/src/types/openApiGen";
+import { CreateOrUpdateUserProfileDto } from "shared/src/types/openApiGen";
 
 const CompleteProfile = () => {
   const [step, setStep] = useState(1);
@@ -21,7 +21,7 @@ const CompleteProfile = () => {
     }
   }, [userProfileCreated]);
 
-  const onUserProfileSubmit = (values: CreateUserProfileDto) => {
+  const onUserProfileSubmit = (values: CreateOrUpdateUserProfileDto) => {
     console.log(values);
     // setStep(2);
     dispatch(

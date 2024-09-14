@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using api.DTOs;
+using api.Dtos;
 using api.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using api.Helpers;

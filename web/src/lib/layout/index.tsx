@@ -2,12 +2,13 @@
 
 import { useEffect, useState, type ReactNode } from "react";
 
-import { AUTH_ROUTES } from "../consts";
+import { AUTH_ROUTES, ONBOARDING_ROUTE } from "../consts";
 import MainLayout from "./MainLayout";
 import AuthLayout from "./AuthLayout";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../state/store";
 import { fetchUser } from "../state/user/userSlice";
+import OnboardingLayout from "./OnboardingLayout";
 
 export type LayoutProps = {
   children: ReactNode;
@@ -33,6 +34,8 @@ const Layout = ({ children }: LayoutProps) => {
   if (typeof window !== "undefined") {
     return AUTH_ROUTES.includes(window.location.pathname.slice(1)) ? (
       <AuthLayout>{children}</AuthLayout>
+    ) : window.location.pathname.slice(1).includes(ONBOARDING_ROUTE) ? (
+      <OnboardingLayout>{children}</OnboardingLayout>
     ) : (
       <MainLayout>{children}</MainLayout>
     );

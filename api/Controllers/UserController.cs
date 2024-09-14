@@ -1,3 +1,4 @@
+using api.Dtos;
 using api.Extensions;
 using api.Helpers;
 using api.Interfaces;
@@ -57,6 +58,7 @@ namespace api.Controllers
 
         [HttpGet("/me")]
         [Authorize]
+        [ProducesResponseType(typeof(ApiResponse<UserDto>), 200)]
         public async Task<IActionResult> Me()
         {
             if (!ModelState.IsValid)

@@ -20,25 +20,27 @@ namespace api.Repository
             var userProfileAlreadyCreated = await GetByUserId(userId);
             if (userProfileAlreadyCreated != null)
             {
-                var userProfileToUpdate = userProfileDto.ToUserProfileFromUpdate(userProfileAlreadyCreated, userId);
+                userProfileDto.ToUserProfileFromUpdate(userProfileAlreadyCreated, userId);
 
                 if (userProfileDto.UserProfileGenders != null && userProfileDto.UserProfileGenders.Count() > 0)
                 {
-                    var existingUserProfileGenders = await _context.UserProfileGenders.Where(upg => upg.UserProfileId == userProfileAlreadyCreated.Id).ToListAsync();
-                    _context.UserProfileGenders.RemoveRange(existingUserProfileGenders);
+                    var existingUserProfileGenders = await _context.UserProfileGenders
+                        .Where(upg => upg.UserProfileId == userProfileAlreadyCreated.Id)
+                        .ToListAsync();
+                    if (existingUserProfileGenders.Any())
+                    {
+                        _context.UserProfileGenders.RemoveRange(existingUserProfileGenders);
+                    }
 
-                    userProfileToUpdate.UserProfileGenders
-                      .AddRange(userProfileDto.UserProfileGenders
-                          .Select(
-                              upg => upg.ToUserProfileGenderFromCreate(userProfileToUpdate.Id)
-                          )
-                      );
+                    foreach (var upgDto in userProfileDto.UserProfileGenders)
+                    {
+                        _context.UserProfileGenders.Add(upgDto.ToUserProfileGenderFromCreate(userProfileAlreadyCreated.Id));
+                    }
                 }
 
-                _context.UserProfiles.Update(userProfileToUpdate);
                 await _context.SaveChangesAsync();
 
-                return userProfileToUpdate;
+                return userProfileAlreadyCreated;
             }
             else
             {
@@ -73,12 +75,18 @@ namespace api.Repository
 
         public async Task<UserProfile?> GetByIdAsync(int id)
         {
-            return await _context.UserProfiles.Include(a => a.User).FirstOrDefaultAsync(c => c.Id == id);
+            return await _context.UserProfiles
+                .Include(a => a.User)
+                .Include(a => a.UserProfileGenders)
+                .FirstOrDefaultAsync(c => c.Id == id);
         }
 
         public async Task<UserProfile?> GetByUserId(string userId)
         {
-            return await _context.UserProfiles.AsNoTracking().FirstOrDefaultAsync(up => up.UserId == userId);
+            var query = _context.UserProfiles
+                .Include(up => up.UserProfileGenders);
+
+            return await query.AsNoTracking().FirstOrDefaultAsync(up => up.UserId == userId);
         }
     }
 }

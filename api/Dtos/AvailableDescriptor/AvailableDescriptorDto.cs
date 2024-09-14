@@ -1,8 +1,7 @@
-using System.Text.Json;
 using System.Text.Json.Serialization;
 using api.Models;
 
-namespace api.DTOs
+namespace api.Dtos
 {
     public class AvailableDescriptorDto
     {

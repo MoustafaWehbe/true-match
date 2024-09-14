@@ -1,14 +1,11 @@
 using System.Text.Json;
-using api.Models;
 
 namespace api.Dtos
 {
     public class UserProfileDto
     {
         public int Id { get; set; }
-        public string? PlaceToLive { get; set; }
         public string? Bio { get; set; }
-        public string? LoveStyle { get; set; }
         public int? AgeFilterMax { get; set; }
         public int? AgeFilterMin { get; set; }
         public int? DistanceFilter { get; set; }
@@ -18,7 +15,7 @@ namespace api.Dtos
         public string? School { get; set; }
         public DateTime? BirthDate { get; set; }
         public string? UserId { get; set; }
-        public JsonDocument? SelectedDescriptors { get; set; }
+        public List<SelectedDescriptor>? SelectedDescriptors { get; set; }
         public List<UserProfileGenderDto> UserProfileGenders { get; set; } = new List<UserProfileGenderDto>();
     }
 }
