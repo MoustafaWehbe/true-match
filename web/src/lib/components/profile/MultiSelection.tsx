@@ -1,19 +1,42 @@
 import {
   Box,
   Text,
-  HStack,
-  Checkbox,
   Wrap,
   WrapItem,
   Button,
   useColorMode,
+  Input,
 } from "@chakra-ui/react";
-import { useState } from "react";
-import { Descriptor as DescriptorType } from "shared/src/types/openApiGen";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import {
+  Descriptor as DescriptorType,
+  SelectedDescriptor,
+} from "shared/src/types/openApiGen";
+import { RootState } from "~/lib/state/store";
 
-const MultiSelection = ({ descriptor }: { descriptor: DescriptorType }) => {
+const MultiSelection = ({
+  descriptor,
+  onSelect,
+  availableDescriptorId,
+}: {
+  descriptor: DescriptorType;
+  availableDescriptorId: number;
+  onSelect: (desc: SelectedDescriptor) => void;
+}) => {
   const [selectedChoices, setSelectedChoices] = useState<string[]>([]);
   const { colorMode } = useColorMode();
+  const [searchTerm, setSearchTerm] = useState("");
+  const { user } = useSelector((state: RootState) => state.user);
+  const existingDescValue = user?.userProfile?.selectedDescriptors?.find(
+    (desc) => desc.availableDescriptorId === availableDescriptorId
+  );
+
+  useEffect(() => {
+    if (existingDescValue?.choicesIds?.length) {
+      setSelectedChoices(existingDescValue?.choicesIds);
+    }
+  }, [existingDescValue]);
 
   const handleSelect = (id: string) => {
     const alreadySelected = selectedChoices.includes(id);
@@ -21,13 +44,33 @@ const MultiSelection = ({ descriptor }: { descriptor: DescriptorType }) => {
       ? selectedChoices.filter((opt) => opt !== id)
       : [...selectedChoices, id];
     setSelectedChoices(updatedSelections);
+    onSelect({
+      availableDescriptorId,
+      descriptorId: descriptor.id,
+      choicesIds: [...selectedChoices],
+    });
+  };
+
+  const filteredChoices = descriptor.choices?.filter((choice) =>
+    choice.name?.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value);
   };
 
   return (
     <Box>
       <Text mb={2}>{descriptor.prompt}</Text>
+      <Input
+        placeholder="Search choices"
+        value={searchTerm}
+        onChange={handleSearch}
+        mb={4}
+        variant={"flushed"}
+      />
       <Wrap spacing={4} justify={"center"}>
-        {descriptor.choices?.map((choice) => (
+        {filteredChoices?.map((choice) => (
           <WrapItem key={choice.id} width="auto" justifyContent={"center"}>
             <Button
               key={choice.id}
@@ -61,17 +104,6 @@ const MultiSelection = ({ descriptor }: { descriptor: DescriptorType }) => {
           </WrapItem>
         ))}
       </Wrap>
-      {/* <HStack spacing={4}>
-        {descriptor.choices?.map((choice) => (
-          <Checkbox
-            key={choice.id}
-            isChecked={selectedOptions.includes(choice.id!)}
-            onChange={() => handleSelect(choice.id!)}
-          >
-            {choice.name}
-          </Checkbox>
-        ))}
-      </HStack> */}
     </Box>
   );
 };

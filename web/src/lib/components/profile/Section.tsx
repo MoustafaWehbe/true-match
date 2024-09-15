@@ -9,10 +9,19 @@ import {
   Collapse,
 } from "@chakra-ui/react";
 import Descriptor from "./Descriptor";
-import { AvailableDescriptorDto } from "shared/src/types/openApiGen";
+import {
+  AvailableDescriptorDto,
+  SelectedDescriptor,
+} from "shared/src/types/openApiGen";
 import { ChevronDownIcon, ChevronRightIcon } from "@chakra-ui/icons";
 
-const Section = ({ section }: { section: AvailableDescriptorDto }) => {
+const Section = ({
+  section,
+  onSelect,
+}: {
+  section: AvailableDescriptorDto;
+  onSelect: (desc: SelectedDescriptor) => void;
+}) => {
   const { isOpen, onToggle } = useDisclosure({ defaultIsOpen: false });
 
   return (
@@ -27,10 +36,31 @@ const Section = ({ section }: { section: AvailableDescriptorDto }) => {
         <Icon as={isOpen ? ChevronDownIcon : ChevronRightIcon} w={6} h={6} />
       </Flex>
       <Collapse in={isOpen} animateOpacity>
-        <Text mt={4}>{section.prompt}</Text>
-        <Stack spacing={5} mt={4} maxHeight={250} overflowY={"auto"}>
+        {section.prompt !==
+          section.descriptors![0].prompt?.slice(
+            0,
+            section.descriptors![0].prompt.length - 1
+          ) && <Text mt={4}>{section.prompt}</Text>}
+        <Stack
+          spacing={5}
+          mt={4}
+          maxHeight={250}
+          overflowY={"auto"}
+          sx={{
+            "::-webkit-scrollbar": {
+              display: "none",
+            },
+          }}
+        >
           {section.descriptors?.map((descriptor) => (
-            <Descriptor key={descriptor.id} descriptor={descriptor} />
+            <Box key={descriptor.id}>
+              <Descriptor
+                descriptor={descriptor}
+                availableDescriptorId={section.id!}
+                onSelect={onSelect}
+              />
+              <hr />
+            </Box>
           ))}
         </Stack>
       </Collapse>

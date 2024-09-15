@@ -40,7 +40,7 @@ const OnboardingFormStep4 = ({ onSubmit }: OnboardingFormStep4Props) => {
       onSubmit({
         selectedDescriptors: [
           {
-            avalibaleDescriptorId: interestsData.id,
+            availableDescriptorId: interestsData.id,
             descriptorId: interestsDataDescriptors[0].id,
             choicesIds: [...selectedChoices],
           },

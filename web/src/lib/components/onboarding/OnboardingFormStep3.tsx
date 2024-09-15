@@ -39,7 +39,7 @@ const OnboardingFormStep3 = ({ onSubmit }: OnboardingFormStep3Props) => {
       onSubmit({
         selectedDescriptors: [
           {
-            avalibaleDescriptorId: relationshipGoalsData.id,
+            availableDescriptorId: relationshipGoalsData.id,
             descriptorId: relationshipGoalsDataDescriptors[0].id,
             choicesIds: [selectedChoice],
           },

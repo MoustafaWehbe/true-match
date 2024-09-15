@@ -84,9 +84,6 @@ const ImageSelector = ({ media }: ImageSelectorProps) => {
 
   return (
     <Box>
-      <Heading textAlign="center" mb={6}>
-        Upload Your Photos
-      </Heading>
       <Input
         type="file"
         multiple
@@ -96,12 +93,6 @@ const ImageSelector = ({ media }: ImageSelectorProps) => {
         display="none"
         id="upload-images"
       />
-      <label htmlFor="upload-images">
-        <Button as="span" colorScheme="pink" mb={4}>
-          Choose Images
-        </Button>
-      </label>
-
       <Grid
         templateColumns={{
           base: "repeat(1, 1fr)",
@@ -169,6 +160,11 @@ const ImageSelector = ({ media }: ImageSelectorProps) => {
           </Box>
         ))}
       </Grid>
+      <label htmlFor="upload-images">
+        <Button as="span" colorScheme="pink" mt={4}>
+          Choose Images
+        </Button>
+      </label>
     </Box>
   );
 };

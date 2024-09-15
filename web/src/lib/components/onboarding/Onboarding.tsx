@@ -39,6 +39,7 @@ const Onboarding = () => {
     );
     setStep(2);
   };
+
   const onStep2Submit = async (
     values: Pick<CreateOrUpdateUserProfileDto, "userProfileGenders">
   ) => {
@@ -54,11 +55,10 @@ const Onboarding = () => {
     values: Pick<CreateOrUpdateUserProfileDto, "selectedDescriptors">
   ) => {
     const avDesc = values.selectedDescriptors!;
-    const existingAvDesc: Array<SelectedDescriptor> = JSON.parse(
-      JSON.stringify(user?.userProfile?.selectedDescriptors)
-    );
+    const existingAvDesc: Array<SelectedDescriptor> =
+      JSON.parse(JSON.stringify(user?.userProfile?.selectedDescriptors)) || [];
     const indexIfAlreadyExist = existingAvDesc?.findIndex(
-      (desc) => desc.avalibaleDescriptorId === avDesc[0].avalibaleDescriptorId
+      (desc) => desc.availableDescriptorId === avDesc[0].availableDescriptorId
     );
     if (
       existingAvDesc &&

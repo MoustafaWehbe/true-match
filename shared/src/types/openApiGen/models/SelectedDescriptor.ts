@@ -24,7 +24,7 @@ export interface SelectedDescriptor {
      * @type {number}
      * @memberof SelectedDescriptor
      */
-    avalibaleDescriptorId?: number;
+    availableDescriptorId?: number;
     /**
      * 
      * @type {string}
@@ -62,7 +62,7 @@ export function SelectedDescriptorFromJSONTyped(json: any, ignoreDiscriminator: 
     }
     return {
         
-        'avalibaleDescriptorId': json['avalibaleDescriptorId'] == null ? undefined : json['avalibaleDescriptorId'],
+        'availableDescriptorId': json['availableDescriptorId'] == null ? undefined : json['availableDescriptorId'],
         'descriptorId': json['descriptorId'] == null ? undefined : json['descriptorId'],
         'choicesIds': json['choicesIds'] == null ? undefined : json['choicesIds'],
         'singleValue': json['singleValue'] == null ? undefined : json['singleValue'],
@@ -75,7 +75,7 @@ export function SelectedDescriptorToJSON(value?: SelectedDescriptor | null): any
     }
     return {
         
-        'avalibaleDescriptorId': value['avalibaleDescriptorId'],
+        'availableDescriptorId': value['availableDescriptorId'],
         'descriptorId': value['descriptorId'],
         'choicesIds': value['choicesIds'],
         'singleValue': value['singleValue'],

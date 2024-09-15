@@ -2,19 +2,54 @@ import { Text } from "@chakra-ui/react";
 import MultiSelection from "./MultiSelection";
 import SingleSelection from "./SingleSelection";
 import Measurement from "./Measurement";
-import { Descriptor as DescriptorType } from "shared/src/types/openApiGen";
+import {
+  Descriptor as DescriptorType,
+  SelectedDescriptor,
+} from "shared/src/types/openApiGen";
 import AdvancedSingleSelection from "./AdvancedSingleSelection";
 
-const Descriptor = ({ descriptor }: { descriptor: DescriptorType }) => {
+const Descriptor = ({
+  descriptor,
+  availableDescriptorId,
+  onSelect,
+}: {
+  descriptor: DescriptorType;
+  availableDescriptorId: number;
+  onSelect: (desc: SelectedDescriptor) => void;
+}) => {
   switch (descriptor.type) {
     case "multiSelectionSet":
-      return <MultiSelection descriptor={descriptor} />;
+      return (
+        <MultiSelection
+          descriptor={descriptor}
+          onSelect={onSelect}
+          availableDescriptorId={availableDescriptorId}
+        />
+      );
     case "single_selection_set":
-      return <SingleSelection descriptor={descriptor} />;
+      return (
+        <SingleSelection
+          descriptor={descriptor}
+          onSelect={onSelect}
+          availableDescriptorId={availableDescriptorId}
+        />
+      );
     case "choice_selector_v1":
-      return <AdvancedSingleSelection descriptor={descriptor} />;
+      return (
+        <AdvancedSingleSelection
+          descriptor={descriptor}
+          onSelect={onSelect}
+          availableDescriptorId={availableDescriptorId}
+        />
+      );
     case "measurement":
-      return <Measurement descriptor={descriptor} />;
+      return (
+        <Measurement
+          descriptor={descriptor}
+          onSelect={onSelect}
+          availableDescriptorId={availableDescriptorId}
+        />
+      );
     default:
       return <Text>Unsupported Descriptor</Text>;
   }
