@@ -6,7 +6,6 @@ interface LoaderProps {
 
 const Loader: React.FC<LoaderProps> = ({ isLoading }) => {
   const loaderColor = useColorModeValue("pink.500", "pink.300");
-  //   const loaderBgColor = useColorModeValue("whiteAlpha.800", "gray.900");
 
   return (
     <>
@@ -17,7 +16,6 @@ const Loader: React.FC<LoaderProps> = ({ isLoading }) => {
           left="0"
           right="0"
           bottom="0"
-          //   bg={loaderBgColor}
           zIndex="overlay"
         >
           <Spinner size="xl" color={loaderColor} />
