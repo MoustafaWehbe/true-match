@@ -25,6 +25,12 @@ import {
     UserFromJSONTyped,
     UserToJSON,
 } from './User';
+import type { Point } from './Point';
+import {
+    PointFromJSON,
+    PointFromJSONTyped,
+    PointToJSON,
+} from './Point';
 
 /**
  * 
@@ -64,10 +70,10 @@ export interface UserProfile {
     distanceFilter?: number | null;
     /**
      * 
-     * @type {string}
+     * @type {Point}
      * @memberof UserProfile
      */
-    pos?: string | null;
+    pos?: Point;
     /**
      * 
      * @type {any}
@@ -152,7 +158,7 @@ export function UserProfileFromJSONTyped(json: any, ignoreDiscriminator: boolean
         'ageFilterMax': json['ageFilterMax'] == null ? undefined : json['ageFilterMax'],
         'ageFilterMin': json['ageFilterMin'] == null ? undefined : json['ageFilterMin'],
         'distanceFilter': json['distanceFilter'] == null ? undefined : json['distanceFilter'],
-        'pos': json['pos'] == null ? undefined : json['pos'],
+        'pos': json['pos'] == null ? undefined : PointFromJSON(json['pos']),
         'location': json['location'] == null ? undefined : json['location'],
         'job': json['job'] == null ? undefined : json['job'],
         'school': json['school'] == null ? undefined : json['school'],
@@ -177,7 +183,7 @@ export function UserProfileToJSON(value?: UserProfile | null): any {
         'ageFilterMax': value['ageFilterMax'],
         'ageFilterMin': value['ageFilterMin'],
         'distanceFilter': value['distanceFilter'],
-        'pos': value['pos'],
+        'pos': PointToJSON(value['pos']),
         'location': value['location'],
         'job': value['job'],
         'school': value['school'],

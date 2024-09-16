@@ -16,7 +16,7 @@ namespace api.Mappers
                 AgeFilterMin = userProfileModel.AgeFilterMin,
                 DistanceFilter = userProfileModel.DistanceFilter,
                 pos = userProfileModel.pos,
-                Location = userProfileModel.Location,
+                Location = userProfileModel.Location != null ? JsonSerializer.Deserialize<UserLocation>(userProfileModel.Location) : null,
                 Job = userProfileModel.Job,
                 School = userProfileModel.School,
                 BirthDate = userProfileModel.BirthDate,
@@ -35,7 +35,7 @@ namespace api.Mappers
                 AgeFilterMin = userProfileDto.AgeFilterMin,
                 DistanceFilter = userProfileDto.DistanceFilter,
                 pos = userProfileDto.pos,
-                Location = userProfileDto.Location,
+                Location = JsonDocument.Parse(JsonSerializer.Serialize(userProfileDto.Location)),
                 Job = userProfileDto.Job,
                 School = userProfileDto.School,
                 BirthDate = userProfileDto.BirthDate,
@@ -53,11 +53,13 @@ namespace api.Mappers
             existingUserProfile.AgeFilterMin = userProfileDto.AgeFilterMin ?? existingUserProfile.AgeFilterMin;
             existingUserProfile.DistanceFilter = userProfileDto.DistanceFilter ?? existingUserProfile.DistanceFilter;
             existingUserProfile.pos = userProfileDto.pos ?? existingUserProfile.pos;
-            existingUserProfile.Location = userProfileDto.Location ?? existingUserProfile.Location;
             existingUserProfile.Job = userProfileDto.Job ?? existingUserProfile.Job;
             existingUserProfile.School = userProfileDto.School ?? existingUserProfile.School;
             existingUserProfile.BirthDate = userProfileDto.BirthDate ?? existingUserProfile.BirthDate;
             existingUserProfile.UpdatedAt = DateTime.UtcNow;
+            existingUserProfile.Location = userProfileDto.Location != null
+                ? JsonDocument.Parse(JsonSerializer.Serialize(userProfileDto.Location))
+                : existingUserProfile.Location;
             existingUserProfile.SelectedDescriptors = userProfileDto.SelectedDescriptors != null
                 ? JsonDocument.Parse(JsonSerializer.Serialize(userProfileDto.SelectedDescriptors))
                 : existingUserProfile.SelectedDescriptors;

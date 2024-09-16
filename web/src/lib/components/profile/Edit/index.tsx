@@ -18,6 +18,7 @@ const EditProfile = () => {
     bio: "",
     job: "",
     school: "",
+    location: undefined,
   });
 
   useEffect(() => {
@@ -67,6 +68,10 @@ const EditProfile = () => {
           basicFormData.school !== user?.userProfile?.school
             ? basicFormData.school
             : null,
+        location:
+          basicFormData.location !== user?.userProfile?.location
+            ? basicFormData.location
+            : undefined,
       })
     );
     toast({

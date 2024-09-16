@@ -8,6 +8,8 @@ namespace api.Models
         public string? Id { get; set; }
         [JsonPropertyName("prompt")]
         public string? Prompt { get; set; }
+        [JsonPropertyName("name")]
+        public string? Name { get; set; }
         [JsonPropertyName("subPrompt")]
         public string? SubPrompt { get; set; }
         [JsonPropertyName("type")]

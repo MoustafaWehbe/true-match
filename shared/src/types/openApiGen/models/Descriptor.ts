@@ -55,6 +55,12 @@ export interface Descriptor {
      * @type {string}
      * @memberof Descriptor
      */
+    name?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof Descriptor
+     */
     subPrompt?: string | null;
     /**
      * 
@@ -161,6 +167,7 @@ export function DescriptorFromJSONTyped(json: any, ignoreDiscriminator: boolean)
         
         'id': json['id'] == null ? undefined : json['id'],
         'prompt': json['prompt'] == null ? undefined : json['prompt'],
+        'name': json['name'] == null ? undefined : json['name'],
         'subPrompt': json['subPrompt'] == null ? undefined : json['subPrompt'],
         'type': json['type'] == null ? undefined : json['type'],
         'iconUrl': json['iconUrl'] == null ? undefined : json['iconUrl'],
@@ -187,6 +194,7 @@ export function DescriptorToJSON(value?: Descriptor | null): any {
         
         'id': value['id'],
         'prompt': value['prompt'],
+        'name': value['name'],
         'subPrompt': value['subPrompt'],
         'type': value['type'],
         'iconUrl': value['iconUrl'],

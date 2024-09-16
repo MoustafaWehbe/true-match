@@ -13,12 +13,24 @@
  */
 
 import { mapValues } from '../runtime';
+import type { UserLocation } from './UserLocation';
+import {
+    UserLocationFromJSON,
+    UserLocationFromJSONTyped,
+    UserLocationToJSON,
+} from './UserLocation';
 import type { SelectedDescriptor } from './SelectedDescriptor';
 import {
     SelectedDescriptorFromJSON,
     SelectedDescriptorFromJSONTyped,
     SelectedDescriptorToJSON,
 } from './SelectedDescriptor';
+import type { Point } from './Point';
+import {
+    PointFromJSON,
+    PointFromJSONTyped,
+    PointToJSON,
+} from './Point';
 import type { UserProfileGenderDto } from './UserProfileGenderDto';
 import {
     UserProfileGenderDtoFromJSON,
@@ -70,16 +82,16 @@ export interface CreateOrUpdateUserProfileDto {
     distanceFilter?: number | null;
     /**
      * 
-     * @type {string}
+     * @type {Point}
      * @memberof CreateOrUpdateUserProfileDto
      */
-    pos?: string | null;
+    pos?: Point;
     /**
      * 
-     * @type {any}
+     * @type {UserLocation}
      * @memberof CreateOrUpdateUserProfileDto
      */
-    location?: any | null;
+    location?: UserLocation;
     /**
      * 
      * @type {string}
@@ -141,8 +153,8 @@ export function CreateOrUpdateUserProfileDtoFromJSONTyped(json: any, ignoreDiscr
         'ageFilterMax': json['ageFilterMax'] == null ? undefined : json['ageFilterMax'],
         'ageFilterMin': json['ageFilterMin'] == null ? undefined : json['ageFilterMin'],
         'distanceFilter': json['distanceFilter'] == null ? undefined : json['distanceFilter'],
-        'pos': json['pos'] == null ? undefined : json['pos'],
-        'location': json['location'] == null ? undefined : json['location'],
+        'pos': json['pos'] == null ? undefined : PointFromJSON(json['pos']),
+        'location': json['location'] == null ? undefined : UserLocationFromJSON(json['location']),
         'job': json['job'] == null ? undefined : json['job'],
         'school': json['school'] == null ? undefined : json['school'],
         'birthDate': json['birthDate'] == null ? undefined : (new Date(json['birthDate'])),
@@ -164,8 +176,8 @@ export function CreateOrUpdateUserProfileDtoToJSON(value?: CreateOrUpdateUserPro
         'ageFilterMax': value['ageFilterMax'],
         'ageFilterMin': value['ageFilterMin'],
         'distanceFilter': value['distanceFilter'],
-        'pos': value['pos'],
-        'location': value['location'],
+        'pos': PointToJSON(value['pos']),
+        'location': UserLocationToJSON(value['location']),
         'job': value['job'],
         'school': value['school'],
         'birthDate': value['birthDate'] == null ? undefined : ((value['birthDate'] as any).toISOString()),

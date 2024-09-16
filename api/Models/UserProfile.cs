@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json;
+using NetTopologySuite.Geometries;
 
 namespace api.Models
 {
@@ -17,7 +18,8 @@ namespace api.Models
 
         // pos = $"({longitude}, {latitude})"
         // exact location: you obtain it after user enables location
-        public string? pos { get; set; }
+        [Column(TypeName = "geometry (point)")]
+        public Point? pos { get; set; }
         // {
         //     coords: {lat, long}, 
         //     name: Beirut, 

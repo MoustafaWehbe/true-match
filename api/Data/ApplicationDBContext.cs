@@ -29,6 +29,7 @@ namespace api.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+            builder.HasPostgresExtension("postgis");
 
             builder.ApplyConfiguration(new UserProfileGenderConfiguration());
             builder.ApplyConfiguration(new RoomParticipantConfiguration());

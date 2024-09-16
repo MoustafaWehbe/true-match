@@ -12,11 +12,15 @@ import {
 import { ChangeEvent, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "~/lib/state/store";
+import Geocoder from "./PlaceGeocoder";
+import { GeocodeFeature } from "@mapbox/search-js-core";
+import { UserLocation } from "shared/src/types/openApiGen";
 
 export type BasicInfoType = {
   bio: string;
   job: string;
   school: string;
+  location?: UserLocation;
 };
 
 interface BasicInfoProps {
@@ -37,6 +41,7 @@ const BasicInfo = ({ basicFormData, setBasicFormData }: BasicInfoProps) => {
       bio: user?.userProfile?.bio || "",
       job: user?.userProfile?.job || "",
       school: user?.userProfile?.school || "",
+      location: user?.userProfile?.location || undefined,
     });
   }, [setBasicFormData, user?.userProfile]);
 
@@ -93,6 +98,14 @@ const BasicInfo = ({ basicFormData, setBasicFormData }: BasicInfoProps) => {
           _placeholder={{ color: placeholderColor }}
           onChange={handleInputChange}
           value={basicFormData.school}
+        />
+      </FormControl>
+
+      <FormControl mb={4}>
+        <FormLabel color={textColor}>Location</FormLabel>
+        <Geocoder
+          basicFormData={basicFormData}
+          setBasicFormData={setBasicFormData}
         />
       </FormControl>
     </Box>

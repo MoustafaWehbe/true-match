@@ -1,4 +1,6 @@
 using System.Text.Json;
+using api.Models;
+using NetTopologySuite.Geometries;
 
 namespace api.Dtos
 {
@@ -10,8 +12,8 @@ namespace api.Dtos
         public int? AgeFilterMax { get; set; }
         public int? AgeFilterMin { get; set; }
         public int? DistanceFilter { get; set; }
-        public string? pos { get; set; }
-        public JsonDocument? Location { get; set; }
+        public Point? pos { get; set; }
+        public UserLocation? Location { get; set; }
         public string? Job { get; set; }
         public string? School { get; set; }
         public DateTime? BirthDate { get; set; }

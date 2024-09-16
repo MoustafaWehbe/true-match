@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using NetTopologySuite.IO.Converters;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,11 +19,16 @@ builder.Services.AddControllers();
 builder.Services.AddControllers().AddNewtonsoftJson(options =>
 {
     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+    options.SerializerSettings.Converters.Add(new GeometryConverter());
 });
 
 builder.Services.AddDbContext<ApplicationDBContext>(options =>
 {
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")).EnableSensitiveDataLogging();
+    options.UseNpgsql(
+        builder.Configuration.GetConnectionString("DefaultConnection"),
+        o => o.UseNetTopologySuite()
+    )
+    .EnableSensitiveDataLogging();
 });
 
 builder.Services.AddIdentity<User, IdentityRole>(options =>

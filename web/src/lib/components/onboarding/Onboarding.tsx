@@ -18,6 +18,7 @@ import OnboardingFormStep2 from "./OnboardingFormStep2";
 import { getAvailableDescriptors } from "~/lib/state/availableDescriptor/availableDescriptorSlice";
 import OnboardingFormStep3 from "./OnboardingFormStep3";
 import OnboardingFormStep4 from "./OnboardingFormStep4";
+import OnboardingLocationAccess from "./OnboardingLocationAccess";
 
 const Onboarding = () => {
   const [step, setStep] = useState(1);
@@ -115,6 +116,17 @@ const Onboarding = () => {
         console.error("Error uploading file:", error);
       }
     });
+    setStep(6);
+  };
+
+  const onLocationSubmit = async (
+    values: Pick<CreateOrUpdateUserProfileDto, "pos">
+  ) => {
+    await dispatch(
+      createOrUpdateUserProfile({
+        ...values,
+      })
+    );
     window.location.href = "/";
   };
 
@@ -125,6 +137,7 @@ const Onboarding = () => {
       {step === 3 && <OnboardingFormStep3 onSubmit={onStep3Submit} />}
       {step === 4 && <OnboardingFormStep4 onSubmit={onStep4Submit} />}
       {step === 5 && <UploadImagesForm onSubmit={onUserImagesSubmit} />}
+      {step === 6 && <OnboardingLocationAccess onSubmit={onLocationSubmit} />}
     </Box>
   );
 };

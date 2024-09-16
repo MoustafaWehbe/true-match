@@ -27,6 +27,7 @@ import CustomSelect, { Option } from "../shared/CustomSelect";
 import { AllRoomStatus } from "shared/src/types/openApiGen";
 import { blockUser } from "~/lib/state/user/userSlice";
 import ConfirmDialog from "../shared/ConfirmDialog";
+import Loader from "../shared/Loader";
 
 const options: Option[] = [
   { value: 0, label: "Coming up" },
@@ -118,6 +119,8 @@ function BrowseRooms() {
           selectedOption={selectedStatus}
         />
       </Box>
+      <Loader isLoading={getRoomsLoading} />
+
       <Stack spacing={4} align="center" sx={{ clear: "both" }}>
         <Heading fontSize="4xl">Browse Rooms</Heading>
         {rooms?.data?.length ? (
