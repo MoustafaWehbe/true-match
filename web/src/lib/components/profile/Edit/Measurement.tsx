@@ -6,7 +6,7 @@ import {
   SliderFilledTrack,
   SliderThumb,
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import {
   Descriptor as DescriptorType,
@@ -26,11 +26,21 @@ const Measurement = ({
   const [value, setValue] = useState<number>();
   const { user } = useSelector((state: RootState) => state.user);
 
-  console.log(descriptor);
+  const existingDescValue = useMemo(
+    () =>
+      user?.userProfile?.selectedDescriptors?.find(
+        (desc) =>
+          desc.availableDescriptorId === availableDescriptorId &&
+          desc.descriptorId === descriptor.id
+      ),
+    [
+      availableDescriptorId,
+      descriptor.id,
+      user?.userProfile?.selectedDescriptors,
+    ]
+  );
+
   useEffect(() => {
-    const existingDescValue = user?.userProfile?.selectedDescriptors?.find(
-      (desc) => desc.availableDescriptorId === availableDescriptorId
-    );
     setValue(
       existingDescValue?.singleValue ||
         Math.round(
@@ -39,11 +49,7 @@ const Measurement = ({
             2
         )
     );
-  }, [
-    availableDescriptorId,
-    descriptor.measurableDetails,
-    user?.userProfile?.selectedDescriptors,
-  ]);
+  }, [descriptor.measurableDetails, existingDescValue?.singleValue]);
 
   const onChange = (value: number) => {
     setValue(value);

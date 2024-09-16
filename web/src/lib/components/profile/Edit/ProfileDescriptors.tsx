@@ -3,6 +3,7 @@ import Section from "./Section";
 import { useSelector } from "react-redux";
 import { RootState } from "~/lib/state/store";
 import { SelectedDescriptor } from "shared/src/types/openApiGen";
+import { memo } from "react";
 
 const ProfileDescriptors = ({
   onSelect,
@@ -26,4 +27,4 @@ const ProfileDescriptors = ({
   );
 };
 
-export default ProfileDescriptors;
+export default memo(ProfileDescriptors);

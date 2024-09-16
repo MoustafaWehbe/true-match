@@ -7,7 +7,7 @@ import {
   useColorMode,
   Input,
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import {
   Descriptor as DescriptorType,
@@ -28,8 +28,19 @@ const MultiSelection = ({
   const { colorMode } = useColorMode();
   const [searchTerm, setSearchTerm] = useState("");
   const { user } = useSelector((state: RootState) => state.user);
-  const existingDescValue = user?.userProfile?.selectedDescriptors?.find(
-    (desc) => desc.availableDescriptorId === availableDescriptorId
+
+  const existingDescValue = useMemo(
+    () =>
+      user?.userProfile?.selectedDescriptors?.find(
+        (desc) =>
+          desc.availableDescriptorId === availableDescriptorId &&
+          desc.descriptorId === descriptor.id
+      ),
+    [
+      availableDescriptorId,
+      descriptor.id,
+      user?.userProfile?.selectedDescriptors,
+    ]
   );
 
   useEffect(() => {
@@ -47,7 +58,7 @@ const MultiSelection = ({
     onSelect({
       availableDescriptorId,
       descriptorId: descriptor.id,
-      choicesIds: [...selectedChoices],
+      choicesIds: [...updatedSelections],
     });
   };
 

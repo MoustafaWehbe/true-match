@@ -6,7 +6,7 @@ import {
   Button,
   useColorMode,
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import {
   Descriptor as DescriptorType,
@@ -27,8 +27,18 @@ const SingleSelection = ({
   const { user } = useSelector((state: RootState) => state.user);
   const { colorMode } = useColorMode();
 
-  const existingDescValue = user?.userProfile?.selectedDescriptors?.find(
-    (desc) => desc.availableDescriptorId === availableDescriptorId
+  const existingDescValue = useMemo(
+    () =>
+      user?.userProfile?.selectedDescriptors?.find(
+        (desc) =>
+          desc.availableDescriptorId === availableDescriptorId &&
+          desc.descriptorId === descriptor.id
+      ),
+    [
+      availableDescriptorId,
+      descriptor.id,
+      user?.userProfile?.selectedDescriptors,
+    ]
   );
 
   useEffect(() => {

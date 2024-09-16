@@ -1,5 +1,5 @@
 import { Box, Text, SimpleGrid, Button, useColorMode } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import {
   Descriptor as DescriptorType,
@@ -20,8 +20,18 @@ const AdvancedSingleSelection = ({
   const { colorMode } = useColorMode();
   const { user } = useSelector((state: RootState) => state.user);
 
-  const existingDescValue = user?.userProfile?.selectedDescriptors?.find(
-    (desc) => desc.availableDescriptorId === availableDescriptorId
+  const existingDescValue = useMemo(
+    () =>
+      user?.userProfile?.selectedDescriptors?.find(
+        (desc) =>
+          desc.availableDescriptorId === availableDescriptorId &&
+          desc.descriptorId === descriptor.id
+      ),
+    [
+      availableDescriptorId,
+      descriptor.id,
+      user?.userProfile?.selectedDescriptors,
+    ]
   );
 
   useEffect(() => {
@@ -55,7 +65,7 @@ const AdvancedSingleSelection = ({
             display="flex"
             flexDirection="column"
             alignItems="center"
-            p={4}
+            p={2}
             borderRadius="lg"
             height="auto"
             onClick={() => handleSelect(choice.id!)}

@@ -13,6 +13,7 @@ import {
   useColorMode,
   useColorModeValue,
 } from "@chakra-ui/react";
+import { useRouter } from "next/navigation";
 import { CiUser } from "react-icons/ci";
 import { IoIosLogOut } from "react-icons/io";
 import { RiMoonFill, RiSunLine } from "react-icons/ri";
@@ -38,6 +39,7 @@ const HeaderPopover = ({ onLogout, user }: Props) => {
   const textColor = useColorModeValue("gray.800", "whiteAlpha.900");
   const hoverColor = useColorModeValue("pink.500", "pink.300");
   const { colorMode, toggleColorMode } = useColorMode();
+  const router = useRouter();
 
   return (
     <Popover trigger="hover" placement="top-end">
@@ -67,6 +69,7 @@ const HeaderPopover = ({ onLogout, user }: Props) => {
               color={textColor}
               _hover={{ color: hoverColor }}
               animation={`${bounceAnimation} 2s infinite`}
+              onClick={() => router.push("/profile")}
             >
               View profile
             </Button>

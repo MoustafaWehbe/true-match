@@ -59,6 +59,7 @@ const Section = ({
                 availableDescriptorId={section.id!}
                 onSelect={onSelect}
               />
+              <br />
               <hr />
             </Box>
           ))}

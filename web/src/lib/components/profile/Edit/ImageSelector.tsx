@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { memo, useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -169,4 +169,4 @@ const ImageSelector = ({ media }: ImageSelectorProps) => {
   );
 };
 
-export default ImageSelector;
+export default memo(ImageSelector);
