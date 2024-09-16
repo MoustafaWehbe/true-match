@@ -43,21 +43,25 @@ const PlaceGeocoder = ({
     },
   };
 
+  // @ts-ignore
   return (
     <Box w="full" className="profile-geocoder">
-      <Geocoder
-        options={{
-          proximity: {
-            lng: -122.431297,
-            lat: 37.773972,
-          },
-        }}
-        value={basicFormData?.location?.fullAddress || ""}
-        accessToken={env.mapboxAccessToken!}
-        theme={geocoderTheme}
-        placeholder="Search for a city"
-        onRetrieve={onRetrieve}
-      />
+      {
+        // @ts-ignore
+        <Geocoder
+          options={{
+            proximity: {
+              lng: -122.431297,
+              lat: 37.773972,
+            },
+          }}
+          value={basicFormData?.location?.fullAddress || ""}
+          accessToken={env.mapboxAccessToken!}
+          theme={geocoderTheme}
+          placeholder="Search for a city"
+          onRetrieve={onRetrieve}
+        />
+      }
     </Box>
   );
 };
