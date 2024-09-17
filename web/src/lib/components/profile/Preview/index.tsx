@@ -181,7 +181,7 @@ const PreviewProfile = () => {
             );
             if (selectedDescs) {
               return (
-                <VStack align="start" spacing={3} mb={4}>
+                <VStack align="start" spacing={3} mb={4} key={avlbleDesc.id}>
                   <Heading
                     size="lg"
                     color={textColor}
@@ -191,7 +191,7 @@ const PreviewProfile = () => {
                   >
                     {avlbleDesc.sectionName}
                   </Heading>
-                  {avlbleDesc.descriptors?.map((desc) => {
+                  {avlbleDesc.descriptors?.map((desc, index) => {
                     const selectedDesc =
                       user?.userProfile?.selectedDescriptors?.find(
                         (sDesc) =>
@@ -200,7 +200,7 @@ const PreviewProfile = () => {
                       );
                     if (selectedDesc) {
                       return (
-                        <Box>
+                        <Box key={desc + "" + index}>
                           <Text color={textColor}>
                             {desc.name && <b>{desc.name} </b>}
                             <Wrap spacing={2} justify={"start"} mt={2}>

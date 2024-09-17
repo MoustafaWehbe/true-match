@@ -178,7 +178,7 @@ namespace api.Controllers
 
                 if (alreadyParticipatedRoom == null)
                 {
-                    return BadRequest("Can't join");
+                    return BadRequest("Can't leave");
                 }
 
                 var newRoomParticipantEvent = new RoomParticipantEvent

@@ -24,7 +24,7 @@ interface IceCandidatePayload {
   candidate: RTCIceCandidate;
 }
 
-export {
+export type {
   JoinRoomPayload,
   LeaveRoomPayload,
   OfferPayload,

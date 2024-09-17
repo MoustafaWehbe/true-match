@@ -17,9 +17,11 @@ const envVars = {
 
 envSchema.validateSync(envVars);
 
-export default {
+const env = {
   apiUrl: envVars.NEXT_PUBLIC_API_URL,
   isProd: envVars.NODE_ENV === "production",
   socketServerUrl: envVars.NEXT_PUBLIC_SOCKET_SERVER_URL,
   mapboxAccessToken: envVars.NEXT_PUBLIC_MAPBOX_TOKEN,
 };
+
+export default env;
