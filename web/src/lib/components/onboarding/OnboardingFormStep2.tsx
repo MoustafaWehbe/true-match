@@ -16,7 +16,7 @@ import {
 import {
   CreateOrUpdateUserProfileDto,
   GenderDto,
-} from "shared/src/types/openApiGen";
+} from "@dapp/shared/src/types/openApiGen";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "~/lib/state/store";
 import { getGenders } from "~/lib/state/gender/genderSlice";

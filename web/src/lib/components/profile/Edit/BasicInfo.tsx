@@ -13,8 +13,7 @@ import { ChangeEvent, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "~/lib/state/store";
 import Geocoder from "./PlaceGeocoder";
-import { GeocodeFeature } from "@mapbox/search-js-core";
-import { UserLocation } from "shared/src/types/openApiGen";
+import { UserLocation } from "@dapp/shared/src/types/openApiGen";
 
 export type BasicInfoType = {
   bio: string;

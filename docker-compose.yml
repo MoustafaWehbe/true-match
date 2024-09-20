@@ -1,0 +1,45 @@
+version: '3.8'
+services:
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    container_name: dapp-api-service
+    ports:
+      - "5000:80"
+    networks:
+      - my-dapp-network
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+
+  web:
+    env_file:
+      - web/.env.local
+    build:
+      context: .
+      dockerfile: web/Dockerfile
+    container_name: dapp-web-service
+    ports:
+      - "3000:3000"
+    networks:
+      - my-dapp-network
+    depends_on:
+      - api
+
+  webrtc-server:
+    env_file:
+      - webrtc-server/.env
+    build:
+      context: .
+      dockerfile: webrtc-server/Dockerfile
+    container_name: dapp-webrtc-service
+    ports:
+      - "8080:8080"
+    networks:
+      - my-dapp-network
+    depends_on:
+      - api
+
+networks:
+  my-dapp-network:
+    driver: bridge

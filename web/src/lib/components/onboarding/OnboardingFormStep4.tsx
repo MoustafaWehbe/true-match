@@ -9,7 +9,7 @@ import {
   Wrap,
   WrapItem,
 } from "@chakra-ui/react";
-import { CreateOrUpdateUserProfileDto } from "shared/src/types/openApiGen";
+import { CreateOrUpdateUserProfileDto } from "@dapp/shared/src/types/openApiGen";
 import { useSelector } from "react-redux";
 import { RootState } from "~/lib/state/store";
 

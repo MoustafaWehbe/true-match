@@ -24,7 +24,7 @@ import {
   removeRoomsByUserId,
 } from "~/lib/state/room/roomSlice";
 import CustomSelect, { Option } from "../shared/CustomSelect";
-import { AllRoomStatus } from "shared/src/types/openApiGen";
+import { AllRoomStatus } from "@dapp/shared/src/types/openApiGen";
 import { blockUser } from "~/lib/state/user/userSlice";
 import ConfirmDialog from "../shared/ConfirmDialog";
 import Loader from "../shared/Loader";

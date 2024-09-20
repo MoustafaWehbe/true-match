@@ -4,7 +4,7 @@ import { Geocoder } from "@mapbox/search-js-react";
 import { GeocodeFeature } from "@mapbox/search-js-core";
 import env from "~/lib/consts/env";
 import { BasicInfoType } from "./BasicInfo";
-import { UserLocation } from "shared/src/types/openApiGen";
+import { UserLocation } from "@dapp/shared/src/types/openApiGen";
 
 const PlaceGeocoder = ({
   basicFormData,

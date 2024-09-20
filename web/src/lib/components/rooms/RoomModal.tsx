@@ -26,7 +26,7 @@ import {
 } from "@chakra-ui/react";
 import { useSelector } from "react-redux";
 import { RootState } from "~/lib/state/store";
-import { RoomDto } from "shared/src/types/openApiGen";
+import { RoomDto } from "@dapp/shared/src/types/openApiGen";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import ContentModal from "./ContentModal";

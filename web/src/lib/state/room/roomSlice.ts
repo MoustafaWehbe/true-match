@@ -14,7 +14,7 @@ import {
   RoomParticipantDtoApiResponse,
   RoomParticipantDto,
   HideRoomDto,
-} from "shared/src/types/openApiGen";
+} from "@dapp/shared/src/types/openApiGen";
 import axiosInstance, { defaultHeaders } from "~/lib/utils/api/axiosConfig";
 
 export interface RoomSate {

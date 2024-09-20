@@ -2,7 +2,6 @@ import {
   Box,
   Button,
   IconButton,
-  Image,
   Stack,
   Text,
   useColorModeValue,
@@ -10,12 +9,12 @@ import {
 // import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { CalendarIcon, CloseIcon, TimeIcon } from "@chakra-ui/icons";
 import { format } from "date-fns";
 
-import { RoomDto } from "shared/src/types/openApiGen";
-import { AppDispatch, RootState } from "~/lib/state/store";
+import { RoomDto } from "@dapp/shared/src/types/openApiGen";
+import { RootState } from "~/lib/state/store";
 // import { startRoom } from "~/lib/state/room/roomSlice";
 import DeleteRoomButton from "./DeleteRoomButton";
 import { FaHeart } from "react-icons/fa";
@@ -40,7 +39,7 @@ interface RoomCardProps {
 
 const RoomCard = ({
   room,
-  isArchived,
+  isArchived: _isArchived,
   isInProgress,
   isComingUp,
   handleOnInterested,
@@ -58,11 +57,11 @@ const RoomCard = ({
     ishidingRoom,
     actionPerformedOnRoomId,
   } = useSelector((state: RootState) => state.room);
-  const { isBlockingUser } = useSelector((state: RootState) => state.user);
+  // const { isBlockingUser } = useSelector((state: RootState) => state.user);
   const router = useRouter();
 
   const isOwner = currentUser && currentUser.id === room?.user?.id;
-  const dispatch = useDispatch<AppDispatch>();
+  // const dispatch = useDispatch<AppDispatch>();
   // const { roomStarted } = useSelector((state: RootState) => state.room);
 
   // useEffect(() => {
@@ -72,7 +71,7 @@ const RoomCard = ({
   // }, [room.id, roomStarted, router]);
 
   const onStart = () => {
-    const newRoom = { ...room };
+    // const newRoom = { ...room };
     // newRoom.status = "InProgress";
     // dispatch(startRoom(newRoom));
   };

@@ -287,7 +287,7 @@ const SwipeCardCore = forwardRef<any, SwipeCardCoreProps>(
       let lastPosition = { dx: 0, dy: 0, vx: 0, vy: 0, timeStamp: Date.now() };
       let isClicking = false;
 
-      const onTouchStart = (ev) => {
+      const onTouchStart = (ev: any) => {
         if (
           !(ev.target as HTMLElement).className.includes("pressable") &&
           ev.cancelable
@@ -307,7 +307,7 @@ const SwipeCardCore = forwardRef<any, SwipeCardCoreProps>(
 
       element.current?.addEventListener("touchstart", onTouchStart);
 
-      const onMouseDown = (ev) => {
+      const onMouseDown = (ev: any) => {
         isClicking = true;
         const gestureState = gestureStateFromWebEvent(
           ev,

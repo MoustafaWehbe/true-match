@@ -9,7 +9,6 @@ import {
   IconButton,
   keyframes,
   Text,
-  Tooltip,
   useColorModeValue,
 } from "@chakra-ui/react";
 import VideoControls from "./VideoControls";

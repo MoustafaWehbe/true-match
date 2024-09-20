@@ -1,4 +1,4 @@
-import { Box, Flex, keyframes } from "@chakra-ui/react";
+import { Box, keyframes } from "@chakra-ui/react";
 import { FaHeart } from "react-icons/fa";
 
 const heartbeat = keyframes`
@@ -6,7 +6,7 @@ const heartbeat = keyframes`
   50% { transform: scale(1.3); }
 `;
 
-const animation = `${heartbeat} 1s ease-in-out infinite`;
+// const animation = `${heartbeat} 1s ease-in-out infinite`;
 
 const AnimatedHeart = () => {
   return (

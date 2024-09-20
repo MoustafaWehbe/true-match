@@ -12,7 +12,7 @@ import Descriptor from "./Descriptor";
 import {
   AvailableDescriptorDto,
   SelectedDescriptor,
-} from "shared/src/types/openApiGen";
+} from "@dapp/shared/src/types/openApiGen";
 import { ChevronDownIcon, ChevronRightIcon } from "@chakra-ui/icons";
 
 const Section = ({

@@ -11,7 +11,7 @@ import { useSelector } from "react-redux";
 import {
   Descriptor as DescriptorType,
   SelectedDescriptor,
-} from "shared/src/types/openApiGen";
+} from "@dapp/shared/src/types/openApiGen";
 import { RootState } from "~/lib/state/store";
 
 const Measurement = ({

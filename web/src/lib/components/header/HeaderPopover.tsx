@@ -13,16 +13,15 @@ import {
   useColorMode,
   useColorModeValue,
 } from "@chakra-ui/react";
+import { openApiTypes } from "@dapp/shared";
 import { useRouter } from "next/navigation";
 import { CiUser } from "react-icons/ci";
 import { IoIosLogOut } from "react-icons/io";
 import { RiMoonFill, RiSunLine } from "react-icons/ri";
 
-import { User } from "shared/src/types/openApiGen";
-
 type Props = {
   onLogout: () => void;
-  user: User;
+  user: openApiTypes.User;
 };
 
 const bounceAnimation = keyframes`

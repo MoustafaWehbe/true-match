@@ -3,7 +3,7 @@ import ImageSelector from "./ImageSelector";
 import ProfileDescriptors from "./ProfileDescriptors";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "~/lib/state/store";
-import { SelectedDescriptor } from "shared/src/types/openApiGen";
+import { SelectedDescriptor } from "@dapp/shared/src/types/openApiGen";
 import { useCallback, useEffect, useState } from "react";
 import { createOrUpdateUserProfile } from "~/lib/state/user/userSlice";
 import BasicInfo, { BasicInfoType } from "./BasicInfo";

@@ -22,7 +22,7 @@ import {
   updateRoom,
 } from "~/lib/state/room/roomSlice";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { MyRoomStatus, RoomDto } from "shared/src/types/openApiGen";
+import { MyRoomStatus, RoomDto } from "@dapp/shared/src/types/openApiGen";
 import CustomSelect, { Option } from "../shared/CustomSelect";
 import { getQuestionCategories } from "~/lib/state/question/questionSlice";
 import RoomModal from "./RoomModal";

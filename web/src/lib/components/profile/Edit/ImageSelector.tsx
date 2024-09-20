@@ -12,7 +12,7 @@ import {
 import { CloseIcon } from "@chakra-ui/icons";
 import { RootState } from "~/lib/state/store";
 import { useSelector } from "react-redux";
-import { Media } from "shared/src/types/openApiGen";
+import { Media } from "@dapp/shared/src/types/openApiGen";
 import { urlToFile } from "~/lib/utils/file/file";
 import env from "~/lib/consts/env";
 

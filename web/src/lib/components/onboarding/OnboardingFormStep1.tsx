@@ -10,11 +10,13 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { useFormik } from "formik";
-import { CreateOrUpdateUserProfileDto } from "shared/src/types/openApiGen";
+import { openApiTypes } from "@dapp/shared";
 import * as Yup from "yup";
 
 interface OnboardingFormStep1Props {
-  onSubmit: (values: Pick<CreateOrUpdateUserProfileDto, "birthDate">) => void;
+  onSubmit: (
+    values: Pick<openApiTypes.CreateOrUpdateUserProfileDto, "birthDate">
+  ) => void;
 }
 
 function OnboardingFormStep1({ onSubmit }: OnboardingFormStep1Props) {

@@ -1,5 +1,5 @@
 import { socket } from "~/lib/utils/socket/socket";
-import { socketEventTypes } from "shared/src/types/custom";
+import { socketEventTypes } from "@dapp/shared/src/types/custom";
 
 export class WebRTCHandler {
   private stream: MediaStream | null = null;

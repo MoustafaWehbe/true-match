@@ -5,7 +5,7 @@ import Measurement from "./Measurement";
 import {
   Descriptor as DescriptorType,
   SelectedDescriptor,
-} from "shared/src/types/openApiGen";
+} from "@dapp/shared/src/types/openApiGen";
 import AdvancedSingleSelection from "./AdvancedSingleSelection";
 
 const Descriptor = ({

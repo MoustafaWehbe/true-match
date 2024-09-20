@@ -5,7 +5,7 @@ import {
   QuestionCategoryDtoListApiResponse,
   SystemQuestionDto,
   SystemQuestionDtoListApiResponse,
-} from "shared/src/types/openApiGen";
+} from "@dapp/shared/src/types/openApiGen";
 import axiosInstance, { defaultHeaders } from "~/lib/utils/api/axiosConfig";
 
 export interface QuestionSate {
