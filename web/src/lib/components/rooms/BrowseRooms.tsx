@@ -1,5 +1,7 @@
 "use client";
 
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   Box,
   Button,
@@ -10,10 +12,15 @@ import {
   Text,
   useColorModeValue,
 } from "@chakra-ui/react";
-import { useCallback, useEffect, useRef, useState } from "react";
+
+import { AllRoomStatus } from "@dapp/shared/src/types/openApiGen";
+
+import ConfirmDialog from "../shared/ConfirmDialog";
+import CustomSelect, { Option } from "../shared/CustomSelect";
+import Loader from "../shared/Loader";
+
 import RoomCard from "./RoomCard";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "~/lib/state/store";
+
 import {
   clearRooms,
   deregisterRoom,
@@ -23,11 +30,8 @@ import {
   removeRoomById,
   removeRoomsByUserId,
 } from "~/lib/state/room/roomSlice";
-import CustomSelect, { Option } from "../shared/CustomSelect";
-import { AllRoomStatus } from "@dapp/shared/src/types/openApiGen";
+import { AppDispatch, RootState } from "~/lib/state/store";
 import { blockUser } from "~/lib/state/user/userSlice";
-import ConfirmDialog from "../shared/ConfirmDialog";
-import Loader from "../shared/Loader";
 
 const options: Option[] = [
   { value: 0, label: "Coming up" },

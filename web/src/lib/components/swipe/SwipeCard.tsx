@@ -2,8 +2,8 @@
 
 import { forwardRef, useState } from "react";
 
-import CardSwipeable from "./CardSwipeable";
 import CardStatic from "./CardStatic";
+import CardSwipeable from "./CardSwipeable";
 
 interface SwipeCardProps {
   user: any;

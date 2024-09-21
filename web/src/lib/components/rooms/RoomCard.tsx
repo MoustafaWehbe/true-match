@@ -1,3 +1,9 @@
+import React from "react";
+import { FaHeart } from "react-icons/fa";
+import { LuHeartOff } from "react-icons/lu";
+import { MdBlock } from "react-icons/md";
+import { useSelector } from "react-redux";
+import { CalendarIcon, CloseIcon, TimeIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
@@ -6,21 +12,19 @@ import {
   Text,
   useColorModeValue,
 } from "@chakra-ui/react";
+import { format } from "date-fns";
 // import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
-import { useSelector } from "react-redux";
-import { CalendarIcon, CloseIcon, TimeIcon } from "@chakra-ui/icons";
-import { format } from "date-fns";
 
 import { RoomDto } from "@dapp/shared/src/types/openApiGen";
-import { RootState } from "~/lib/state/store";
+
+import CustomTooltip from "../shared/CutsomTooltip";
+
 // import { startRoom } from "~/lib/state/room/roomSlice";
 import DeleteRoomButton from "./DeleteRoomButton";
-import { FaHeart } from "react-icons/fa";
-import { MdBlock } from "react-icons/md";
-import { LuHeartOff } from "react-icons/lu";
-import CustomTooltip from "../shared/CutsomTooltip";
+
+import { RootState } from "~/lib/state/store";
 
 interface RoomCardProps {
   room: RoomDto;

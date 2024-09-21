@@ -1,16 +1,18 @@
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import {
   Box,
   Button,
   Heading,
   Text,
-  useColorModeValue,
   useColorMode,
+  useColorModeValue,
   Wrap,
   WrapItem,
 } from "@chakra-ui/react";
+
 import { CreateOrUpdateUserProfileDto } from "@dapp/shared/src/types/openApiGen";
-import { useSelector } from "react-redux";
+
 import { RootState } from "~/lib/state/store";
 
 interface OnboardingFormStep4Props {

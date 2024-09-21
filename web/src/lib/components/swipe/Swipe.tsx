@@ -1,10 +1,11 @@
 "use client";
 
-import { Box, Flex, IconButton } from "@chakra-ui/react";
-import SwipeCard from "./SwipeCard";
 import { createRef, useMemo, useRef, useState } from "react";
-import { CloseIcon } from "@chakra-ui/icons";
 import { FaHeart, FaUndoAlt } from "react-icons/fa";
+import { CloseIcon } from "@chakra-ui/icons";
+import { Box, Flex, IconButton } from "@chakra-ui/react";
+
+import SwipeCard from "./SwipeCard";
 
 const Swipe = () => {
   const users = [
@@ -53,7 +54,9 @@ const Swipe = () => {
 
   const onCardLeftScreen = (idx: number) => {
     // handle the case in which go back is pressed before card goes outOfFrame
-    currentIndexRef.current >= idx && childRefs[idx].current.restoreCard();
+    if (currentIndexRef.current >= idx) {
+      childRefs[idx].current.restoreCard();
+    }
     // TODO: when quickly swipe and restore multiple times the same card,
     // it happens multiple outOfFrame events are queued and the card disappear
     // during latest swipes. Only the last outOfFrame event should be considered valid

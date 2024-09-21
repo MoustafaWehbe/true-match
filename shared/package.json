@@ -5,7 +5,7 @@
   "license": "MIT",
   "private": "true",
   "scripts": {
-    "build": "tsc --noEmit",
+    "build": "tsc",
     "generate-types": "node generate-types.js"
   },
   "devDependencies": {

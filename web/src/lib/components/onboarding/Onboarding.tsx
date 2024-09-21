@@ -1,21 +1,24 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Box, useToast } from "@chakra-ui/react";
-import OnboardingFormStep1 from "./OnboardingFormStep1";
-import UploadImagesForm from "./UploadImageForm";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "~/lib/state/store";
-import {
-  createUserMedia,
-  createOrUpdateUserProfile,
-} from "~/lib/state/user/userSlice";
+import { Box, useToast } from "@chakra-ui/react";
+
 import { openApiTypes } from "@dapp/shared";
+
+import OnboardingFormStep1 from "./OnboardingFormStep1";
 import OnboardingFormStep2 from "./OnboardingFormStep2";
-import { getAvailableDescriptors } from "~/lib/state/availableDescriptor/availableDescriptorSlice";
 import OnboardingFormStep3 from "./OnboardingFormStep3";
 import OnboardingFormStep4 from "./OnboardingFormStep4";
 import OnboardingLocationAccess from "./OnboardingLocationAccess";
+import UploadImagesForm from "./UploadImageForm";
+
+import { getAvailableDescriptors } from "~/lib/state/availableDescriptor/availableDescriptorSlice";
+import { AppDispatch, RootState } from "~/lib/state/store";
+import {
+  createOrUpdateUserProfile,
+  createUserMedia,
+} from "~/lib/state/user/userSlice";
 
 const Onboarding = () => {
   const [step, setStep] = useState(1);

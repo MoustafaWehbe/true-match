@@ -1,5 +1,5 @@
-import { Box, keyframes } from "@chakra-ui/react";
 import { FaHeart } from "react-icons/fa";
+import { Box, keyframes } from "@chakra-ui/react";
 
 const heartbeat = keyframes`
   0%, 100% { transform: scale(1); }

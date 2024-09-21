@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { FaArrowRight, FaForward, FaPause, FaPlay } from "react-icons/fa";
 import {
   Box,
   Button,
@@ -11,12 +12,14 @@ import {
   Text,
   useColorModeValue,
 } from "@chakra-ui/react";
-import VideoControls from "./VideoControls";
-import PeerVideo from "./PeerVideo";
-import useRound from "~/lib/hooks/useRound";
+
 import AnimatedHeart from "../shared/AnimatedHeart";
-import { FaArrowRight, FaForward, FaPause, FaPlay } from "react-icons/fa";
 import CustomTooltip from "../shared/CutsomTooltip";
+
+import PeerVideo from "./PeerVideo";
+import VideoControls from "./VideoControls";
+
+import useRound from "~/lib/hooks/useRound";
 
 interface PresenterDisplayProps {
   peers: { peerID: string; peer: RTCPeerConnection }[];

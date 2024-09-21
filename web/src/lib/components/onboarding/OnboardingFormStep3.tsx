@@ -1,20 +1,25 @@
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import {
   Box,
   Button,
   Heading,
   SimpleGrid,
   Text,
-  useColorModeValue,
   useColorMode,
+  useColorModeValue,
 } from "@chakra-ui/react";
-import { CreateOrUpdateUserProfileDto } from "@dapp/shared/src/types/openApiGen";
-import { useSelector } from "react-redux";
+
+import { openApiTypes } from "@dapp/shared";
+
 import { RootState } from "~/lib/state/store";
 
 interface OnboardingFormStep3Props {
   onSubmit: (
-    values: Pick<CreateOrUpdateUserProfileDto, "selectedDescriptors">
+    values: Pick<
+      openApiTypes.CreateOrUpdateUserProfileDto,
+      "selectedDescriptors"
+    >
   ) => void;
 }
 
@@ -27,7 +32,7 @@ const OnboardingFormStep3 = ({ onSubmit }: OnboardingFormStep3Props) => {
   const textColor = useColorModeValue("gray.600", "gray.300");
 
   const relationshipGoalsData = (availableDescriptors || [])[2];
-  const relationshipGoalsDataDescriptors =
+  const relationshipGoalsDataDescriptors: any =
     (availableDescriptors || [])[2]?.descriptors || [];
 
   if (!relationshipGoalsData) {
@@ -67,7 +72,7 @@ const OnboardingFormStep3 = ({ onSubmit }: OnboardingFormStep3Props) => {
       </Text>
 
       <SimpleGrid columns={[1, 2, 3]} spacing={4}>
-        {relationshipGoalsDataDescriptors[0].choices?.map((choice) => (
+        {relationshipGoalsDataDescriptors[0].choices?.map((choice: any) => (
           <Button
             key={choice.id}
             variant={selectedChoice === choice.id ? "solid" : "outline"}

@@ -1,3 +1,7 @@
+import React from "react";
+import { CiUser } from "react-icons/ci";
+import { IoIosLogOut } from "react-icons/io";
+import { RiMoonFill, RiSunLine } from "react-icons/ri";
 import {
   Avatar,
   Box,
@@ -13,11 +17,9 @@ import {
   useColorMode,
   useColorModeValue,
 } from "@chakra-ui/react";
-import { openApiTypes } from "@dapp/shared";
 import { useRouter } from "next/navigation";
-import { CiUser } from "react-icons/ci";
-import { IoIosLogOut } from "react-icons/io";
-import { RiMoonFill, RiSunLine } from "react-icons/ri";
+
+import { openApiTypes } from "@dapp/shared";
 
 type Props = {
   onLogout: () => void;

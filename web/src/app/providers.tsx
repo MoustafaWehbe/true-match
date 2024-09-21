@@ -1,7 +1,7 @@
 "use client";
 
-import { CacheProvider } from "@chakra-ui/next-js";
 import { Provider } from "react-redux";
+import { CacheProvider } from "@chakra-ui/next-js";
 
 import { Chakra as ChakraProvider } from "~/lib/components/Chakra";
 import { store } from "~/lib/state/store";

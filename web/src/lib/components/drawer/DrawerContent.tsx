@@ -1,22 +1,23 @@
-import {
-  List,
-  ListItem,
-  ListIcon,
-  Link,
-  Avatar,
-  Box,
-  Stack,
-  Heading,
-  useColorModeValue,
-} from "@chakra-ui/react";
-import { RiCalendarScheduleLine } from "react-icons/ri";
-import { MdOutlineLiveTv } from "react-icons/md";
-import { GrSchedulePlay } from "react-icons/gr";
 import { BsEmojiHeartEyes } from "react-icons/bs";
 import { BsChatDots } from "react-icons/bs";
-import NextLink from "next/link";
-import { RootState } from "~/lib/state/store";
+import { GrSchedulePlay } from "react-icons/gr";
+import { MdOutlineLiveTv } from "react-icons/md";
+import { RiCalendarScheduleLine } from "react-icons/ri";
 import { useSelector } from "react-redux";
+import {
+  Avatar,
+  Box,
+  Heading,
+  Link,
+  List,
+  ListIcon,
+  ListItem,
+  Stack,
+  useColorModeValue,
+} from "@chakra-ui/react";
+import NextLink from "next/link";
+
+import { RootState } from "~/lib/state/store";
 
 const DrawerContent = () => {
   const bgColor = useColorModeValue("whiteAlpha.900", "gray.700");

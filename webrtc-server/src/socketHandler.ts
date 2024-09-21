@@ -1,6 +1,8 @@
 import { Server as SocketIOServer, Socket } from "socket.io";
+
+import { socketEventTypes } from "@dapp/shared/src/types/custom";
+
 import { roomService } from "./services";
-import { socketEventTypes } from "shared/src/types/custom";
 
 class SocketHandler {
   private io: SocketIOServer;
@@ -11,36 +13,36 @@ class SocketHandler {
   }
 
   private handleConnection(): void {
-    this.io.on("connection", (socket) => {
+    this.io.on("connection", socket => {
       console.log("New client connected");
 
       socket.on("join", (payload: socketEventTypes.JoinRoomPayload) =>
-        this.handleOnJoin(payload, socket)
+        this.handleOnJoin(payload, socket),
       );
 
       socket.on("offer", (payload: socketEventTypes.OfferPayload) =>
-        this.handleOffer(payload, socket)
+        this.handleOffer(payload, socket),
       );
 
       socket.on("answer", (payload: socketEventTypes.AnswerPayload) =>
-        this.handleAnswer(payload, socket)
+        this.handleAnswer(payload, socket),
       );
 
       socket.on(
         "ice-candidate",
         (payload: socketEventTypes.IceCandidatePayload) =>
-          this.handleIceCandidate(payload, socket)
+          this.handleIceCandidate(payload, socket),
       );
 
       socket.on("leave-room", (payload: socketEventTypes.LeaveRoomPayload) =>
-        this.handleDisconnect(payload, socket)
+        this.handleDisconnect(payload, socket),
       );
     });
   }
 
   private async handleOnJoin(
     { roomId }: socketEventTypes.JoinRoomPayload,
-    socket: Socket
+    socket: Socket,
   ) {
     const token = socket.handshake.auth.token;
     try {
@@ -59,27 +61,27 @@ class SocketHandler {
     }
   }
 
-  private handleOffer(payload: socketEventTypes.OfferPayload, socket: Socket) {
+  private handleOffer(payload: socketEventTypes.OfferPayload, _socket: Socket) {
     this.io.to(payload.targetSocketId).emit("offer", payload);
   }
 
   private handleAnswer(
     payload: socketEventTypes.AnswerPayload,
-    socket: Socket
+    _socket: Socket,
   ) {
     this.io.to(payload.targetSocketId).emit("answer", payload);
   }
 
   private handleIceCandidate(
     payload: socketEventTypes.IceCandidatePayload,
-    socket: Socket
+    _socket: Socket,
   ) {
     this.io.to(payload.targetSocketId).emit("ice-candidate", payload);
   }
 
   private async handleDisconnect(
     { roomId }: socketEventTypes.LeaveRoomPayload,
-    socket: Socket
+    socket: Socket,
   ) {
     const token = socket.handshake.auth.token;
     try {

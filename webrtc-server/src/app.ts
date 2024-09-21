@@ -1,10 +1,12 @@
-import express, { Application } from "express";
-import https, { Server as HTTPSServer } from "https";
 import fs from "fs";
-import { Server as SocketIOServer } from "socket.io";
-import SocketHandler from "./socketHandler";
+import https, { Server as HTTPSServer } from "https";
+
 import { instrument } from "@socket.io/admin-ui";
+import express, { Application } from "express";
+import { Server as SocketIOServer } from "socket.io";
+
 import authMiddleware from "./middlwares/authMiddleware";
+import SocketHandler from "./socketHandler";
 
 class App {
   public server: Application;

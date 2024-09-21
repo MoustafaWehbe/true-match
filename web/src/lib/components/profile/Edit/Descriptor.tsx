@@ -1,12 +1,15 @@
+import React from "react";
 import { Text } from "@chakra-ui/react";
-import MultiSelection from "./MultiSelection";
-import SingleSelection from "./SingleSelection";
-import Measurement from "./Measurement";
+
 import {
   Descriptor as DescriptorType,
   SelectedDescriptor,
 } from "@dapp/shared/src/types/openApiGen";
+
 import AdvancedSingleSelection from "./AdvancedSingleSelection";
+import Measurement from "./Measurement";
+import MultiSelection from "./MultiSelection";
+import SingleSelection from "./SingleSelection";
 
 const Descriptor = ({
   descriptor,

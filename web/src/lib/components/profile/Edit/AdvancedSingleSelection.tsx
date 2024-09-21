@@ -1,10 +1,12 @@
-import { Box, Text, SimpleGrid, Button, useColorMode } from "@chakra-ui/react";
-import { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
+import { Box, Button, SimpleGrid, Text, useColorMode } from "@chakra-ui/react";
+
 import {
   Descriptor as DescriptorType,
   SelectedDescriptor,
 } from "@dapp/shared/src/types/openApiGen";
+
 import { RootState } from "~/lib/state/store";
 
 const AdvancedSingleSelection = ({

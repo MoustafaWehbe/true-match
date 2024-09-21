@@ -1,12 +1,14 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
-import { Box, Flex, useColorModeValue } from "@chakra-ui/react";
-import { WebRTCHandler } from "~/lib/utils/webrtc/WebRTCHandler";
-import PresenterDisplay from "./PresenterDisplay";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "~/lib/state/store";
+import { Box, Flex, useColorModeValue } from "@chakra-ui/react";
+
+import PresenterDisplay from "./PresenterDisplay";
+
 import { getRoomById } from "~/lib/state/room/roomSlice";
+import { AppDispatch, RootState } from "~/lib/state/store";
+import { WebRTCHandler } from "~/lib/utils/webrtc/WebRTCHandler";
 
 const Room = ({ roomId: roomId }: { roomId: string }) => {
   const cardBg = useColorModeValue("gray.100", "gray.900");

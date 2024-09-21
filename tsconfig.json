@@ -1,0 +1,44 @@
+{
+  "compilerOptions": {
+    "composite": true,
+    "noEmit": true,
+    "noEmitOnError": true,
+    "allowJs": false,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "jsx": "preserve",
+    "lib": ["dom", "es2017"],
+    "target": "esnext",
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitAny": false,
+    "preserveConstEnums": true,
+    "resolveJsonModule": true,
+    "sourceMap": true,
+    "removeComments": false,
+    "strict": true,
+    "strictNullChecks": true,
+    "importHelpers": true,
+    "ignoreDeprecations": "5.0",
+    "preserveWatchOutput": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "declaration": true,
+    "declarationMap": true,
+    "baseUrl": ".",
+    "noImplicitReturns": false,
+    "paths": {
+      "@dapp/*": ["@dapp/*"]
+    }
+  },
+  "include": [],
+  "exclude": [],
+  "references": [
+    { "path": "./web" },
+    { "path": "./webrtc-server" },
+    { "path": "./shared" }
+  ]
+}

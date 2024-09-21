@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   Box,
   Flex,
@@ -8,10 +10,9 @@ import {
 } from "@chakra-ui/react";
 
 import HeaderPopover from "../header/HeaderPopover";
-import { useDispatch, useSelector } from "react-redux";
+
 import { AppDispatch, RootState } from "~/lib/state/store";
 import { logoutUser } from "~/lib/state/user/userSlice";
-import { useEffect } from "react";
 
 const Header = () => {
   const dispatch = useDispatch<AppDispatch>();

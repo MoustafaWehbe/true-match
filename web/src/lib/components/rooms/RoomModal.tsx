@@ -1,35 +1,38 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
-  Button,
-  useToast,
-  useColorModeValue,
-  FormControl,
-  FormLabel,
-  Checkbox,
-  SimpleGrid,
-  CheckboxGroup,
-  FormErrorMessage,
-  Link,
   Box,
-  Stack,
+  Button,
+  Checkbox,
+  CheckboxGroup,
+  FormControl,
+  FormErrorMessage,
+  FormLabel,
   Heading,
   Input,
+  Link,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalOverlay,
+  SimpleGrid,
+  Stack,
   Textarea,
+  useColorModeValue,
+  useToast,
 } from "@chakra-ui/react";
-import { useSelector } from "react-redux";
-import { RootState } from "~/lib/state/store";
-import { RoomDto } from "@dapp/shared/src/types/openApiGen";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+
+import { RoomDto } from "@dapp/shared/src/types/openApiGen";
+
 import ContentModal from "./ContentModal";
+
+import { RootState } from "~/lib/state/store";
 
 interface RoomModalProp {
   isOpen: boolean;

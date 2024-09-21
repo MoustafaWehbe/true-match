@@ -1,17 +1,19 @@
+import React, { useEffect, useMemo, useState } from "react";
+import { useSelector } from "react-redux";
 import {
   Box,
+  Button,
   Text,
+  useColorMode,
   Wrap,
   WrapItem,
-  Button,
-  useColorMode,
 } from "@chakra-ui/react";
-import { useEffect, useMemo, useState } from "react";
-import { useSelector } from "react-redux";
+
 import {
   Descriptor as DescriptorType,
   SelectedDescriptor,
 } from "@dapp/shared/src/types/openApiGen";
+
 import { RootState } from "~/lib/state/store";
 
 const SingleSelection = ({

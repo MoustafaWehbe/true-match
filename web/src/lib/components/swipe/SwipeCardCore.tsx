@@ -4,7 +4,8 @@ import React, {
   useLayoutEffect,
   useRef,
 } from "react";
-import { useSpring, animated } from "@react-spring/web";
+import { animated, useSpring } from "@react-spring/web";
+
 import useWindowSize from "~/lib/hooks/useWindowSize";
 
 interface Settings {

@@ -1,3 +1,4 @@
+import { InfoIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
@@ -6,9 +7,9 @@ import {
   Text,
   useColorModeValue,
 } from "@chakra-ui/react";
-import SwipeCardCore from "./SwipeCardCore";
-import { InfoIcon } from "@chakra-ui/icons";
+
 import { sharedCardContainerStyles } from "./SwipeCard";
+import SwipeCardCore from "./SwipeCardCore";
 
 interface CardSwipeableProps {
   user: any;

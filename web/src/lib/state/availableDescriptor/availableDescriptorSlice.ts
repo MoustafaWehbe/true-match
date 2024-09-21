@@ -1,9 +1,11 @@
-import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
+
 import {
   AvailableDescriptorDto,
   AvailableDescriptorDtoListApiResponse,
 } from "@dapp/shared/src/types/openApiGen";
+
 import axiosInstance, { defaultHeaders } from "~/lib/utils/api/axiosConfig";
 
 export interface QuestionSate {

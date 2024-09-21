@@ -1,12 +1,15 @@
+import React, { useCallback, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Box, Button, useToast } from "@chakra-ui/react";
+
+import { SelectedDescriptor } from "@dapp/shared/src/types/openApiGen";
+
+import BasicInfo, { BasicInfoType } from "./BasicInfo";
 import ImageSelector from "./ImageSelector";
 import ProfileDescriptors from "./ProfileDescriptors";
-import { useDispatch, useSelector } from "react-redux";
+
 import { AppDispatch, RootState } from "~/lib/state/store";
-import { SelectedDescriptor } from "@dapp/shared/src/types/openApiGen";
-import { useCallback, useEffect, useState } from "react";
 import { createOrUpdateUserProfile } from "~/lib/state/user/userSlice";
-import BasicInfo, { BasicInfoType } from "./BasicInfo";
 
 const EditProfile = () => {
   const { user } = useSelector((state: RootState) => state.user);

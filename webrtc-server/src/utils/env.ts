@@ -1,5 +1,6 @@
-import "dotenv/config";
 import * as env from "env-var";
+
+import "dotenv/config";
 
 export const DEPLOY_ENV = env.get("DEPLOY_ENV").default("local").asString();
 

@@ -1,1 +1,4 @@
 ../shared
+@dapp/shared
+/@dapp/shared/src/types/openApiGen.*
+/../shared/src/types/openApiGen.*

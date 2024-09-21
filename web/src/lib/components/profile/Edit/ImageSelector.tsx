@@ -1,20 +1,22 @@
 import React, { memo, useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { CloseIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
-  Input,
-  Image,
   Grid,
   Heading,
   IconButton,
+  Image,
+  Input,
   Spinner,
 } from "@chakra-ui/react";
-import { CloseIcon } from "@chakra-ui/icons";
-import { RootState } from "~/lib/state/store";
-import { useSelector } from "react-redux";
+
 import { Media } from "@dapp/shared/src/types/openApiGen";
-import { urlToFile } from "~/lib/utils/file/file";
+
 import env from "~/lib/consts/env";
+import { RootState } from "~/lib/state/store";
+import { urlToFile } from "~/lib/utils/file/file";
 
 interface ImageSelectorProps {
   media?: Array<Media> | null;

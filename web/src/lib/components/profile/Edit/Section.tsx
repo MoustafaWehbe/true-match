@@ -1,19 +1,22 @@
+import React from "react";
+import { ChevronDownIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import {
   Box,
-  Heading,
-  Text,
-  Stack,
-  Flex,
-  Icon,
-  useDisclosure,
   Collapse,
+  Flex,
+  Heading,
+  Icon,
+  Stack,
+  Text,
+  useDisclosure,
 } from "@chakra-ui/react";
-import Descriptor from "./Descriptor";
+
 import {
   AvailableDescriptorDto,
   SelectedDescriptor,
 } from "@dapp/shared/src/types/openApiGen";
-import { ChevronDownIcon, ChevronRightIcon } from "@chakra-ui/icons";
+
+import Descriptor from "./Descriptor";
 
 const Section = ({
   section,

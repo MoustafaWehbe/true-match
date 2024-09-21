@@ -1,10 +1,13 @@
 import React from "react";
 import { Box, useColorModeValue } from "@chakra-ui/react";
-import { Geocoder } from "@mapbox/search-js-react";
 import { GeocodeFeature } from "@mapbox/search-js-core";
-import env from "~/lib/consts/env";
-import { BasicInfoType } from "./BasicInfo";
+import { Geocoder } from "@mapbox/search-js-react";
+
 import { UserLocation } from "@dapp/shared/src/types/openApiGen";
+
+import { BasicInfoType } from "./BasicInfo";
+
+import env from "~/lib/consts/env";
 
 const PlaceGeocoder = ({
   basicFormData,

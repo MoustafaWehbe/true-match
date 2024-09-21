@@ -1,18 +1,20 @@
+import React, { useEffect, useMemo, useState } from "react";
+import { useSelector } from "react-redux";
 import {
   Box,
+  Button,
+  Input,
   Text,
+  useColorMode,
   Wrap,
   WrapItem,
-  Button,
-  useColorMode,
-  Input,
 } from "@chakra-ui/react";
-import { useEffect, useMemo, useState } from "react";
-import { useSelector } from "react-redux";
+
 import {
   Descriptor as DescriptorType,
   SelectedDescriptor,
 } from "@dapp/shared/src/types/openApiGen";
+
 import { RootState } from "~/lib/state/store";
 
 const MultiSelection = ({

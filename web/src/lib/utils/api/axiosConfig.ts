@@ -1,7 +1,8 @@
 import axios from "axios";
 
-import env from "~/lib/consts/env";
 import { TOKEN } from "../../consts/localStorage";
+
+import env from "~/lib/consts/env";
 
 export const defaultHeaders = {
   "Content-Type": "application/json",

@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Button } from "@chakra-ui/react";
 
-import { deleteRoom } from "~/lib/state/room/roomSlice";
 import ConfirmDialog from "../shared/ConfirmDialog";
+
+import { deleteRoom } from "~/lib/state/room/roomSlice";
 import { AppDispatch } from "~/lib/state/store";
 
 const DeleteRoomButton: React.FC<{ roomId: number }> = ({ roomId }) => {

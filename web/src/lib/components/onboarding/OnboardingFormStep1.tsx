@@ -1,17 +1,19 @@
+import React from "react";
 import {
   Box,
   Button,
   FormControl,
   FormLabel,
   Grid,
+  Heading,
   Input,
   Stack,
-  Heading,
   useColorModeValue,
 } from "@chakra-ui/react";
 import { useFormik } from "formik";
-import { openApiTypes } from "@dapp/shared";
 import * as Yup from "yup";
+
+import { openApiTypes } from "@dapp/shared";
 
 interface OnboardingFormStep1Props {
   onSubmit: (

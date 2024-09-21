@@ -1,14 +1,14 @@
+import React from "react";
 import {
   Button,
   Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
   ModalBody,
+  ModalContent,
   ModalFooter,
+  ModalHeader,
+  ModalOverlay,
   Text,
 } from "@chakra-ui/react";
-import React from "react";
 
 interface ConfirmDialogProps {
   isOpen: boolean;

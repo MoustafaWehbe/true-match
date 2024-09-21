@@ -6,11 +6,6 @@
       "web",
       "webrtc-server",
       "shared"
-    ],
-    "nohoist": [
-      "@dapp/shared/**",
-      "@dapp/webrtc-server/**",
-      "@dapp/web/**"
     ]
   },
   "scripts": {
@@ -18,8 +13,25 @@
     "start": "docker-compose up --build"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^8.6.0",
-    "@typescript-eslint/parser": "^8.6.0",
+    "@babel/core": "^7.21.0",
+    "@babel/preset-env": "^7.20.2",
+    "@babel/preset-typescript": "^7.21.0",
+    "@typescript-eslint/eslint-plugin": "^6.10.0",
+    "@typescript-eslint/parser": "^6.10.0",
+    "dotenv": "^10.0.0",
+    "eslint": "^8.53.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-prettier": "^5.0.1",
+    "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-simple-import-sort": "^8.0.0",
+    "eslint_d": "^13.0.0",
+    "husky": "^8.0.1",
+    "lint-staged": "^13.1.0",
+    "node-fetch": "^3.3.1",
+    "prettier": "^3.1.0",
+    "prettier-plugin-tailwindcss": "^0.5.7",
+    "tslib": "^2.6.2",
     "typescript": "^5.3.3"
   }
 }
