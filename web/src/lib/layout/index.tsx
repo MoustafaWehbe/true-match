@@ -1,13 +1,14 @@
 "use client";
 
-import { useEffect, useState, type ReactNode } from "react";
+import { type ReactNode, useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 
 import { AUTH_ROUTES, ONBOARDING_ROUTE } from "../consts";
-import MainLayout from "./MainLayout";
-import AuthLayout from "./AuthLayout";
-import { useDispatch } from "react-redux";
 import { AppDispatch } from "../state/store";
 import { fetchUser } from "../state/user/userSlice";
+
+import AuthLayout from "./AuthLayout";
+import MainLayout from "./MainLayout";
 import OnboardingLayout from "./OnboardingLayout";
 
 export type LayoutProps = {

@@ -1,5 +1,6 @@
 "use client";
 
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Box,
@@ -11,12 +12,12 @@ import {
   useMultiStyleConfig,
   useTab,
 } from "@chakra-ui/react";
-import React, { useEffect } from "react";
 
-import { AppDispatch, RootState } from "~/lib/state/store";
-import { getAvailableDescriptors } from "~/lib/state/availableDescriptor/availableDescriptorSlice";
 import EditProfile from "./Edit";
 import PreviewProfile from "./Preview";
+
+import { getAvailableDescriptors } from "~/lib/state/availableDescriptor/availableDescriptorSlice";
+import { AppDispatch, RootState } from "~/lib/state/store";
 
 const CustomTab = React.forwardRef((props: any, ref: any) => {
   // 1. Reuse the `useTab` hook

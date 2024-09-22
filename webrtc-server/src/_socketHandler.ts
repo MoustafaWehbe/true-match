@@ -1,4 +1,4 @@
-import { Server as SocketIOServer, Socket } from "socket.io";
+import { Server as SocketIOServer } from "socket.io";
 
 interface Offer {
   offererUserName: string;
@@ -35,10 +35,10 @@ class SocketHandler {
   }
 
   private handleConnection(): void {
-    this.io.on("connection", (socket) => {
+    this.io.on("connection", socket => {
       console.log("New client connected");
 
-      socket.on("join", (room) => {
+      socket.on("join", room => {
         if (!this.rooms[room]) {
           this.rooms[room] = [];
         }
@@ -53,14 +53,14 @@ class SocketHandler {
       //   user,
       //   sdp,
       // }
-      socket.on("offer", (payload) => {
+      socket.on("offer", payload => {
         this.io.to(payload.target).emit("offer", payload);
       });
 
       //payload:
       // target,
       // sdp,
-      socket.on("answer", (payload) => {
+      socket.on("answer", payload => {
         this.io.to(payload.target).emit("answer", payload);
       });
 
@@ -68,14 +68,14 @@ class SocketHandler {
       // target: userToSignal,
       // user,
       // candidate: event.candidate,
-      socket.on("ice-candidate", (incoming) => {
+      socket.on("ice-candidate", incoming => {
         this.io.to(incoming.target).emit("ice-candidate", incoming);
       });
 
       socket.on("disconnect", () => {
         for (const room in this.rooms) {
           this.rooms[room] = this.rooms[room].filter(
-            (id: any) => id !== socket.id
+            (id: any) => id !== socket.id,
           );
         }
         console.log("Client disconnected");

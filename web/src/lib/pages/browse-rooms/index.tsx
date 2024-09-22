@@ -1,4 +1,5 @@
 import { Box } from "@chakra-ui/react";
+
 import BrowseRooms from "~/lib/components/rooms/BrowseRooms";
 
 const BrowseRoomsPage = () => {

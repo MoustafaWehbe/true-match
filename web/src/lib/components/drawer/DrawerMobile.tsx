@@ -1,9 +1,9 @@
 "use client";
 
-import { useRef, type PropsWithChildren } from "react";
+import { type PropsWithChildren, useRef } from "react";
+import { HamburgerIcon } from "@chakra-ui/icons";
 import {
   Box,
-  Button,
   Drawer,
   DrawerBody,
   DrawerCloseButton,
@@ -11,8 +11,8 @@ import {
   IconButton,
   useDisclosure,
 } from "@chakra-ui/react";
+
 import Content from "./DrawerContent";
-import { HamburgerIcon } from "@chakra-ui/icons";
 
 function DrawerMobile({ children, ...rest }: PropsWithChildren) {
   const { onClose, isOpen, onOpen } = useDisclosure();

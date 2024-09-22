@@ -1,21 +1,22 @@
 import {
-  RoomDtoApiResponse,
   RoomDto,
+  RoomDtoApiResponse,
   RoomParticipantDtoApiResponse,
-} from "shared/src/types/openApiGen";
+} from "@dapp/shared/src/types/openApiGen";
+
 import axiosInstance from "./axiosInstance";
 import { handleError } from "./errorHandler";
 
 const getRoomById = async (
   token: string,
-  roomId: number
-): Promise<RoomDtoApiResponse> => {
+  roomId: number,
+): Promise<RoomDtoApiResponse | undefined> => {
   try {
     const response = await axiosInstance.get<RoomDtoApiResponse>(
       `api/room/${roomId}`,
       {
         headers: { Authorization: `Bearer ${token}` },
-      }
+      },
     );
     return response.data;
   } catch (error) {
@@ -28,7 +29,7 @@ const leaveRoom = async (roomId: number, token: string): Promise<void> => {
     const response = await axiosInstance.put<void>(
       `api/room-participant/leave/${roomId}`,
       {},
-      { headers: { Authorization: `Bearer ${token}` } }
+      { headers: { Authorization: `Bearer ${token}` } },
     );
     return response.data;
   } catch (error) {
@@ -39,15 +40,15 @@ const leaveRoom = async (roomId: number, token: string): Promise<void> => {
 const updateRoom = async (
   token: string,
   room: RoomDto,
-  roomId: number
-): Promise<RoomDtoApiResponse> => {
+  roomId: number,
+): Promise<RoomDtoApiResponse | undefined> => {
   try {
     const response = await axiosInstance.put<RoomDtoApiResponse>(
       `api/room/${roomId}`,
       room,
       {
         headers: { Authorization: `Bearer ${token}` },
-      }
+      },
     );
     return response.data;
   } catch (error) {
@@ -58,8 +59,8 @@ const updateRoom = async (
 const joinRoom = async (
   token: string,
   roomId: number,
-  socketId: string
-): Promise<RoomParticipantDtoApiResponse> => {
+  socketId: string,
+): Promise<RoomParticipantDtoApiResponse | undefined> => {
   try {
     const response = await axiosInstance.post<RoomParticipantDtoApiResponse>(
       `api/room-participant?roomId=${roomId}`,
@@ -69,7 +70,7 @@ const joinRoom = async (
       },
       {
         headers: { Authorization: `Bearer ${token}` },
-      }
+      },
     );
     return response.data;
   } catch (error) {

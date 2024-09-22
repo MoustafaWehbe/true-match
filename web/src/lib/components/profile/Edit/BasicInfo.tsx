@@ -1,20 +1,23 @@
-import {
-  Box,
-  FormControl,
-  FormLabel,
-  Textarea,
-  Text,
-  Input,
-  useColorModeValue,
-  Heading,
-  Flex,
-} from "@chakra-ui/react";
+import React from "react";
 import { ChangeEvent, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { RootState } from "~/lib/state/store";
+import {
+  Box,
+  Flex,
+  FormControl,
+  FormLabel,
+  Heading,
+  Input,
+  Text,
+  Textarea,
+  useColorModeValue,
+} from "@chakra-ui/react";
+
+import { UserLocation } from "@dapp/shared/src/types/openApiGen";
+
 import Geocoder from "./PlaceGeocoder";
-import { GeocodeFeature } from "@mapbox/search-js-core";
-import { UserLocation } from "shared/src/types/openApiGen";
+
+import { RootState } from "~/lib/state/store";
 
 export type BasicInfoType = {
   bio: string;

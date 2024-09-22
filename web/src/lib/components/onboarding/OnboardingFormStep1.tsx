@@ -1,20 +1,24 @@
+import React from "react";
 import {
   Box,
   Button,
   FormControl,
   FormLabel,
   Grid,
+  Heading,
   Input,
   Stack,
-  Heading,
   useColorModeValue,
 } from "@chakra-ui/react";
 import { useFormik } from "formik";
-import { CreateOrUpdateUserProfileDto } from "shared/src/types/openApiGen";
 import * as Yup from "yup";
 
+import { openApiTypes } from "@dapp/shared";
+
 interface OnboardingFormStep1Props {
-  onSubmit: (values: Pick<CreateOrUpdateUserProfileDto, "birthDate">) => void;
+  onSubmit: (
+    values: Pick<openApiTypes.CreateOrUpdateUserProfileDto, "birthDate">
+  ) => void;
 }
 
 function OnboardingFormStep1({ onSubmit }: OnboardingFormStep1Props) {

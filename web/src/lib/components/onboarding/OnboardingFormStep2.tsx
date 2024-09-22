@@ -1,4 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { ChevronDownIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
@@ -13,24 +15,27 @@ import {
   Text,
   useDisclosure,
 } from "@chakra-ui/react";
-import {
-  CreateOrUpdateUserProfileDto,
-  GenderDto,
-} from "shared/src/types/openApiGen";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "~/lib/state/store";
+
+import { openApiTypes } from "@dapp/shared";
+
 import { getGenders } from "~/lib/state/gender/genderSlice";
-import { ChevronDownIcon } from "@chakra-ui/icons";
+import { AppDispatch, RootState } from "~/lib/state/store";
 
 interface OnboardingFormStep2Props {
   onSubmit: (
-    values: Pick<CreateOrUpdateUserProfileDto, "userProfileGenders">
+    values: Pick<
+      openApiTypes.CreateOrUpdateUserProfileDto,
+      "userProfileGenders"
+    >
   ) => void;
 }
 
 const OnboardingFormStep2 = ({ onSubmit }: OnboardingFormStep2Props) => {
-  const [selectedMainGender, setSelectedMainGender] = useState<GenderDto>();
-  const [selectedSubgenders, setSelectedSubgenders] = useState<GenderDto[]>([]);
+  const [selectedMainGender, setSelectedMainGender] =
+    useState<openApiTypes.GenderDto>();
+  const [selectedSubgenders, setSelectedSubgenders] = useState<
+    openApiTypes.GenderDto[]
+  >([]);
   const {
     isOpen: isAddMoreGendersOpen,
     onOpen: onAddMoreGendersOpen,
@@ -43,12 +48,12 @@ const OnboardingFormStep2 = ({ onSubmit }: OnboardingFormStep2Props) => {
     dispatch(getGenders());
   }, [dispatch]);
 
-  const handleMainGenderSelect = (gender: GenderDto) => {
+  const handleMainGenderSelect = (gender: openApiTypes.GenderDto) => {
     setSelectedMainGender(gender);
     setSelectedSubgenders([]);
   };
 
-  const handleSubgenderSelect = (subgender: GenderDto) => {
+  const handleSubgenderSelect = (subgender: openApiTypes.GenderDto) => {
     setSelectedSubgenders((prev) =>
       prev.includes(subgender)
         ? prev.filter((id: any) => id !== subgender)

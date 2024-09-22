@@ -1,44 +1,20 @@
 {
-  "firstName": "moustafa",
-  "lastName": "wehbe",
-  "email": "moustafa@example.com",
-  "password": "$@$Ffsfsd(f000fFFF)"
-}
-
-eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1vdXN0YWZhQGV4YW1wbGUuY29tIiwiZ2l2ZW5fbmFtZSI6WyJtb3VzdGFmYSIsIndlaGJlIl0sIm5iZiI6MTcyMzk4MzA1NiwiZXhwIjoxNzI0NTg3ODU2LCJpYXQiOjE3MjM5ODMwNTYsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6NTI0NiIsImF1ZCI6Imh0dHA6Ly9sb2NhbGhvc3Q6NTI0NiJ9.QUrkVChl1hNdViyUkKiWauQY4K3ruw5jMm4yroEababUoh1oQ2DYDZA2uvZkzl5R1bnIH-kOYhR0HEAYFYSKvg
-
-{
   "firstName": "rach",
   "lastName": "arna",
   "email": "rach@example.com",
   "password": "$@$Ffsfsd(f000fFFF)"
 }
 
-eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJhY2hAZXhhbXBsZS5jb20iLCJnaXZlbl9uYW1lIjpbInJhY2giLCJhcm5hIl0sIm5iZiI6MTcyMjY4MTE5NCwiZXhwIjoxNzIzMjg1OTk0LCJpYXQiOjE3MjI2ODExOTQsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6NTI0NiIsImF1ZCI6Imh0dHA6Ly9sb2NhbGhvc3Q6NTI0NiJ9.wfy584BHi_hPVQT7NqG6i5o_E2YBNbcFSzLe9FOXyiEx5o5ahdkm6qeaupKU-GMWXlAcO_tYHa3Eo-hSet_OWw
+symlinks:
+  in shared: yarn link
+  in web: yarn link shared
 
 
-{
-  "gender": 0,
-  "nationality": "lebanese",
-  "placeToLive": "lebanon",
-  "bio": "Fun and easy going. Looking for my perfect match."`,
-  "height": 178,
-  "relationshipGoal": "marriage",
-  "education": "Masters degree",
-  "zodiac": "Taurus",
-  "loveStyle": "dfsf",
-  "userProfileInterests": [
-    {
-      "interestId": 1
-    }
-  ],
-  "userProfileLifeStyles": [
-    {
-      "lifeStyleId": 1
-    }
-  ]
-}
-
-
-in shared: yarn link
-in web: yarn link shared
+For the api running inside docker to access db running on host machine:
+  - Update postgresql.conf: Find the listen_addresses setting and ensure it is set to '*' to allow connections from all IPs.
+  - Update pg_hba.conf: Add an entry in pg_hba.conf to allow access from your Docker container’s subnet or IP range. For example:
+  The IP range 172.17.0.0/16 is commonly used by Docker for its internal network, but you should verify this by running:
+  - change the connection string from: 
+    "DefaultConnection": "Server=127.0.0.1;Port=5434;Database=DAPP;User Id=postgres;Password=postgres;" 
+    to:
+    "DefaultConnection": "Host=host.docker.internal;Port=5434;Database=DAPP;User Id=postgres;Password=postgres;"

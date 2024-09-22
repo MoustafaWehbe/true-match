@@ -1,3 +1,7 @@
+import React from "react";
+import { CiUser } from "react-icons/ci";
+import { IoIosLogOut } from "react-icons/io";
+import { RiMoonFill, RiSunLine } from "react-icons/ri";
 import {
   Avatar,
   Box,
@@ -14,15 +18,12 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
-import { CiUser } from "react-icons/ci";
-import { IoIosLogOut } from "react-icons/io";
-import { RiMoonFill, RiSunLine } from "react-icons/ri";
 
-import { User } from "shared/src/types/openApiGen";
+import { openApiTypes } from "@dapp/shared";
 
 type Props = {
   onLogout: () => void;
-  user: User;
+  user: openApiTypes.User;
 };
 
 const bounceAnimation = keyframes`

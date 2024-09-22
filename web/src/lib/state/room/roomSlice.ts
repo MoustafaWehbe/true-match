@@ -1,31 +1,19 @@
-import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
-import {
-  RoomContentDto,
-  RoomContentDtoListApiResponse,
-  RoomDto,
-  RoomDtoApiResponse,
-  CreateRoomDto,
-  RoomDtoPagedResponse,
-  AllRoomStatus,
-  MyRoomStatus,
-  SimpleApiResponseApiResponse,
-  UpdateRoomDto,
-  RoomParticipantDtoApiResponse,
-  RoomParticipantDto,
-  HideRoomDto,
-} from "shared/src/types/openApiGen";
+
+import { openApiTypes } from "@dapp/shared";
+
 import axiosInstance, { defaultHeaders } from "~/lib/utils/api/axiosConfig";
 
 export interface RoomSate {
-  roomContent: Array<RoomContentDto> | null;
+  roomContent: Array<openApiTypes.RoomContentDto> | null;
   roomContentLoading: boolean;
   createRoomLoading: boolean;
   getRoomsLoading: boolean;
   getMyRoomsLoading: boolean;
-  rooms: RoomDtoPagedResponse | null;
-  myRooms: RoomDtoPagedResponse | null;
-  activeRoom: RoomDto | null;
+  rooms: openApiTypes.RoomDtoPagedResponse | null;
+  myRooms: openApiTypes.RoomDtoPagedResponse | null;
+  activeRoom: openApiTypes.RoomDto | null;
   activeRoomLoading: boolean;
   updateRoomLoading: boolean;
   deletingRoom: boolean;
@@ -36,17 +24,18 @@ export interface RoomSate {
 }
 
 export const getRoomContent = createAsyncThunk<
-  Array<RoomContentDto> | null,
+  Array<openApiTypes.RoomContentDto> | null,
   undefined,
   { rejectValue: string }
 >("room/getAll", async (_, { rejectWithValue }) => {
   try {
-    const response = await axiosInstance.get<RoomContentDtoListApiResponse>(
-      "/api/room-content",
-      {
-        headers: defaultHeaders,
-      }
-    );
+    const response =
+      await axiosInstance.get<openApiTypes.RoomContentDtoListApiResponse>(
+        "/api/room-content",
+        {
+          headers: defaultHeaders,
+        }
+      );
     return response.data.data ?? null;
   } catch (error) {
     let errorMessage = "Something went wrong!";
@@ -58,20 +47,25 @@ export const getRoomContent = createAsyncThunk<
 });
 
 export const getRooms = createAsyncThunk<
-  RoomDtoPagedResponse,
-  { PageNumber: number; PageSize: number; Status: AllRoomStatus },
+  openApiTypes.RoomDtoPagedResponse,
+  {
+    PageNumber: number;
+    PageSize: number;
+    Status: openApiTypes.AllRoomStatus;
+  },
   { rejectValue: string }
 >(
   "room/getRooms",
   async ({ PageNumber, PageSize, Status }, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.get<RoomDtoPagedResponse>(
-        "/api/room",
-        {
-          params: { PageNumber, PageSize, Status },
-          headers: defaultHeaders,
-        }
-      );
+      const response =
+        await axiosInstance.get<openApiTypes.RoomDtoPagedResponse>(
+          "/api/room",
+          {
+            params: { PageNumber, PageSize, Status },
+            headers: defaultHeaders,
+          }
+        );
       return response.data ?? null;
     } catch (error) {
       let errorMessage = "Something went wrong!";
@@ -84,20 +78,21 @@ export const getRooms = createAsyncThunk<
 );
 
 export const getMyRooms = createAsyncThunk<
-  RoomDtoPagedResponse,
-  { PageNumber: number; PageSize: number; Status: MyRoomStatus },
+  openApiTypes.RoomDtoPagedResponse,
+  { PageNumber: number; PageSize: number; Status: openApiTypes.MyRoomStatus },
   { rejectValue: string }
 >(
   "room/getMyRooms",
   async ({ PageNumber, PageSize, Status }, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.get<RoomDtoPagedResponse>(
-        "/api/room/my-rooms",
-        {
-          params: { PageNumber, PageSize, Status },
-          headers: defaultHeaders,
-        }
-      );
+      const response =
+        await axiosInstance.get<openApiTypes.RoomDtoPagedResponse>(
+          "/api/room/my-rooms",
+          {
+            params: { PageNumber, PageSize, Status },
+            headers: defaultHeaders,
+          }
+        );
       return response.data ?? null;
     } catch (error) {
       let errorMessage = "Something went wrong!";
@@ -110,12 +105,12 @@ export const getMyRooms = createAsyncThunk<
 );
 
 export const createRoom = createAsyncThunk<
-  RoomDto | undefined,
-  CreateRoomDto,
+  openApiTypes.RoomDto | undefined,
+  openApiTypes.CreateRoomDto,
   { rejectValue: string }
 >("room/create", async (roomData, { rejectWithValue }) => {
   try {
-    const response = await axiosInstance.post<RoomDtoApiResponse>(
+    const response = await axiosInstance.post<openApiTypes.RoomDtoApiResponse>(
       "/api/room",
       roomData,
       { headers: defaultHeaders }
@@ -131,16 +126,17 @@ export const createRoom = createAsyncThunk<
 });
 
 export const registerRoom = createAsyncThunk<
-  RoomParticipantDto | undefined,
+  openApiTypes.RoomParticipantDto | undefined,
   number,
   { rejectValue: string }
 >("room/registerRoom", async (roomId, { rejectWithValue }) => {
   try {
-    const response = await axiosInstance.post<RoomParticipantDtoApiResponse>(
-      `/api/room-participant/register/${roomId}`,
-      {},
-      { headers: defaultHeaders }
-    );
+    const response =
+      await axiosInstance.post<openApiTypes.RoomParticipantDtoApiResponse>(
+        `/api/room-participant/register/${roomId}`,
+        {},
+        { headers: defaultHeaders }
+      );
     return response.data.data;
   } catch (error) {
     let errorMessage = "Something went wrong!";
@@ -152,16 +148,17 @@ export const registerRoom = createAsyncThunk<
 });
 
 export const deregisterRoom = createAsyncThunk<
-  SimpleApiResponseApiResponse,
+  openApiTypes.SimpleApiResponseApiResponse,
   number,
   { rejectValue: string }
 >("room/deregisterRoom", async (roomId, { rejectWithValue }) => {
   try {
-    const response = await axiosInstance.post<SimpleApiResponseApiResponse>(
-      `/api/room-participant/deregister/${roomId}`,
-      {},
-      { headers: defaultHeaders }
-    );
+    const response =
+      await axiosInstance.post<openApiTypes.SimpleApiResponseApiResponse>(
+        `/api/room-participant/deregister/${roomId}`,
+        {},
+        { headers: defaultHeaders }
+      );
     return response.data;
   } catch (error) {
     let errorMessage = "Something went wrong!";
@@ -173,16 +170,17 @@ export const deregisterRoom = createAsyncThunk<
 });
 
 export const hideRoom = createAsyncThunk<
-  SimpleApiResponseApiResponse,
-  HideRoomDto,
+  openApiTypes.SimpleApiResponseApiResponse,
+  openApiTypes.HideRoomDto,
   { rejectValue: string }
 >("room/hideRoom", async (roomDto, { rejectWithValue }) => {
   try {
-    const response = await axiosInstance.post<SimpleApiResponseApiResponse>(
-      `/api/room/hide-room`,
-      roomDto,
-      { headers: defaultHeaders }
-    );
+    const response =
+      await axiosInstance.post<openApiTypes.SimpleApiResponseApiResponse>(
+        `/api/room/hide-room`,
+        roomDto,
+        { headers: defaultHeaders }
+      );
     return response.data;
   } catch (error) {
     let errorMessage = "Something went wrong!";
@@ -194,12 +192,12 @@ export const hideRoom = createAsyncThunk<
 });
 
 export const updateRoom = createAsyncThunk<
-  RoomDto | undefined,
-  UpdateRoomDto & { id: number },
+  openApiTypes.RoomDto | undefined,
+  openApiTypes.UpdateRoomDto & { id: number },
   { rejectValue: string }
 >("room/update", async (roomData, { rejectWithValue }) => {
   try {
-    const response = await axiosInstance.put<RoomDtoApiResponse>(
+    const response = await axiosInstance.put<openApiTypes.RoomDtoApiResponse>(
       `/api/room/${roomData.id}`,
       roomData,
       { headers: defaultHeaders }
@@ -215,12 +213,12 @@ export const updateRoom = createAsyncThunk<
 });
 
 export const getRoomById = createAsyncThunk<
-  RoomDto | null,
+  openApiTypes.RoomDto | null,
   number,
   { rejectValue: string }
 >("room/getRoomById", async (roomId, { rejectWithValue }) => {
   try {
-    const response = await axiosInstance.get<RoomDtoApiResponse>(
+    const response = await axiosInstance.get<openApiTypes.RoomDtoApiResponse>(
       `/api/room/${roomId}`,
       { headers: defaultHeaders }
     );
@@ -235,14 +233,15 @@ export const getRoomById = createAsyncThunk<
 });
 
 export const deleteRoom = createAsyncThunk<
-  SimpleApiResponseApiResponse,
+  openApiTypes.SimpleApiResponseApiResponse,
   number,
   { rejectValue: string }
 >("room/delete", async (roomId, { rejectWithValue }) => {
   try {
-    const response = await axiosInstance.delete<SimpleApiResponseApiResponse>(
-      `/api/room/${roomId}`
-    );
+    const response =
+      await axiosInstance.delete<openApiTypes.SimpleApiResponseApiResponse>(
+        `/api/room/${roomId}`
+      );
     return response.data;
   } catch (error) {
     let errorMessage = "Failed to delete the room!";
@@ -284,55 +283,59 @@ const roomSlice = createSlice({
     removeRoomsByUserId(state, action) {
       const userId = action.payload as string;
       if (state.rooms?.data?.length) {
-        state.rooms.data = state.rooms.data.filter(
-          (r) => r.user?.id !== userId
-        );
+        state.rooms.data = state.rooms.data.filter(r => r.user?.id !== userId);
       }
     },
     removeRoomById(state, action) {
       if (state.rooms?.data?.length) {
         state.rooms.data = state.rooms.data.filter(
-          (r) => r.id !== action.payload
+          r => r.id !== action.payload
         );
       }
     },
   },
-  extraReducers: (builder) => {
+  extraReducers: builder => {
     builder
-      .addCase(getRoomContent.pending, (state) => {
+      .addCase(getRoomContent.pending, state => {
         state.roomContentLoading = true;
       })
       .addCase(
         getRoomContent.fulfilled,
-        (state, action: PayloadAction<Array<RoomContentDto> | null>) => {
+        (
+          state,
+          action: PayloadAction<Array<openApiTypes.RoomContentDto> | null>
+        ) => {
           state.roomContentLoading = false;
           state.roomContent = action.payload;
         }
       )
-      .addCase(getRoomContent.rejected, (state) => {
+      .addCase(getRoomContent.rejected, state => {
         state.roomContentLoading = false;
       })
-      .addCase(createRoom.pending, (state) => {
+      .addCase(createRoom.pending, state => {
         state.createRoomLoading = true;
       })
       .addCase(
         createRoom.fulfilled,
-        (state, action: PayloadAction<RoomDto | undefined>) => {
+        (state, action: PayloadAction<openApiTypes.RoomDto | undefined>) => {
           state.createRoomLoading = false;
           if (action.payload) {
             state.myRooms?.data?.unshift(action.payload);
           }
         }
       )
-      .addCase(createRoom.rejected, (state) => {
+      .addCase(createRoom.rejected, state => {
         state.createRoomLoading = false;
       })
-      .addCase(getRooms.pending, (state) => {
+      .addCase(getRooms.pending, state => {
         state.getRoomsLoading = true;
       })
       .addCase(
         getRooms.fulfilled,
-        (state, action: PayloadAction<RoomDtoPagedResponse | null>) => {
+        (
+          state,
+          action: PayloadAction<openApiTypes.RoomDtoPagedResponse | null>
+        ) => {
           state.getRoomsLoading = false;
           if (!state.rooms?.data) {
             state.rooms = action.payload;
@@ -344,64 +347,67 @@ const roomSlice = createSlice({
           }
         }
       )
-      .addCase(getRooms.rejected, (state) => {
+      .addCase(getRooms.rejected, state => {
         state.getRoomsLoading = false;
       })
-      .addCase(getMyRooms.pending, (state) => {
+      .addCase(getMyRooms.pending, state => {
         state.getMyRoomsLoading = true;
       })
       .addCase(
         getMyRooms.fulfilled,
-        (state, action: PayloadAction<RoomDtoPagedResponse | null>) => {
+        (
+          state,
+          action: PayloadAction<openApiTypes.RoomDtoPagedResponse | null>
+        ) => {
           state.getMyRoomsLoading = false;
           state.myRooms = action.payload;
         }
       )
-      .addCase(getMyRooms.rejected, (state) => {
+      .addCase(getMyRooms.rejected, state => {
         state.getMyRoomsLoading = false;
       })
-      .addCase(getRoomById.pending, (state) => {
+      .addCase(getRoomById.pending, state => {
         state.activeRoomLoading = true;
       })
       .addCase(
         getRoomById.fulfilled,
-        (state, action: PayloadAction<RoomDto | null>) => {
+        (state, action: PayloadAction<openApiTypes.RoomDto | null>) => {
           state.activeRoomLoading = false;
           state.activeRoom = action.payload;
         }
       )
-      .addCase(getRoomById.rejected, (state) => {
+      .addCase(getRoomById.rejected, state => {
         state.activeRoomLoading = false;
       })
-      .addCase(updateRoom.pending, (state) => {
+      .addCase(updateRoom.pending, state => {
         state.updateRoomLoading = true;
       })
       .addCase(updateRoom.fulfilled, (state, action) => {
         state.updateRoomLoading = false;
         if (state.myRooms?.data?.length && action.payload) {
           const index = state.myRooms.data.findIndex(
-            (r) => r.id === action.payload?.id
+            r => r.id === action.payload?.id
           );
           if (index !== -1) {
             state.myRooms.data[index] = action.payload;
           }
         }
       })
-      .addCase(updateRoom.rejected, (state) => {
+      .addCase(updateRoom.rejected, state => {
         state.updateRoomLoading = false;
       })
-      .addCase(deleteRoom.pending, (state) => {
+      .addCase(deleteRoom.pending, state => {
         state.deletingRoom = true;
       })
       .addCase(deleteRoom.fulfilled, (state, action) => {
         state.deletingRoom = false;
         if (state.myRooms?.data) {
           state.myRooms.data = state.myRooms?.data?.filter(
-            (room) => room.id !== action.meta.arg
+            room => room.id !== action.meta.arg
           );
         }
       })
-      .addCase(deleteRoom.rejected, (state) => {
+      .addCase(deleteRoom.rejected, state => {
         state.deletingRoom = false;
       })
       .addCase(registerRoom.pending, (state, action) => {
@@ -412,7 +418,7 @@ const roomSlice = createSlice({
         state.isRegistering = false;
         if (state.rooms?.data?.length) {
           const roomIndex = state.rooms.data.findIndex(
-            (r) => r.id === action.meta.arg
+            r => r.id === action.meta.arg
           );
           if (roomIndex !== -1) {
             const room = state.rooms.data[roomIndex];
@@ -423,7 +429,7 @@ const roomSlice = createSlice({
           }
         }
       })
-      .addCase(registerRoom.rejected, (state) => {
+      .addCase(registerRoom.rejected, state => {
         state.isRegistering = false;
       })
       .addCase(deregisterRoom.pending, (state, action) => {
@@ -434,7 +440,7 @@ const roomSlice = createSlice({
         state.isdeRegistering = false;
         if (state.rooms?.data?.length) {
           const roomIndex = state.rooms.data.findIndex(
-            (r) => r.id === action.meta.arg
+            r => r.id === action.meta.arg
           );
           if (roomIndex !== -1) {
             const room = state.rooms.data[roomIndex];
@@ -445,7 +451,7 @@ const roomSlice = createSlice({
           }
         }
       })
-      .addCase(deregisterRoom.rejected, (state) => {
+      .addCase(deregisterRoom.rejected, state => {
         state.isdeRegistering = false;
       })
       .addCase(hideRoom.pending, (state, action) => {
@@ -456,11 +462,11 @@ const roomSlice = createSlice({
         state.ishidingRoom = false;
         if (state.rooms?.data?.length) {
           state.rooms.data = state.rooms.data.filter(
-            (r) => r.id !== action.meta.arg.roomId
+            r => r.id !== action.meta.arg.roomId
           );
         }
       })
-      .addCase(hideRoom.rejected, (state) => {
+      .addCase(hideRoom.rejected, state => {
         state.ishidingRoom = false;
       });
   },

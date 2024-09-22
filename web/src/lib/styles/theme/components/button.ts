@@ -23,7 +23,7 @@ export const Button: ComponentStyleConfig = {
       // boxShadow: "0 0 2px 2px #efdfde",
     },
     // 4. We can override existing variants
-    solid: (props: StyleFunctionProps) => ({
+    solid: (_props: StyleFunctionProps) => ({
       // bg: props.colorMode === "dark" ? "red.600" : "red.500",
       // fontSize: "smaller",
     }),

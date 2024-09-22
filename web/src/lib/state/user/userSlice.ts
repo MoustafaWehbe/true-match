@@ -1,5 +1,6 @@
-import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
+
 import {
   BlockUserDto,
   CreateOrUpdateUserProfileDto,
@@ -12,9 +13,10 @@ import {
   UserDtoApiResponse,
   UserProfileDto,
   UserProfileDtoApiResponse,
-} from "shared/src/types/openApiGen";
-import axiosInstance, { defaultHeaders } from "~/lib/utils/api/axiosConfig";
+} from "@dapp/shared/src/types/openApiGen";
+
 import { TOKEN } from "~/lib/consts/localStorage";
+import axiosInstance, { defaultHeaders } from "~/lib/utils/api/axiosConfig";
 
 export interface UserState {
   loginResult: UserApiResponse | null;

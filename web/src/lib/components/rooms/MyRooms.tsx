@@ -1,5 +1,7 @@
 "use client";
 
+import { useCallback, useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   Box,
   Button,
@@ -11,9 +13,15 @@ import {
   useColorModeValue,
   useToast,
 } from "@chakra-ui/react";
+
+import { MyRoomStatus, RoomDto } from "@dapp/shared/src/types/openApiGen";
+
+import CustomSelect, { Option } from "../shared/CustomSelect";
+
 import RoomCard from "./RoomCard";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "~/lib/state/store";
+import RoomModal from "./RoomModal";
+
+import { getQuestionCategories } from "~/lib/state/question/questionSlice";
 import {
   clearMyRooms,
   clearRooms,
@@ -21,11 +29,7 @@ import {
   getMyRooms,
   updateRoom,
 } from "~/lib/state/room/roomSlice";
-import { useCallback, useEffect, useRef, useState } from "react";
-import { MyRoomStatus, RoomDto } from "shared/src/types/openApiGen";
-import CustomSelect, { Option } from "../shared/CustomSelect";
-import { getQuestionCategories } from "~/lib/state/question/questionSlice";
-import RoomModal from "./RoomModal";
+import { AppDispatch, RootState } from "~/lib/state/store";
 
 const options: Option[] = [
   { value: 0, label: "Coming up" },

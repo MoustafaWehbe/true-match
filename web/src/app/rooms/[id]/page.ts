@@ -1,3 +1,3 @@
-import Room from "~/lib/pages/room";
+import RoomPage from "~/lib/pages/room";
 
-export default Room;
+export default RoomPage;

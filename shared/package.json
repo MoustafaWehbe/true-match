@@ -1,8 +1,9 @@
 {
-  "name": "shared",
+  "name": "@dapp/shared",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "private": "true",
   "scripts": {
     "build": "tsc",
     "generate-types": "node generate-types.js"

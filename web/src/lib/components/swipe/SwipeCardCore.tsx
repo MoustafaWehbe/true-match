@@ -4,7 +4,8 @@ import React, {
   useLayoutEffect,
   useRef,
 } from "react";
-import { useSpring, animated } from "@react-spring/web";
+import { animated, useSpring } from "@react-spring/web";
+
 import useWindowSize from "~/lib/hooks/useWindowSize";
 
 interface Settings {
@@ -287,7 +288,7 @@ const SwipeCardCore = forwardRef<any, SwipeCardCoreProps>(
       let lastPosition = { dx: 0, dy: 0, vx: 0, vy: 0, timeStamp: Date.now() };
       let isClicking = false;
 
-      const onTouchStart = (ev) => {
+      const onTouchStart = (ev: any) => {
         if (
           !(ev.target as HTMLElement).className.includes("pressable") &&
           ev.cancelable
@@ -307,7 +308,7 @@ const SwipeCardCore = forwardRef<any, SwipeCardCoreProps>(
 
       element.current?.addEventListener("touchstart", onTouchStart);
 
-      const onMouseDown = (ev) => {
+      const onMouseDown = (ev: any) => {
         isClicking = true;
         const gestureState = gestureStateFromWebEvent(
           ev,

@@ -1,14 +1,15 @@
 "use client";
 
+import { InfoIcon } from "@chakra-ui/icons";
 import {
   Box,
-  Text,
   Button,
-  useColorModeValue,
-  Stack,
   Flex,
+  Stack,
+  Text,
+  useColorModeValue,
 } from "@chakra-ui/react";
-import { InfoIcon } from "@chakra-ui/icons";
+
 import { sharedCardContainerStyles } from "./SwipeCard";
 
 interface CardStaticProps {

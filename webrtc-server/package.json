@@ -1,12 +1,14 @@
 {
-  "name": "webrtc-server",
+  "name": "@dapp/webrtc-server",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
   "author": "Moustafa Wehbe <moustafawehbe102@gmail.com>",
+  "private": true,
   "scripts": {
     "build": "tsc --project ./",
     "start:dev": "nodemon src/server.ts",
+    "start": "nodemon src/server.ts",
     "start:prod": "node dist/server.js"
   },
   "dependencies": {
@@ -17,7 +19,8 @@
     "express": "^4.19.2",
     "mkcert": "^3.2.0",
     "socket.io": "^4.7.5",
-    "ts-node-dev": "^2.0.0"
+    "ts-node-dev": "^2.0.0",
+    "@dapp/shared": "1.0.0"
   },
   "devDependencies": {
     "@openapitools/openapi-generator-cli": "^2.13.4",

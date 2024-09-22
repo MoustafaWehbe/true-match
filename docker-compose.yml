@@ -1,0 +1,65 @@
+version: '3.8'
+
+x-common: &common
+  restart: on-failure
+  init: true
+
+services:
+  api:
+    <<: *common
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    container_name: dapp-api-service
+    ports:
+      - "5095:5095"
+    networks:
+      - my-dapp-network
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://0.0.0.0:5095
+    volumes:
+      - ./api:/src/api
+    working_dir: /app
+
+  web:
+    <<: *common
+    env_file:
+      - web/.env.local
+    build:
+      context: .
+      dockerfile: web/Dockerfile
+    container_name: dapp-web-service
+    ports:
+      - "3000:3000"
+    networks:
+      - my-dapp-network
+    depends_on:
+      - api
+    volumes:
+      - ./:/usr/src/app
+    working_dir: /usr/src/app/web
+
+
+  webrtc-server:
+    <<: *common
+    env_file:
+      - webrtc-server/.env
+    build:
+      context: .
+      dockerfile: webrtc-server/Dockerfile
+    container_name: dapp-webrtc-service
+    ports:
+      - "8081:8081"
+    networks:
+      - my-dapp-network
+    depends_on:
+      - api
+    volumes:
+      - ./:/usr/src/app
+    working_dir: /usr/src/app/webrtc-server
+
+
+networks:
+  my-dapp-network:
+    driver: bridge

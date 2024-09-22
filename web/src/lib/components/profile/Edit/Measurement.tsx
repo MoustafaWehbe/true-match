@@ -1,17 +1,19 @@
+import React, { useEffect, useMemo, useState } from "react";
+import { useSelector } from "react-redux";
 import {
   Box,
-  Text,
   Slider,
-  SliderTrack,
   SliderFilledTrack,
   SliderThumb,
+  SliderTrack,
+  Text,
 } from "@chakra-ui/react";
-import { useEffect, useMemo, useState } from "react";
-import { useSelector } from "react-redux";
+
 import {
   Descriptor as DescriptorType,
   SelectedDescriptor,
-} from "shared/src/types/openApiGen";
+} from "@dapp/shared/src/types/openApiGen";
+
 import { RootState } from "~/lib/state/store";
 
 const Measurement = ({

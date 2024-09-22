@@ -1,26 +1,26 @@
 "use client";
 
 import React, { useEffect } from "react";
-
+import { MdCheckCircle } from "react-icons/md";
+import { useDispatch, useSelector } from "react-redux";
 import {
+  Button,
   List,
   ListIcon,
   ListItem,
-  Text,
   Modal,
   ModalBody,
   ModalCloseButton,
   ModalContent,
+  ModalFooter,
   ModalHeader,
   ModalOverlay,
-  ModalFooter,
-  Button,
+  Text,
   useColorModeValue,
 } from "@chakra-ui/react";
-import { MdCheckCircle } from "react-icons/md";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "~/lib/state/store";
+
 import { getRoomContent } from "~/lib/state/room/roomSlice";
+import { AppDispatch, RootState } from "~/lib/state/store";
 
 type Props = {
   isModalOpen: boolean;

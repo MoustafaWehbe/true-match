@@ -1,9 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
-import userReducer from "./user/userSlice";
-import roomReducer from "./room/roomSlice";
-import questionSlice from "./question/questionSlice";
-import genderSlice from "./gender/genderSlice";
+
 import availableDescriptorSlice from "./availableDescriptor/availableDescriptorSlice";
+import genderSlice from "./gender/genderSlice";
+import questionSlice from "./question/questionSlice";
+import roomReducer from "./room/roomSlice";
+import userReducer from "./user/userSlice";
 
 export const store = configureStore({
   reducer: {

@@ -1,24 +1,24 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Box, useToast } from "@chakra-ui/react";
-import OnboardingFormStep1 from "./OnboardingFormStep1";
-import UploadImagesForm from "./UploadImageForm";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "~/lib/state/store";
-import {
-  createUserMedia,
-  createOrUpdateUserProfile,
-} from "~/lib/state/user/userSlice";
-import {
-  CreateOrUpdateUserProfileDto,
-  SelectedDescriptor,
-} from "shared/src/types/openApiGen";
+import { Box, useToast } from "@chakra-ui/react";
+
+import { openApiTypes } from "@dapp/shared";
+
+import OnboardingFormStep1 from "./OnboardingFormStep1";
 import OnboardingFormStep2 from "./OnboardingFormStep2";
-import { getAvailableDescriptors } from "~/lib/state/availableDescriptor/availableDescriptorSlice";
 import OnboardingFormStep3 from "./OnboardingFormStep3";
 import OnboardingFormStep4 from "./OnboardingFormStep4";
 import OnboardingLocationAccess from "./OnboardingLocationAccess";
+import UploadImagesForm from "./UploadImageForm";
+
+import { getAvailableDescriptors } from "~/lib/state/availableDescriptor/availableDescriptorSlice";
+import { AppDispatch, RootState } from "~/lib/state/store";
+import {
+  createOrUpdateUserProfile,
+  createUserMedia,
+} from "~/lib/state/user/userSlice";
 
 const Onboarding = () => {
   const [step, setStep] = useState(1);
@@ -31,7 +31,7 @@ const Onboarding = () => {
   }, [dispatch]);
 
   const onStep1Submit = async (
-    values: Pick<CreateOrUpdateUserProfileDto, "birthDate">
+    values: Pick<openApiTypes.CreateOrUpdateUserProfileDto, "birthDate">
   ) => {
     await dispatch(
       createOrUpdateUserProfile({
@@ -42,7 +42,10 @@ const Onboarding = () => {
   };
 
   const onStep2Submit = async (
-    values: Pick<CreateOrUpdateUserProfileDto, "userProfileGenders">
+    values: Pick<
+      openApiTypes.CreateOrUpdateUserProfileDto,
+      "userProfileGenders"
+    >
   ) => {
     await dispatch(
       createOrUpdateUserProfile({
@@ -53,10 +56,13 @@ const Onboarding = () => {
   };
 
   const getMergedDescriptors = (
-    values: Pick<CreateOrUpdateUserProfileDto, "selectedDescriptors">
+    values: Pick<
+      openApiTypes.CreateOrUpdateUserProfileDto,
+      "selectedDescriptors"
+    >
   ) => {
     const avDesc = values.selectedDescriptors!;
-    const existingAvDesc: Array<SelectedDescriptor> =
+    const existingAvDesc: Array<openApiTypes.SelectedDescriptor> =
       JSON.parse(JSON.stringify(user?.userProfile?.selectedDescriptors)) || [];
     const indexIfAlreadyExist = existingAvDesc?.findIndex(
       (desc) => desc.availableDescriptorId === avDesc[0].availableDescriptorId
@@ -74,7 +80,10 @@ const Onboarding = () => {
   };
 
   const onStep3Submit = async (
-    values: Pick<CreateOrUpdateUserProfileDto, "selectedDescriptors">
+    values: Pick<
+      openApiTypes.CreateOrUpdateUserProfileDto,
+      "selectedDescriptors"
+    >
   ) => {
     await dispatch(
       createOrUpdateUserProfile({
@@ -85,7 +94,10 @@ const Onboarding = () => {
   };
 
   const onStep4Submit = async (
-    values: Pick<CreateOrUpdateUserProfileDto, "selectedDescriptors">
+    values: Pick<
+      openApiTypes.CreateOrUpdateUserProfileDto,
+      "selectedDescriptors"
+    >
   ) => {
     await dispatch(
       createOrUpdateUserProfile({
@@ -120,7 +132,7 @@ const Onboarding = () => {
   };
 
   const onLocationSubmit = async (
-    values: Pick<CreateOrUpdateUserProfileDto, "pos">
+    values: Pick<openApiTypes.CreateOrUpdateUserProfileDto, "pos">
   ) => {
     await dispatch(
       createOrUpdateUserProfile({

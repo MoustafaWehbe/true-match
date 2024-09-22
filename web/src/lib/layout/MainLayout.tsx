@@ -2,11 +2,12 @@
 
 import { Box, Flex, useMediaQuery } from "@chakra-ui/react";
 
+import DrawerMobile from "../components/drawer/DrawerMobile";
+import Sidebar from "../components/drawer/Sidebar";
 import Footer from "../components/layout/Footer";
 import Header from "../components/layout/Header";
-import Sidebar from "../components/drawer/Sidebar";
-import DrawerMobile from "../components/drawer/DrawerMobile";
 import { size } from "../consts";
+
 import { LayoutProps } from ".";
 
 const MainLayout = ({ children }: LayoutProps) => {

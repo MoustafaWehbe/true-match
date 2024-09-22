@@ -1,28 +1,29 @@
-import {
-  Box,
-  Text,
-  IconButton,
-  Flex,
-  Image,
-  Collapse,
-  VStack,
-  Heading,
-  useDisclosure,
-  useColorModeValue,
-  Progress,
-  Button,
-  Wrap,
-} from "@chakra-ui/react";
+import { useState } from "react";
+import { useSelector } from "react-redux";
 import {
   ChevronDownIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
   ChevronUpIcon,
 } from "@chakra-ui/icons";
-import { useState } from "react";
-import { useSelector } from "react-redux";
-import { RootState } from "~/lib/state/store";
+import {
+  Box,
+  Button,
+  Collapse,
+  Flex,
+  Heading,
+  IconButton,
+  Image,
+  Progress,
+  Text,
+  useColorModeValue,
+  useDisclosure,
+  VStack,
+  Wrap,
+} from "@chakra-ui/react";
+
 import env from "~/lib/consts/env";
+import { RootState } from "~/lib/state/store";
 import { calculateAge } from "~/lib/utils/date/date";
 
 const PreviewProfile = () => {

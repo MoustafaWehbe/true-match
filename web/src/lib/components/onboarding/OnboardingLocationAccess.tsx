@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import {
   Box,
   Button,
@@ -6,8 +7,8 @@ import {
   useColorMode,
   VStack,
 } from "@chakra-ui/react";
-import { useState } from "react";
-import { CreateOrUpdateUserProfileDto } from "shared/src/types/openApiGen";
+
+import { CreateOrUpdateUserProfileDto } from "@dapp/shared/src/types/openApiGen";
 
 interface OnboardingLocationAccessProps {
   onSubmit: (values: Pick<CreateOrUpdateUserProfileDto, "pos">) => void;

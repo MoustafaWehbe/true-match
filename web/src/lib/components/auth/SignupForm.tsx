@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   Box,
   Button,
@@ -15,9 +17,8 @@ import {
 import { FormControl, FormErrorMessage, useToast } from "@chakra-ui/react";
 import { useFormik } from "formik";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup";
+
 import { AppDispatch, RootState } from "~/lib/state/store";
 import { registerUser } from "~/lib/state/user/userSlice";
 

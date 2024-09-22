@@ -1,11 +1,11 @@
 import {
   Box,
   Button,
+  Flex,
   Heading,
   Image,
-  Text,
   Link as ChakraLink,
-  Flex,
+  Text,
 } from "@chakra-ui/react";
 import Link from "next/link";
 

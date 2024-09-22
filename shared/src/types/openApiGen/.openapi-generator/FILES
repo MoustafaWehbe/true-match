@@ -1,16 +1,3 @@
-apis/AccountApi.ts
-apis/AvailableDescriptorsApi.ts
-apis/GenderApi.ts
-apis/MatchApi.ts
-apis/MediaApi.ts
-apis/QuestionCategoriesApi.ts
-apis/RoomApi.ts
-apis/RoomContentApi.ts
-apis/RoomParticipantApi.ts
-apis/SystemQuestionsApi.ts
-apis/UserApi.ts
-apis/UserProfileApi.ts
-apis/index.ts
 index.ts
 models/AllRoomStatus.ts
 models/AvailableDescriptorDto.ts

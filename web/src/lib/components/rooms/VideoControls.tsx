@@ -1,10 +1,10 @@
-import { IconButton, Stack } from "@chakra-ui/react";
 import {
   FaMicrophone,
   FaMicrophoneSlash,
   FaVideo,
   FaVideoSlash,
 } from "react-icons/fa";
+import { IconButton, Stack } from "@chakra-ui/react";
 
 interface VideoControlsProps {
   onToggleMic: () => void;

@@ -1,4 +1,4 @@
-import { Spinner, Center, useColorModeValue } from "@chakra-ui/react";
+import { Center, Spinner, useColorModeValue } from "@chakra-ui/react";
 
 interface LoaderProps {
   isLoading: boolean;

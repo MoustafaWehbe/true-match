@@ -1,17 +1,18 @@
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
+import { CloseIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
-  Input,
-  Image,
   Grid,
   Heading,
   IconButton,
+  Image,
+  Input,
   Spinner,
 } from "@chakra-ui/react";
-import { CloseIcon } from "@chakra-ui/icons";
+
 import { RootState } from "~/lib/state/store";
-import { useSelector } from "react-redux";
 
 interface UploadImagesFormProps {
   onSubmit: (images: (File | null)[]) => void;

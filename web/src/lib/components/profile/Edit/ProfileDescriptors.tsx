@@ -1,9 +1,12 @@
-import { VStack } from "@chakra-ui/react";
-import Section from "./Section";
-import { useSelector } from "react-redux";
-import { RootState } from "~/lib/state/store";
-import { SelectedDescriptor } from "shared/src/types/openApiGen";
 import { memo } from "react";
+import { useSelector } from "react-redux";
+import { VStack } from "@chakra-ui/react";
+
+import { SelectedDescriptor } from "@dapp/shared/src/types/openApiGen";
+
+import Section from "./Section";
+
+import { RootState } from "~/lib/state/store";
 
 const ProfileDescriptors = ({
   onSelect,
