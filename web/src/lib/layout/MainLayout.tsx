@@ -21,7 +21,7 @@ const MainLayout = ({ children }: LayoutProps) => {
         <Box
           margin="0 auto"
           width={"100%"}
-          maxWidth={{ base: "100vw", md: "80vw" }} // 100vw for base (screens < 768px), 80vw for md (screens >= 768px)
+          maxWidth={{ base: "100vw", md: "65%", lg: "75%" }}
           transition="0.5s ease-out"
           height={"90vh"}
           as="main"

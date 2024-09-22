@@ -1,4 +1,3 @@
-import React from "react";
 import { FaHeart } from "react-icons/fa";
 import { LuHeartOff } from "react-icons/lu";
 import { MdBlock } from "react-icons/md";
@@ -13,7 +12,6 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { format } from "date-fns";
-// import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 
@@ -21,7 +19,6 @@ import { RoomDto } from "@dapp/shared/src/types/openApiGen";
 
 import CustomTooltip from "../shared/CutsomTooltip";
 
-// import { startRoom } from "~/lib/state/room/roomSlice";
 import DeleteRoomButton from "./DeleteRoomButton";
 
 import { RootState } from "~/lib/state/store";
@@ -39,6 +36,7 @@ interface RoomCardProps {
   handleOnHideRoom?: (roomId: number) => void;
   handleOnNotInterestedAnymore?: (roomId: number) => void;
   onEditClicked?: (room: RoomDto) => void;
+  onStartRoom?: (room: RoomDto) => void;
 }
 
 const RoomCard = ({
@@ -51,6 +49,7 @@ const RoomCard = ({
   handleOnHideRoom,
   handleOnNotInterestedAnymore,
   onEditClicked,
+  onStartRoom,
 }: RoomCardProps) => {
   const cardBg = useColorModeValue("white", "gray.700");
   const cardTextColor = useColorModeValue("gray.800", "whiteAlpha.900");
@@ -61,23 +60,14 @@ const RoomCard = ({
     ishidingRoom,
     actionPerformedOnRoomId,
   } = useSelector((state: RootState) => state.room);
-  // const { isBlockingUser } = useSelector((state: RootState) => state.user);
   const router = useRouter();
 
   const isOwner = currentUser && currentUser.id === room?.user?.id;
-  // const dispatch = useDispatch<AppDispatch>();
-  // const { roomStarted } = useSelector((state: RootState) => state.room);
 
-  // useEffect(() => {
-  //   if (roomStarted) {
-  //     router.push(`rooms/${room.id}`);
-  //   }
-  // }, [room.id, roomStarted, router]);
-
-  const onStart = () => {
-    // const newRoom = { ...room };
-    // newRoom.status = "InProgress";
-    // dispatch(startRoom(newRoom));
+  const onStart = async () => {
+    if (onStartRoom) {
+      onStartRoom(room);
+    }
   };
 
   return (

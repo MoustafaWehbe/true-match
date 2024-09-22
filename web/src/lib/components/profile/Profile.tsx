@@ -52,7 +52,11 @@ const Profile = () => {
   }
 
   return (
-    <Tabs maxWidth={"50%"} margin={"0 auto"}>
+    <Tabs
+      maxWidth={{ base: "90%", md: "75%", lg: "50%" }}
+      margin={"0 auto"}
+      marginTop={{ base: "50px", md: "0px" }}
+    >
       <TabList>
         <CustomTab>Edit</CustomTab>
         <CustomTab>Preview</CustomTab>

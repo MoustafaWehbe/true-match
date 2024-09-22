@@ -13,6 +13,7 @@ import {
   useColorModeValue,
   useToast,
 } from "@chakra-ui/react";
+import { useRouter } from "next/navigation";
 
 import { MyRoomStatus, RoomDto } from "@dapp/shared/src/types/openApiGen";
 
@@ -27,6 +28,7 @@ import {
   clearRooms,
   createRoom,
   getMyRooms,
+  startRoom,
   updateRoom,
 } from "~/lib/state/room/roomSlice";
 import { AppDispatch, RootState } from "~/lib/state/store";
@@ -52,6 +54,7 @@ function MyRooms() {
   const [roomToEdit, setRoomToEdit] = useState<RoomDto>();
   const [isRoomModalOpen, setIsRoomModalOpen] = useState(false);
   const page = useRef(1);
+  const router = useRouter();
 
   const loadRooms = useCallback(() => {
     dispatch(
@@ -70,16 +73,6 @@ function MyRooms() {
       dispatch(clearMyRooms());
     };
   }, [dispatch, selectedStatus.value, page, loadRooms]);
-
-  // useEffect(() => {
-  //   dispatch(
-  //     getMyRooms({
-  //       PageNumber: 1,
-  //       PageSize: 10,
-  //       Status: selectedStatus.value as MyRoomStatus,
-  //     })
-  //   );
-  // }, [dispatch, selectedStatus.value]);
 
   useEffect(() => {
     if (!categories && !categoriesLoading) {
@@ -166,6 +159,25 @@ function MyRooms() {
     setIsAgreementChecked(false);
   };
 
+  const handleStartRoom = async (room: RoomDto) => {
+    const res = await dispatch(startRoom({ id: room.id! }));
+    if (
+      res.payload &&
+      "status" in res.payload &&
+      res.payload.status !== 200 &&
+      res.payload.status !== 201
+    ) {
+      toast({
+        title: res.payload.data,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+    } else {
+      router.push(`rooms/${room.id}`);
+    }
+  };
+
   return (
     <Box bg={bg} color={textColor} px={8} py={4} borderRadius="lg">
       <Flex p={6} float={"right"} alignItems={"center"} gap={2}>
@@ -210,6 +222,7 @@ function MyRooms() {
             key={room.id}
             room={room}
             onEditClicked={handleEditClicked}
+            onStartRoom={handleStartRoom}
           />
         ))}
       </Grid>

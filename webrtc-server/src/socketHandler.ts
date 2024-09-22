@@ -17,38 +17,41 @@ class SocketHandler {
       console.log("New client connected");
 
       socket.on("join", (payload: socketEventTypes.JoinRoomPayload) =>
-        this.handleOnJoin(payload, socket),
+        this.handleOnJoin(payload, socket)
       );
 
       socket.on("offer", (payload: socketEventTypes.OfferPayload) =>
-        this.handleOffer(payload, socket),
+        this.handleOffer(payload, socket)
       );
 
       socket.on("answer", (payload: socketEventTypes.AnswerPayload) =>
-        this.handleAnswer(payload, socket),
+        this.handleAnswer(payload, socket)
       );
 
       socket.on(
         "ice-candidate",
         (payload: socketEventTypes.IceCandidatePayload) =>
-          this.handleIceCandidate(payload, socket),
+          this.handleIceCandidate(payload, socket)
       );
 
       socket.on("leave-room", (payload: socketEventTypes.LeaveRoomPayload) =>
-        this.handleDisconnect(payload, socket),
+        this.handleDisconnect(payload, socket)
       );
     });
   }
 
   private async handleOnJoin(
     { roomId }: socketEventTypes.JoinRoomPayload,
-    socket: Socket,
+    socket: Socket
   ) {
     const token = socket.handshake.auth.token;
     try {
       const room = await roomService.getRoomById(token, roomId);
       if (room) {
-        await roomService.joinRoom(token, roomId, socket.id);
+        const joinRes = await roomService.joinRoom(token, roomId, socket.id);
+        if (joinRes?.statusCode !== 200 && joinRes?.statusCode !== 201) {
+          throw Error(joinRes?.message || "Failed to join room.");
+        }
         socket.join(roomId.toString());
         socket.broadcast.to(roomId.toString()).emit("user-joined", socket.id);
       } else {
@@ -67,25 +70,29 @@ class SocketHandler {
 
   private handleAnswer(
     payload: socketEventTypes.AnswerPayload,
-    _socket: Socket,
+    _socket: Socket
   ) {
     this.io.to(payload.targetSocketId).emit("answer", payload);
   }
 
   private handleIceCandidate(
     payload: socketEventTypes.IceCandidatePayload,
-    _socket: Socket,
+    _socket: Socket
   ) {
     this.io.to(payload.targetSocketId).emit("ice-candidate", payload);
   }
 
   private async handleDisconnect(
     { roomId }: socketEventTypes.LeaveRoomPayload,
-    socket: Socket,
+    socket: Socket
   ) {
     const token = socket.handshake.auth.token;
     try {
-      await roomService.leaveRoom(roomId, token);
+      const leaveRes = await roomService.leaveRoom(roomId, token);
+      if (leaveRes?.statusCode !== 200 && leaveRes?.statusCode !== 201) {
+        throw Error(leaveRes?.message || "Failed to leave room.");
+      }
+      socket.disconnect(true);
       console.log("Client disconnected");
     } catch {
       socket.disconnect(true);

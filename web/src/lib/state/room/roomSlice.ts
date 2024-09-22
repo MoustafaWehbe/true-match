@@ -5,6 +5,11 @@ import { openApiTypes } from "@dapp/shared";
 
 import axiosInstance, { defaultHeaders } from "~/lib/utils/api/axiosConfig";
 
+export interface RejectErrorCustomType {
+  status: number;
+  data: string;
+}
+
 export interface RoomSate {
   roomContent: Array<openApiTypes.RoomContentDto> | null;
   roomContentLoading: boolean;
@@ -20,6 +25,7 @@ export interface RoomSate {
   isRegistering: boolean;
   isdeRegistering: boolean;
   ishidingRoom: boolean;
+  isStartingRoom: boolean;
   actionPerformedOnRoomId: number | null;
 }
 
@@ -125,50 +131,6 @@ export const createRoom = createAsyncThunk<
   }
 });
 
-export const registerRoom = createAsyncThunk<
-  openApiTypes.RoomParticipantDto | undefined,
-  number,
-  { rejectValue: string }
->("room/registerRoom", async (roomId, { rejectWithValue }) => {
-  try {
-    const response =
-      await axiosInstance.post<openApiTypes.RoomParticipantDtoApiResponse>(
-        `/api/room-participant/register/${roomId}`,
-        {},
-        { headers: defaultHeaders }
-      );
-    return response.data.data;
-  } catch (error) {
-    let errorMessage = "Something went wrong!";
-    if (axios.isAxiosError(error) && error.response) {
-      errorMessage = error.response.data.message || errorMessage;
-    }
-    return rejectWithValue(errorMessage);
-  }
-});
-
-export const deregisterRoom = createAsyncThunk<
-  openApiTypes.SimpleApiResponseApiResponse,
-  number,
-  { rejectValue: string }
->("room/deregisterRoom", async (roomId, { rejectWithValue }) => {
-  try {
-    const response =
-      await axiosInstance.post<openApiTypes.SimpleApiResponseApiResponse>(
-        `/api/room-participant/deregister/${roomId}`,
-        {},
-        { headers: defaultHeaders }
-      );
-    return response.data;
-  } catch (error) {
-    let errorMessage = "Something went wrong!";
-    if (axios.isAxiosError(error) && error.response) {
-      errorMessage = error.response.data.message || errorMessage;
-    }
-    return rejectWithValue(errorMessage);
-  }
-});
-
 export const hideRoom = createAsyncThunk<
   openApiTypes.SimpleApiResponseApiResponse,
   openApiTypes.HideRoomDto,
@@ -252,6 +214,91 @@ export const deleteRoom = createAsyncThunk<
   }
 });
 
+export const startRoom = createAsyncThunk<
+  openApiTypes.RoomDtoApiResponse | undefined,
+  { id: number },
+  { rejectValue: RejectErrorCustomType }
+>("room/start", async (roomData, { rejectWithValue }) => {
+  try {
+    const response = await axiosInstance.post<openApiTypes.RoomDtoApiResponse>(
+      `/api/room/start-room/${roomData.id}`,
+      {},
+      { headers: defaultHeaders }
+    );
+    return response.data;
+  } catch (error) {
+    let errorMessage: RejectErrorCustomType = {
+      data: "Something went wrong!",
+      status: 200,
+    };
+    if (axios.isAxiosError(error) && error.response) {
+      errorMessage = {
+        status: error.response.status,
+        data: error.response.data || errorMessage.data,
+      };
+    }
+    return rejectWithValue(errorMessage);
+  }
+});
+
+// start room-participant
+export const registerRoom = createAsyncThunk<
+  openApiTypes.RoomParticipantDto | undefined,
+  number,
+  { rejectValue: RejectErrorCustomType }
+>("room/registerRoom", async (roomId, { rejectWithValue }) => {
+  try {
+    const response =
+      await axiosInstance.post<openApiTypes.RoomParticipantDtoApiResponse>(
+        `/api/room-participant/register/${roomId}`,
+        {},
+        { headers: defaultHeaders }
+      );
+    return response.data.data;
+  } catch (error) {
+    let errorMessage: RejectErrorCustomType = {
+      data: "Something went wrong!",
+      status: 200,
+    };
+    if (axios.isAxiosError(error) && error.response) {
+      errorMessage = {
+        status: error.response.status,
+        data: error.response.data || errorMessage.data,
+      };
+    }
+    return rejectWithValue(errorMessage);
+  }
+});
+
+export const deregisterRoom = createAsyncThunk<
+  openApiTypes.SimpleApiResponseApiResponse,
+  number,
+  { rejectValue: RejectErrorCustomType }
+>("room/deregisterRoom", async (roomId, { rejectWithValue }) => {
+  try {
+    const response =
+      await axiosInstance.post<openApiTypes.SimpleApiResponseApiResponse>(
+        `/api/room-participant/deregister/${roomId}`,
+        {},
+        { headers: defaultHeaders }
+      );
+    return response.data;
+  } catch (error) {
+    let errorMessage: RejectErrorCustomType = {
+      data: "Something went wrong!",
+      status: 200,
+    };
+    if (axios.isAxiosError(error) && error.response) {
+      errorMessage = {
+        status: error.response.status,
+        data: error.response.data || errorMessage.data,
+      };
+    }
+    return rejectWithValue(errorMessage);
+  }
+});
+// end room-participant
+
 const initialState: RoomSate = {
   roomContent: null,
   roomContentLoading: false,
@@ -268,6 +315,7 @@ const initialState: RoomSate = {
   isdeRegistering: false,
   ishidingRoom: false,
   actionPerformedOnRoomId: null,
+  isStartingRoom: false,
 };
 
 const roomSlice = createSlice({
@@ -283,20 +331,22 @@ const roomSlice = createSlice({
     removeRoomsByUserId(state, action) {
       const userId = action.payload as string;
       if (state.rooms?.data?.length) {
-        state.rooms.data = state.rooms.data.filter(r => r.user?.id !== userId);
+        state.rooms.data = state.rooms.data.filter(
+          (r) => r.user?.id !== userId
+        );
       }
     },
     removeRoomById(state, action) {
       if (state.rooms?.data?.length) {
         state.rooms.data = state.rooms.data.filter(
-          r => r.id !== action.payload
+          (r) => r.id !== action.payload
         );
       }
     },
   },
-  extraReducers: builder => {
+  extraReducers: (builder) => {
     builder
-      .addCase(getRoomContent.pending, state => {
+      .addCase(getRoomContent.pending, (state) => {
         state.roomContentLoading = true;
       })
       .addCase(
@@ -309,10 +359,10 @@ const roomSlice = createSlice({
           state.roomContent = action.payload;
         }
       )
-      .addCase(getRoomContent.rejected, state => {
+      .addCase(getRoomContent.rejected, (state) => {
         state.roomContentLoading = false;
       })
-      .addCase(createRoom.pending, state => {
+      .addCase(createRoom.pending, (state) => {
         state.createRoomLoading = true;
       })
       .addCase(
@@ -324,10 +374,10 @@ const roomSlice = createSlice({
           }
         }
       )
-      .addCase(createRoom.rejected, state => {
+      .addCase(createRoom.rejected, (state) => {
         state.createRoomLoading = false;
       })
-      .addCase(getRooms.pending, state => {
+      .addCase(getRooms.pending, (state) => {
         state.getRoomsLoading = true;
       })
       .addCase(
@@ -347,10 +397,10 @@ const roomSlice = createSlice({
           }
         }
       )
-      .addCase(getRooms.rejected, state => {
+      .addCase(getRooms.rejected, (state) => {
         state.getRoomsLoading = false;
       })
-      .addCase(getMyRooms.pending, state => {
+      .addCase(getMyRooms.pending, (state) => {
         state.getMyRoomsLoading = true;
       })
       .addCase(
@@ -363,10 +413,10 @@ const roomSlice = createSlice({
           state.myRooms = action.payload;
         }
       )
-      .addCase(getMyRooms.rejected, state => {
+      .addCase(getMyRooms.rejected, (state) => {
         state.getMyRoomsLoading = false;
       })
-      .addCase(getRoomById.pending, state => {
+      .addCase(getRoomById.pending, (state) => {
         state.activeRoomLoading = true;
       })
       .addCase(
@@ -376,38 +426,38 @@ const roomSlice = createSlice({
           state.activeRoom = action.payload;
         }
       )
-      .addCase(getRoomById.rejected, state => {
+      .addCase(getRoomById.rejected, (state) => {
         state.activeRoomLoading = false;
       })
-      .addCase(updateRoom.pending, state => {
+      .addCase(updateRoom.pending, (state) => {
         state.updateRoomLoading = true;
       })
       .addCase(updateRoom.fulfilled, (state, action) => {
         state.updateRoomLoading = false;
         if (state.myRooms?.data?.length && action.payload) {
           const index = state.myRooms.data.findIndex(
-            r => r.id === action.payload?.id
+            (r) => r.id === action.payload?.id
           );
           if (index !== -1) {
             state.myRooms.data[index] = action.payload;
           }
         }
       })
-      .addCase(updateRoom.rejected, state => {
+      .addCase(updateRoom.rejected, (state) => {
         state.updateRoomLoading = false;
       })
-      .addCase(deleteRoom.pending, state => {
+      .addCase(deleteRoom.pending, (state) => {
         state.deletingRoom = true;
       })
       .addCase(deleteRoom.fulfilled, (state, action) => {
         state.deletingRoom = false;
         if (state.myRooms?.data) {
           state.myRooms.data = state.myRooms?.data?.filter(
-            room => room.id !== action.meta.arg
+            (room) => room.id !== action.meta.arg
           );
         }
       })
-      .addCase(deleteRoom.rejected, state => {
+      .addCase(deleteRoom.rejected, (state) => {
         state.deletingRoom = false;
       })
       .addCase(registerRoom.pending, (state, action) => {
@@ -418,7 +468,7 @@ const roomSlice = createSlice({
         state.isRegistering = false;
         if (state.rooms?.data?.length) {
           const roomIndex = state.rooms.data.findIndex(
-            r => r.id === action.meta.arg
+            (r) => r.id === action.meta.arg
           );
           if (roomIndex !== -1) {
             const room = state.rooms.data[roomIndex];
@@ -429,7 +479,7 @@ const roomSlice = createSlice({
           }
         }
       })
-      .addCase(registerRoom.rejected, state => {
+      .addCase(registerRoom.rejected, (state) => {
         state.isRegistering = false;
       })
       .addCase(deregisterRoom.pending, (state, action) => {
@@ -440,7 +490,7 @@ const roomSlice = createSlice({
         state.isdeRegistering = false;
         if (state.rooms?.data?.length) {
           const roomIndex = state.rooms.data.findIndex(
-            r => r.id === action.meta.arg
+            (r) => r.id === action.meta.arg
           );
           if (roomIndex !== -1) {
             const room = state.rooms.data[roomIndex];
@@ -451,7 +501,7 @@ const roomSlice = createSlice({
           }
         }
       })
-      .addCase(deregisterRoom.rejected, state => {
+      .addCase(deregisterRoom.rejected, (state) => {
         state.isdeRegistering = false;
       })
       .addCase(hideRoom.pending, (state, action) => {
@@ -462,12 +512,21 @@ const roomSlice = createSlice({
         state.ishidingRoom = false;
         if (state.rooms?.data?.length) {
           state.rooms.data = state.rooms.data.filter(
-            r => r.id !== action.meta.arg.roomId
+            (r) => r.id !== action.meta.arg.roomId
           );
         }
       })
-      .addCase(hideRoom.rejected, state => {
+      .addCase(hideRoom.rejected, (state) => {
         state.ishidingRoom = false;
+      })
+      .addCase(startRoom.pending, (state) => {
+        state.isStartingRoom = true;
+      })
+      .addCase(startRoom.fulfilled, (state) => {
+        state.isStartingRoom = false;
+      })
+      .addCase(startRoom.rejected, (state) => {
+        state.isStartingRoom = false;
       });
   },
 });

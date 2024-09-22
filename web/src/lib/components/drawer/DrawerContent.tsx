@@ -29,7 +29,12 @@ const DrawerContent = () => {
   const { user } = useSelector((state: RootState) => state.user);
 
   return (
-    <Box bg={bgColor} p={6} borderRadius="lg" boxShadow="xl">
+    <Box
+      bg={bgColor}
+      p={6}
+      borderRadius="lg"
+      boxShadow={{ base: "none", md: "xl" }}
+    >
       <Stack spacing={6} align="center" mb={6}>
         <Heading fontSize="2xl" color={headingColor}>
           Menu

@@ -4,7 +4,6 @@ using api.Helpers;
 using api.Interfaces;
 using api.Mappers;
 using api.Models;
-using Bogus.DataSets;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -17,7 +16,6 @@ namespace api.Controllers
     {
         private readonly IRoomRepository _roomRepo;
         private readonly UserManager<User> _userManager;
-        public const int AfterStartTheRoomIsValidFor = 1; // 1hr
 
         public RoomController(IRoomRepository roomRepo, UserManager<User> userManager)
         {
@@ -81,7 +79,7 @@ namespace api.Controllers
             return Ok(response);
         }
 
-        [HttpGet("start-room/{id}")]
+        [HttpPost("start-room/{id}")]
         [Authorize]
         [ProducesResponseType(typeof(ApiResponse<RoomDto>), 200)]
         public async Task<IActionResult> StartRoom([FromRoute] int id)
@@ -114,7 +112,7 @@ namespace api.Controllers
             // otherwise you can start the room if it is after the scheduled datetime
             if (
                 room.ScheduledAt > DateTime.UtcNow ||
-                DateTime.UtcNow.AddHours(-AfterStartTheRoomIsValidFor) > room.ScheduledAt)
+                DateTime.UtcNow.AddHours(-RoomConstants.AfterStartTheRoomIsValidFor) > room.ScheduledAt)
             {
                 return BadRequest("Cannot start room");
             }

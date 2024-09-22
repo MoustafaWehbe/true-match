@@ -19,7 +19,6 @@ export class WebRTCHandler {
     this.roomId = roomId;
 
     this.onPeersChanged = onPeersChanged;
-
     this.handleUserJoined = this.handleUserJoined.bind(this);
     this.handleIncomingOffer = this.handleIncomingOffer.bind(this);
     this.handleAnswer = this.handleAnswer.bind(this);
@@ -39,13 +38,18 @@ export class WebRTCHandler {
 
   closeConnections() {
     this.peers.forEach(({ peer }) => peer.close());
+
     socket.emit("leave-room", {
       roomId: parseInt(this.roomId),
     } as socketEventTypes.LeaveRoomPayload);
+
     socket.off("user-joined", this.handleUserJoined);
     socket.off("offer", this.handleIncomingOffer);
     socket.off("answer", this.handleAnswer);
     socket.off("ice-candidate", this.handleICECandidate);
+
+    const tracks = this.stream?.getTracks();
+    tracks?.forEach((track) => track.stop());
   }
 
   // private method section

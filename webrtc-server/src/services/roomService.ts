@@ -2,6 +2,7 @@ import {
   RoomDto,
   RoomDtoApiResponse,
   RoomParticipantDtoApiResponse,
+  SimpleApiResponseApiResponse,
 } from "@dapp/shared/src/types/openApiGen";
 
 import axiosInstance from "./axiosInstance";
@@ -9,14 +10,14 @@ import { handleError } from "./errorHandler";
 
 const getRoomById = async (
   token: string,
-  roomId: number,
+  roomId: number
 ): Promise<RoomDtoApiResponse | undefined> => {
   try {
     const response = await axiosInstance.get<RoomDtoApiResponse>(
       `api/room/${roomId}`,
       {
         headers: { Authorization: `Bearer ${token}` },
-      },
+      }
     );
     return response.data;
   } catch (error) {
@@ -24,12 +25,15 @@ const getRoomById = async (
   }
 };
 
-const leaveRoom = async (roomId: number, token: string): Promise<void> => {
+const leaveRoom = async (
+  roomId: number,
+  token: string
+): Promise<SimpleApiResponseApiResponse | undefined> => {
   try {
-    const response = await axiosInstance.put<void>(
+    const response = await axiosInstance.post<SimpleApiResponseApiResponse>(
       `api/room-participant/leave/${roomId}`,
       {},
-      { headers: { Authorization: `Bearer ${token}` } },
+      { headers: { Authorization: `Bearer ${token}` } }
     );
     return response.data;
   } catch (error) {
@@ -40,7 +44,7 @@ const leaveRoom = async (roomId: number, token: string): Promise<void> => {
 const updateRoom = async (
   token: string,
   room: RoomDto,
-  roomId: number,
+  roomId: number
 ): Promise<RoomDtoApiResponse | undefined> => {
   try {
     const response = await axiosInstance.put<RoomDtoApiResponse>(
@@ -48,7 +52,7 @@ const updateRoom = async (
       room,
       {
         headers: { Authorization: `Bearer ${token}` },
-      },
+      }
     );
     return response.data;
   } catch (error) {
@@ -59,18 +63,18 @@ const updateRoom = async (
 const joinRoom = async (
   token: string,
   roomId: number,
-  socketId: string,
+  socketId: string
 ): Promise<RoomParticipantDtoApiResponse | undefined> => {
   try {
     const response = await axiosInstance.post<RoomParticipantDtoApiResponse>(
-      `api/room-participant?roomId=${roomId}`,
+      `api/room-participant/join?roomId=${roomId}`,
       {
         roomId,
         socketId,
       },
       {
         headers: { Authorization: `Bearer ${token}` },
-      },
+      }
     );
     return response.data;
   } catch (error) {

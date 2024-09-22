@@ -44,7 +44,8 @@ namespace api.Controllers
                 return BadRequest("User does not exist");
             }
 
-            if (room.FinishedAt != null)
+            if (room.FinishedAt != null ||
+                DateTime.UtcNow.AddHours(-RoomConstants.AfterStartTheRoomIsValidFor) > room.ScheduledAt)
             {
                 return BadRequest("Can't deregister from rooms finished in the past.");
             }
@@ -129,7 +130,7 @@ namespace api.Controllers
 
                 if (alreadyParticipatedRoom == null)
                 {
-                    return BadRequest("Can't join");
+                    return BadRequest("Can't join. Not registered to this room.");
                 }
 
                 var newRoomParticipantEvent = new RoomParticipantEvent
@@ -145,7 +146,7 @@ namespace api.Controllers
             return Ok(ResponseHelper.CreateSuccessResponse(new { message = "User joined." }));
         }
 
-        [HttpPut]
+        [HttpPost]
         [Route("leave/{id:int}")]
         [ProducesResponseType(typeof(ApiResponse<SimpleApiResponse>), 200)]
         public async Task<IActionResult> LeaveRoom([FromRoute] int roomId)
@@ -178,7 +179,7 @@ namespace api.Controllers
 
                 if (alreadyParticipatedRoom == null)
                 {
-                    return BadRequest("Can't leave");
+                    return BadRequest("Can't leave. You are not even registered!");
                 }
 
                 var newRoomParticipantEvent = new RoomParticipantEvent

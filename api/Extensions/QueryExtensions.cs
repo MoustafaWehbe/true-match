@@ -15,6 +15,7 @@ namespace api.Extensions
                         && r.FinishedAt == null
                         && r.RoomParticipants
                             .Any(rp => rp.UserId == userId)
+                        && DateTime.UtcNow.AddHours(-RoomConstants.AfterStartTheRoomIsValidFor) <= r.ScheduledAt
                         );
                 case AllRoomStatus.Coming:
                     return query.Where(r => r.StartedAt == null);
@@ -32,7 +33,8 @@ namespace api.Extensions
                 case MyRoomStatus.Coming:
                     return query.Where(r => r.StartedAt == null);
                 case MyRoomStatus.Archived:
-                    return query.Where(r => r.FinishedAt < DateTime.UtcNow);
+                    return query.Where(r => r.FinishedAt < DateTime.UtcNow ||
+                        DateTime.UtcNow.AddHours(-RoomConstants.AfterStartTheRoomIsValidFor) > r.ScheduledAt);
                 default:
                     return query;
             }
