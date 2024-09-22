@@ -2,5 +2,3 @@ node_modules
 **/dist
 /data
 .next
-/@dapp/shared/src/types/openApiGen.*
-/shared/src/types/openApiGen.*

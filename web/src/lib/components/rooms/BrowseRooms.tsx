@@ -90,7 +90,7 @@ function BrowseRooms() {
     if (!roomIdToBlock) {
       return;
     }
-    const room = rooms?.data?.find((r) => r.id === roomIdToBlock);
+    const room = rooms?.data?.find(r => r.id === roomIdToBlock);
     if (room && room.user?.id) {
       await dispatch(blockUser({ blockedUserId: room.user.id }));
       closeDialog();
@@ -144,7 +144,7 @@ function BrowseRooms() {
         gap={8}
         mt={8}
       >
-        {rooms?.data?.map((room) => (
+        {rooms?.data?.map(room => (
           <RoomCard
             isComingUp={selectedStatus.value === 0}
             isInProgress={selectedStatus.value === 1}

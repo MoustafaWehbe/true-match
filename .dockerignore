@@ -1,6 +1,6 @@
 node_modules
-docker-compose.yml
-*.log
-.git
-.gitignore
-api
+# docker-compose.yml
+# *.log
+# .git
+# .gitignore
+# api

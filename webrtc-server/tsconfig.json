@@ -15,10 +15,6 @@
   },
   "noImplicitReturns": false,
   "include": ["src/**/*"],
-  "exclude": [
-    "node_modules",
-    "@dapp/shared/src/types/openApiGen/**/*.ts",
-    "..shared/src/types/openApiGen/**/*.ts"
-  ],
+  "exclude": ["node_modules", "..shared/src/types/openApiGen/**/*.ts"],
   "references": [{ "path": "../shared" }]
 }

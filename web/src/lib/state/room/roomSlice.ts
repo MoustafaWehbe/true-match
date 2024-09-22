@@ -48,7 +48,11 @@ export const getRoomContent = createAsyncThunk<
 
 export const getRooms = createAsyncThunk<
   openApiTypes.RoomDtoPagedResponse,
-  { PageNumber: number; PageSize: number; Status: openApiTypes.AllRoomStatus },
+  {
+    PageNumber: number;
+    PageSize: number;
+    Status: openApiTypes.AllRoomStatus;
+  },
   { rejectValue: string }
 >(
   "room/getRooms",
@@ -279,22 +283,20 @@ const roomSlice = createSlice({
     removeRoomsByUserId(state, action) {
       const userId = action.payload as string;
       if (state.rooms?.data?.length) {
-        state.rooms.data = state.rooms.data.filter(
-          (r) => r.user?.id !== userId
-        );
+        state.rooms.data = state.rooms.data.filter(r => r.user?.id !== userId);
       }
     },
     removeRoomById(state, action) {
       if (state.rooms?.data?.length) {
         state.rooms.data = state.rooms.data.filter(
-          (r) => r.id !== action.payload
+          r => r.id !== action.payload
         );
       }
     },
   },
-  extraReducers: (builder) => {
+  extraReducers: builder => {
     builder
-      .addCase(getRoomContent.pending, (state) => {
+      .addCase(getRoomContent.pending, state => {
         state.roomContentLoading = true;
       })
       .addCase(
@@ -307,10 +309,10 @@ const roomSlice = createSlice({
           state.roomContent = action.payload;
         }
       )
-      .addCase(getRoomContent.rejected, (state) => {
+      .addCase(getRoomContent.rejected, state => {
         state.roomContentLoading = false;
       })
-      .addCase(createRoom.pending, (state) => {
+      .addCase(createRoom.pending, state => {
         state.createRoomLoading = true;
       })
       .addCase(
@@ -322,10 +324,10 @@ const roomSlice = createSlice({
           }
         }
       )
-      .addCase(createRoom.rejected, (state) => {
+      .addCase(createRoom.rejected, state => {
         state.createRoomLoading = false;
       })
-      .addCase(getRooms.pending, (state) => {
+      .addCase(getRooms.pending, state => {
         state.getRoomsLoading = true;
       })
       .addCase(
@@ -345,10 +347,10 @@ const roomSlice = createSlice({
           }
         }
       )
-      .addCase(getRooms.rejected, (state) => {
+      .addCase(getRooms.rejected, state => {
         state.getRoomsLoading = false;
       })
-      .addCase(getMyRooms.pending, (state) => {
+      .addCase(getMyRooms.pending, state => {
         state.getMyRoomsLoading = true;
       })
       .addCase(
@@ -361,10 +363,10 @@ const roomSlice = createSlice({
           state.myRooms = action.payload;
         }
       )
-      .addCase(getMyRooms.rejected, (state) => {
+      .addCase(getMyRooms.rejected, state => {
         state.getMyRoomsLoading = false;
       })
-      .addCase(getRoomById.pending, (state) => {
+      .addCase(getRoomById.pending, state => {
         state.activeRoomLoading = true;
       })
       .addCase(
@@ -374,38 +376,38 @@ const roomSlice = createSlice({
           state.activeRoom = action.payload;
         }
       )
-      .addCase(getRoomById.rejected, (state) => {
+      .addCase(getRoomById.rejected, state => {
         state.activeRoomLoading = false;
       })
-      .addCase(updateRoom.pending, (state) => {
+      .addCase(updateRoom.pending, state => {
         state.updateRoomLoading = true;
       })
       .addCase(updateRoom.fulfilled, (state, action) => {
         state.updateRoomLoading = false;
         if (state.myRooms?.data?.length && action.payload) {
           const index = state.myRooms.data.findIndex(
-            (r) => r.id === action.payload?.id
+            r => r.id === action.payload?.id
           );
           if (index !== -1) {
             state.myRooms.data[index] = action.payload;
           }
         }
       })
-      .addCase(updateRoom.rejected, (state) => {
+      .addCase(updateRoom.rejected, state => {
         state.updateRoomLoading = false;
       })
-      .addCase(deleteRoom.pending, (state) => {
+      .addCase(deleteRoom.pending, state => {
         state.deletingRoom = true;
       })
       .addCase(deleteRoom.fulfilled, (state, action) => {
         state.deletingRoom = false;
         if (state.myRooms?.data) {
           state.myRooms.data = state.myRooms?.data?.filter(
-            (room) => room.id !== action.meta.arg
+            room => room.id !== action.meta.arg
           );
         }
       })
-      .addCase(deleteRoom.rejected, (state) => {
+      .addCase(deleteRoom.rejected, state => {
         state.deletingRoom = false;
       })
       .addCase(registerRoom.pending, (state, action) => {
@@ -416,7 +418,7 @@ const roomSlice = createSlice({
         state.isRegistering = false;
         if (state.rooms?.data?.length) {
           const roomIndex = state.rooms.data.findIndex(
-            (r) => r.id === action.meta.arg
+            r => r.id === action.meta.arg
           );
           if (roomIndex !== -1) {
             const room = state.rooms.data[roomIndex];
@@ -427,7 +429,7 @@ const roomSlice = createSlice({
           }
         }
       })
-      .addCase(registerRoom.rejected, (state) => {
+      .addCase(registerRoom.rejected, state => {
         state.isRegistering = false;
       })
       .addCase(deregisterRoom.pending, (state, action) => {
@@ -438,7 +440,7 @@ const roomSlice = createSlice({
         state.isdeRegistering = false;
         if (state.rooms?.data?.length) {
           const roomIndex = state.rooms.data.findIndex(
-            (r) => r.id === action.meta.arg
+            r => r.id === action.meta.arg
           );
           if (roomIndex !== -1) {
             const room = state.rooms.data[roomIndex];
@@ -449,7 +451,7 @@ const roomSlice = createSlice({
           }
         }
       })
-      .addCase(deregisterRoom.rejected, (state) => {
+      .addCase(deregisterRoom.rejected, state => {
         state.isdeRegistering = false;
       })
       .addCase(hideRoom.pending, (state, action) => {
@@ -460,11 +462,11 @@ const roomSlice = createSlice({
         state.ishidingRoom = false;
         if (state.rooms?.data?.length) {
           state.rooms.data = state.rooms.data.filter(
-            (r) => r.id !== action.meta.arg.roomId
+            r => r.id !== action.meta.arg.roomId
           );
         }
       })
-      .addCase(hideRoom.rejected, (state) => {
+      .addCase(hideRoom.rejected, state => {
         state.ishidingRoom = false;
       });
   },

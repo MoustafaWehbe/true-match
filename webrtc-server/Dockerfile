@@ -1,6 +1,6 @@
 FROM node:20-alpine
 
-WORKDIR /app
+WORKDIR /usr/src/app
 
 # Copy only the necessary files for installation
 COPY package.json yarn.lock ./
@@ -16,7 +16,7 @@ RUN yarn install --production
 COPY . .
 
 # Expose port
-EXPOSE 8080
+EXPOSE 8181
 
 # Start the application
 CMD ["yarn", "workspace", "@dapp/webrtc-server", "start"]

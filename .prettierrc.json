@@ -1,6 +1,9 @@
 {
-  "tabWidth": 2,
+  "endOfLine": "lf",
+  "semi": true,
+  "arrowParens": "avoid",
   "singleQuote": false,
-  "proseWrap": "always",
-  "arrowParens": "avoid"
+  "tabWidth": 2,
+  "trailingComma": "es5",
+  "proseWrap": "always"
 }

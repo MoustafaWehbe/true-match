@@ -32,7 +32,7 @@ const OnboardingFormStep3 = ({ onSubmit }: OnboardingFormStep3Props) => {
   const textColor = useColorModeValue("gray.600", "gray.300");
 
   const relationshipGoalsData = (availableDescriptors || [])[2];
-  const relationshipGoalsDataDescriptors: any =
+  const relationshipGoalsDataDescriptors =
     (availableDescriptors || [])[2]?.descriptors || [];
 
   if (!relationshipGoalsData) {
@@ -72,7 +72,7 @@ const OnboardingFormStep3 = ({ onSubmit }: OnboardingFormStep3Props) => {
       </Text>
 
       <SimpleGrid columns={[1, 2, 3]} spacing={4}>
-        {relationshipGoalsDataDescriptors[0].choices?.map((choice: any) => (
+        {relationshipGoalsDataDescriptors[0].choices?.map(choice => (
           <Button
             key={choice.id}
             variant={selectedChoice === choice.id ? "solid" : "outline"}

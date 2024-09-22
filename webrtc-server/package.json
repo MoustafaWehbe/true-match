@@ -4,9 +4,11 @@
   "main": "index.js",
   "license": "MIT",
   "author": "Moustafa Wehbe <moustafawehbe102@gmail.com>",
+  "private": true,
   "scripts": {
     "build": "tsc --project ./",
     "start:dev": "nodemon src/server.ts",
+    "start": "nodemon src/server.ts",
     "start:prod": "node dist/server.js"
   },
   "dependencies": {

@@ -1,17 +1,22 @@
+# Dockerfile
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+USER root
 WORKDIR /app
-EXPOSE 80
+EXPOSE 5095
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["./api.csproj", "api/"]
-RUN dotnet restore "api/api.csproj"
-COPY . ./api
-WORKDIR "/src/api"
-RUN dotnet build "api.csproj" -c Release -o /app/build
+COPY ["api.csproj", "./"]
+RUN dotnet restore "./api.csproj"
+
+WORKDIR "/src"
+COPY . .
+RUN dotnet build "./api.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "api.csproj" -c Release -o /app/publish
+ARG BUILD_CONFIGURATION=Release
+RUN dotnet publish "./api.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
