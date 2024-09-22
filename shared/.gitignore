@@ -1,2 +1,3 @@
 dist/
 src/types/openApiGen/models/
+src/types/openApiGen/.openapi-generator/
