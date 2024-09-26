@@ -15,13 +15,13 @@ import * as Yup from "yup";
 
 import { openApiTypes } from "@dapp/shared";
 
-interface OnboardingFormStep1Props {
+interface OnboardingFormStep1DobProps {
   onSubmit: (
     values: Pick<openApiTypes.CreateOrUpdateUserProfileDto, "birthDate">
   ) => void;
 }
 
-function OnboardingFormStep1({ onSubmit }: OnboardingFormStep1Props) {
+function OnboardingFormStep1Dob({ onSubmit }: OnboardingFormStep1DobProps) {
   const formik = useFormik({
     initialValues: {
       day: "",
@@ -132,4 +132,4 @@ function OnboardingFormStep1({ onSubmit }: OnboardingFormStep1Props) {
   );
 }
 
-export default OnboardingFormStep1;
+export default OnboardingFormStep1Dob;

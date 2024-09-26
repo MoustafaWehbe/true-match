@@ -31,6 +31,7 @@ export interface UserState {
   loadingImages: string[];
   isBlockingUser: boolean;
   isUnBlockingUser: boolean;
+  isFetchingUser: boolean;
 }
 
 export interface ExtendedUserApiResponse extends Omit<UserApiResponse, "data"> {
@@ -221,6 +222,7 @@ const initialState: UserState = {
   loadingImages: [],
   isBlockingUser: false,
   isUnBlockingUser: false,
+  isFetchingUser: false,
 };
 
 const userSlice = createSlice({
@@ -266,12 +268,19 @@ const userSlice = createSlice({
           state.loginError = action.payload || "Unknown error";
         }
       )
+      .addCase(fetchUser.pending, (state) => {
+        state.isFetchingUser = true;
+      })
       .addCase(
         fetchUser.fulfilled,
         (state, action: PayloadAction<User | null>) => {
           state.user = action.payload;
+          state.isFetchingUser = false;
         }
       )
+      .addCase(fetchUser.rejected, (state) => {
+        state.isFetchingUser = false;
+      })
       .addCase(
         logoutUser.fulfilled,
         (state, action: PayloadAction<SimpleApiResponseApiResponse>) => {

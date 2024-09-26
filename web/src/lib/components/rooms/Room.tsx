@@ -2,17 +2,15 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Box, Flex, Heading, useColorModeValue } from "@chakra-ui/react";
+import { Box, Heading } from "@chakra-ui/react";
 
-import PresenterDisplay from "./PresenterDisplay";
+import PresenterDisplay from "./displays/PresenterDisplay";
 
 import { getRoomById } from "~/lib/state/room/roomSlice";
 import { AppDispatch, RootState } from "~/lib/state/store";
 import { WebRTCHandler } from "~/lib/utils/webrtc/WebRTCHandler";
 
 const Room = ({ roomId }: { roomId: string }) => {
-  const cardBg = useColorModeValue("gray.100", "gray.900");
-  const cardTextColor = useColorModeValue("gray.800", "whiteAlpha.900");
   const localVideoRef = useRef<HTMLVideoElement>(null);
   const webRTCHandler = useRef<WebRTCHandler | null>(null);
   const [peers, setPeers] = useState<
@@ -41,19 +39,22 @@ const Room = ({ roomId }: { roomId: string }) => {
   }, [roomId]);
 
   return (
-    <Flex height="90%" bg={cardBg} color={cardTextColor} borderRadius="10px">
+    // <Flex
+    //   height="calc(100vh - 60px - 100px)"
+    //   bg={cardBg}
+    //   color={cardTextColor}
+    //   borderRadius="10px"
+    // >
+    <Box height="calc(100vh - 60px - 100px)">
       {activeRoom?.user?.id === user?.id ? (
-        <Box position="relative" width="full">
-          <Heading as={"h2"}>Presenter</Heading>
-          <PresenterDisplay peers={peers} localVideoRef={localVideoRef} />
-        </Box>
+        <PresenterDisplay peers={peers} localVideoRef={localVideoRef} />
       ) : (
         <Box position="relative" width="full">
           <Heading as={"h2"}>Viewer</Heading>
           <PresenterDisplay peers={peers} localVideoRef={localVideoRef} />
         </Box>
       )}
-    </Flex>
+    </Box>
   );
 };
 

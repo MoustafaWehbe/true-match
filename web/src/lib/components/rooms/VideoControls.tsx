@@ -20,13 +20,24 @@ const VideoControls = ({
   onToggleVideo,
 }: VideoControlsProps) => {
   return (
-    <Stack direction="row" spacing={4} top="74%" position="absolute" zIndex={1}>
+    <Stack
+      direction="row"
+      spacing={4}
+      // bottom={6}
+      position="absolute"
+      zIndex={1}
+      top={8}
+      right={8}
+      // left="50%"
+      // transform="translate(-50%, -50%)"
+    >
       <IconButton
         onClick={onToggleMic}
         icon={isMicOn ? <FaMicrophone /> : <FaMicrophoneSlash />}
         variant="ghost"
-        width={"48px"}
-        height={"48px"}
+        width={"28px"}
+        size={"xs"}
+        height={"28px"}
         bg="blackAlpha.700"
         color="white"
         borderRadius="full"
@@ -37,8 +48,9 @@ const VideoControls = ({
         onClick={onToggleVideo}
         icon={isVideoOn ? <FaVideo /> : <FaVideoSlash />}
         variant="ghost"
-        width={"48px"}
-        height={"48px"}
+        width={"28px"}
+        size={"xs"}
+        height={"28px"}
         bg="blackAlpha.700"
         color="white"
         borderRadius="full"

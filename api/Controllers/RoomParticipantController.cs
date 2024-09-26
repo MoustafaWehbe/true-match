@@ -101,11 +101,11 @@ namespace api.Controllers
         [HttpPost("join/{id}")]
         [Authorize]
         [ProducesResponseType(typeof(ApiResponse<SimpleApiResponse>), 200)]
-        public async Task<IActionResult> joinRoom(int roomId)
+        public async Task<IActionResult> joinRoom(int id)
         {
             var user = await _userManager.FindByEmailAsync(User.GetEmail());
 
-            var room = await _roomRepo.GetByIdAsync(roomId);
+            var room = await _roomRepo.GetByIdAsync(id);
 
             if (room == null)
             {
@@ -124,9 +124,20 @@ namespace api.Controllers
 
             var roomParticipants = await _roomParticipantRepo.GetRoomParticipantsAsync(user);
 
-            if (roomParticipants.Any(rp => rp.RoomId == room.Id))
+            if (room.UserId == user.Id)
             {
-                var alreadyParticipatedRoom = roomParticipants.Where(rp => rp.RoomId == roomId).FirstOrDefault();
+                var newRoomParticipantEvent = new RoomParticipantEvent
+                {
+                    Left = false,
+                    AttendedFromTime = DateTime.UtcNow,
+                    AttendedToTime = null,
+                    CreatedAt = DateTime.UtcNow
+                };
+                await _roomParticipantRepo.CreateRoomParticipantEventAsync(newRoomParticipantEvent);
+            }
+            else if (roomParticipants.Any(rp => rp.RoomId == room.Id))
+            {
+                var alreadyParticipatedRoom = roomParticipants.Where(rp => rp.RoomId == id).FirstOrDefault();
 
                 if (alreadyParticipatedRoom == null)
                 {

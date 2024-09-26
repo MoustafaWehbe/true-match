@@ -4,6 +4,7 @@ import { type ReactNode, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 
 import { AUTH_ROUTES, ONBOARDING_ROUTE } from "../consts";
+import useProfileGuard from "../hooks/useProfileGuard";
 import { AppDispatch } from "../state/store";
 import { fetchUser } from "../state/user/userSlice";
 
@@ -18,6 +19,8 @@ export type LayoutProps = {
 const Layout = ({ children }: LayoutProps) => {
   const [isMounted, setIsMounted] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
+
+  useProfileGuard();
 
   useEffect(() => {
     setIsMounted(true);

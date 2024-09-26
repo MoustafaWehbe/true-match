@@ -21,7 +21,7 @@ import { openApiTypes } from "@dapp/shared";
 import { getGenders } from "~/lib/state/gender/genderSlice";
 import { AppDispatch, RootState } from "~/lib/state/store";
 
-interface OnboardingFormStep2Props {
+interface OnboardingFormStep2GenderProps {
   onSubmit: (
     values: Pick<
       openApiTypes.CreateOrUpdateUserProfileDto,
@@ -30,7 +30,9 @@ interface OnboardingFormStep2Props {
   ) => void;
 }
 
-const OnboardingFormStep2 = ({ onSubmit }: OnboardingFormStep2Props) => {
+const OnboardingFormStep2Gender = ({
+  onSubmit,
+}: OnboardingFormStep2GenderProps) => {
   const [selectedMainGender, setSelectedMainGender] =
     useState<openApiTypes.GenderDto>();
   const [selectedSubgenders, setSelectedSubgenders] = useState<
@@ -154,4 +156,4 @@ const OnboardingFormStep2 = ({ onSubmit }: OnboardingFormStep2Props) => {
   );
 };
 
-export default OnboardingFormStep2;
+export default OnboardingFormStep2Gender;

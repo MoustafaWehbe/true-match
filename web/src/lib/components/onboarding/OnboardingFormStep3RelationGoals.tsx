@@ -14,7 +14,7 @@ import { openApiTypes } from "@dapp/shared";
 
 import { RootState } from "~/lib/state/store";
 
-interface OnboardingFormStep3Props {
+interface OnboardingFormStep3RelationGoalsProps {
   onSubmit: (
     values: Pick<
       openApiTypes.CreateOrUpdateUserProfileDto,
@@ -23,7 +23,9 @@ interface OnboardingFormStep3Props {
   ) => void;
 }
 
-const OnboardingFormStep3 = ({ onSubmit }: OnboardingFormStep3Props) => {
+const OnboardingFormStep3RelationGoals = ({
+  onSubmit,
+}: OnboardingFormStep3RelationGoalsProps) => {
   const [selectedChoice, setSelectedChoice] = useState<string>();
   const { availableDescriptors } = useSelector(
     (state: RootState) => state.availableDescriptor
@@ -72,7 +74,7 @@ const OnboardingFormStep3 = ({ onSubmit }: OnboardingFormStep3Props) => {
       </Text>
 
       <SimpleGrid columns={[1, 2, 3]} spacing={4}>
-        {relationshipGoalsDataDescriptors[0].choices?.map(choice => (
+        {relationshipGoalsDataDescriptors[0].choices?.map((choice) => (
           <Button
             key={choice.id}
             variant={selectedChoice === choice.id ? "solid" : "outline"}
@@ -114,4 +116,4 @@ const OnboardingFormStep3 = ({ onSubmit }: OnboardingFormStep3Props) => {
   );
 };
 
-export default OnboardingFormStep3;
+export default OnboardingFormStep3RelationGoals;

@@ -30,7 +30,7 @@ const MainLayout = ({ children }: LayoutProps) => {
           flexDirection={"column"}
           justifyContent={"space-between"}
         >
-          <Box marginBottom={10}>{children}</Box>
+          <Box marginBottom={5}>{children}</Box>
           <Box marginBottom={10}>
             <Footer />
           </Box>

@@ -67,7 +67,7 @@ const joinRoom = async (
 ): Promise<RoomParticipantDtoApiResponse | undefined> => {
   try {
     const response = await axiosInstance.post<RoomParticipantDtoApiResponse>(
-      `api/room-participant/join?roomId=${roomId}`,
+      `api/room-participant/join/${roomId}`,
       {
         roomId,
         socketId,

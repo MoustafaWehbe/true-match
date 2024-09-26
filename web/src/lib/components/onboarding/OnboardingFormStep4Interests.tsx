@@ -15,13 +15,15 @@ import { CreateOrUpdateUserProfileDto } from "@dapp/shared/src/types/openApiGen"
 
 import { RootState } from "~/lib/state/store";
 
-interface OnboardingFormStep4Props {
+interface OnboardingFormStep4InterestsProps {
   onSubmit: (
     values: Pick<CreateOrUpdateUserProfileDto, "selectedDescriptors">
   ) => void;
 }
 
-const OnboardingFormStep4 = ({ onSubmit }: OnboardingFormStep4Props) => {
+const OnboardingFormStep4Interests = ({
+  onSubmit,
+}: OnboardingFormStep4InterestsProps) => {
   const [selectedChoices, setSelectedChoices] = useState<string[]>([]);
   const { availableDescriptors } = useSelector(
     (state: RootState) => state.availableDescriptor
@@ -124,4 +126,4 @@ const OnboardingFormStep4 = ({ onSubmit }: OnboardingFormStep4Props) => {
   );
 };
 
-export default OnboardingFormStep4;
+export default OnboardingFormStep4Interests;

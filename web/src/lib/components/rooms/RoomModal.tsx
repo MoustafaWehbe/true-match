@@ -80,7 +80,8 @@ function RoomModal({
         title: "",
         description: "",
         scheduledAt: "",
-        selectedQuestionCategories: [],
+        selectedQuestionCategories:
+          categories?.map((cat) => cat.id!.toString()) || [],
       };
 
   const formik = useFormik({

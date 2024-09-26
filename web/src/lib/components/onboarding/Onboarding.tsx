@@ -3,13 +3,14 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Box, useToast } from "@chakra-ui/react";
+import { useRouter } from "next/navigation";
 
 import { openApiTypes } from "@dapp/shared";
 
-import OnboardingFormStep1 from "./OnboardingFormStep1";
-import OnboardingFormStep2 from "./OnboardingFormStep2";
-import OnboardingFormStep3 from "./OnboardingFormStep3";
-import OnboardingFormStep4 from "./OnboardingFormStep4";
+import OnboardingFormStep1Dob from "./OnboardingFormStep1Dob";
+import OnboardingFormStep2Gender from "./OnboardingFormStep2Gender";
+import OnboardingFormStep3RelationGoals from "./OnboardingFormStep3RelationGoals";
+import OnboardingFormStep4Interests from "./OnboardingFormStep4Interests";
 import OnboardingLocationAccess from "./OnboardingLocationAccess";
 import UploadImagesForm from "./UploadImageForm";
 
@@ -25,6 +26,39 @@ const Onboarding = () => {
   const dispatch = useDispatch<AppDispatch>();
   const toast = useToast();
   const { user } = useSelector((state: RootState) => state.user);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!user?.userProfile?.birthDate) {
+      setStep(1);
+    } else if (!user.userProfile.userProfileGenders?.length) {
+      setStep(2);
+    } else if (
+      !(
+        user.userProfile.selectedDescriptors &&
+        user.userProfile.selectedDescriptors.find(
+          (desc) => desc.availableDescriptorId === 3
+        )
+      )
+    ) {
+      setStep(3);
+    } else if (
+      !(
+        user.userProfile.selectedDescriptors &&
+        user.userProfile.selectedDescriptors.find(
+          (desc) => desc.availableDescriptorId === 2
+        )
+      )
+    ) {
+      setStep(4);
+    } else if (!user.media?.length) {
+      setStep(5);
+    } else if (!user.userProfile.pos) {
+      setStep(6);
+    } else {
+      window.location.href = "/";
+    }
+  }, [router, user?.media, user?.userProfile]);
 
   useEffect(() => {
     dispatch(getAvailableDescriptors());
@@ -144,10 +178,12 @@ const Onboarding = () => {
 
   return (
     <Box width="100%" maxWidth="600px" mx="auto">
-      {step === 1 && <OnboardingFormStep1 onSubmit={onStep1Submit} />}
-      {step === 2 && <OnboardingFormStep2 onSubmit={onStep2Submit} />}
-      {step === 3 && <OnboardingFormStep3 onSubmit={onStep3Submit} />}
-      {step === 4 && <OnboardingFormStep4 onSubmit={onStep4Submit} />}
+      {step === 1 && <OnboardingFormStep1Dob onSubmit={onStep1Submit} />}
+      {step === 2 && <OnboardingFormStep2Gender onSubmit={onStep2Submit} />}
+      {step === 3 && (
+        <OnboardingFormStep3RelationGoals onSubmit={onStep3Submit} />
+      )}
+      {step === 4 && <OnboardingFormStep4Interests onSubmit={onStep4Submit} />}
       {step === 5 && <UploadImagesForm onSubmit={onUserImagesSubmit} />}
       {step === 6 && <OnboardingLocationAccess onSubmit={onLocationSubmit} />}
     </Box>

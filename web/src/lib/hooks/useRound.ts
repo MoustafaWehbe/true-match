@@ -34,10 +34,11 @@ const useRound = () => {
             clearInterval(intervalRef.current!);
             if (currentRound < rounds.length - 1) {
               setCurrentRound((prevRound) => prevRound! + 1);
+              return rounds[currentRound + 1].duration!;
             } else {
               setCurrentRound(null);
+              return 0;
             }
-            return 0;
           }
           return prevTimer - 1;
         });
@@ -87,6 +88,7 @@ const useRound = () => {
 
   const skipRound = () => {
     setCurrentRound((cr) => cr! + 1);
+    setTimer(rounds![currentRound! + 1].duration!);
   };
 
   return {

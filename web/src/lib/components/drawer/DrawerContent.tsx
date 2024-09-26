@@ -42,7 +42,7 @@ const DrawerContent = () => {
       </Stack>
       <List fontSize="1.2em" spacing={4} color={linkColor}>
         <ListItem>
-          <NextLink href="/swipe-to-match" passHref>
+          <NextLink href="/swipe-to-match" passHref prefetch={true}>
             <Link _hover={{ textDecoration: "none", color: hoverColor }}>
               <ListIcon as={RiCalendarScheduleLine} color={iconColor} />
               Swipe to match
@@ -50,7 +50,7 @@ const DrawerContent = () => {
           </NextLink>
         </ListItem>
         <ListItem>
-          <NextLink href="/browse-rooms" passHref>
+          <NextLink href="/browse-rooms" passHref prefetch={true}>
             <Link _hover={{ textDecoration: "none", color: hoverColor }}>
               <ListIcon as={MdOutlineLiveTv} color={iconColor} />
               Browse rooms
@@ -58,7 +58,7 @@ const DrawerContent = () => {
           </NextLink>
         </ListItem>
         <ListItem>
-          <NextLink href="/my-rooms" passHref>
+          <NextLink href="/my-rooms" passHref prefetch={true}>
             <Link _hover={{ textDecoration: "none", color: hoverColor }}>
               <ListIcon as={GrSchedulePlay} color={iconColor} />
               My rooms
@@ -66,7 +66,7 @@ const DrawerContent = () => {
           </NextLink>
         </ListItem>
         <ListItem>
-          <NextLink href="/matches" passHref>
+          <NextLink href="/matches" passHref prefetch={true}>
             <Link _hover={{ textDecoration: "none", color: hoverColor }}>
               <ListIcon as={BsEmojiHeartEyes} color={iconColor} />
               Matches
@@ -74,7 +74,7 @@ const DrawerContent = () => {
           </NextLink>
         </ListItem>
         <ListItem>
-          <NextLink href="/chat" passHref>
+          <NextLink href="/chat" passHref prefetch={true}>
             <Link _hover={{ textDecoration: "none", color: hoverColor }}>
               <ListIcon as={BsChatDots} color={iconColor} />
               Chat
@@ -82,7 +82,7 @@ const DrawerContent = () => {
           </NextLink>
         </ListItem>
         <ListItem>
-          <NextLink href="/profile" passHref>
+          <NextLink href="/profile" passHref prefetch={true}>
             <Link
               display="flex"
               alignItems="center"
