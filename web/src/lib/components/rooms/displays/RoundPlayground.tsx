@@ -33,7 +33,7 @@ const RoundPlayground = ({
       borderRadius="lg"
       maxWidth={"75%"}
     >
-      <Flex justifyContent={"center"} alignItems={"center"} gap={2}>
+      <Flex justifyContent={"center"} alignItems={"start"} gap={2}>
         <Text fontSize={{ base: "md", lg: "2xl" }} mb={2}>
           {rounds[currentRound].title}
         </Text>

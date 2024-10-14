@@ -7,6 +7,7 @@ using api.Helpers;
 using Microsoft.OpenApi.Any;
 using Microsoft.EntityFrameworkCore;
 using api.Mappers;
+using System.Text.Json;
 
 namespace api.Controllers
 {
@@ -15,16 +16,18 @@ namespace api.Controllers
     public class SystemQuestionsController : ControllerBase
     {
         private readonly ISystemQuestionRepository _systemQuestionRepository;
+        private readonly IRoomRepository _roomRepo;
 
-        public SystemQuestionsController(ISystemQuestionRepository systemQuestionRepository)
+        public SystemQuestionsController(ISystemQuestionRepository systemQuestionRepository, IRoomRepository roomRepo)
         {
             _systemQuestionRepository = systemQuestionRepository;
+            _roomRepo = roomRepo;
         }
 
         [HttpGet]
         [Authorize]
         [ProducesResponseType(typeof(ApiResponse<List<SystemQuestionDto>>), 200)]
-        public async Task<ActionResult<IEnumerable<SystemQuestionDto>>> GetSystemQuestions([FromQuery] List<int> categories)
+        public async Task<ActionResult<IEnumerable<SystemQuestionDto>>> GetSystemQuestions([FromQuery] List<int> categories, [FromQuery] int? roomId)
         {
             if (!ModelState.IsValid)
             {
@@ -39,8 +42,33 @@ namespace api.Controllers
 
                 var randomQuestions = questions
                     .OrderBy(q => Guid.NewGuid())
-                    .Take(10)
+                    .Take(3)
                     .ToList();
+
+
+                if (roomId.HasValue)
+                {
+
+                    var room = await _roomRepo.GetByIdAsync((int)roomId);
+
+                    if (room == null)
+                    {
+                        return NotFound("Room was not found.");
+                    }
+                    var existingRoomMetadata = room.RoomMetaData != null ? JsonSerializer.Deserialize<RoomMetaData>(room.RoomMetaData) : null;
+                    if (existingRoomMetadata != null)
+                    {
+                        existingRoomMetadata.SystemQuestions = (List<SystemQuestionDto>?)randomQuestions.Select(q => q.ToSystemQuestionDto());
+                    }
+                    else
+                    {
+                        existingRoomMetadata = new RoomMetaData { SystemQuestions = (List<SystemQuestionDto>?)randomQuestions.Select(q => q.ToSystemQuestionDto()) };
+                    }
+                    room.RoomMetaData = JsonDocument.Parse(JsonSerializer.Serialize(existingRoomMetadata));
+
+                    await _roomRepo.UpdateAsync(room);
+                }
+
                 return Ok(ResponseHelper.CreateSuccessResponse(randomQuestions.Select(q => q.ToSystemQuestionDto())));
             }
             else

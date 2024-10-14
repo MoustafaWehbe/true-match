@@ -25,7 +25,6 @@ interface PresenterDisplayProps {
 const PresenterDisplay = ({ peers, localVideoRef }: PresenterDisplayProps) => {
   const cardTextColor = useColorModeValue("gray.800", "whiteAlpha.900");
   const cardBg = useColorModeValue("gray.100", "gray.900");
-  useState(0);
   const [isBottom, setIsBottom] = useState(false);
   const boxRef = useRef<HTMLDivElement>(null);
   const [isLaptopOrDesktop] = useMediaQuery(`(min-width: ${size.desktop})`);
@@ -34,7 +33,7 @@ const PresenterDisplay = ({ peers, localVideoRef }: PresenterDisplayProps) => {
   const [currentIndexForSystemQuestion, setCurrentIndexForSystemQuestion] =
     useState(0);
 
-  const { rounds, systemQuestions, skipRound } = useRound();
+  const { rounds, systemQuestions, skipCurrentRound: skipRound } = useRound();
 
   const getGridTemplateColumns = (videoCount: number) => {
     if (videoCount === 1) return "1fr 1fr"; // 1 video takes full width
@@ -46,7 +45,7 @@ const PresenterDisplay = ({ peers, localVideoRef }: PresenterDisplayProps) => {
     const box = boxRef.current;
     if (box) {
       const isScrolledToBottom =
-        box.scrollHeight - box.scrollTop === box.clientHeight;
+        Math.round(box.scrollHeight - box.scrollTop) === box.clientHeight;
       setIsBottom(isScrolledToBottom);
     }
   };
@@ -102,6 +101,7 @@ const PresenterDisplay = ({ peers, localVideoRef }: PresenterDisplayProps) => {
       justify="space-between"
       gap={4}
       mt={{ base: "20px", md: "0px" }}
+      mx={{ base: "10px" }}
     >
       {/* First Row */}
       {!isLaptopOrDesktop ? (
@@ -146,6 +146,7 @@ const PresenterDisplay = ({ peers, localVideoRef }: PresenterDisplayProps) => {
             : "linear(to-t, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0))",
           pointerEvents: "none",
         }}
+        mb={4}
       >
         <Box
           ref={boxRef}

@@ -2,13 +2,7 @@ import { Flex, Link, Text } from "@chakra-ui/react";
 
 const Footer = () => {
   return (
-    <Flex
-      as="footer"
-      width="full"
-      justifyContent="center"
-      gap={4}
-      marginBottom={4}
-    >
+    <Flex as="footer" width="full" justifyContent="center" gap={4}>
       <Text fontSize="sm">
         <Link href="/" isExternal rel="noopener noreferrer">
           Help

@@ -40,8 +40,8 @@ const PresenterDisplayFirstHalfDesktop = ({
     rounds,
     timer,
     isPaused,
-    pauseRound,
-    skipRound,
+    pauseCurrentRound,
+    skipCurrentRound,
     startRounds,
   } = useRound();
 
@@ -109,8 +109,8 @@ const PresenterDisplayFirstHalfDesktop = ({
                 <TimerControls
                   currentRound={currentRound}
                   isPaused={isPaused}
-                  pauseRound={pauseRound}
-                  skipRound={skipRound}
+                  pauseRound={pauseCurrentRound}
+                  skipRound={skipCurrentRound}
                 />
               </Flex>
             </Flex>

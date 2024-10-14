@@ -1,4 +1,5 @@
 import { socketEventTypes } from "@dapp/shared/src/types/custom";
+import { RoomMetaData } from "@dapp/shared/src/types/openApiGen";
 
 import { socket } from "~/lib/utils/socket/socket";
 
@@ -23,6 +24,7 @@ export class WebRTCHandler {
     this.handleIncomingOffer = this.handleIncomingOffer.bind(this);
     this.handleAnswer = this.handleAnswer.bind(this);
     this.handleICECandidate = this.handleICECandidate.bind(this);
+    this.handleUpdateRoomData = this.handleUpdateRoomData.bind(this);
   }
 
   async init(localVideoRef: React.RefObject<HTMLVideoElement>) {
@@ -141,10 +143,13 @@ export class WebRTCHandler {
     }
   }
 
+  private handleUpdateRoomData(payload: RoomMetaData) {}
+
   private registerSocketEvents() {
     socket.on("user-joined", this.handleUserJoined);
     socket.on("offer", this.handleIncomingOffer);
     socket.on("answer", this.handleAnswer);
     socket.on("ice-candidate", this.handleICECandidate);
+    socket.on("update-room-data", this.handleUpdateRoomData);
   }
 }

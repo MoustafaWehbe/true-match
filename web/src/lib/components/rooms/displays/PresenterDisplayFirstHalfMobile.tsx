@@ -40,8 +40,8 @@ const PresenterDisplayFirstHalfMobile = ({
     rounds,
     timer,
     isPaused,
-    pauseRound,
-    skipRound,
+    pauseCurrentRound,
+    skipCurrentRound,
     startRounds,
   } = useRound();
 
@@ -73,6 +73,7 @@ const PresenterDisplayFirstHalfMobile = ({
         }
         borderRadius="10px"
         position={"relative"}
+        mb={"20px"}
       >
         {currentRound !== null && (
           <Flex
@@ -98,8 +99,8 @@ const PresenterDisplayFirstHalfMobile = ({
               <TimerControls
                 currentRound={currentRound}
                 isPaused={isPaused}
-                pauseRound={pauseRound}
-                skipRound={skipRound}
+                pauseRound={pauseCurrentRound}
+                skipRound={skipCurrentRound}
               />
             </Flex>
           </Flex>

@@ -7,7 +7,7 @@ export const fontBody = FontBody({
 });
 
 export const fonts: DeepPartial<Theme["fonts"]> = {
-  heading: fontBody.style.fontFamily,
-  body: fontBody.style.fontFamily,
+  // heading: fontBody.style.fontFamily,
+  // body: fontBody.style.fontFamily,
   mono: "Menlo, monospace",
 };

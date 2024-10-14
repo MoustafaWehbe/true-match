@@ -1,3 +1,4 @@
+using System.Text.Json;
 using api.Dtos;
 using api.Extensions;
 using api.Helpers;
@@ -227,6 +228,7 @@ namespace api.Controllers
             existingRoom.FinishedAt = updateRoomDto.FinishedAt;
             existingRoom.UpdatedAt = DateTime.UtcNow;
             existingRoom.Offers = updateRoomDto.Offers;
+            existingRoom.RoomMetaData = JsonDocument.Parse(JsonSerializer.Serialize(updateRoomDto.RoomMetaData));
             existingRoom.QuestionsCategories = updateRoomDto.QuestionsCategories;
 
 

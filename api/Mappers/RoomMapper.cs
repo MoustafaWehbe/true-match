@@ -1,3 +1,4 @@
+using System.Text.Json;
 using api.Dtos;
 using api.Models;
 
@@ -20,6 +21,7 @@ namespace api.Mappers
                 CreatedAt = roomModel.CreatedAt,
                 UpdatedAt = roomModel.UpdatedAt,
                 Offers = roomModel.Offers,
+                RoomMetaData = roomModel.RoomMetaData != null ? JsonSerializer.Deserialize<RoomMetaData>(roomModel.RoomMetaData) : null,
                 QuestionsCategories = roomModel.QuestionsCategories
             };
         }

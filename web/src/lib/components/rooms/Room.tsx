@@ -39,13 +39,7 @@ const Room = ({ roomId }: { roomId: string }) => {
   }, [roomId]);
 
   return (
-    // <Flex
-    //   height="calc(100vh - 60px - 100px)"
-    //   bg={cardBg}
-    //   color={cardTextColor}
-    //   borderRadius="10px"
-    // >
-    <Box height="calc(100vh - 60px - 100px)">
+    <Box height={{ base: "100%", lg: "calc(100vh - 60px - 75px)" }}>
       {activeRoom?.user?.id === user?.id ? (
         <PresenterDisplay peers={peers} localVideoRef={localVideoRef} />
       ) : (

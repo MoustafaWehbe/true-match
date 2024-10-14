@@ -4,6 +4,7 @@ import availableDescriptorSlice from "./availableDescriptor/availableDescriptorS
 import genderSlice from "./gender/genderSlice";
 import questionSlice from "./question/questionSlice";
 import roomReducer from "./room/roomSlice";
+import roundSlice from "./round/roundSlice";
 import userReducer from "./user/userSlice";
 
 export const store = configureStore({
@@ -13,6 +14,7 @@ export const store = configureStore({
     question: questionSlice,
     gender: genderSlice,
     availableDescriptor: availableDescriptorSlice,
+    round: roundSlice,
   },
 });
 

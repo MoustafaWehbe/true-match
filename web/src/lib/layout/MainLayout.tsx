@@ -23,7 +23,7 @@ const MainLayout = ({ children }: LayoutProps) => {
           width={"100%"}
           maxWidth={{ base: "100vw", md: "65%", lg: "75%" }}
           transition="0.5s ease-out"
-          height={"90vh"}
+          minHeight={"90vh"}
           as="main"
           marginY={22}
           display={"flex"}
@@ -31,7 +31,7 @@ const MainLayout = ({ children }: LayoutProps) => {
           justifyContent={"space-between"}
         >
           <Box marginBottom={5}>{children}</Box>
-          <Box marginBottom={10}>
+          <Box>
             <Footer />
           </Box>
         </Box>

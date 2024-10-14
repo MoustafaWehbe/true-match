@@ -1,6 +1,7 @@
 import { Server as SocketIOServer, Socket } from "socket.io";
 
 import { socketEventTypes } from "@dapp/shared/src/types/custom";
+import { RoomMetaData } from "@dapp/shared/src/types/openApiGen";
 
 import { roomService } from "./services";
 
@@ -37,6 +38,12 @@ class SocketHandler {
       socket.on("leave-room", (payload: socketEventTypes.LeaveRoomPayload) =>
         this.handleDisconnect(payload, socket)
       );
+
+      socket.on(
+        "update-room-data",
+        (payload: RoomMetaData & { roomId: number }) =>
+          this.handleUpdateRoomData(payload, socket)
+      );
     });
   }
 
@@ -53,7 +60,10 @@ class SocketHandler {
           throw Error(joinRes?.message || "Failed to join room.");
         }
         socket.join(roomId.toString());
+        // notify everyone that this user has joined
         socket.broadcast.to(roomId.toString()).emit("user-joined", socket.id);
+        // send the current room meta data to this user
+        socket.emit("update-room-data", room.data?.roomMetaData);
       } else {
         throw Error("Could not find room");
       }
@@ -98,6 +108,14 @@ class SocketHandler {
       socket.disconnect(true);
       throw Error("Failde to leave room!");
     }
+  }
+
+  private async handleUpdateRoomData(
+    payload: RoomMetaData & { roomId: number },
+    socket: Socket
+  ) {
+    // Broadcast the new action to all users except the owner
+    socket.to(payload.roomId.toString()).emit("update-room-data", payload);
   }
 }
 

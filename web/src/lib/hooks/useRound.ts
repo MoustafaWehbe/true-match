@@ -1,15 +1,18 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { getSystemQuestions } from "../state/question/questionSlice";
 import { getRoomContent } from "../state/room/roomSlice";
+import {
+  pauseRound,
+  resetRound,
+  setTimer,
+  skipRound,
+  startRound,
+} from "../state/round/roundSlice";
 import { AppDispatch, RootState } from "../state/store";
 
 const useRound = () => {
-  const [currentRound, setCurrentRound] = useState<number | null>(null);
-  const [timer, setTimer] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
-
   const dispatch = useDispatch<AppDispatch>();
   const {
     roomContent: rounds,
@@ -17,6 +20,9 @@ const useRound = () => {
     activeRoom,
   } = useSelector((state: RootState) => state.room);
   const { systemQuestions } = useSelector((state: RootState) => state.question);
+  const { currentRound, timer, isPaused } = useSelector(
+    (state: RootState) => state.round
+  );
 
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -29,31 +35,28 @@ const useRound = () => {
   useEffect(() => {
     if (currentRound !== null && rounds && !isPaused) {
       intervalRef.current = setInterval(() => {
-        setTimer((prevTimer) => {
-          if (prevTimer <= 1) {
-            clearInterval(intervalRef.current!);
-            if (currentRound < rounds.length - 1) {
-              setCurrentRound((prevRound) => prevRound! + 1);
-              return rounds[currentRound + 1].duration!;
-            } else {
-              setCurrentRound(null);
-              return 0;
-            }
+        dispatch(setTimer(timer - 1));
+        if (timer <= 1) {
+          clearInterval(intervalRef.current!);
+          if (currentRound < rounds.length - 1) {
+            dispatch(startRound(currentRound + 1));
+            dispatch(setTimer(rounds[currentRound + 1].duration!));
+          } else {
+            dispatch(resetRound());
           }
-          return prevTimer - 1;
-        });
+        }
       }, 1000);
     }
 
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
     };
-  }, [currentRound, isPaused, rounds]);
+  }, [currentRound, isPaused, rounds, timer, dispatch]);
 
   const startRounds = useCallback(() => {
-    setCurrentRound(0);
+    dispatch(startRound(0));
     if (rounds) {
-      setTimer(rounds[0].duration!);
+      dispatch(setTimer(rounds[0].duration!));
     }
     if (activeRoom && activeRoom.questionsCategories) {
       dispatch(
@@ -62,33 +65,15 @@ const useRound = () => {
     }
   }, [activeRoom, dispatch, rounds]);
 
-  const pauseRound = useCallback(() => {
-    setIsPaused((prevIsPaused) => {
-      if (!prevIsPaused) {
-        if (intervalRef.current) clearInterval(intervalRef.current);
-      } else if (rounds && currentRound !== null) {
-        intervalRef.current = setInterval(() => {
-          setTimer((prevTimer) => {
-            if (prevTimer <= 1) {
-              clearInterval(intervalRef.current!);
-              if (currentRound < rounds.length - 1) {
-                setCurrentRound((prevRound) => prevRound! + 1);
-              } else {
-                setCurrentRound(null);
-              }
-              return 0;
-            }
-            return prevTimer - 1;
-          });
-        }, 1000);
-      }
-      return !prevIsPaused;
-    });
-  }, [currentRound, rounds]);
+  const pauseCurrentRound = useCallback(() => {
+    dispatch(pauseRound());
+  }, [dispatch]);
 
-  const skipRound = () => {
-    setCurrentRound((cr) => cr! + 1);
-    setTimer(rounds![currentRound! + 1].duration!);
+  const skipCurrentRound = () => {
+    if (currentRound !== null) {
+      dispatch(skipRound(currentRound + 1));
+      dispatch(setTimer(rounds![currentRound! + 1].duration!));
+    }
   };
 
   return {
@@ -98,8 +83,9 @@ const useRound = () => {
     rounds,
     isPaused,
     startRounds,
-    pauseRound,
-    skipRound,
+    pauseCurrentRound,
+    skipCurrentRound,
   };
 };
+
 export default useRound;
