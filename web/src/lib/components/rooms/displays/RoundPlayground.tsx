@@ -5,7 +5,7 @@ import { Box, Button, Flex, Text } from "@chakra-ui/react";
 import { RootState } from "~/lib/state/store";
 
 interface RoundPlaygroundProps {
-  onNextQuestionClicked: () => void;
+  onNextQuestionClicked?: () => void;
   currentIndexForSystemQuestion: number;
   currentRound: number | null;
 }

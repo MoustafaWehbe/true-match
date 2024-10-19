@@ -1,13 +1,6 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { useSelector } from "react-redux";
-import {
-  Box,
-  Slider,
-  SliderFilledTrack,
-  SliderThumb,
-  SliderTrack,
-  Text,
-} from "@chakra-ui/react";
+import { Box, Flex, FormControl, Input, Text } from "@chakra-ui/react";
 
 import {
   Descriptor as DescriptorType,
@@ -25,7 +18,6 @@ const Measurement = ({
   availableDescriptorId: number;
   onSelect: (desc: SelectedDescriptor) => void;
 }) => {
-  const [value, setValue] = useState<number>();
   const { user } = useSelector((state: RootState) => state.user);
 
   const existingDescValue = useMemo(
@@ -41,45 +33,37 @@ const Measurement = ({
       user?.userProfile?.selectedDescriptors,
     ]
   );
+  const [value, setValue] = useState<number>(
+    parseFloat(existingDescValue?.singleValue!) || 0
+  );
 
-  useEffect(() => {
-    setValue(
-      existingDescValue?.singleValue ||
-        Math.round(
-          (descriptor.measurableDetails?.min! +
-            descriptor.measurableDetails?.max!) /
-            2
-        )
-    );
-  }, [descriptor.measurableDetails, existingDescValue?.singleValue]);
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = parseFloat(e.target.value) || 0;
 
-  const onChange = (value: number) => {
     setValue(value);
     onSelect({
       availableDescriptorId,
       descriptorId: descriptor.id,
-      singleValue: value,
+      singleValue: e.target.value,
     });
   };
 
   return (
-    <Box>
-      <Text mb={2}>{descriptor.prompt}</Text>
-      <Slider
-        aria-label="slider"
-        min={descriptor.measurableDetails?.min!}
-        max={descriptor.measurableDetails?.max!}
-        value={value}
-        onChangeEnd={onChange}
-      >
-        <SliderTrack>
-          <SliderFilledTrack />
-        </SliderTrack>
-        <SliderThumb />
-      </Slider>
-      <Text mt={2}>
-        {value} {descriptor.measurableDetails?.unitOfMeasure}
-      </Text>
+    <Box maxW="sm" mx="auto" p={4}>
+      <FormControl>
+        <Text mb={2}>{descriptor.prompt}</Text>
+        <Flex gap={4}>
+          <Input
+            id="height"
+            type="text"
+            value={value}
+            onChange={onChange}
+            min={descriptor.measurableDetails?.min!}
+            max={descriptor.measurableDetails?.max!}
+          />
+          <Text mt={2}>{descriptor.measurableDetails?.unitOfMeasure}</Text>
+        </Flex>
+      </FormControl>
     </Box>
   );
 };

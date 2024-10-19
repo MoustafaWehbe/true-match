@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Flex, useColorModeValue } from "@chakra-ui/react";
+import { Box, Flex, useColorModeValue, useMediaQuery } from "@chakra-ui/react";
 
 import MyVideo from "./MyVideo";
 import RoundPlayground from "./RoundPlayground";
@@ -7,9 +7,10 @@ import StartRound from "./StartRound";
 import Timer from "./Timer";
 import TimerControls from "./TimerControls";
 
+import { size } from "~/lib/consts";
 import useRound from "~/lib/hooks/useRound";
 
-interface PresenterDisplayFirstHalfDesktopProps {
+interface PresenterMainDisplayProps {
   localVideoRef: React.RefObject<HTMLVideoElement>;
   peers: { peerID: string; peer: RTCPeerConnection }[];
   isMicOn: boolean;
@@ -20,10 +21,7 @@ interface PresenterDisplayFirstHalfDesktopProps {
   onNextQuestionClicked: () => void;
 }
 
-const progressCircleThickness = 5;
-const progressCircleSize = 140;
-
-const PresenterDisplayFirstHalfDesktop = ({
+const PresenterMainDisplay = ({
   localVideoRef,
   isMicOn,
   isVideoOn,
@@ -31,9 +29,13 @@ const PresenterDisplayFirstHalfDesktop = ({
   onToggleMic,
   onToggleVideo,
   onNextQuestionClicked,
-}: PresenterDisplayFirstHalfDesktopProps) => {
+}: PresenterMainDisplayProps) => {
   const cardTextColor = useColorModeValue("gray.800", "whiteAlpha.900");
   const cardBg = useColorModeValue("gray.100", "gray.900");
+  const [isLaptopOrDesktop] = useMediaQuery(`(min-width: ${size.desktop})`);
+
+  const progressCircleThickness = isLaptopOrDesktop ? 5 : 4;
+  const progressCircleSize = isLaptopOrDesktop ? 140 : 70;
 
   const {
     currentRound,
@@ -51,8 +53,19 @@ const PresenterDisplayFirstHalfDesktop = ({
   }
 
   return (
-    <Box height={"30%"} bg={cardBg} color={cardTextColor} borderRadius="10px">
-      <Flex direction="row" width="100%" gap={4} height={"100%"}>
+    <Box
+      bg={cardBg}
+      color={cardTextColor}
+      height={{ base: "initial", lg: "30%" }}
+      borderRadius="10px"
+      px={{ base: 4, lg: 0 }}
+    >
+      <Flex
+        direction={{ base: "column", lg: "row" }}
+        width="100%"
+        gap={4}
+        height={"100%"}
+      >
         {/* Left Column (25%) */}
         <Flex
           color={cardTextColor}
@@ -73,7 +86,7 @@ const PresenterDisplayFirstHalfDesktop = ({
 
         {/* Right Column (75%) */}
         <Box
-          width="70%"
+          width={{ base: "100%", lg: "70%" }}
           overflow={"auto"}
           p={4}
           color={cardTextColor}
@@ -83,9 +96,10 @@ const PresenterDisplayFirstHalfDesktop = ({
               : "transparent"
           }
           borderRadius="10px"
-          minHeight={0}
-          flexGrow={1}
           position={"relative"}
+          mb={{ base: "20px", lg: "0" }}
+          minHeight={{ base: "unset", lg: 0 }}
+          flexGrow={{ base: "unset", lg: 1 }}
         >
           {currentRound !== null && (
             <Flex
@@ -98,7 +112,7 @@ const PresenterDisplayFirstHalfDesktop = ({
                 currentIndexForSystemQuestion={currentIndexForSystemQuestion}
                 currentRound={currentRound}
               />
-              <Flex gap={4}>
+              <Flex gap={4} direction={{ base: "column", lg: "row" }}>
                 {/* Timer section */}
                 <Timer
                   progressCircleSize={progressCircleSize}
@@ -130,4 +144,4 @@ const PresenterDisplayFirstHalfDesktop = ({
   );
 };
 
-export default PresenterDisplayFirstHalfDesktop;
+export default PresenterMainDisplay;

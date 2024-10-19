@@ -6,15 +6,13 @@ import {
   GridItem,
   Text,
   useColorModeValue,
-  useMediaQuery,
 } from "@chakra-ui/react";
 
 import AnimatedHeart from "../../shared/AnimatedHeart";
+import PeerVideo from "../PeerVideo";
 
-import PresenterDisplayFirstHalfDesktop from "./PresenterDisplayFirstHalfDesktop";
-import PresenterDisplayFirstHalfMobile from "./PresenterDisplayFirstHalfMobile";
+import PresenterMainDisplay from "./PresenterMainDisplay";
 
-import { size } from "~/lib/consts";
 import useRound from "~/lib/hooks/useRound";
 
 interface PresenterDisplayProps {
@@ -27,7 +25,6 @@ const PresenterDisplay = ({ peers, localVideoRef }: PresenterDisplayProps) => {
   const cardBg = useColorModeValue("gray.100", "gray.900");
   const [isBottom, setIsBottom] = useState(false);
   const boxRef = useRef<HTMLDivElement>(null);
-  const [isLaptopOrDesktop] = useMediaQuery(`(min-width: ${size.desktop})`);
   const [isMicOn, setIsMicOn] = useState(true);
   const [isVideoOn, setIsVideoOn] = useState(true);
   const [currentIndexForSystemQuestion, setCurrentIndexForSystemQuestion] =
@@ -104,29 +101,16 @@ const PresenterDisplay = ({ peers, localVideoRef }: PresenterDisplayProps) => {
       mx={{ base: "10px" }}
     >
       {/* First Row */}
-      {!isLaptopOrDesktop ? (
-        <PresenterDisplayFirstHalfMobile
-          localVideoRef={localVideoRef}
-          peers={peers}
-          isMicOn={isMicOn}
-          isVideoOn={isVideoOn}
-          currentIndexForSystemQuestion={currentIndexForSystemQuestion}
-          onToggleMic={onToggleMic}
-          onToggleVideo={onToggleVideo}
-          onNextQuestionClicked={onNextQuestionClicked}
-        />
-      ) : (
-        <PresenterDisplayFirstHalfDesktop
-          localVideoRef={localVideoRef}
-          peers={peers}
-          isMicOn={isMicOn}
-          isVideoOn={isVideoOn}
-          currentIndexForSystemQuestion={currentIndexForSystemQuestion}
-          onToggleMic={onToggleMic}
-          onToggleVideo={onToggleVideo}
-          onNextQuestionClicked={onNextQuestionClicked}
-        />
-      )}
+      <PresenterMainDisplay
+        localVideoRef={localVideoRef}
+        peers={peers}
+        isMicOn={isMicOn}
+        isVideoOn={isVideoOn}
+        currentIndexForSystemQuestion={currentIndexForSystemQuestion}
+        onToggleMic={onToggleMic}
+        onToggleVideo={onToggleVideo}
+        onNextQuestionClicked={onNextQuestionClicked}
+      />
       {/* Second Row */}
       <Box
         height={{ base: "auto", lg: "70%" }}
@@ -157,7 +141,7 @@ const PresenterDisplay = ({ peers, localVideoRef }: PresenterDisplayProps) => {
           overflowY={"auto"}
           position={"relative"}
         >
-          {peers?.length !== 0 ? (
+          {peers?.length === 0 ? (
             <Flex
               direction="column"
               align="center"
@@ -183,8 +167,8 @@ const PresenterDisplay = ({ peers, localVideoRef }: PresenterDisplayProps) => {
               padding={6}
               overflowY={"auto"}
             >
-              {Array.from(Array(9).keys())?.map((peer, index) => (
-                // <PeerVideo key={index} peer={peer.peer} />
+              {/* {Array.from(Array(9).keys())?.map((peer, index) => ( */}
+              {peers?.map((peer, index) => (
                 <GridItem
                   key={index}
                   width="100%"
@@ -206,7 +190,8 @@ const PresenterDisplay = ({ peers, localVideoRef }: PresenterDisplayProps) => {
                     <Box>My name is</Box>
                     <Box>My age is</Box>
                   </Flex>
-                  <video
+                  <PeerVideo key={index} peer={peer.peer} />
+                  {/* <video
                     key={index}
                     autoPlay
                     src="/sample-video.mp4"
@@ -214,7 +199,7 @@ const PresenterDisplay = ({ peers, localVideoRef }: PresenterDisplayProps) => {
                     width="100%"
                     height="auto"
                     style={{ borderRadius: "10px", marginTop: "10px" }}
-                  />
+                  /> */}
                 </GridItem>
               ))}
             </Grid>
