@@ -1,8 +1,8 @@
 import {
-  RoomDto,
   RoomDtoApiResponse,
   RoomParticipantDtoApiResponse,
   SimpleApiResponseApiResponse,
+  UpdateRoomDto,
 } from "@dapp/shared/src/types/openApiGen";
 
 import axiosInstance from "./axiosInstance";
@@ -43,7 +43,7 @@ const leaveRoom = async (
 
 const updateRoom = async (
   token: string,
-  room: RoomDto,
+  room: UpdateRoomDto,
   roomId: number
 ): Promise<RoomDtoApiResponse | undefined> => {
   try {

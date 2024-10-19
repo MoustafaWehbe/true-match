@@ -2,6 +2,7 @@ namespace api.Models
 {
     public static class RoomConstants
     {
-        public const int AfterStartTheRoomIsValidFor = 1;
+        public const int TheRoomIsValidFor = 10; // 10 mins
+        public const int TotalRoundsDuration = 15; // 10 mins
     }
 }

@@ -1,3 +1,5 @@
+import { RoomContentDto, RoomState } from "@dapp/shared/src/types/openApiGen";
+
 interface JoinRoomPayload {
   roomId: number;
 }
@@ -24,10 +26,62 @@ interface IceCandidatePayload {
   candidate: RTCIceCandidate;
 }
 
+interface StartRoundPayload {
+  roomId: number;
+  rounds?: Array<RoomContentDto>;
+}
+
+interface PauseRoundPayload {
+  roomId: number;
+  timeRemaining: number;
+}
+
+interface SkipRoundPayload {
+  roomId: number;
+}
+
+interface ResumeRoundPayload {
+  roomId: number;
+}
+
+interface RoundPausedPayload {
+  roomState: RoomState;
+}
+
+interface RoundResumedPayload {
+  roomState: RoomState;
+}
+
+interface RoundsEndedPayload {
+  roomState: RoomState;
+}
+
+interface TimerUpdatedPayload {
+  roomState: RoomState;
+}
+
+interface RoundsStartedPayload {
+  roomState: RoomState;
+}
+
+interface RoundSkipedPayload {
+  roomState: RoomState;
+}
+
 export type {
   JoinRoomPayload,
   LeaveRoomPayload,
   OfferPayload,
   AnswerPayload,
   IceCandidatePayload,
+  StartRoundPayload,
+  PauseRoundPayload,
+  ResumeRoundPayload,
+  RoundPausedPayload,
+  RoundResumedPayload,
+  RoundsEndedPayload,
+  TimerUpdatedPayload,
+  RoundsStartedPayload,
+  RoundSkipedPayload,
+  SkipRoundPayload,
 };

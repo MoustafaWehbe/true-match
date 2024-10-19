@@ -19,7 +19,7 @@ namespace api.Data
         private static void seedRoomContent(ModelBuilder builder)
         {
             builder.Entity<RoomContent>().HasData(new List<RoomContent> {
-                new RoomContent{Id = 1, Title = "Meet & Greet", Description = "Give us the scoop on the person behind the screen!", Duration = 10, Order = 1},
+                new RoomContent{Id = 1, Title = "Meet & Greet", Description = "Give us the scoop on the person behind the screen!", Duration = 1 * 60, Order = 1},
                 new RoomContent{Id = 2, Title = "Hobby Showcase & Fun Fact Extravaganza", Description = "Share your passions and two quirky facts about yourself!", Duration = 2 * 60, Order = 2},
                 new RoomContent{Id = 3, Title = "Random Question Roulette", Description = "Brace yourself for some off-the-wall questions and give your best answers within the time limit!", Duration = 5 * 60, Order = 3},
                 new RoomContent{Id = 4, Title = "Spotlight Q&A", Description = "Get ready to field questions from your adoring audience!", Duration = 5 * 60, Order = 4},

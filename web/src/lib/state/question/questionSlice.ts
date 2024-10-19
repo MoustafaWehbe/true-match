@@ -40,7 +40,7 @@ export const getQuestionCategories = createAsyncThunk<
 
 export const getSystemQuestions = createAsyncThunk<
   Array<SystemQuestionDto> | null,
-  { categories?: number[] },
+  { categories?: number[]; roomId: number },
   { rejectValue: string }
 >("question/system-question", async (params, { rejectWithValue }) => {
   try {
@@ -48,6 +48,8 @@ export const getSystemQuestions = createAsyncThunk<
     params.categories?.forEach((category) =>
       searchParams.append("categories", category.toString())
     );
+
+    searchParams.append("roomId", params.roomId.toString());
 
     const response = await axiosInstance.get<SystemQuestionDtoListApiResponse>(
       "/api/system-question",

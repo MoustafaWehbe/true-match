@@ -44,8 +44,7 @@ namespace api.Controllers
                 return BadRequest("User does not exist");
             }
 
-            if (room.FinishedAt != null ||
-                DateTime.UtcNow.AddHours(-RoomConstants.AfterStartTheRoomIsValidFor) > room.ScheduledAt)
+            if (room.FinishedAt != null)
             {
                 return BadRequest("Can't deregister from rooms finished in the past.");
             }
@@ -160,12 +159,12 @@ namespace api.Controllers
         [HttpPost]
         [Route("leave/{id:int}")]
         [ProducesResponseType(typeof(ApiResponse<SimpleApiResponse>), 200)]
-        public async Task<IActionResult> LeaveRoom([FromRoute] int roomId)
+        public async Task<IActionResult> LeaveRoom([FromRoute] int id)
         {
 
             var user = await _userManager.FindByEmailAsync(User.GetEmail());
 
-            var room = await _roomRepo.GetByIdAsync(roomId);
+            var room = await _roomRepo.GetByIdAsync(id);
 
             if (room == null)
             {
@@ -186,7 +185,7 @@ namespace api.Controllers
 
             if (roomParticipants.Any(rp => rp.RoomId == room.Id))
             {
-                var alreadyParticipatedRoom = roomParticipants.Where(rp => rp.RoomId == roomId).FirstOrDefault();
+                var alreadyParticipatedRoom = roomParticipants.Where(rp => rp.RoomId == id).FirstOrDefault();
 
                 if (alreadyParticipatedRoom == null)
                 {

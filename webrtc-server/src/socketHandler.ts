@@ -1,15 +1,18 @@
+/* eslint-disable no-param-reassign */
 import { Server as SocketIOServer, Socket } from "socket.io";
 
 import { socketEventTypes } from "@dapp/shared/src/types/custom";
-import { RoomMetaData } from "@dapp/shared/src/types/openApiGen";
+import { RoomState } from "@dapp/shared/src/types/openApiGen";
 
 import { roomService } from "./services";
 
 class SocketHandler {
   private io: SocketIOServer;
+  private timersMap: Map<string, NodeJS.Timeout>;
 
   constructor(io: SocketIOServer) {
     this.io = io;
+    this.timersMap = new Map();
     this.handleConnection();
   }
 
@@ -39,10 +42,22 @@ class SocketHandler {
         this.handleDisconnect(payload, socket)
       );
 
+      socket.on("start-round", (payload: socketEventTypes.StartRoundPayload) =>
+        this.handleStartRound(payload, socket)
+      );
+
+      socket.on("pause-round", (payload: socketEventTypes.PauseRoundPayload) =>
+        this.handlePauseRound(payload, socket)
+      );
+
       socket.on(
-        "update-room-data",
-        (payload: RoomMetaData & { roomId: number }) =>
-          this.handleUpdateRoomData(payload, socket)
+        "resume-round",
+        (payload: socketEventTypes.ResumeRoundPayload) =>
+          this.handleResumeRound(payload, socket)
+      );
+
+      socket.on("skip-round", (payload: socketEventTypes.SkipRoundPayload) =>
+        this.handleSkipRound(payload, socket)
       );
     });
   }
@@ -62,15 +77,14 @@ class SocketHandler {
         socket.join(roomId.toString());
         // notify everyone that this user has joined
         socket.broadcast.to(roomId.toString()).emit("user-joined", socket.id);
-        // send the current room meta data to this user
-        socket.emit("update-room-data", room.data?.roomMetaData);
+        // send the current room state to this user
+        socket.emit("room-state", room.data?.roomState);
       } else {
         throw Error("Could not find room");
       }
     } catch (e) {
       socket.disconnect(true);
       console.error(e);
-      throw Error("Failde to update room!");
     }
   }
 
@@ -103,19 +117,217 @@ class SocketHandler {
         throw Error(leaveRes?.message || "Failed to leave room.");
       }
       socket.disconnect(true);
-      console.log("Client disconnected");
-    } catch {
+    } catch (e) {
       socket.disconnect(true);
-      throw Error("Failde to leave room!");
+      console.error("Failde to leave room!", e);
     }
   }
 
-  private async handleUpdateRoomData(
-    payload: RoomMetaData & { roomId: number },
+  private async handleStartRound(
+    payload: socketEventTypes.StartRoundPayload,
     socket: Socket
   ) {
-    // Broadcast the new action to all users except the owner
-    socket.to(payload.roomId.toString()).emit("update-room-data", payload);
+    const token = socket.handshake.auth.token;
+    try {
+      const room = await roomService.getRoomById(token, payload.roomId);
+      if (room?.data) {
+        const existingRoomState = room.data.roomState as RoomState | undefined;
+        const finalRoomState: RoomState = {
+          ...existingRoomState,
+          roundStartTime: new Date(),
+          currentRound: 0,
+          isRoundPaused: false,
+          rounds: payload.rounds,
+        };
+        this.io.in(payload.roomId.toString()).emit("rounds-started", {
+          roomState: finalRoomState,
+        } as socketEventTypes.RoundsStartedPayload);
+
+        await roomService.updateRoom(
+          token,
+          { roomState: finalRoomState },
+          room?.data?.id!
+        );
+        this.setTimer(
+          room.data.id!,
+          finalRoomState,
+          finalRoomState.rounds![finalRoomState.currentRound!].duration!,
+          token,
+          socket.id
+        );
+      } else {
+        throw Error("Could not find room");
+      }
+    } catch (e) {
+      console.error("failed to start round..", e);
+    }
+  }
+
+  private async handlePauseRound(
+    payload: socketEventTypes.PauseRoundPayload,
+    socket: Socket
+  ) {
+    const token = socket.handshake.auth.token;
+
+    try {
+      const room = await roomService.getRoomById(token, payload.roomId);
+      if (room?.data) {
+        const existingRoomState = room.data.roomState as RoomState | undefined;
+        const finalRoomState: RoomState = {
+          ...existingRoomState,
+          isRoundPaused: true,
+          timeRemainingForRoundBeforePause: payload.timeRemaining,
+        };
+        this.io.in(payload.roomId.toString()).emit("round-paused", {
+          roomState: finalRoomState,
+        } as socketEventTypes.RoundPausedPayload);
+
+        await roomService.updateRoom(
+          token,
+          { roomState: finalRoomState },
+          room?.data?.id!
+        );
+        clearInterval(this.timersMap.get(socket.id));
+      } else {
+        throw Error("Could not find room");
+      }
+    } catch (e) {
+      console.error("failed to pause/resume round..", e);
+    }
+  }
+
+  private async handleResumeRound(
+    payload: socketEventTypes.ResumeRoundPayload,
+    socket: Socket
+  ) {
+    const token = socket.handshake.auth.token;
+
+    try {
+      const room = await roomService.getRoomById(token, payload.roomId);
+      if (room?.data) {
+        const existingRoomState = room.data.roomState as RoomState | undefined;
+        const finalRoomState: RoomState = {
+          ...existingRoomState,
+          isRoundPaused: false,
+        };
+        this.io.in(payload.roomId.toString()).emit("round-resumed", {
+          roomState: finalRoomState,
+        } as socketEventTypes.RoundResumedPayload);
+
+        await roomService.updateRoom(
+          token,
+          { roomState: finalRoomState },
+          room?.data?.id!
+        );
+        this.setTimer(
+          room.data.id!,
+          finalRoomState,
+          finalRoomState.timeRemainingForRoundBeforePause!,
+          token,
+          socket.id
+        );
+      } else {
+        throw Error("Could not find room");
+      }
+    } catch (e) {
+      console.error("failed to pause/resume round..", e);
+    }
+  }
+
+  private async handleSkipRound(
+    payload: socketEventTypes.SkipRoundPayload,
+    socket: Socket
+  ) {
+    const token = socket.handshake.auth.token;
+
+    try {
+      const room = await roomService.getRoomById(token, payload.roomId);
+      if (room?.data) {
+        const existingRoomState = room.data.roomState as RoomState | undefined;
+        const finalRoomState: RoomState = {
+          ...existingRoomState,
+          isRoundPaused: false,
+          currentRound: existingRoomState?.currentRound! + 1,
+          timeRemainingForRoundBeforePause:
+            existingRoomState?.rounds![existingRoomState?.currentRound! + 1]
+              .duration!,
+        };
+        this.io.in(payload.roomId.toString()).emit("round-skiped", {
+          roomState: finalRoomState,
+        } as socketEventTypes.RoundSkipedPayload);
+
+        await roomService.updateRoom(
+          token,
+          { roomState: finalRoomState },
+          room?.data?.id!
+        );
+        this.setTimer(
+          room.data.id!,
+          finalRoomState,
+          finalRoomState.timeRemainingForRoundBeforePause!,
+          token,
+          socket.id
+        );
+      } else {
+        throw Error("Could not find room");
+      }
+    } catch (e) {
+      console.error("failed to skip round..", e);
+    }
+  }
+
+  // helpers
+  private async setTimer(
+    roomId: number,
+    roomState: RoomState,
+    timeRemaining: number,
+    token: string,
+    socketId: string
+  ) {
+    const previousTimer = this.timersMap.get(socketId);
+    clearInterval(previousTimer);
+    previousTimer?.unref();
+    let theEnd = false;
+    const timer = setInterval(async () => {
+      timeRemaining = timeRemaining - 1;
+      roomState.timeRemainingForRoundBeforePause = timeRemaining - 1;
+      if (timeRemaining <= 1) {
+        clearInterval(timer!);
+        if (roomState.currentRound! < roomState.rounds?.length! - 1) {
+          roomState.currentRound! = roomState.currentRound! + 1;
+          timeRemaining =
+            roomState.rounds![roomState.currentRound! + 1].duration!;
+          roomState.timeRemainingForRoundBeforePause =
+            roomState.rounds![roomState.currentRound! + 1].duration!;
+        } else {
+          // reset round
+          roomState.currentRound = null;
+          timeRemaining = 0;
+          roomState.timeRemainingForRoundBeforePause = 0;
+          roomState.isRoundPaused = false;
+          theEnd = true;
+        }
+        // only update room if the rounds end or we move to the next round.
+        try {
+          await roomService.updateRoom(token, { roomState }, roomId);
+        } catch {
+          console.error("failed to update room state...");
+        }
+      }
+      if (theEnd) {
+        this.io.in(roomId.toString()).emit("rounds-ended", {
+          roomState,
+        } as socketEventTypes.RoundsEndedPayload);
+      } else {
+        this.io.in(roomId.toString()).emit("timer-updated", {
+          roomState,
+        } as socketEventTypes.TimerUpdatedPayload);
+      }
+    }, 1000);
+
+    if (timer) {
+      this.timersMap.set(socketId, timer);
+    }
   }
 }
 

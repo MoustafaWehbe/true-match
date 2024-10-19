@@ -1,3 +1,4 @@
+using System.Text.Json;
 using api.Data;
 using api.Dtos;
 using api.Extensions;
@@ -49,15 +50,15 @@ namespace api.Repository
 
         public async Task<List<Room>> GetMyRoomsAsync(MyRoomQueryObject query, string userId)
         {
-            return await _context.Rooms
+            return await Task.Run(() => _context.Rooms
                 .IncludeRoomDetails()
                 .Where(r => r.UserId == userId)
-                .FindMyRoomByStatus(query.Status, userId)
+                .FindMyRoomByStatus(query.Status, userId) // This has AsEnumerable() inside, switching to LINQ-to-Objects
                 .FindNotDeleted()
                 .OrderByDescending(r => r.CreatedAt)
                 .Skip((query.PageNumber - 1) * query.PageSize)
                 .Take(query.PageSize)
-                .ToListAsync();
+                .ToList()); // Use synchronous ToList after switching to in-memory processing
         }
 
         public async Task<Room?> GetByIdAsync(int id)
@@ -100,18 +101,37 @@ namespace api.Repository
 
         public async Task<int> GetTotalMyRoomsAsync(MyRoomQueryObject query, string userId)
         {
-            return await _context.Rooms
-                .FindMyRoomByStatus(query.Status, userId)
+            // Fetch the part that can be evaluated by the database (FinishedAt or neverStarted)
+            var filteredQuery = _context.Rooms
                 .Where(r => r.UserId == userId)
-                .FindNotDeleted()
-                .CountAsync();
-        }
+                .FindMyRoomByStatus(query.Status, userId) // This handles part of the filtering, which might include AsEnumerable()
+                .FindNotDeleted();
 
-        public async Task<Room> UpdateAsync(Room room)
+            // If the FindMyRoomByStatus uses AsEnumerable (client-side logic), switch to in-memory filtering
+            var rooms = filteredQuery.AsEnumerable();
+
+            // Apply the in-memory filtering for IsArchived logic
+            var count = rooms.Count(r => r.IsArchived(userId));
+
+            return await Task.FromResult(count);
+        }
+        public async Task<Room> UpdateAsync(Room existingRoom, UpdateRoomDto? roomDto)
         {
-            _context.Rooms.Update(room);
+            if (roomDto != null)
+            {
+                existingRoom.Title = roomDto.Title ?? existingRoom.Title;
+                existingRoom.Description = roomDto.Description ?? existingRoom.Description;
+                existingRoom.ScheduledAt = roomDto.ScheduledAt ?? existingRoom.ScheduledAt;
+                existingRoom.FinishedAt = roomDto.FinishedAt ?? existingRoom.FinishedAt;
+                existingRoom.UpdatedAt = DateTime.UtcNow;
+                existingRoom.Offers = roomDto.Offers ?? existingRoom.Offers;
+                existingRoom.RoomStateJson = roomDto.RoomState != null ? JsonDocument.Parse(JsonSerializer.Serialize(roomDto.RoomState)) : existingRoom.RoomStateJson;
+                existingRoom.QuestionsCategories = roomDto.QuestionsCategories ?? existingRoom.QuestionsCategories;
+            }
+
+            _context.Rooms.Update(existingRoom);
             await _context.SaveChangesAsync();
-            return room;
+            return existingRoom;
         }
 
         public async Task<HideRoomDto> HideRoom(HideRoomDto hideRoomDto, User user)

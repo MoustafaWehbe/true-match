@@ -10,6 +10,7 @@ interface TimerControlsProps {
   currentRound: number | null;
   isPaused: boolean;
   pauseRound: () => void;
+  resumeRound: () => void;
   skipRound: () => void;
 }
 
@@ -18,6 +19,7 @@ const TimerControls = ({
   isPaused,
   pauseRound,
   skipRound,
+  resumeRound,
 }: TimerControlsProps) => {
   const { roomContent: rounds } = useSelector((state: RootState) => state.room);
 
@@ -44,7 +46,7 @@ const TimerControls = ({
       </CustomTooltip>
       <CustomTooltip label="Pause round">
         <IconButton
-          onClick={pauseRound}
+          onClick={() => (isPaused ? resumeRound() : pauseRound())}
           colorScheme="yellow"
           color="yellow"
           icon={isPaused ? <FaPlay /> : <FaPause />}

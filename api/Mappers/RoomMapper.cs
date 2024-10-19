@@ -21,7 +21,7 @@ namespace api.Mappers
                 CreatedAt = roomModel.CreatedAt,
                 UpdatedAt = roomModel.UpdatedAt,
                 Offers = roomModel.Offers,
-                RoomMetaData = roomModel.RoomMetaData != null ? JsonSerializer.Deserialize<RoomMetaData>(roomModel.RoomMetaData) : null,
+                RoomState = roomModel.RoomState,
                 QuestionsCategories = roomModel.QuestionsCategories
             };
         }

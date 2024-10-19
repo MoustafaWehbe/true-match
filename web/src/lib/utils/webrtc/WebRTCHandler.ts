@@ -1,5 +1,4 @@
 import { socketEventTypes } from "@dapp/shared/src/types/custom";
-import { RoomMetaData } from "@dapp/shared/src/types/openApiGen";
 
 import { socket } from "~/lib/utils/socket/socket";
 
@@ -10,21 +9,47 @@ export class WebRTCHandler {
   private onPeersChanged: (
     peers: { peerID: string; peer: RTCPeerConnection }[]
   ) => void;
+  private onRoundsStarted: (
+    payload: socketEventTypes.RoundsStartedPayload
+  ) => void;
+  private onTimerUpdated: (
+    payload: socketEventTypes.TimerUpdatedPayload
+  ) => void;
+  private onRoundPaused: (payload: socketEventTypes.RoundPausedPayload) => void;
+  private onRoundResumed: (
+    payload: socketEventTypes.RoundResumedPayload
+  ) => void;
+  private onRoundSkiped: (payload: socketEventTypes.RoundSkipedPayload) => void;
+  private onRoundsEnded: (payload: socketEventTypes.RoundsEndedPayload) => void;
 
   constructor(
     roomId: string,
-    onPeersChanged: (
-      peers: { peerID: string; peer: RTCPeerConnection }[]
-    ) => void
+    callbacks: {
+      onPeersChanged: (
+        peers: { peerID: string; peer: RTCPeerConnection }[]
+      ) => void;
+      onRoundsStarted: (payload: socketEventTypes.RoundsStartedPayload) => void;
+      onTimerUpdated: (payload: socketEventTypes.TimerUpdatedPayload) => void;
+      onRoundPaused: (payload: socketEventTypes.RoundPausedPayload) => void;
+      onRoundResumed: (payload: socketEventTypes.RoundResumedPayload) => void;
+      onRoundSkiped: (payload: socketEventTypes.RoundSkipedPayload) => void;
+      onRoundsEnded: (payload: socketEventTypes.RoundsEndedPayload) => void;
+    }
   ) {
     this.roomId = roomId;
 
-    this.onPeersChanged = onPeersChanged;
+    this.onPeersChanged = callbacks.onPeersChanged;
+    this.onRoundsStarted = callbacks.onRoundsStarted;
+    this.onTimerUpdated = callbacks.onTimerUpdated;
+    this.onRoundPaused = callbacks.onRoundPaused;
+    this.onRoundResumed = callbacks.onRoundResumed;
+    this.onRoundSkiped = callbacks.onRoundSkiped;
+    this.onRoundsEnded = callbacks.onRoundsEnded;
+
     this.handleUserJoined = this.handleUserJoined.bind(this);
     this.handleIncomingOffer = this.handleIncomingOffer.bind(this);
     this.handleAnswer = this.handleAnswer.bind(this);
     this.handleICECandidate = this.handleICECandidate.bind(this);
-    this.handleUpdateRoomData = this.handleUpdateRoomData.bind(this);
   }
 
   async init(localVideoRef: React.RefObject<HTMLVideoElement>) {
@@ -143,13 +168,18 @@ export class WebRTCHandler {
     }
   }
 
-  private handleUpdateRoomData(payload: RoomMetaData) {}
-
   private registerSocketEvents() {
     socket.on("user-joined", this.handleUserJoined);
     socket.on("offer", this.handleIncomingOffer);
     socket.on("answer", this.handleAnswer);
     socket.on("ice-candidate", this.handleICECandidate);
-    socket.on("update-room-data", this.handleUpdateRoomData);
+
+    // rounds events
+    socket.on("rounds-started", this.onRoundsStarted);
+    socket.on("timer-updated", this.onTimerUpdated);
+    socket.on("round-paused", this.onRoundPaused);
+    socket.on("round-resumed", this.onRoundResumed);
+    socket.on("round-skiped", this.onRoundSkiped);
+    socket.on("rounds-ended", this.onRoundsEnded);
   }
 }

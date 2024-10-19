@@ -23,7 +23,10 @@ const roundSlice = createSlice({
       state.timer = action.payload;
     },
     pauseRound: (state) => {
-      state.isPaused = !state.isPaused;
+      state.isPaused = true;
+    },
+    resumeRound: (state) => {
+      state.isPaused = false;
     },
     skipRound: (state, action: PayloadAction<number>) => {
       state.currentRound = action.payload;
@@ -36,7 +39,13 @@ const roundSlice = createSlice({
   },
 });
 
-export const { startRound, setTimer, pauseRound, skipRound, resetRound } =
-  roundSlice.actions;
+export const {
+  startRound,
+  setTimer,
+  pauseRound,
+  resumeRound,
+  skipRound,
+  resetRound,
+} = roundSlice.actions;
 
 export default roundSlice.reducer;

@@ -1,4 +1,3 @@
-using System.Text.Json;
 using api.Dtos;
 using api.Extensions;
 using api.Helpers;
@@ -111,9 +110,7 @@ namespace api.Controllers
 
             // after one hour passed, you can't start the room anymore,
             // otherwise you can start the room if it is after the scheduled datetime
-            if (
-                room.ScheduledAt > DateTime.UtcNow ||
-                DateTime.UtcNow.AddHours(-RoomConstants.AfterStartTheRoomIsValidFor) > room.ScheduledAt)
+            if (room.ScheduledAt > DateTime.UtcNow || !room.canStart)
             {
                 return BadRequest("Cannot start room");
             }
@@ -222,17 +219,7 @@ namespace api.Controllers
                 return Unauthorized("Action not allowed");
             }
 
-            existingRoom.Title = updateRoomDto.Title;
-            existingRoom.Description = updateRoomDto.Description;
-            existingRoom.ScheduledAt = updateRoomDto.ScheduledAt;
-            existingRoom.FinishedAt = updateRoomDto.FinishedAt;
-            existingRoom.UpdatedAt = DateTime.UtcNow;
-            existingRoom.Offers = updateRoomDto.Offers;
-            existingRoom.RoomMetaData = JsonDocument.Parse(JsonSerializer.Serialize(updateRoomDto.RoomMetaData));
-            existingRoom.QuestionsCategories = updateRoomDto.QuestionsCategories;
-
-
-            var room = await _roomRepo.UpdateAsync(existingRoom);
+            var room = await _roomRepo.UpdateAsync(existingRoom, updateRoomDto);
 
             return Ok(ResponseHelper.CreateSuccessResponse(room.ToRoomDto()));
         }

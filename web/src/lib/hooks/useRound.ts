@@ -1,80 +1,67 @@
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+
+import { socketEventTypes } from "@dapp/shared/src/types/custom";
 
 import { getSystemQuestions } from "../state/question/questionSlice";
 import { getRoomContent } from "../state/room/roomSlice";
-import {
-  pauseRound,
-  resetRound,
-  setTimer,
-  skipRound,
-  startRound,
-} from "../state/round/roundSlice";
 import { AppDispatch, RootState } from "../state/store";
+
+import { socket } from "~/lib/utils/socket/socket";
 
 const useRound = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const {
-    roomContent: rounds,
-    roomContentLoading,
-    activeRoom,
-  } = useSelector((state: RootState) => state.room);
+  const { roomContent: rounds, activeRoom } = useSelector(
+    (state: RootState) => state.room
+  );
   const { systemQuestions } = useSelector((state: RootState) => state.question);
   const { currentRound, timer, isPaused } = useSelector(
     (state: RootState) => state.round
   );
 
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
-
   useEffect(() => {
-    if (!rounds && !roomContentLoading) {
+    if (!rounds) {
       dispatch(getRoomContent());
     }
-  }, [dispatch, rounds, roomContentLoading]);
+  }, [dispatch, rounds]);
 
-  useEffect(() => {
-    if (currentRound !== null && rounds && !isPaused) {
-      intervalRef.current = setInterval(() => {
-        dispatch(setTimer(timer - 1));
-        if (timer <= 1) {
-          clearInterval(intervalRef.current!);
-          if (currentRound < rounds.length - 1) {
-            dispatch(startRound(currentRound + 1));
-            dispatch(setTimer(rounds[currentRound + 1].duration!));
-          } else {
-            dispatch(resetRound());
-          }
-        }
-      }, 1000);
-    }
-
-    return () => {
-      if (intervalRef.current) clearInterval(intervalRef.current);
-    };
-  }, [currentRound, isPaused, rounds, timer, dispatch]);
-
-  const startRounds = useCallback(() => {
-    dispatch(startRound(0));
-    if (rounds) {
-      dispatch(setTimer(rounds[0].duration!));
-    }
+  const startRounds = useCallback(async () => {
     if (activeRoom && activeRoom.questionsCategories) {
-      dispatch(
-        getSystemQuestions({ categories: activeRoom.questionsCategories })
+      await dispatch(
+        getSystemQuestions({
+          categories: activeRoom.questionsCategories,
+          roomId: activeRoom.id!,
+        })
       );
+    }
+    if (rounds) {
+      socket.emit("start-round", {
+        rounds,
+        roomId: activeRoom?.id!,
+      } as socketEventTypes.StartRoundPayload);
     }
   }, [activeRoom, dispatch, rounds]);
 
   const pauseCurrentRound = useCallback(() => {
-    dispatch(pauseRound());
-  }, [dispatch]);
+    socket.emit("pause-round", {
+      timeRemaining: timer,
+      roomId: activeRoom?.id,
+    } as socketEventTypes.PauseRoundPayload);
+  }, [activeRoom?.id, timer]);
 
-  const skipCurrentRound = () => {
+  const resumeCurrentRound = useCallback(() => {
+    socket.emit("resume-round", {
+      roomId: activeRoom?.id,
+    } as socketEventTypes.PauseRoundPayload);
+  }, [activeRoom?.id]);
+
+  const skipCurrentRound = useCallback(() => {
     if (currentRound !== null) {
-      dispatch(skipRound(currentRound + 1));
-      dispatch(setTimer(rounds![currentRound! + 1].duration!));
+      socket.emit("skip-round", {
+        roomId: activeRoom?.id!,
+      } as socketEventTypes.SkipRoundPayload);
     }
-  };
+  }, [activeRoom?.id, currentRound]);
 
   return {
     timer,
@@ -85,6 +72,7 @@ const useRound = () => {
     startRounds,
     pauseCurrentRound,
     skipCurrentRound,
+    resumeCurrentRound,
   };
 };
 

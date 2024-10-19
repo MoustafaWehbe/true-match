@@ -8,6 +8,8 @@ using Microsoft.OpenApi.Any;
 using Microsoft.EntityFrameworkCore;
 using api.Mappers;
 using System.Text.Json;
+using Microsoft.AspNetCore.Identity;
+using api.Extensions;
 
 namespace api.Controllers
 {
@@ -17,17 +19,19 @@ namespace api.Controllers
     {
         private readonly ISystemQuestionRepository _systemQuestionRepository;
         private readonly IRoomRepository _roomRepo;
+        private readonly UserManager<User> _userManager;
 
-        public SystemQuestionsController(ISystemQuestionRepository systemQuestionRepository, IRoomRepository roomRepo)
+        public SystemQuestionsController(ISystemQuestionRepository systemQuestionRepository, IRoomRepository roomRepo, UserManager<User> userManager)
         {
             _systemQuestionRepository = systemQuestionRepository;
             _roomRepo = roomRepo;
+            _userManager = userManager;
         }
 
         [HttpGet]
         [Authorize]
         [ProducesResponseType(typeof(ApiResponse<List<SystemQuestionDto>>), 200)]
-        public async Task<ActionResult<IEnumerable<SystemQuestionDto>>> GetSystemQuestions([FromQuery] List<int> categories, [FromQuery] int? roomId)
+        public async Task<ActionResult<IEnumerable<SystemQuestionDto>>> GetSystemQuestions([FromQuery] List<int> categories, [FromQuery] int roomId)
         {
             if (!ModelState.IsValid)
             {
@@ -45,29 +49,38 @@ namespace api.Controllers
                     .Take(3)
                     .ToList();
 
+                var room = await _roomRepo.GetByIdAsync(roomId);
 
-                if (roomId.HasValue)
+                if (room == null)
                 {
-
-                    var room = await _roomRepo.GetByIdAsync((int)roomId);
-
-                    if (room == null)
-                    {
-                        return NotFound("Room was not found.");
-                    }
-                    var existingRoomMetadata = room.RoomMetaData != null ? JsonSerializer.Deserialize<RoomMetaData>(room.RoomMetaData) : null;
-                    if (existingRoomMetadata != null)
-                    {
-                        existingRoomMetadata.SystemQuestions = (List<SystemQuestionDto>?)randomQuestions.Select(q => q.ToSystemQuestionDto());
-                    }
-                    else
-                    {
-                        existingRoomMetadata = new RoomMetaData { SystemQuestions = (List<SystemQuestionDto>?)randomQuestions.Select(q => q.ToSystemQuestionDto()) };
-                    }
-                    room.RoomMetaData = JsonDocument.Parse(JsonSerializer.Serialize(existingRoomMetadata));
-
-                    await _roomRepo.UpdateAsync(room);
+                    return NotFound("Room was not found.");
                 }
+
+
+                var user = await _userManager.FindByEmailAsync(User.GetEmail());
+
+                if (user == null)
+                {
+                    return NotFound("User was not found!");
+                }
+
+                if (user.Id != room.UserId || room.IsArchived(user.Id))
+                {
+                    return BadRequest("Room/User validation failed.");
+                }
+
+                var existingRoomState = room.RoomState;
+                if (existingRoomState != null)
+                {
+                    existingRoomState.RoundQuestions = randomQuestions.Select(q => q.ToSystemQuestionDto()).ToList();
+                }
+                else
+                {
+                    existingRoomState = new RoomState { RoundQuestions = randomQuestions.Select(q => q.ToSystemQuestionDto()).ToList() };
+                }
+                room.RoomStateJson = JsonDocument.Parse(JsonSerializer.Serialize(existingRoomState));
+
+                await _roomRepo.UpdateAsync(room);
 
                 return Ok(ResponseHelper.CreateSuccessResponse(randomQuestions.Select(q => q.ToSystemQuestionDto())));
             }

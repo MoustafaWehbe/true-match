@@ -10,13 +10,7 @@ namespace api.Extensions
             switch (roomStatus)
             {
                 case AllRoomStatus.InProgress:
-                    return query.Where(r =>
-                        r.StartedAt != null
-                        && r.FinishedAt == null
-                        && r.RoomParticipants
-                            .Any(rp => rp.UserId == userId)
-                        && DateTime.UtcNow.AddHours(-RoomConstants.AfterStartTheRoomIsValidFor) <= r.ScheduledAt
-                        );
+                    return query.Where(r => r.IsInProgress(userId));
                 case AllRoomStatus.Coming:
                     return query.Where(r => r.StartedAt == null);
                 case AllRoomStatus.InterestedIn:
@@ -33,8 +27,7 @@ namespace api.Extensions
                 case MyRoomStatus.Coming:
                     return query.Where(r => r.StartedAt == null);
                 case MyRoomStatus.Archived:
-                    return query.Where(r => r.FinishedAt < DateTime.UtcNow ||
-                        DateTime.UtcNow.AddHours(-RoomConstants.AfterStartTheRoomIsValidFor) > r.ScheduledAt);
+                    return query.AsEnumerable().Where(r => r.IsArchived(userId)).AsQueryable();
                 default:
                     return query;
             }

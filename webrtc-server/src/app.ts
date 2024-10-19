@@ -41,7 +41,7 @@ class App {
           "https://admin.socket.io",
           "https://192.168.43.149", //if using a phone or another computer
         ],
-        // credentials: true,
+        credentials: true,
         methods: ["GET", "POST"],
       },
     });

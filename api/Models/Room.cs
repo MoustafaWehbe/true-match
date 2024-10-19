@@ -18,7 +18,7 @@ namespace api.Models
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
         public JsonDocument? Offers { get; set; }
-        public JsonDocument? RoomMetaData { get; set; }
+        public JsonDocument? RoomStateJson { get; set; }
         public List<int> QuestionsCategories { get; set; } = new List<int>();
         public bool IsDeleted { get; set; } = false;
 
@@ -27,5 +27,56 @@ namespace api.Models
         public User? User { get; set; }
 
         public ICollection<RoomParticipant> RoomParticipants { get; set; } = new List<RoomParticipant>();
+
+        // The room will be valid for 10 mins after the scheduled time. If you don't start it within those 10 mins,
+        // you won't be able to start it anymore
+        [NotMapped]
+        public bool canStart => ScheduledAt.HasValue ?
+            DateTime.UtcNow.AddMinutes(-RoomConstants.TheRoomIsValidFor) <= ScheduledAt : false;
+
+        // We know that the room never started if the rounds itself has not started and we passed the first specified 10 mins
+        [NotMapped]
+        public bool neverStarted => RoomState != null && !RoomState.RoundStartTime.HasValue && ScheduledAt.HasValue &&
+            DateTime.UtcNow > ScheduledAt.Value.AddMinutes(RoomConstants.TheRoomIsValidFor);
+
+        [NotMapped]
+        public RoomState? RoomState => RoomStateJson != null
+            ? JsonSerializer.Deserialize<RoomState>(RoomStateJson.RootElement.GetRawText())
+            : null;
+
+        public bool IsArchived(string userId)
+        {
+            return FinishedAt < DateTime.UtcNow || neverStarted ||
+            // room started but everyone left
+            (
+                !RoomParticipants
+                .Where(rp => rp.UserId == userId && rp.RoomId == Id)
+                .Any(rp => rp.RoomParticipantEvents
+                    .Any(rpe => !rpe.Left))
+            );
+        }
+
+        public bool IsInProgress(string userId)
+        {
+            return StartedAt != null && FinishedAt == null && RoomParticipants
+                .Where(rp => rp.UserId == userId && rp.RoomId == Id)
+                .Any(rp => rp.RoomParticipantEvents.Any(rpe => !rpe.Left));
+        }
+
+        // [NotMapped]
+        // public DateTime? EndTime
+        // {
+        //     get
+        //     {
+        //         if (RoomStateDeserialized == null || !RoomStateDeserialized.RoundStartTime.HasValue)
+        //         {
+        //             return null;
+        //         }
+        //         else
+        //         {
+        //             return RoomStateDeserialized.RoundStartTime.Value.AddMinutes(RoomConstants.TotalRoundsDuration);
+        //         }
+        //     }
+        // }
     }
 }

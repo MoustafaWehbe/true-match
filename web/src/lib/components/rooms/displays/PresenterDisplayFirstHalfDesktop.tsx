@@ -43,6 +43,7 @@ const PresenterDisplayFirstHalfDesktop = ({
     pauseCurrentRound,
     skipCurrentRound,
     startRounds,
+    resumeCurrentRound,
   } = useRound();
 
   if (!rounds) {
@@ -110,6 +111,7 @@ const PresenterDisplayFirstHalfDesktop = ({
                   currentRound={currentRound}
                   isPaused={isPaused}
                   pauseRound={pauseCurrentRound}
+                  resumeRound={resumeCurrentRound}
                   skipRound={skipCurrentRound}
                 />
               </Flex>
