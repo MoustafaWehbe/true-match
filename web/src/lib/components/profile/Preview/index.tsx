@@ -204,6 +204,14 @@ const PreviewProfile = () => {
                         <Box key={desc + "" + index}>
                           <Text color={textColor}>
                             {desc.name && <b>{desc.name} </b>}
+                            {selectedDesc.singleValue && (
+                              <Flex gap={1}>
+                                <Text>{selectedDesc.singleValue}</Text>
+                                <Text>
+                                  {desc.measurableDetails?.unitOfMeasure}
+                                </Text>
+                              </Flex>
+                            )}
                             <Wrap spacing={2} justify={"start"} mt={2}>
                               {selectedDesc.choicesIds?.map(
                                 (choiceId, index) => {
