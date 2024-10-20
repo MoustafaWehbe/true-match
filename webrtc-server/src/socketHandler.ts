@@ -2,7 +2,7 @@
 import { Server as SocketIOServer, Socket } from "socket.io";
 
 import { socketEventTypes } from "@dapp/shared/src/types/custom";
-import { RoomState } from "@dapp/shared/src/types/openApiGen";
+import { RoomState, UserDto } from "@dapp/shared/src/types/openApiGen";
 
 import { roomService } from "./services";
 
@@ -67,6 +67,7 @@ class SocketHandler {
     socket: Socket
   ) {
     const token = socket.handshake.auth.token;
+    const user = socket.data.user as UserDto;
     try {
       const room = await roomService.getRoomById(token, roomId);
       if (room) {
@@ -76,7 +77,10 @@ class SocketHandler {
         }
         socket.join(roomId.toString());
         // notify everyone that this user has joined
-        socket.broadcast.to(roomId.toString()).emit("user-joined", socket.id);
+        socket.broadcast.to(roomId.toString()).emit("user-joined", {
+          userToSignal: socket.id,
+          user,
+        } as socketEventTypes.UserJoinedPayload);
         // send the current room state to this user
         socket.emit("room-state", room.data?.roomState);
       } else {
@@ -88,8 +92,13 @@ class SocketHandler {
     }
   }
 
-  private handleOffer(payload: socketEventTypes.OfferPayload, _socket: Socket) {
-    this.io.to(payload.targetSocketId).emit("offer", payload);
+  private handleOffer(payload: socketEventTypes.OfferPayload, socket: Socket) {
+    this.io
+      .to(payload.targetSocketId)
+      .emit("offer-produced", {
+        ...payload,
+        user: socket.data.user,
+      } as socketEventTypes.OfferProducedPayload);
   }
 
   private handleAnswer(

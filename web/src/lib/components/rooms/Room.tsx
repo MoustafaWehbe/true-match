@@ -2,11 +2,13 @@
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Box, Heading, useToast } from "@chakra-ui/react";
+import { Box, useToast } from "@chakra-ui/react";
 
 import { socketEventTypes } from "@dapp/shared/src/types/custom";
+import { UserDto } from "@dapp/shared/src/types/openApiGen";
 
 import PresenterDisplay from "./displays/PresenterDisplay";
+import WatcherDisplay from "./displays/WatcherDisplay";
 
 import { getRoomById } from "~/lib/state/room/roomSlice";
 import {
@@ -18,12 +20,16 @@ import {
 import { AppDispatch, RootState } from "~/lib/state/store";
 import { WebRTCHandler } from "~/lib/utils/webrtc/WebRTCHandler";
 
+export interface PeerItem {
+  peerID: string;
+  peer: RTCPeerConnection;
+  user: UserDto;
+}
+
 const Room = ({ roomId }: { roomId: string }) => {
   const localVideoRef = useRef<HTMLVideoElement>(null);
   const webRTCHandler = useRef<WebRTCHandler | null>(null);
-  const [peers, setPeers] = useState<
-    { peerID: string; peer: RTCPeerConnection }[]
-  >([]);
+  const [peers, setPeers] = useState<PeerItem[]>([]);
 
   const { activeRoom } = useSelector((state: RootState) => state.room);
   const { user } = useSelector((state: RootState) => state.user);
@@ -112,8 +118,7 @@ const Room = ({ roomId }: { roomId: string }) => {
         <PresenterDisplay peers={peers} localVideoRef={localVideoRef} />
       ) : (
         <Box position="relative" width="full">
-          <Heading as={"h2"}>Viewer</Heading>
-          <PresenterDisplay peers={peers} localVideoRef={localVideoRef} />
+          <WatcherDisplay peers={peers} localVideoRef={localVideoRef} />
         </Box>
       )}
     </Box>

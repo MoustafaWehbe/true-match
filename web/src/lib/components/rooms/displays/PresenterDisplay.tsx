@@ -10,13 +10,15 @@ import {
 
 import AnimatedHeart from "../../shared/AnimatedHeart";
 import PeerVideo from "../PeerVideo";
+import { PeerItem } from "../Room";
 
 import PresenterMainDisplay from "./PresenterMainDisplay";
 
 import useRound from "~/lib/hooks/useRound";
+import { calculateAge } from "~/lib/utils/date/date";
 
 interface PresenterDisplayProps {
-  peers: { peerID: string; peer: RTCPeerConnection }[];
+  peers: PeerItem[];
   localVideoRef: React.RefObject<HTMLVideoElement>;
 }
 
@@ -187,8 +189,14 @@ const PresenterDisplay = ({ peers, localVideoRef }: PresenterDisplayProps) => {
                     fontWeight={"bold"}
                     color={"white"}
                   >
-                    <Box>My name is</Box>
-                    <Box>My age is</Box>
+                    <Box>{peer.user.firstName}</Box>
+                    <Box>
+                      {calculateAge(
+                        new Date(peer.user?.userProfile?.birthDate!)
+                      )}
+                    </Box>
+                    {/* <Box>My name is</Box> */}
+                    {/* <Box>My age is</Box> */}
                   </Flex>
                   <PeerVideo key={index} peer={peer.peer} />
                   {/* <video

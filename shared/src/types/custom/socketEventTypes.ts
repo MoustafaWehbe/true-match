@@ -1,4 +1,8 @@
-import { RoomContentDto, RoomState } from "@dapp/shared/src/types/openApiGen";
+import {
+  RoomContentDto,
+  RoomState,
+  UserDto,
+} from "@dapp/shared/src/types/openApiGen";
 
 interface JoinRoomPayload {
   roomId: number;
@@ -26,6 +30,19 @@ interface IceCandidatePayload {
   candidate: RTCIceCandidate;
 }
 
+interface UserJoinedPayload {
+  userToSignal: string; // socketId
+  user: UserDto;
+}
+
+interface OfferProducedPayload {
+  targetSocketId: string;
+  offerSenderSocketId: string;
+  sdp: RTCSessionDescription;
+  user: UserDto;
+}
+
+// round events
 interface StartRoundPayload {
   roomId: number;
   rounds?: Array<RoomContentDto>;
@@ -68,6 +85,8 @@ interface RoundSkipedPayload {
   roomState: RoomState;
 }
 
+// end round events
+
 export type {
   JoinRoomPayload,
   LeaveRoomPayload,
@@ -84,4 +103,6 @@ export type {
   RoundsStartedPayload,
   RoundSkipedPayload,
   SkipRoundPayload,
+  UserJoinedPayload,
+  OfferProducedPayload,
 };

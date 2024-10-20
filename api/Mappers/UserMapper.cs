@@ -10,7 +10,6 @@ namespace api.Mappers
             return new UserDto
             {
                 Id = userModel.Id,
-                Rooms = userModel.Rooms,
                 Media = userModel.Media,
                 UserProfile = userModel.UserProfile?.ToUserProfileDto(),
                 FirstName = userModel.FirstName,

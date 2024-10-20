@@ -36,7 +36,7 @@ namespace api.Repository
                 .Select(hr => hr.RoomId)
                 .ToListAsync();
 
-            return await _context.Rooms
+            return await Task.Run(() => _context.Rooms
                 .IncludeRoomDetails()
                 .FindAllRoomByStatus(query.Status, userId)
                 .Where(r => r.UserId != userId && !blockedUsersIds.Contains(r.UserId) &&
@@ -45,7 +45,7 @@ namespace api.Repository
                 .OrderByDescending(r => r.CreatedAt)
                 .Skip((query.PageNumber - 1) * query.PageSize)
                 .Take(query.PageSize)
-                .ToListAsync();
+                .ToList());
         }
 
         public async Task<List<Room>> GetMyRoomsAsync(MyRoomQueryObject query, string userId)
@@ -91,12 +91,15 @@ namespace api.Repository
                 .Select(hr => hr.RoomId)
                 .ToListAsync();
 
-            return await _context.Rooms
-                .FindNotDeleted()
-                .FindAllRoomByStatus(query.Status, userId)
+            var filteredQuery = _context.Rooms
                 .Where(r => r.UserId != userId && !blockedUsersIds.Contains(r.UserId)
                     && !hiddenRoomIds.Contains(r.Id))
-                .CountAsync();
+                .FindNotDeleted()
+                .FindAllRoomByStatus(query.Status, userId);
+
+            var rooms = filteredQuery.AsEnumerable();
+
+            return await Task.FromResult(rooms.Count());
         }
 
         public async Task<int> GetTotalMyRoomsAsync(MyRoomQueryObject query, string userId)

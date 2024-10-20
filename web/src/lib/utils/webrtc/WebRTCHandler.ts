@@ -1,14 +1,13 @@
 import { socketEventTypes } from "@dapp/shared/src/types/custom";
 
+import { PeerItem } from "~/lib/components/rooms/Room";
 import { socket } from "~/lib/utils/socket/socket";
 
 export class WebRTCHandler {
   private stream: MediaStream | null = null;
-  private peers: { peerID: string; peer: RTCPeerConnection }[] = [];
+  private peers: PeerItem[] = [];
   private roomId: string;
-  private onPeersChanged: (
-    peers: { peerID: string; peer: RTCPeerConnection }[]
-  ) => void;
+  private onPeersChanged: (peers: PeerItem[]) => void;
   private onRoundsStarted: (
     payload: socketEventTypes.RoundsStartedPayload
   ) => void;
@@ -25,9 +24,7 @@ export class WebRTCHandler {
   constructor(
     roomId: string,
     callbacks: {
-      onPeersChanged: (
-        peers: { peerID: string; peer: RTCPeerConnection }[]
-      ) => void;
+      onPeersChanged: (peers: PeerItem[]) => void;
       onRoundsStarted: (payload: socketEventTypes.RoundsStartedPayload) => void;
       onTimerUpdated: (payload: socketEventTypes.TimerUpdatedPayload) => void;
       onRoundPaused: (payload: socketEventTypes.RoundPausedPayload) => void;
@@ -71,7 +68,7 @@ export class WebRTCHandler {
     } as socketEventTypes.LeaveRoomPayload);
 
     socket.off("user-joined", this.handleUserJoined);
-    socket.off("offer", this.handleIncomingOffer);
+    socket.off("offer-produced", this.handleIncomingOffer);
     socket.off("answer", this.handleAnswer);
     socket.off("ice-candidate", this.handleICECandidate);
 
@@ -113,24 +110,26 @@ export class WebRTCHandler {
     return peer;
   }
 
-  private handleUserJoined(userToSignal: string): void {
-    const peer = this.createPeerConnection(userToSignal);
+  private handleUserJoined(payload: socketEventTypes.UserJoinedPayload): void {
+    const peer = this.createPeerConnection(payload.userToSignal);
 
     peer.createOffer().then((offer) => {
       peer.setLocalDescription(offer).then(() => {
         socket.emit("offer", {
-          targetSocketId: userToSignal,
+          targetSocketId: payload.userToSignal,
           offerSenderSocketId: socket.id!,
           sdp: peer.localDescription,
         } as socketEventTypes.OfferPayload);
       });
     });
 
-    this.peers.push({ peerID: userToSignal, peer });
+    this.peers.push({ peerID: payload.userToSignal, peer, user: payload.user });
     this.updatePeers();
   }
 
-  private handleIncomingOffer(payload: socketEventTypes.OfferPayload): void {
+  private handleIncomingOffer(
+    payload: socketEventTypes.OfferProducedPayload
+  ): void {
     const peer = this.createPeerConnection(payload.offerSenderSocketId);
     peer
       .setRemoteDescription(new RTCSessionDescription(payload.sdp))
@@ -146,7 +145,11 @@ export class WebRTCHandler {
         });
       });
 
-    this.peers.push({ peerID: payload.offerSenderSocketId, peer });
+    this.peers.push({
+      peerID: payload.offerSenderSocketId,
+      peer,
+      user: payload.user,
+    });
     this.updatePeers();
   }
 
@@ -166,11 +169,12 @@ export class WebRTCHandler {
       const candidate = new RTCIceCandidate(payload.candidate);
       item.peer.addIceCandidate(candidate);
     }
+    // TODO: do we need to update peers here???
   }
 
   private registerSocketEvents() {
     socket.on("user-joined", this.handleUserJoined);
-    socket.on("offer", this.handleIncomingOffer);
+    socket.on("offer-produced", this.handleIncomingOffer);
     socket.on("answer", this.handleAnswer);
     socket.on("ice-candidate", this.handleICECandidate);
 

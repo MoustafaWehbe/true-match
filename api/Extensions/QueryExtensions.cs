@@ -10,7 +10,7 @@ namespace api.Extensions
             switch (roomStatus)
             {
                 case AllRoomStatus.InProgress:
-                    return query.Where(r => r.IsInProgress(userId));
+                    return query.AsEnumerable().Where(r => r.IsInProgress(userId)).AsQueryable();
                 case AllRoomStatus.Coming:
                     return query.Where(r => r.StartedAt == null);
                 case AllRoomStatus.InterestedIn:

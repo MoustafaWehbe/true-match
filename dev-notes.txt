@@ -18,3 +18,9 @@ For the api running inside docker to access db running on host machine:
     "DefaultConnection": "Server=127.0.0.1;Port=5434;Database=DAPP;User Id=postgres;Password=postgres;" 
     to:
     "DefaultConnection": "Host=host.docker.internal;Port=5434;Database=DAPP;User Id=postgres;Password=postgres;"
+
+todos:
+- when the timer of a round finishes, it moves to the next round, but the timer stop
+- in the watcher display, make sure all videos to the side have the same size.
+- random questions are not showing
+- 
