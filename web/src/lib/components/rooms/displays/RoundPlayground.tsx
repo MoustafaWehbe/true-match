@@ -28,13 +28,12 @@ const RoundPlayground = ({
   }
   return (
     <Flex
-      top="0"
-      left="0"
       color="white"
       direction="column"
       align="start"
       justify="center"
       borderRadius="lg"
+      maxWidth={{ base: "95vw", md: "65vw" }}
     >
       <Flex justifyContent={"center"} alignItems={"start"} gap={2}>
         <Text fontSize={{ base: "md", lg: "2xl" }} mb={2} fontWeight={"bold"}>

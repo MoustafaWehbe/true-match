@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import {
   Box,
@@ -12,7 +13,7 @@ import { RootState } from "~/lib/state/store";
 interface TimerProps {
   progressCircleSize: number;
   progressCircleThickness: number;
-  currentRound: number | null;
+  currentRound?: number;
   timer: number;
 }
 
@@ -29,11 +30,18 @@ const Timer = ({
   timer,
 }: TimerProps) => {
   const { roomContent: rounds } = useSelector((state: RootState) => state.room);
+  const alarmSoundRef = useRef<HTMLAudioElement | null>(null);
+
+  useEffect(() => {
+    if (timer === 12 && alarmSoundRef.current) {
+      alarmSoundRef.current.play();
+    }
+  }, [timer]);
 
   return (
     rounds &&
-    currentRound !== null &&
-    rounds[currentRound]?.duration && (
+    currentRound !== undefined &&
+    rounds[currentRound!]?.duration && (
       <Box
         display="flex"
         alignItems="center"
@@ -44,6 +52,11 @@ const Timer = ({
         overflow="hidden"
         position={"relative"}
       >
+        <audio
+          ref={alarmSoundRef}
+          src="/sounds/10-sec-reminder.m4a"
+          preload="auto"
+        />
         <Box
           position="absolute"
           top="0"
@@ -66,12 +79,7 @@ const Timer = ({
           zIndex="1" // Ensure it's above the background and glow
         >
           <CircularProgressLabel>
-            <Text
-              fontSize="lg"
-              fontWeight="bold"
-              color="pink.600"
-              fontFamily="'Pacifico', cursive"
-            >
+            <Text fontSize="lg" fontWeight="bold" color="pink.600">
               {timer}s
             </Text>
           </CircularProgressLabel>

@@ -316,15 +316,17 @@ class SocketHandler {
     clearInterval(previousTimer);
     previousTimer?.unref();
     let theEnd = false;
+    let goToNextRound = false;
     const timer = setInterval(async () => {
       roomState.timeRemainingForRoundBeforePause =
         roomState.timeRemainingForRoundBeforePause! - 1;
-      if (roomState.timeRemainingForRoundBeforePause <= 1) {
+      if (roomState.timeRemainingForRoundBeforePause < 1) {
         clearInterval(timer!);
         if (roomState.currentRound! < roomState.rounds?.length! - 1) {
-          roomState.currentRound! = roomState.currentRound! + 1;
+          roomState.currentRound = roomState.currentRound! + 1;
           roomState.timeRemainingForRoundBeforePause =
-            roomState.rounds![roomState.currentRound! + 1].duration!;
+            roomState.rounds![roomState.currentRound].duration!;
+          goToNextRound = true;
         } else {
           // reset round
           roomState.currentRound = null;
@@ -347,6 +349,9 @@ class SocketHandler {
         this.io.in(roomId.toString()).emit("timer-updated", {
           roomState,
         } as socketEventTypes.TimerUpdatedPayload);
+        if (goToNextRound) {
+          this.setTimer(roomId, roomState, token, socketId);
+        }
       }
     }, 1000);
 

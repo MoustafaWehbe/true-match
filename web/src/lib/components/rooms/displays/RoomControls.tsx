@@ -48,16 +48,18 @@ const RoomControls = ({
       padding={10}
     >
       <Button
-        aria-label="skip round"
+        aria-label="toggle mic"
         variant="outline"
         width={"205px"}
-        colorScheme="red"
-        leftIcon={<FaForward />}
-        onClick={skipRound}
+        colorScheme="blue"
+        leftIcon={isPaused ? <FaPlay /> : <FaPause />}
+        onClick={() => (isPaused ? resumeRound() : pauseRound())}
         size={"lg"}
-        isDisabled={currentRound === null || currentRound >= rounds.length - 1}
+        isDisabled={
+          currentRound === undefined || currentRound! >= rounds.length - 1
+        }
       >
-        Skip Round
+        {isPaused ? "Resume Round" : "Pause Round"}
       </Button>
       <Box>
         <VideoControls
@@ -68,16 +70,18 @@ const RoomControls = ({
         />
       </Box>
       <Button
-        aria-label="toggle mic"
+        aria-label="skip round"
         variant="outline"
         width={"205px"}
-        colorScheme="blue"
-        leftIcon={isPaused ? <FaPlay /> : <FaPause />}
-        onClick={() => (isPaused ? resumeRound() : pauseRound())}
+        colorScheme="red"
+        leftIcon={<FaForward />}
+        onClick={skipRound}
         size={"lg"}
-        isDisabled={currentRound === null || currentRound >= rounds.length - 1}
+        isDisabled={
+          currentRound === undefined || currentRound! >= rounds.length - 1
+        }
       >
-        {isPaused ? "Resume Round" : "Pause Round"}
+        Skip Round
       </Button>
     </Box>
   );
