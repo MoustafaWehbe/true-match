@@ -1,4 +1,3 @@
-/* eslint-disable no-param-reassign */
 import { Server as SocketIOServer, Socket } from "socket.io";
 
 import { socketEventTypes } from "@dapp/shared/src/types/custom";
@@ -59,6 +58,12 @@ class SocketHandler {
       socket.on("skip-round", (payload: socketEventTypes.SkipRoundPayload) =>
         this.handleSkipRound(payload, socket)
       );
+
+      socket.on(
+        "go-to-next-question",
+        (payload: socketEventTypes.GoToNextQuestionPayload) =>
+          this.handleGoToNextQuestion(payload, socket)
+      );
     });
   }
 
@@ -93,12 +98,10 @@ class SocketHandler {
   }
 
   private handleOffer(payload: socketEventTypes.OfferPayload, socket: Socket) {
-    this.io
-      .to(payload.targetSocketId)
-      .emit("offer-produced", {
-        ...payload,
-        user: socket.data.user,
-      } as socketEventTypes.OfferProducedPayload);
+    this.io.to(payload.targetSocketId).emit("offer-produced", {
+      ...payload,
+      user: socket.data.user,
+    } as socketEventTypes.OfferProducedPayload);
   }
 
   private handleAnswer(
@@ -147,6 +150,7 @@ class SocketHandler {
           currentRound: 0,
           isRoundPaused: false,
           rounds: payload.rounds,
+          timeRemainingForRoundBeforePause: payload.rounds![0].duration!,
         };
         this.io.in(payload.roomId.toString()).emit("rounds-started", {
           roomState: finalRoomState,
@@ -157,13 +161,7 @@ class SocketHandler {
           { roomState: finalRoomState },
           room?.data?.id!
         );
-        this.setTimer(
-          room.data.id!,
-          finalRoomState,
-          finalRoomState.rounds![finalRoomState.currentRound!].duration!,
-          token,
-          socket.id
-        );
+        this.setTimer(room.data.id!, finalRoomState, token, socket.id);
       } else {
         throw Error("Could not find room");
       }
@@ -228,13 +226,7 @@ class SocketHandler {
           { roomState: finalRoomState },
           room?.data?.id!
         );
-        this.setTimer(
-          room.data.id!,
-          finalRoomState,
-          finalRoomState.timeRemainingForRoundBeforePause!,
-          token,
-          socket.id
-        );
+        this.setTimer(room.data.id!, finalRoomState, token, socket.id);
       } else {
         throw Error("Could not find room");
       }
@@ -270,13 +262,7 @@ class SocketHandler {
           { roomState: finalRoomState },
           room?.data?.id!
         );
-        this.setTimer(
-          room.data.id!,
-          finalRoomState,
-          finalRoomState.timeRemainingForRoundBeforePause!,
-          token,
-          socket.id
-        );
+        this.setTimer(room.data.id!, finalRoomState, token, socket.id);
       } else {
         throw Error("Could not find room");
       }
@@ -285,11 +271,44 @@ class SocketHandler {
     }
   }
 
+  private async handleGoToNextQuestion(
+    payload: socketEventTypes.GoToNextQuestionPayload,
+    socket: Socket
+  ) {
+    const token = socket.handshake.auth.token;
+    try {
+      const room = await roomService.getRoomById(token, payload.roomId);
+      if (room?.data) {
+        const existingRoomState = room.data.roomState as RoomState;
+        if (
+          existingRoomState.questionIndex! <
+          existingRoomState.roundQuestions?.length! - 1
+        ) {
+          existingRoomState.questionIndex =
+            existingRoomState.questionIndex! + 1;
+          this.io.in(payload.roomId.toString()).emit("next-question-clicked", {
+            roomState: existingRoomState,
+          } as socketEventTypes.NextQuestionClickedPayload);
+        } else {
+          this.handleSkipRound({ roomId: payload.roomId }, socket);
+        }
+        await roomService.updateRoom(
+          token,
+          { roomState: existingRoomState },
+          room?.data?.id!
+        );
+      } else {
+        throw Error("Could not find room");
+      }
+    } catch (e) {
+      console.error("failed to go to next question..", e);
+    }
+  }
+
   // helpers
   private async setTimer(
     roomId: number,
     roomState: RoomState,
-    timeRemaining: number,
     token: string,
     socketId: string
   ) {
@@ -298,20 +317,17 @@ class SocketHandler {
     previousTimer?.unref();
     let theEnd = false;
     const timer = setInterval(async () => {
-      timeRemaining = timeRemaining - 1;
-      roomState.timeRemainingForRoundBeforePause = timeRemaining - 1;
-      if (timeRemaining <= 1) {
+      roomState.timeRemainingForRoundBeforePause =
+        roomState.timeRemainingForRoundBeforePause! - 1;
+      if (roomState.timeRemainingForRoundBeforePause <= 1) {
         clearInterval(timer!);
         if (roomState.currentRound! < roomState.rounds?.length! - 1) {
           roomState.currentRound! = roomState.currentRound! + 1;
-          timeRemaining =
-            roomState.rounds![roomState.currentRound! + 1].duration!;
           roomState.timeRemainingForRoundBeforePause =
             roomState.rounds![roomState.currentRound! + 1].duration!;
         } else {
           // reset round
           roomState.currentRound = null;
-          timeRemaining = 0;
           roomState.timeRemainingForRoundBeforePause = 0;
           roomState.isRoundPaused = false;
           theEnd = true;

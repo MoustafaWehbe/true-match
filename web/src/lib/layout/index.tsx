@@ -3,7 +3,7 @@
 import { type ReactNode, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 
-import { AUTH_ROUTES, ONBOARDING_ROUTE } from "../consts";
+import { AUTH_ROUTES, ONBOARDING_ROUTE, ROOM_ROUTE } from "../consts";
 import useProfileGuard from "../hooks/useProfileGuard";
 import { AppDispatch } from "../state/store";
 import { fetchUser } from "../state/user/userSlice";
@@ -11,6 +11,7 @@ import { fetchUser } from "../state/user/userSlice";
 import AuthLayout from "./AuthLayout";
 import MainLayout from "./MainLayout";
 import OnboardingLayout from "./OnboardingLayout";
+import RoomLayout from "./RoomLayout";
 
 export type LayoutProps = {
   children: ReactNode;
@@ -40,6 +41,8 @@ const Layout = ({ children }: LayoutProps) => {
       <AuthLayout>{children}</AuthLayout>
     ) : window.location.pathname.slice(1).includes(ONBOARDING_ROUTE) ? (
       <OnboardingLayout>{children}</OnboardingLayout>
+    ) : /^\/rooms\/\d+$/.test(window.location.pathname) ? (
+      <RoomLayout>{children}</RoomLayout>
     ) : (
       <MainLayout>{children}</MainLayout>
     );

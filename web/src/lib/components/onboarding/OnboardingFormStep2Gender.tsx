@@ -146,7 +146,7 @@ const OnboardingFormStep2Gender = ({
             </Stack>
           </ModalBody>
           <ModalFooter>
-            <Button colorScheme="blue" onClick={onAddMoreGendersClose}>
+            <Button colorScheme="teal" onClick={onAddMoreGendersClose}>
               Done
             </Button>
           </ModalFooter>

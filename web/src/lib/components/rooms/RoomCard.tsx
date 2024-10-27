@@ -17,6 +17,7 @@ import { useRouter } from "next/navigation";
 
 import { RoomDto } from "@dapp/shared/src/types/openApiGen";
 
+import GradientButton from "../shared/buttons/GradientButton";
 import CustomTooltip from "../shared/CutsomTooltip";
 
 import DeleteRoomButton from "./DeleteRoomButton";
@@ -244,17 +245,9 @@ const RoomCard = ({
             right: "10px",
           }}
         >
-          <Button
-            size="md"
-            bgGradient="linear(to-r, teal.500, green.500)"
-            color="white"
-            _hover={{ bgGradient: "linear(to-r, teal.600, green.600)" }}
-            _active={{ bgGradient: "linear(to-r, teal.700, green.700)" }}
-            boxShadow="xl"
-            onClick={onStart}
-          >
+          <GradientButton size="md" boxShadow="xl" onClick={onStart}>
             Start Room
-          </Button>
+          </GradientButton>
         </motion.div>
       )}
     </Box>

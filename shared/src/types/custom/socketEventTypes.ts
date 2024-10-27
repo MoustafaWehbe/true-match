@@ -57,6 +57,10 @@ interface SkipRoundPayload {
   roomId: number;
 }
 
+interface GoToNextQuestionPayload {
+  roomId: number;
+}
+
 interface ResumeRoundPayload {
   roomId: number;
 }
@@ -85,6 +89,10 @@ interface RoundSkipedPayload {
   roomState: RoomState;
 }
 
+interface NextQuestionClickedPayload {
+  roomState: RoomState;
+}
+
 // end round events
 
 export type {
@@ -105,4 +113,6 @@ export type {
   SkipRoundPayload,
   UserJoinedPayload,
   OfferProducedPayload,
+  GoToNextQuestionPayload,
+  NextQuestionClickedPayload,
 };

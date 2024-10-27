@@ -64,11 +64,6 @@ const Watcher = ({ peers, localVideoRef }: WatcherProps) => {
     return peers.find((peer) => peer.user.id === activeRoom?.user?.id);
   }, [activeRoom?.user?.id, peers]);
 
-  console.log({
-    activeRoom,
-    peers,
-  });
-
   if (!rounds) {
     return null;
   }

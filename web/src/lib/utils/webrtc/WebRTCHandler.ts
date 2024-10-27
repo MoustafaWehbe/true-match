@@ -20,6 +20,9 @@ export class WebRTCHandler {
   ) => void;
   private onRoundSkiped: (payload: socketEventTypes.RoundSkipedPayload) => void;
   private onRoundsEnded: (payload: socketEventTypes.RoundsEndedPayload) => void;
+  private onGoToNextQuestion: (
+    payload: socketEventTypes.NextQuestionClickedPayload
+  ) => void;
 
   constructor(
     roomId: string,
@@ -31,6 +34,9 @@ export class WebRTCHandler {
       onRoundResumed: (payload: socketEventTypes.RoundResumedPayload) => void;
       onRoundSkiped: (payload: socketEventTypes.RoundSkipedPayload) => void;
       onRoundsEnded: (payload: socketEventTypes.RoundsEndedPayload) => void;
+      onGoToNextQuestion: (
+        payload: socketEventTypes.NextQuestionClickedPayload
+      ) => void;
     }
   ) {
     this.roomId = roomId;
@@ -42,6 +48,7 @@ export class WebRTCHandler {
     this.onRoundResumed = callbacks.onRoundResumed;
     this.onRoundSkiped = callbacks.onRoundSkiped;
     this.onRoundsEnded = callbacks.onRoundsEnded;
+    this.onGoToNextQuestion = callbacks.onGoToNextQuestion;
 
     this.handleUserJoined = this.handleUserJoined.bind(this);
     this.handleIncomingOffer = this.handleIncomingOffer.bind(this);
@@ -185,5 +192,6 @@ export class WebRTCHandler {
     socket.on("round-resumed", this.onRoundResumed);
     socket.on("round-skiped", this.onRoundSkiped);
     socket.on("rounds-ended", this.onRoundsEnded);
+    socket.on("next-question-clicked", this.onGoToNextQuestion);
   }
 }

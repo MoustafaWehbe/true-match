@@ -5,18 +5,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { Box, useToast } from "@chakra-ui/react";
 
 import { socketEventTypes } from "@dapp/shared/src/types/custom";
-import { UserDto } from "@dapp/shared/src/types/openApiGen";
+import { RoomState, UserDto } from "@dapp/shared/src/types/openApiGen";
 
 import PresenterDisplay from "./displays/PresenterDisplay";
 import WatcherDisplay from "./displays/WatcherDisplay";
 
-import { getRoomById } from "~/lib/state/room/roomSlice";
 import {
-  pauseRound,
-  resumeRound,
-  setTimer,
-  startRound,
-} from "~/lib/state/round/roundSlice";
+  getRoomById,
+  updateActiveRoomStatePartially,
+} from "~/lib/state/room/roomSlice";
 import { AppDispatch, RootState } from "~/lib/state/store";
 import { WebRTCHandler } from "~/lib/utils/webrtc/WebRTCHandler";
 
@@ -42,35 +39,70 @@ const Room = ({ roomId }: { roomId: string }) => {
 
   const onRoundsStarted = useCallback(
     (payload: socketEventTypes.RoundsStartedPayload) => {
-      dispatch(startRound(0));
-      dispatch(setTimer(payload.roomState.rounds![0].duration!));
+      dispatch(
+        updateActiveRoomStatePartially({
+          currentRound: payload.roomState.currentRound,
+          timeRemainingForRoundBeforePause:
+            payload.roomState.timeRemainingForRoundBeforePause,
+        } as RoomState)
+      );
     },
     [dispatch]
   );
   const onTimerUpdated = useCallback(
     (payload: socketEventTypes.TimerUpdatedPayload) => {
-      dispatch(setTimer(payload.roomState.timeRemainingForRoundBeforePause!));
-      dispatch(startRound(payload.roomState.currentRound!));
+      dispatch(
+        updateActiveRoomStatePartially({
+          currentRound: payload.roomState.currentRound,
+          timeRemainingForRoundBeforePause:
+            payload.roomState.timeRemainingForRoundBeforePause,
+        } as RoomState)
+      );
     },
     [dispatch]
   );
   const onRoundPaused = useCallback(
-    (_payload: socketEventTypes.RoundPausedPayload) => {
-      dispatch(pauseRound());
+    (payload: socketEventTypes.RoundPausedPayload) => {
+      dispatch(
+        updateActiveRoomStatePartially({
+          isRoundPaused: payload.roomState.isRoundPaused,
+        } as RoomState)
+      );
     },
     [dispatch]
   );
   const onRoundResumed = useCallback(
-    (_payload: socketEventTypes.RoundResumedPayload) => {
-      dispatch(resumeRound());
+    (payload: socketEventTypes.RoundResumedPayload) => {
+      dispatch(
+        updateActiveRoomStatePartially({
+          isRoundPaused: payload.roomState.isRoundPaused,
+        } as RoomState)
+      );
     },
     [dispatch]
   );
   const onRoundSkiped = useCallback(
     (payload: socketEventTypes.RoundSkipedPayload) => {
-      dispatch(setTimer(payload.roomState.timeRemainingForRoundBeforePause!));
-      dispatch(startRound(payload.roomState.currentRound!));
-      dispatch(resumeRound());
+      dispatch(
+        updateActiveRoomStatePartially({
+          timeRemainingForRoundBeforePause:
+            payload.roomState.timeRemainingForRoundBeforePause,
+          currentRound: payload.roomState.currentRound,
+          isRoundPaused: payload.roomState.isRoundPaused,
+        } as RoomState)
+      );
+    },
+    [dispatch]
+  );
+  const onGoToNextQuestion = useCallback(
+    (payload: socketEventTypes.NextQuestionClickedPayload) => {
+      console.log("onGoToNextQuestion: ", payload.roomState);
+      dispatch(
+        updateActiveRoomStatePartially({
+          currentRound: payload.roomState.currentRound,
+          questionIndex: payload.roomState.questionIndex,
+        } as RoomState)
+      );
     },
     [dispatch]
   );
@@ -94,6 +126,7 @@ const Room = ({ roomId }: { roomId: string }) => {
       onRoundSkiped,
       onRoundsEnded,
       onRoundsStarted,
+      onGoToNextQuestion,
       onTimerUpdated,
       onPeersChanged: setPeers,
     });
@@ -109,11 +142,12 @@ const Room = ({ roomId }: { roomId: string }) => {
     onRoundsEnded,
     onRoundsStarted,
     onTimerUpdated,
+    onGoToNextQuestion,
     roomId,
   ]);
 
   return (
-    <Box height={{ base: "100%", lg: "calc(100vh - 60px - 75px)" }}>
+    <Box height="100%">
       {activeRoom?.user?.id === user?.id ? (
         <PresenterDisplay peers={peers} localVideoRef={localVideoRef} />
       ) : (

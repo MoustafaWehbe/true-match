@@ -343,6 +343,28 @@ const roomSlice = createSlice({
         );
       }
     },
+    updateSystemQuestions(state, action) {
+      if (state.activeRoom) {
+        if (state.activeRoom.roomState) {
+          state.activeRoom.roomState.roundQuestions = action.payload;
+        } else {
+          state.activeRoom.roomState = { roundQuestions: action.payload };
+        }
+      }
+    },
+    updateActiveRoomState(state, action) {
+      if (state.activeRoom) {
+        state.activeRoom.roomState = action.payload;
+      }
+    },
+    updateActiveRoomStatePartially(state, action) {
+      if (state.activeRoom) {
+        state.activeRoom.roomState = {
+          ...state.activeRoom.roomState,
+          ...action.payload,
+        };
+      }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -535,5 +557,8 @@ export const { clearRooms } = roomSlice.actions;
 export const { clearMyRooms } = roomSlice.actions;
 export const { removeRoomsByUserId } = roomSlice.actions;
 export const { removeRoomById } = roomSlice.actions;
+export const { updateSystemQuestions } = roomSlice.actions;
+export const { updateActiveRoomState } = roomSlice.actions;
+export const { updateActiveRoomStatePartially } = roomSlice.actions;
 
 export default roomSlice.reducer;

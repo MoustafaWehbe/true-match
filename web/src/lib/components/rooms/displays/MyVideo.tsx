@@ -1,30 +1,12 @@
 import { Box, Flex } from "@chakra-ui/react";
 
-import VideoControls from "../VideoControls";
-
 interface MyVideoProps {
-  onToggleVideo: () => void;
-  onToggleMic: () => void;
-  isMicOn: boolean;
-  isVideoOn: boolean;
   localVideoRef: React.RefObject<HTMLVideoElement>;
 }
 
-const MyVideo = ({
-  onToggleMic,
-  onToggleVideo,
-  isMicOn,
-  isVideoOn,
-  localVideoRef,
-}: MyVideoProps) => {
+const MyVideo = ({ localVideoRef }: MyVideoProps) => {
   return (
     <>
-      <VideoControls
-        onToggleMic={onToggleMic}
-        onToggleVideo={onToggleVideo}
-        isMicOn={isMicOn}
-        isVideoOn={isVideoOn}
-      />
       <Flex
         position={"absolute"}
         bottom={8}

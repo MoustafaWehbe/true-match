@@ -20,41 +20,29 @@ const VideoControls = ({
   onToggleVideo,
 }: VideoControlsProps) => {
   return (
-    <Stack
-      direction="row"
-      spacing={4}
-      // bottom={6}
-      position="absolute"
-      zIndex={1}
-      top={8}
-      right={8}
-      // left="50%"
-      // transform="translate(-50%, -50%)"
-    >
+    <Stack direction="row" spacing={4}>
       <IconButton
         onClick={onToggleMic}
         icon={isMicOn ? <FaMicrophone /> : <FaMicrophoneSlash />}
         variant="ghost"
-        width={"28px"}
-        size={"xs"}
-        height={"28px"}
-        bg="blackAlpha.700"
+        width={"48px"}
+        size={"md"}
+        height={"48px"}
+        bg="blackAlpha.600"
         color="white"
-        borderRadius="full"
-        _hover={{ bg: "blackAlpha.800" }}
+        _hover={{ bg: "blackAlpha.400" }}
         aria-label="toggle mic"
       />
       <IconButton
         onClick={onToggleVideo}
         icon={isVideoOn ? <FaVideo /> : <FaVideoSlash />}
         variant="ghost"
-        width={"28px"}
-        size={"xs"}
-        height={"28px"}
-        bg="blackAlpha.700"
+        width={"48px"}
+        size={"md"}
+        height={"48px"}
+        bg="blackAlpha.600"
         color="white"
-        borderRadius="full"
-        _hover={{ bg: "blackAlpha.800" }}
+        _hover={{ bg: "blackAlpha.400" }}
         aria-label="toggle video"
       />
     </Stack>

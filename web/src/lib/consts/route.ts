@@ -1,2 +1,3 @@
 export const AUTH_ROUTES = ["signup", "login"];
 export const ONBOARDING_ROUTE = "onboarding";
+export const ROOM_ROUTE = "rooms";

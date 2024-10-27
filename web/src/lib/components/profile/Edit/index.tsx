@@ -1,8 +1,10 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Box, Button, useToast } from "@chakra-ui/react";
+import { Box, useToast } from "@chakra-ui/react";
 
 import { SelectedDescriptor } from "@dapp/shared/src/types/openApiGen";
+
+import GradientButton from "../../shared/buttons/GradientButton";
 
 import BasicInfo, { BasicInfoType } from "./BasicInfo";
 import ImageSelector from "./ImageSelector";
@@ -97,19 +99,16 @@ const EditProfile = () => {
         setBasicFormData={setBasicFormData}
       />
       <ProfileDescriptors onSelect={onDescriptorChange} />
-      <Button
+      <GradientButton
         size="md"
-        bgGradient="linear(to-r, teal.500, green.500)"
         color="white"
-        _hover={{ bgGradient: "linear(to-r, teal.600, green.600)" }}
-        _active={{ bgGradient: "linear(to-r, teal.700, green.700)" }}
         boxShadow="xl"
         onClick={onSave}
         mt={4}
         float={"right"}
       >
         Save
-      </Button>
+      </GradientButton>
     </Box>
   );
 };

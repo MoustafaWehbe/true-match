@@ -12,8 +12,8 @@ const AnimatedHeart = () => {
   return (
     <Box
       as={FaHeart}
-      size="24px"
-      color="red"
+      size="28px"
+      color="pink.400"
       animation={`${heartbeat} 1.5s infinite`}
     />
   );

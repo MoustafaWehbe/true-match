@@ -17,7 +17,7 @@ interface Props {
   handleSelect: (option: Option) => void;
 }
 
-function CustomSelect({
+function CustomMenuButton({
   options,
   placeholder,
   selectedOption,
@@ -36,6 +36,7 @@ function CustomSelect({
         rightIcon={<ChevronDownIcon />}
         bg={bg}
         _hover={{ bg: hoverBg }}
+        _active={{ bg: hoverBg }}
         color={textColor}
         size={"sm"}
       >
@@ -59,4 +60,4 @@ function CustomSelect({
   );
 }
 
-export default CustomSelect;
+export default CustomMenuButton;

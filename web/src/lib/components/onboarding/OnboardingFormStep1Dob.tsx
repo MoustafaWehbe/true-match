@@ -52,8 +52,6 @@ function OnboardingFormStep1Dob({ onSubmit }: OnboardingFormStep1DobProps) {
 
   const bgColor = useColorModeValue("white", "gray.700");
   const textColor = useColorModeValue("gray.800", "whiteAlpha.900");
-  const buttonBgColor = useColorModeValue("pink.400", "pink.600");
-  const buttonTextColor = useColorModeValue("white", "gray.100");
   const boxShadow = useColorModeValue("lg", "dark-lg");
 
   return (
@@ -118,12 +116,7 @@ function OnboardingFormStep1Dob({ onSubmit }: OnboardingFormStep1DobProps) {
               </Box>
             )}
           </FormControl>
-          <Button
-            bg={buttonBgColor}
-            color={buttonTextColor}
-            type="submit"
-            _hover={{ bg: buttonBgColor }}
-          >
+          <Button colorScheme={"teal"} type="submit">
             Next
           </Button>
         </Stack>

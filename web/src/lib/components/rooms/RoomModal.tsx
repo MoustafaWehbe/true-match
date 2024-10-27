@@ -264,7 +264,7 @@ function RoomModal({
           </Box>
         </ModalBody>
         <ModalFooter>
-          <Button colorScheme="blue" mr={3} onClick={onClose}>
+          <Button colorScheme="gray" mr={3} onClick={onClose}>
             Close
           </Button>
           <Button

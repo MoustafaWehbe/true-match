@@ -8,7 +8,7 @@ interface StartRoundProps {
 const StartRound = ({ startRounds, isDisabled }: StartRoundProps) => {
   return (
     <Button
-      colorScheme="red"
+      colorScheme="pink"
       variant="outline"
       onClick={startRounds}
       float={"right"}

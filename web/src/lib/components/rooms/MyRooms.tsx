@@ -17,7 +17,8 @@ import { useRouter } from "next/navigation";
 
 import { MyRoomStatus, RoomDto } from "@dapp/shared/src/types/openApiGen";
 
-import CustomSelect, { Option } from "../shared/CustomSelect";
+import MenuButton, { Option } from "../shared/buttons/CustomMenuButton";
+import GradientButton from "../shared/buttons/GradientButton";
 
 import RoomCard from "./RoomCard";
 import RoomModal from "./RoomModal";
@@ -181,30 +182,25 @@ function MyRooms() {
   return (
     <Box bg={bg} color={textColor} px={8} py={4} borderRadius="lg">
       <Flex p={6} float={"right"} alignItems={"center"} gap={2}>
-        <CustomSelect
+        <MenuButton
           options={options}
           placeholder="Select option"
           handleSelect={handleSelect}
           selectedOption={selectedStatus}
         />
-        <Button
+        <GradientButton
           size="sm"
-          bgGradient="linear(to-r, teal.500, green.500)"
           color="white"
-          _hover={{ bgGradient: "linear(to-r, teal.600, green.600)" }}
-          _active={{ bgGradient: "linear(to-r, teal.700, green.700)" }}
           boxShadow="xl"
           onClick={handleOpenRoomModal}
         >
           Schedule room
-        </Button>
+        </GradientButton>
       </Flex>
 
       <Stack spacing={4} align="center" sx={{ clear: "both" }}>
         <Heading fontSize="4xl">My Rooms</Heading>
-        <Text fontSize="lg">
-          Join us for these exciting live rooms happening soon!
-        </Text>
+        <Text fontSize="lg">You rooms appear here</Text>
       </Stack>
       <Grid
         templateColumns={{

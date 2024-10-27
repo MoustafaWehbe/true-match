@@ -46,9 +46,10 @@ namespace api.Models
 
         public bool IsArchived(string userId)
         {
-            return FinishedAt < DateTime.UtcNow || neverStarted ||
+            return FinishedAt < DateTime.UtcNow ||
             // room started but everyone left
             (
+                RoomParticipants.Count != 0 &&
                 !RoomParticipants
                 .Where(rp => rp.UserId == userId && rp.RoomId == Id)
                 .Any(rp => rp.RoomParticipantEvents

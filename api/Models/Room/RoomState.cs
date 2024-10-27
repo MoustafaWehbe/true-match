@@ -23,5 +23,8 @@ namespace api.Models
 
         [JsonPropertyName("rounds")]
         public List<RoomContentDto>? Rounds { get; set; }
+
+        [JsonPropertyName("questionIndex")]
+        public int? QuestionIndex { get; set; }
     }
 }

@@ -1,6 +1,6 @@
 import { FaArrowRight } from "react-icons/fa";
 import { useSelector } from "react-redux";
-import { Box, Button, Flex, Text } from "@chakra-ui/react";
+import { Box, Button, Flex, Text, useColorModeValue } from "@chakra-ui/react";
 
 import { RootState } from "~/lib/state/store";
 
@@ -12,11 +12,16 @@ interface RoundPlaygroundProps {
 
 const RoundPlayground = ({
   onNextQuestionClicked,
-  currentIndexForSystemQuestion,
+  currentIndexForSystemQuestion = 0,
   currentRound,
 }: RoundPlaygroundProps) => {
-  const { roomContent: rounds } = useSelector((state: RootState) => state.room);
-  const { systemQuestions } = useSelector((state: RootState) => state.question);
+  const { roomContent: rounds, activeRoom } = useSelector(
+    (state: RootState) => state.room
+  );
+  const questionBgGradient = useColorModeValue(
+    "linear(to-r, teal.300, blue.500)",
+    "linear(to-r, pink.500, purple.500)"
+  );
 
   if (!rounds || currentRound === null || !rounds[currentRound]) {
     return null;
@@ -29,36 +34,59 @@ const RoundPlayground = ({
       direction="column"
       align="start"
       justify="center"
-      p={4}
       borderRadius="lg"
-      maxWidth={"75%"}
     >
       <Flex justifyContent={"center"} alignItems={"start"} gap={2}>
-        <Text fontSize={{ base: "md", lg: "2xl" }} mb={2}>
+        <Text fontSize={{ base: "md", lg: "2xl" }} mb={2} fontWeight={"bold"}>
           {rounds[currentRound].title}
         </Text>
-        {currentRound === 2 && systemQuestions && (
+      </Flex>
+      <Text fontSize={{ base: "sm", lg: "lg" }} mb={4} opacity={0.85}>
+        {rounds[currentRound].description}
+      </Text>
+      {currentRound === 2 && activeRoom?.roomState?.roundQuestions && (
+        <Box width={"100%"}>
+          <Flex
+            bgGradient={questionBgGradient}
+            color="white"
+            p={4}
+            borderRadius="2xl"
+            boxShadow="lg"
+            textAlign="center"
+            border="2px solid white"
+            w="100%"
+            align="center"
+            justify="center"
+            transform="scale(1)"
+            transition="transform 0.3s ease-in-out"
+            _hover={{ transform: "scale(1.05)" }}
+          >
+            <Text
+              fontSize="3xl"
+              fontWeight="bold"
+              fontStyle="italic"
+              lineHeight="1.2"
+            >
+              {
+                activeRoom?.roomState?.roundQuestions[
+                  currentIndexForSystemQuestion
+                ].name
+              }
+            </Text>
+          </Flex>
+
           <Button
-            float={"right"}
             leftIcon={<FaArrowRight />}
             onClick={onNextQuestionClicked}
-            colorScheme="blue"
-            color="blue.200"
+            colorScheme="pink"
+            color="pink.200"
             variant="ghost"
             size={{ base: "sm", lg: "md" }}
+            padding={0}
+            mt={2}
           >
             Next question
           </Button>
-        )}
-      </Flex>
-      <Text fontSize={{ base: "sm", lg: "md" }} mb={4}>
-        {rounds[currentRound].description}
-      </Text>
-      {currentRound === 2 && systemQuestions && (
-        <Box width={"100%"}>
-          <Text mb={2}>
-            {systemQuestions[currentIndexForSystemQuestion].name}
-          </Text>
         </Box>
       )}
     </Flex>
