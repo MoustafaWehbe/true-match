@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { FaHeart } from "react-icons/fa";
 import { LuHeartOff } from "react-icons/lu";
 import { MdBlock } from "react-icons/md";
@@ -17,6 +18,7 @@ import { useRouter } from "next/navigation";
 
 import { RoomDto } from "@dapp/shared/src/types/openApiGen";
 
+import PreviewProfileModal from "../profile/Preview/PreviewProfileModal";
 import GradientButton from "../shared/buttons/GradientButton";
 import CustomTooltip from "../shared/CutsomTooltip";
 
@@ -62,6 +64,8 @@ const RoomCard = ({
     actionPerformedOnRoomId,
   } = useSelector((state: RootState) => state.room);
   const router = useRouter();
+  const [isPreviewProfileModalOpen, setIsPreviewProfileModalOpen] =
+    useState(false);
 
   const isOwner = currentUser && currentUser.id === room?.user?.id;
 
@@ -71,8 +75,17 @@ const RoomCard = ({
     }
   };
 
+  const handleViewProfile = () => {
+    setIsPreviewProfileModalOpen(true);
+  };
+
+  const handleClosePreviewProfileModal = () => {
+    setIsPreviewProfileModalOpen(false);
+  };
+
   return (
     <Box
+      role="group"
       bg={cardBg}
       color={cardTextColor}
       borderRadius="lg"
@@ -80,7 +93,7 @@ const RoomCard = ({
       overflow="hidden"
       height={600}
       transition="transform 0.2s"
-      _hover={{ transform: "scale(1.05)" }}
+      _hover={{ transform: "scale(1.05)", cursor: "pointer", opacity: 0.9 }}
       position={"relative"}
       display={"flex"}
       flexDirection={"column"}
@@ -91,6 +104,20 @@ const RoomCard = ({
         bgSize="cover"
         bgPosition="center"
       />
+      <Button
+        position="absolute"
+        top="20%"
+        left="50%"
+        transform="translate(-50%, -50%)"
+        size="sm"
+        colorScheme="teal"
+        transition="opacity 0.2s ease-in-out"
+        onClick={handleViewProfile}
+        opacity={0}
+        _groupHover={{ opacity: 1 }}
+      >
+        View Profile
+      </Button>
       <Box p={6} flex={8}>
         <Stack spacing={4} justifyContent={"space-between"} height={"100%"}>
           <Text
@@ -249,6 +276,13 @@ const RoomCard = ({
             Start Room
           </GradientButton>
         </motion.div>
+      )}
+      {isPreviewProfileModalOpen && (
+        <PreviewProfileModal
+          isOpen={isPreviewProfileModalOpen}
+          onClose={handleClosePreviewProfileModal}
+          userId={room.user?.id!}
+        />
       )}
     </Box>
   );

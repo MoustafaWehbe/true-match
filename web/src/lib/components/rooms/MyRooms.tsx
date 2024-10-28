@@ -23,6 +23,7 @@ import GradientButton from "../shared/buttons/GradientButton";
 import RoomCard from "./RoomCard";
 import RoomModal from "./RoomModal";
 
+import { getAvailableDescriptors } from "~/lib/state/availableDescriptor/availableDescriptorSlice";
 import { getQuestionCategories } from "~/lib/state/question/questionSlice";
 import {
   clearMyRooms,
@@ -80,6 +81,10 @@ function MyRooms() {
       dispatch(getQuestionCategories());
     }
   }, [dispatch, categories, categoriesLoading]);
+
+  useEffect(() => {
+    dispatch(getAvailableDescriptors());
+  }, [dispatch]);
 
   const handleSelect = (option: Option) => {
     if (selectedStatus.value !== option.value) {

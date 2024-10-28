@@ -22,12 +22,17 @@ import {
   Wrap,
 } from "@chakra-ui/react";
 
+import { UserDto } from "@dapp/shared/src/types/openApiGen";
+
 import env from "~/lib/consts/env";
 import { RootState } from "~/lib/state/store";
 import { calculateAge } from "~/lib/utils/date/date";
 
-const PreviewProfile = () => {
-  const { user } = useSelector((state: RootState) => state.user);
+interface PreviewProfileProps {
+  user?: UserDto;
+}
+
+const PreviewProfile = ({ user }: PreviewProfileProps) => {
   const { availableDescriptors } = useSelector(
     (state: RootState) => state.availableDescriptor
   );
@@ -86,7 +91,11 @@ const PreviewProfile = () => {
       <Box position="relative">
         {/* User Image */}
         <Image
-          src={env.apiUrl + "" + user?.media?.[currentImageIndex]?.url}
+          src={
+            user?.media?.[currentImageIndex]?.url.startsWith("http")
+              ? user?.media?.[currentImageIndex]?.url
+              : env.apiUrl + "" + user?.media?.[currentImageIndex]?.url
+          }
           alt={user?.firstName!}
           objectFit="cover"
           w="full"

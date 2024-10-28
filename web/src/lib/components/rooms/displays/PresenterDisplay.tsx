@@ -266,7 +266,7 @@ const PresenterDisplay = ({ peers, localVideoRef }: PresenterDisplayProps) => {
             direction={"column"}
             justifyContent={"center"}
             gap={4}
-            mt={12}
+            // mt={"100px"}
           >
             <Text textAlign={"left"}>
               Round {activeRoom?.roomState?.currentRound! + 1}
@@ -278,7 +278,12 @@ const PresenterDisplay = ({ peers, localVideoRef }: PresenterDisplayProps) => {
               }
               currentRound={activeRoom?.roomState?.currentRound!}
             />
-            <Box margin={"0 auto"}>
+            <Box
+              position={"absolute"}
+              top={"50%"}
+              right={8}
+              transform="translateY(-50%)"
+            >
               {/* Timer section */}
               <Timer
                 progressCircleSize={progressCircleSize}

@@ -36,11 +36,16 @@ const RoundPlayground = ({
       maxWidth={{ base: "95vw", md: "65vw" }}
     >
       <Flex justifyContent={"center"} alignItems={"start"} gap={2}>
-        <Text fontSize={{ base: "md", lg: "2xl" }} mb={2} fontWeight={"bold"}>
+        <Text fontSize={{ base: "md", lg: "3xl" }} mb={2} fontWeight={"bold"}>
           {rounds[currentRound].title}
         </Text>
       </Flex>
-      <Text fontSize={{ base: "sm", lg: "lg" }} mb={4} opacity={0.85}>
+      <Text
+        fontSize={{ base: "sm", lg: "xl" }}
+        color="gray.200"
+        mb={4}
+        opacity={0.85}
+      >
         {rounds[currentRound].description}
       </Text>
       {currentRound === 2 && activeRoom?.roomState?.roundQuestions && (

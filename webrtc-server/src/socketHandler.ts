@@ -38,8 +38,13 @@ class SocketHandler {
       );
 
       socket.on("leave-room", (payload: socketEventTypes.LeaveRoomPayload) =>
-        this.handleDisconnect(payload, socket)
+        this.handleDisconnect(socket, payload)
       );
+
+      socket.on("disconnect", reason => {
+        console.log(`User disconnected: ${socket.id}, Reason: ${reason}`);
+        this.handleDisconnect(socket);
+      });
 
       socket.on("start-round", (payload: socketEventTypes.StartRoundPayload) =>
         this.handleStartRound(payload, socket)
@@ -119,15 +124,20 @@ class SocketHandler {
   }
 
   private async handleDisconnect(
-    { roomId }: socketEventTypes.LeaveRoomPayload,
-    socket: Socket
+    socket: Socket,
+    payload?: socketEventTypes.LeaveRoomPayload
   ) {
     const token = socket.handshake.auth.token;
     try {
-      const leaveRes = await roomService.leaveRoom(roomId, token);
-      if (leaveRes?.statusCode !== 200 && leaveRes?.statusCode !== 201) {
-        throw Error(leaveRes?.message || "Failed to leave room.");
+      if (payload) {
+        const leaveRes = await roomService.leaveRoom(payload.roomId, token);
+        if (leaveRes?.statusCode !== 200 && leaveRes?.statusCode !== 201) {
+          throw Error(leaveRes?.message || "Failed to leave room.");
+        }
       }
+      const previousTimer = this.timersMap.get(socket.id);
+      clearInterval(previousTimer);
+      this.timersMap.delete(socket.id);
       socket.disconnect(true);
     } catch (e) {
       socket.disconnect(true);
@@ -152,15 +162,15 @@ class SocketHandler {
           rounds: payload.rounds,
           timeRemainingForRoundBeforePause: payload.rounds![0].duration!,
         };
-        this.io.in(payload.roomId.toString()).emit("rounds-started", {
-          roomState: finalRoomState,
-        } as socketEventTypes.RoundsStartedPayload);
-
         await roomService.updateRoom(
           token,
           { roomState: finalRoomState },
           room?.data?.id!
         );
+        this.io.in(payload.roomId.toString()).emit("rounds-started", {
+          roomState: finalRoomState,
+        } as socketEventTypes.RoundsStartedPayload);
+
         this.setTimer(room.data.id!, finalRoomState, token, socket.id);
       } else {
         throw Error("Could not find room");
@@ -262,6 +272,7 @@ class SocketHandler {
           { roomState: finalRoomState },
           room?.data?.id!
         );
+
         this.setTimer(room.data.id!, finalRoomState, token, socket.id);
       } else {
         throw Error("Could not find room");

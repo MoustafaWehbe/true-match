@@ -21,6 +21,7 @@ import Loader from "../shared/Loader";
 
 import RoomCard from "./RoomCard";
 
+import { getAvailableDescriptors } from "~/lib/state/availableDescriptor/availableDescriptorSlice";
 import {
   clearRooms,
   deregisterRoom,
@@ -72,6 +73,10 @@ function BrowseRooms() {
       dispatch(clearRooms());
     };
   }, [dispatch, loadRooms]);
+
+  useEffect(() => {
+    dispatch(getAvailableDescriptors());
+  }, [dispatch]);
 
   const handleSelect = (option: Option) => {
     if (selectedStatus.value !== option.value) {

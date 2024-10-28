@@ -26,12 +26,14 @@ export interface UserState {
   loginError: string | null;
   registerError: string | null;
   user: UserDto | null;
+  userById: UserDto | null;
   logoutResponseMessage: string;
   userProfileCreated: boolean;
   loadingImages: string[];
   isBlockingUser: boolean;
   isUnBlockingUser: boolean;
   isFetchingUser: boolean;
+  isFetchingUserById: boolean;
 }
 
 export interface ExtendedUserApiResponse extends Omit<UserApiResponse, "data"> {
@@ -112,6 +114,28 @@ export const fetchUser = createAsyncThunk<
     const response = await axiosInstance.get<UserDtoApiResponse>("/me", {
       headers: defaultHeaders,
     });
+    return response.data.data ?? null;
+  } catch (error) {
+    let errorMessage = "Something went wrong!";
+    if (axios.isAxiosError(error) && error.response) {
+      errorMessage = error.response.data.message || errorMessage;
+    }
+    return rejectWithValue(errorMessage);
+  }
+});
+
+export const getUserById = createAsyncThunk<
+  UserDto | null,
+  { id: string },
+  { rejectValue: string } // Error type
+>("user/fetchUserById", async (user, { rejectWithValue }) => {
+  try {
+    const response = await axiosInstance.get<UserDtoApiResponse>(
+      `/api/user/${user.id}`,
+      {
+        headers: defaultHeaders,
+      }
+    );
     return response.data.data ?? null;
   } catch (error) {
     let errorMessage = "Something went wrong!";
@@ -217,12 +241,14 @@ const initialState: UserState = {
   loginError: null,
   registerError: null,
   user: null,
+  userById: null,
   logoutResponseMessage: "",
   userProfileCreated: false,
   loadingImages: [],
   isBlockingUser: false,
   isUnBlockingUser: false,
   isFetchingUser: false,
+  isFetchingUserById: false,
 };
 
 const userSlice = createSlice({
@@ -280,6 +306,19 @@ const userSlice = createSlice({
       )
       .addCase(fetchUser.rejected, (state) => {
         state.isFetchingUser = false;
+      })
+      .addCase(getUserById.pending, (state) => {
+        state.isFetchingUserById = true;
+      })
+      .addCase(
+        getUserById.fulfilled,
+        (state, action: PayloadAction<User | null>) => {
+          state.isFetchingUserById = false;
+          state.userById = action.payload;
+        }
+      )
+      .addCase(getUserById.rejected, (state) => {
+        state.isFetchingUserById = false;
       })
       .addCase(
         logoutUser.fulfilled,

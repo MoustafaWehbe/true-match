@@ -66,7 +66,7 @@ const Profile = () => {
           <EditProfile />
         </TabPanel>
         <TabPanel>
-          <PreviewProfile />
+          <PreviewProfile user={user} />
         </TabPanel>
       </TabPanels>
     </Tabs>
