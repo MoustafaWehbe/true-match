@@ -1,4 +1,5 @@
 ﻿using api.Models;
+using ChatApp.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -25,6 +26,8 @@ namespace api.Data
         public DbSet<UserProfileGender> UserProfileGenders { get; set; }
 
         public DbSet<AvailableDescriptor> AvailableDescriptors { get; set; }
+        public DbSet<Message> Messages { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

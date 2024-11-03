@@ -8,20 +8,26 @@ import { roomService } from "./services";
 
 class SocketHandler {
   private io: SocketIOServer;
+  // TODO: move to redis
   private timersMap: Map<
     string,
     { timer: NodeJS.Timeout; timeRemaining: number }
   >;
+  // TODO: move to redis
+  private userSocketsMap: Map<string, string>;
 
   constructor(io: SocketIOServer) {
     this.io = io;
     this.timersMap = new Map();
+    this.userSocketsMap = new Map();
     this.handleConnection();
   }
 
   private handleConnection(): void {
     this.io.on("connection", socket => {
       console.log("New client connected");
+      const userId = (socket.data.user as UserDto).id;
+      this.userSocketsMap.set(`user_socket:${userId}`, socket.id);
 
       socket.on(
         SOCKET_EVENTS.CLIENT.JOIN_ROOM_EVENT,
@@ -86,6 +92,12 @@ class SocketHandler {
         SOCKET_EVENTS.CLIENT.GO_TO_NEXT_QUESTION_EVENT,
         (payload: socketEventTypes.GoToNextQuestionPayload) =>
           this.handleGoToNextQuestion(payload, socket)
+      );
+
+      socket.on(
+        SOCKET_EVENTS.CLIENT.SEND_MESSAGE,
+        (payload: socketEventTypes.SendMessageSkipRoundPayload) =>
+          this.handleMessageSent(payload, socket, userId)
       );
     });
   }
@@ -372,6 +384,32 @@ class SocketHandler {
       console.error("failed to go to next question..", e);
     }
   }
+
+  private async handleMessageSent(
+    payload: socketEventTypes.SendMessageSkipRoundPayload,
+    _socket: Socket,
+    senderId: string
+  ) {
+    const { receiverId, content } = payload;
+    const messageData = {
+      senderId,
+      receiverId,
+      content,
+      timestamp: new Date(),
+    };
+
+    await sendMessageToApi(messageData);
+    const receiverSocketId = this.userSocketsMap.get(
+      `user_socket:${receiverId}`
+    );
+    if (receiverSocketId) {
+      this.io
+        .to(receiverSocketId)
+        .emit(SOCKET_EVENTS.SERVER.SEND_MESSAGE, messageData);
+    }
+  }
+
+  // individual users chat
 
   // helpers
   private async setTimer(

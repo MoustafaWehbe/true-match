@@ -14,6 +14,7 @@ export const SOCKET_EVENTS = {
     RESUME_ROUND_EVENT: "client:room:resume-round",
     SKIP_ROUND_EVENT: "client:room:skip-round",
     GO_TO_NEXT_QUESTION_EVENT: "client:room:go-to-next-question",
+    SEND_MESSAGE: "client:chat:send-message",
   },
   SERVER: {
     JOIN_ROOM_EVENT: "server:room:user-joined",
@@ -28,5 +29,6 @@ export const SOCKET_EVENTS = {
     GO_TO_NEXT_QUESTION_EVENT: "server:room:go-to-next-question",
     END_ROUNDS_EVENT: "server:room:end-rounds",
     UPDATE_TIMER_EVENT: "server:room:update-timer",
+    SEND_MESSAGE: "server:chat:send-message",
   },
 };
