@@ -2,7 +2,6 @@ import { BsEmojiHeartEyes } from "react-icons/bs";
 import { BsChatDots } from "react-icons/bs";
 import { GrSchedulePlay } from "react-icons/gr";
 import { MdOutlineLiveTv } from "react-icons/md";
-import { RiCalendarScheduleLine } from "react-icons/ri";
 import { useSelector } from "react-redux";
 import {
   Avatar,
@@ -44,7 +43,7 @@ const DrawerContent = () => {
         <ListItem>
           <NextLink href="/swipe-to-match" passHref prefetch={true}>
             <Link _hover={{ textDecoration: "none", color: hoverColor }}>
-              <ListIcon as={RiCalendarScheduleLine} color={iconColor} />
+              <ListIcon as={BsEmojiHeartEyes} color={iconColor} />
               Swipe to match
             </Link>
           </NextLink>
@@ -66,14 +65,6 @@ const DrawerContent = () => {
           </NextLink>
         </ListItem>
         <ListItem>
-          <NextLink href="/matches" passHref prefetch={true}>
-            <Link _hover={{ textDecoration: "none", color: hoverColor }}>
-              <ListIcon as={BsEmojiHeartEyes} color={iconColor} />
-              Matches
-            </Link>
-          </NextLink>
-        </ListItem>
-        <ListItem>
           <NextLink href="/chat" passHref prefetch={true}>
             <Link _hover={{ textDecoration: "none", color: hoverColor }}>
               <ListIcon as={BsChatDots} color={iconColor} />
@@ -91,7 +82,7 @@ const DrawerContent = () => {
               <Avatar
                 size={"xs"}
                 name={user?.firstName!}
-                backgroundColor="pink.500"
+                backgroundColor="pink.400"
                 color={"white"}
                 cursor={"pointer"}
                 mr="20px"

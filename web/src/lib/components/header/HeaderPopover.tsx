@@ -48,7 +48,7 @@ const HeaderPopover = ({ onLogout, user }: Props) => {
         <Avatar
           size="sm"
           name={user.firstName!}
-          bg="pink.500"
+          backgroundColor="pink.400"
           color="white"
           cursor="pointer"
           mr="20px"
