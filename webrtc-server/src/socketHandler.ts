@@ -1,5 +1,6 @@
 import { Server as SocketIOServer, Socket } from "socket.io";
 
+import { SOCKET_EVENTS } from "@dapp/shared/src/consts/socketEvents";
 import { socketEventTypes } from "@dapp/shared/src/types/custom";
 import { RoomState, UserDto } from "@dapp/shared/src/types/openApiGen";
 
@@ -22,26 +23,34 @@ class SocketHandler {
     this.io.on("connection", socket => {
       console.log("New client connected");
 
-      socket.on("join", (payload: socketEventTypes.JoinRoomPayload) =>
-        this.handleOnJoin(payload, socket)
-      );
-
-      socket.on("offer", (payload: socketEventTypes.OfferPayload) =>
-        this.handleOffer(payload, socket)
-      );
-
-      socket.on("answer", (payload: socketEventTypes.AnswerPayload) =>
-        this.handleAnswer(payload, socket)
+      socket.on(
+        SOCKET_EVENTS.CLIENT.JOIN_ROOM_EVENT,
+        (payload: socketEventTypes.JoinRoomPayload) =>
+          this.handleOnJoin(payload, socket)
       );
 
       socket.on(
-        "ice-candidate",
+        SOCKET_EVENTS.CLIENT.SEND_OFFER_EVENT,
+        (payload: socketEventTypes.OfferPayload) =>
+          this.handleOffer(payload, socket)
+      );
+
+      socket.on(
+        SOCKET_EVENTS.CLIENT.SEND_ANSWER_EVENT,
+        (payload: socketEventTypes.AnswerPayload) =>
+          this.handleAnswer(payload, socket)
+      );
+
+      socket.on(
+        SOCKET_EVENTS.CLIENT.SEND_ICE_CANDIDATE_EVENT,
         (payload: socketEventTypes.IceCandidatePayload) =>
           this.handleIceCandidate(payload, socket)
       );
 
-      socket.on("leave-room", (payload: socketEventTypes.LeaveRoomPayload) =>
-        this.handleDisconnect(socket, payload)
+      socket.on(
+        SOCKET_EVENTS.CLIENT.LEAVE_ROOM_EVENT,
+        (payload: socketEventTypes.LeaveRoomPayload) =>
+          this.handleDisconnect(socket, payload)
       );
 
       socket.on("disconnect", reason => {
@@ -49,26 +58,32 @@ class SocketHandler {
         this.handleDisconnect(socket);
       });
 
-      socket.on("start-round", (payload: socketEventTypes.StartRoundPayload) =>
-        this.handleStartRound(payload, socket)
-      );
-
-      socket.on("pause-round", (payload: socketEventTypes.PauseRoundPayload) =>
-        this.handlePauseRound(payload, socket)
+      socket.on(
+        SOCKET_EVENTS.CLIENT.START_ROUND_EVENT,
+        (payload: socketEventTypes.StartRoundPayload) =>
+          this.handleStartRound(payload, socket)
       );
 
       socket.on(
-        "resume-round",
+        SOCKET_EVENTS.CLIENT.PAUSE_ROUND_EVENT,
+        (payload: socketEventTypes.PauseRoundPayload) =>
+          this.handlePauseRound(payload, socket)
+      );
+
+      socket.on(
+        SOCKET_EVENTS.CLIENT.RESUME_ROUND_EVENT,
         (payload: socketEventTypes.ResumeRoundPayload) =>
           this.handleResumeRound(payload, socket)
       );
 
-      socket.on("skip-round", (payload: socketEventTypes.SkipRoundPayload) =>
-        this.handleSkipRound(payload, socket)
+      socket.on(
+        SOCKET_EVENTS.CLIENT.SKIP_ROUND_EVENT,
+        (payload: socketEventTypes.SkipRoundPayload) =>
+          this.handleSkipRound(payload, socket)
       );
 
       socket.on(
-        "go-to-next-question",
+        SOCKET_EVENTS.CLIENT.GO_TO_NEXT_QUESTION_EVENT,
         (payload: socketEventTypes.GoToNextQuestionPayload) =>
           this.handleGoToNextQuestion(payload, socket)
       );
@@ -90,13 +105,15 @@ class SocketHandler {
         }
         socket.join(roomId.toString());
         // notify everyone that this user has joined
-        socket.broadcast.to(roomId.toString()).emit("user-joined", {
-          userToSignal: socket.id,
-          user,
-        } as socketEventTypes.UserJoinedPayload);
+        socket.broadcast
+          .to(roomId.toString())
+          .emit(SOCKET_EVENTS.SERVER.JOIN_ROOM_EVENT, {
+            userToSignal: socket.id,
+            user,
+          } as socketEventTypes.UserJoinedPayload);
         // send the current room state to this user
         const previousTimer = this.timersMap.get(roomId.toString());
-        socket.emit("room-state-sent", {
+        socket.emit(SOCKET_EVENTS.SERVER.SEND_ROOM_STATE_EVENT, {
           roomState: {
             ...room.data?.roomState,
             timeRemainingForRoundBeforePause: previousTimer?.timeRemaining || 0,
@@ -112,24 +129,30 @@ class SocketHandler {
   }
 
   private handleOffer(payload: socketEventTypes.OfferPayload, socket: Socket) {
-    this.io.to(payload.targetSocketId).emit("offer-produced", {
-      ...payload,
-      user: socket.data.user,
-    } as socketEventTypes.OfferProducedPayload);
+    this.io
+      .to(payload.targetSocketId)
+      .emit(SOCKET_EVENTS.SERVER.SEND_OFFER_EVENT, {
+        ...payload,
+        user: socket.data.user,
+      } as socketEventTypes.OfferProducedPayload);
   }
 
   private handleAnswer(
     payload: socketEventTypes.AnswerPayload,
     _socket: Socket
   ) {
-    this.io.to(payload.targetSocketId).emit("answer", payload);
+    this.io
+      .to(payload.targetSocketId)
+      .emit(SOCKET_EVENTS.SERVER.SEND_ANSWER_EVENT, payload);
   }
 
   private handleIceCandidate(
     payload: socketEventTypes.IceCandidatePayload,
     _socket: Socket
   ) {
-    this.io.to(payload.targetSocketId).emit("ice-candidate", payload);
+    this.io
+      .to(payload.targetSocketId)
+      .emit(SOCKET_EVENTS.SERVER.SEND_ICE_CANDIDATE_EVENT, payload);
   }
 
   private async handleDisconnect(
@@ -191,9 +214,11 @@ class SocketHandler {
           { roomState: finalRoomState },
           room?.data?.id!
         );
-        this.io.in(payload.roomId.toString()).emit("rounds-started", {
-          roomState: finalRoomState,
-        } as socketEventTypes.RoundsStartedPayload);
+        this.io
+          .in(payload.roomId.toString())
+          .emit(SOCKET_EVENTS.SERVER.START_ROUND_EVENT, {
+            roomState: finalRoomState,
+          } as socketEventTypes.RoundsStartedPayload);
 
         this.setTimer(room.data.id!, finalRoomState, token, socket.id);
       } else {
@@ -219,9 +244,11 @@ class SocketHandler {
           isRoundPaused: true,
           timeRemainingForRoundBeforePause: payload.timeRemaining,
         };
-        this.io.in(payload.roomId.toString()).emit("round-paused", {
-          roomState: finalRoomState,
-        } as socketEventTypes.RoundPausedPayload);
+        this.io
+          .in(payload.roomId.toString())
+          .emit(SOCKET_EVENTS.SERVER.PAUSE_ROUND_EVENT, {
+            roomState: finalRoomState,
+          } as socketEventTypes.RoundPausedPayload);
 
         await roomService.updateRoom(
           token,
@@ -251,9 +278,11 @@ class SocketHandler {
           ...existingRoomState,
           isRoundPaused: false,
         };
-        this.io.in(payload.roomId.toString()).emit("round-resumed", {
-          roomState: finalRoomState,
-        } as socketEventTypes.RoundResumedPayload);
+        this.io
+          .in(payload.roomId.toString())
+          .emit(SOCKET_EVENTS.SERVER.RESUME_ROUND_EVENT, {
+            roomState: finalRoomState,
+          } as socketEventTypes.RoundResumedPayload);
 
         await roomService.updateRoom(
           token,
@@ -287,9 +316,11 @@ class SocketHandler {
             existingRoomState?.rounds![existingRoomState?.currentRound! + 1]
               .duration!,
         };
-        this.io.in(payload.roomId.toString()).emit("round-skiped", {
-          roomState: finalRoomState,
-        } as socketEventTypes.RoundSkipedPayload);
+        this.io
+          .in(payload.roomId.toString())
+          .emit(SOCKET_EVENTS.SERVER.SKIP_ROUND_EVENT, {
+            roomState: finalRoomState,
+          } as socketEventTypes.RoundSkipedPayload);
 
         await roomService.updateRoom(
           token,
@@ -321,9 +352,11 @@ class SocketHandler {
         ) {
           existingRoomState.questionIndex =
             existingRoomState.questionIndex! + 1;
-          this.io.in(payload.roomId.toString()).emit("next-question-clicked", {
-            roomState: existingRoomState,
-          } as socketEventTypes.NextQuestionClickedPayload);
+          this.io
+            .in(payload.roomId.toString())
+            .emit(SOCKET_EVENTS.SERVER.GO_TO_NEXT_QUESTION_EVENT, {
+              roomState: existingRoomState,
+            } as socketEventTypes.NextQuestionClickedPayload);
         } else {
           this.handleSkipRound({ roomId: payload.roomId }, socket);
         }
@@ -377,13 +410,17 @@ class SocketHandler {
         }
       }
       if (theEnd) {
-        this.io.in(roomId.toString()).emit("rounds-ended", {
-          roomState,
-        } as socketEventTypes.RoundsEndedPayload);
+        this.io
+          .in(roomId.toString())
+          .emit(SOCKET_EVENTS.SERVER.END_ROUNDS_EVENT, {
+            roomState,
+          } as socketEventTypes.RoundsEndedPayload);
       } else {
-        this.io.in(roomId.toString()).emit("timer-updated", {
-          roomState,
-        } as socketEventTypes.TimerUpdatedPayload);
+        this.io
+          .in(roomId.toString())
+          .emit(SOCKET_EVENTS.SERVER.UPDATE_TIMER_EVENT, {
+            roomState,
+          } as socketEventTypes.TimerUpdatedPayload);
         if (goToNextRound) {
           this.setTimer(roomId, roomState, token, socketId);
         }

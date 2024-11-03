@@ -1,6 +1,7 @@
 import { useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
+import { SOCKET_EVENTS } from "@dapp/shared/src/consts/socketEvents";
 import { socketEventTypes } from "@dapp/shared/src/types/custom";
 
 import { getSystemQuestions } from "../state/question/questionSlice";
@@ -33,7 +34,7 @@ const useRound = () => {
       dispatch(updateSystemQuestions(newQuestions.payload));
     }
     if (rounds) {
-      socket.emit("start-round", {
+      socket.emit(SOCKET_EVENTS.CLIENT.START_ROUND_EVENT, {
         rounds,
         roomId: activeRoom?.id!,
       } as socketEventTypes.StartRoundPayload);
@@ -41,28 +42,28 @@ const useRound = () => {
   }, [activeRoom, dispatch, rounds]);
 
   const pauseCurrentRound = useCallback(() => {
-    socket.emit("pause-round", {
+    socket.emit(SOCKET_EVENTS.CLIENT.PAUSE_ROUND_EVENT, {
       timeRemaining: activeRoom?.roomState?.timeRemainingForRoundBeforePause,
       roomId: activeRoom?.id,
     } as socketEventTypes.PauseRoundPayload);
   }, [activeRoom?.id, activeRoom?.roomState?.timeRemainingForRoundBeforePause]);
 
   const resumeCurrentRound = useCallback(() => {
-    socket.emit("resume-round", {
+    socket.emit(SOCKET_EVENTS.CLIENT.RESUME_ROUND_EVENT, {
       roomId: activeRoom?.id,
     } as socketEventTypes.PauseRoundPayload);
   }, [activeRoom?.id]);
 
   const skipCurrentRound = useCallback(() => {
     if (activeRoom?.roomState?.currentRound !== null) {
-      socket.emit("skip-round", {
+      socket.emit(SOCKET_EVENTS.CLIENT.SKIP_ROUND_EVENT, {
         roomId: activeRoom?.id!,
       } as socketEventTypes.SkipRoundPayload);
     }
   }, [activeRoom?.id, activeRoom?.roomState?.currentRound]);
 
   const nextQuestionClicked = useCallback(() => {
-    socket.emit("go-to-next-question", {
+    socket.emit(SOCKET_EVENTS.CLIENT.GO_TO_NEXT_QUESTION_EVENT, {
       roomId: activeRoom?.id!,
     } as socketEventTypes.GoToNextQuestionPayload);
   }, [activeRoom?.id]);

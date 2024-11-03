@@ -1,3 +1,4 @@
+import { SOCKET_EVENTS } from "@dapp/shared/src/consts/socketEvents";
 import { socketEventTypes } from "@dapp/shared/src/types/custom";
 
 import { PeerItem } from "~/lib/components/rooms/Room";
@@ -69,7 +70,7 @@ export class WebRTCHandler {
       localVideoRef.current.srcObject = this.stream;
     }
     this.registerSocketEvents();
-    socket.emit("join", {
+    socket.emit(SOCKET_EVENTS.CLIENT.JOIN_ROOM_EVENT, {
       roomId: parseInt(this.roomId),
     } as socketEventTypes.JoinRoomPayload);
   }
@@ -77,14 +78,31 @@ export class WebRTCHandler {
   closeConnections() {
     this.peers.forEach(({ peer }) => peer.close());
 
-    socket.emit("leave-room", {
+    socket.emit(SOCKET_EVENTS.CLIENT.LEAVE_ROOM_EVENT, {
       roomId: parseInt(this.roomId),
     } as socketEventTypes.LeaveRoomPayload);
 
-    socket.off("user-joined", this.handleUserJoined);
-    socket.off("offer-produced", this.handleIncomingOffer);
-    socket.off("answer", this.handleAnswer);
-    socket.off("ice-candidate", this.handleICECandidate);
+    socket.off(SOCKET_EVENTS.SERVER.JOIN_ROOM_EVENT, this.handleUserJoined);
+    socket.off(SOCKET_EVENTS.SERVER.SEND_OFFER_EVENT, this.handleIncomingOffer);
+    socket.off(SOCKET_EVENTS.SERVER.SEND_ANSWER_EVENT, this.handleAnswer);
+    socket.off(
+      SOCKET_EVENTS.SERVER.SEND_ICE_CANDIDATE_EVENT,
+      this.handleICECandidate
+    );
+    socket.off(SOCKET_EVENTS.SERVER.START_ROUND_EVENT, this.onRoundsStarted);
+    socket.off(SOCKET_EVENTS.SERVER.UPDATE_TIMER_EVENT, this.onTimerUpdated);
+    socket.off(SOCKET_EVENTS.SERVER.PAUSE_ROUND_EVENT, this.onRoundPaused);
+    socket.off(SOCKET_EVENTS.SERVER.RESUME_ROUND_EVENT, this.onRoundResumed);
+    socket.off(SOCKET_EVENTS.SERVER.SKIP_ROUND_EVENT, this.onRoundSkiped);
+    socket.off(SOCKET_EVENTS.SERVER.END_ROUNDS_EVENT, this.onRoundsEnded);
+    socket.off(
+      SOCKET_EVENTS.SERVER.GO_TO_NEXT_QUESTION_EVENT,
+      this.onGoToNextQuestion
+    );
+    socket.off(
+      SOCKET_EVENTS.SERVER.SEND_ROOM_STATE_EVENT,
+      this.onRoomStateReceived
+    );
 
     const tracks = this.stream?.getTracks();
     tracks?.forEach((track) => track.stop());
@@ -109,7 +127,7 @@ export class WebRTCHandler {
 
     peer.onicecandidate = (event) => {
       if (event.candidate) {
-        socket.emit("ice-candidate", {
+        socket.emit(SOCKET_EVENTS.CLIENT.SEND_ICE_CANDIDATE_EVENT, {
           targetSocketId: userToSignal,
           iceCandidateSenderSocketId: socket.id,
           candidate: event.candidate,
@@ -129,7 +147,7 @@ export class WebRTCHandler {
 
     peer.createOffer().then((offer) => {
       peer.setLocalDescription(offer).then(() => {
-        socket.emit("offer", {
+        socket.emit(SOCKET_EVENTS.CLIENT.SEND_OFFER_EVENT, {
           targetSocketId: payload.userToSignal,
           offerSenderSocketId: socket.id!,
           sdp: peer.localDescription,
@@ -150,7 +168,7 @@ export class WebRTCHandler {
       .then(() => {
         peer.createAnswer().then((answer) => {
           peer.setLocalDescription(answer).then(() => {
-            socket.emit("answer", {
+            socket.emit(SOCKET_EVENTS.CLIENT.SEND_ANSWER_EVENT, {
               targetSocketId: payload.offerSenderSocketId,
               answerSenderSocketId: socket.id,
               sdp: peer.localDescription,
@@ -187,19 +205,28 @@ export class WebRTCHandler {
   }
 
   private registerSocketEvents() {
-    socket.on("user-joined", this.handleUserJoined);
-    socket.on("offer-produced", this.handleIncomingOffer);
-    socket.on("answer", this.handleAnswer);
-    socket.on("ice-candidate", this.handleICECandidate);
+    socket.on(SOCKET_EVENTS.SERVER.JOIN_ROOM_EVENT, this.handleUserJoined);
+    socket.on(SOCKET_EVENTS.SERVER.SEND_OFFER_EVENT, this.handleIncomingOffer);
+    socket.on(SOCKET_EVENTS.SERVER.SEND_ANSWER_EVENT, this.handleAnswer);
+    socket.on(
+      SOCKET_EVENTS.SERVER.SEND_ICE_CANDIDATE_EVENT,
+      this.handleICECandidate
+    );
 
     // rounds events
-    socket.on("rounds-started", this.onRoundsStarted);
-    socket.on("timer-updated", this.onTimerUpdated);
-    socket.on("round-paused", this.onRoundPaused);
-    socket.on("round-resumed", this.onRoundResumed);
-    socket.on("round-skiped", this.onRoundSkiped);
-    socket.on("rounds-ended", this.onRoundsEnded);
-    socket.on("next-question-clicked", this.onGoToNextQuestion);
-    socket.on("room-state-sent", this.onRoomStateReceived);
+    socket.on(SOCKET_EVENTS.SERVER.START_ROUND_EVENT, this.onRoundsStarted);
+    socket.on(SOCKET_EVENTS.SERVER.UPDATE_TIMER_EVENT, this.onTimerUpdated);
+    socket.on(SOCKET_EVENTS.SERVER.PAUSE_ROUND_EVENT, this.onRoundPaused);
+    socket.on(SOCKET_EVENTS.SERVER.RESUME_ROUND_EVENT, this.onRoundResumed);
+    socket.on(SOCKET_EVENTS.SERVER.SKIP_ROUND_EVENT, this.onRoundSkiped);
+    socket.on(SOCKET_EVENTS.SERVER.END_ROUNDS_EVENT, this.onRoundsEnded);
+    socket.on(
+      SOCKET_EVENTS.SERVER.GO_TO_NEXT_QUESTION_EVENT,
+      this.onGoToNextQuestion
+    );
+    socket.on(
+      SOCKET_EVENTS.SERVER.SEND_ROOM_STATE_EVENT,
+      this.onRoomStateReceived
+    );
   }
 }
