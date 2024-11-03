@@ -23,6 +23,9 @@ export class WebRTCHandler {
   private onGoToNextQuestion: (
     payload: socketEventTypes.NextQuestionClickedPayload
   ) => void;
+  private onRoomStateReceived: (
+    payload: socketEventTypes.NextQuestionClickedPayload
+  ) => void;
 
   constructor(
     roomId: string,
@@ -37,6 +40,9 @@ export class WebRTCHandler {
       onGoToNextQuestion: (
         payload: socketEventTypes.NextQuestionClickedPayload
       ) => void;
+      onRoomStateReceived: (
+        payload: socketEventTypes.SendRoomStatePayload
+      ) => void;
     }
   ) {
     this.roomId = roomId;
@@ -49,6 +55,7 @@ export class WebRTCHandler {
     this.onRoundSkiped = callbacks.onRoundSkiped;
     this.onRoundsEnded = callbacks.onRoundsEnded;
     this.onGoToNextQuestion = callbacks.onGoToNextQuestion;
+    this.onRoomStateReceived = callbacks.onRoomStateReceived;
 
     this.handleUserJoined = this.handleUserJoined.bind(this);
     this.handleIncomingOffer = this.handleIncomingOffer.bind(this);
@@ -193,5 +200,6 @@ export class WebRTCHandler {
     socket.on("round-skiped", this.onRoundSkiped);
     socket.on("rounds-ended", this.onRoundsEnded);
     socket.on("next-question-clicked", this.onGoToNextQuestion);
+    socket.on("room-state-sent", this.onRoomStateReceived);
   }
 }

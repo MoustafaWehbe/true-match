@@ -69,6 +69,10 @@ interface RoundPausedPayload {
   roomState: RoomState;
 }
 
+interface SendRoomStatePayload {
+  roomState: RoomState;
+}
+
 interface RoundResumedPayload {
   roomState: RoomState;
 }
@@ -115,4 +119,5 @@ export type {
   OfferProducedPayload,
   GoToNextQuestionPayload,
   NextQuestionClickedPayload,
+  SendRoomStatePayload,
 };

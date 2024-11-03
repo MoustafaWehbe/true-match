@@ -1,42 +1,58 @@
 import React, { useCallback, useMemo, useState } from "react";
+import { FaArrowLeft } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import {
   Box,
+  Button,
   Flex,
+  Grid,
+  GridItem,
   Text,
   useColorModeValue,
   useMediaQuery,
 } from "@chakra-ui/react";
-import { motion } from "framer-motion";
 
+import AnimatedHeart from "../../shared/AnimatedHeart";
 import PeerVideo from "../PeerVideo";
 import { PeerItem } from "../Room";
 
 import MyVideo from "./MyVideo";
+import RoomControls from "./RoomControls";
 import RoundPlayground from "./RoundPlayground";
 import Timer from "./Timer";
 
 import { size } from "~/lib/consts";
 import useRound from "~/lib/hooks/useRound";
 import { RootState } from "~/lib/state/store";
+import { calculateAge } from "~/lib/utils/date/date";
 
-interface WatcherProps {
+interface WatcherDisplayProps {
   peers: PeerItem[];
   localVideoRef: React.RefObject<HTMLVideoElement>;
 }
 
-const MotionBox = motion(Box as any); // Create a motion-enhanced Box component
-
-const Watcher = ({ peers, localVideoRef }: WatcherProps) => {
+const WatcherDisplay = ({ peers, localVideoRef }: WatcherDisplayProps) => {
   const cardTextColor = useColorModeValue("gray.800", "whiteAlpha.900");
-  const cardBg = useColorModeValue("gray.100", "gray.900");
   const [isMicOn, setIsMicOn] = useState(true);
   const [isVideoOn, setIsVideoOn] = useState(true);
-  const [currentIndexForSystemQuestion] = useState(0);
   const { activeRoom } = useSelector((state: RootState) => state.room);
+  const { user } = useSelector((state: RootState) => state.user);
+
+  const {
+    rounds,
+    skipCurrentRound,
+    pauseCurrentRound,
+    resumeCurrentRound,
+    nextQuestionClicked,
+  } = useRound();
+
+  const presenterBgGradient = useColorModeValue(
+    "linear(to-r, teal.300, blue.500)",
+    "linear(to-r, pink.500, purple.500)"
+  );
+
   const [isLaptopOrDesktop] = useMediaQuery(`(min-width: ${size.desktop})`);
 
-  const { rounds, currentRound, timer } = useRound();
   const progressCircleThickness = isLaptopOrDesktop ? 5 : 4;
   const progressCircleSize = isLaptopOrDesktop ? 140 : 70;
 
@@ -68,174 +84,198 @@ const Watcher = ({ peers, localVideoRef }: WatcherProps) => {
     return null;
   }
 
-  // const peers2 = Array.from(Array(4).keys());
-  const peersWithoutThePresenter = peers.filter(
-    (peer) => peer.user.id !== activeRoom?.user!.id!
-  );
-  const leftPeers = peersWithoutThePresenter.slice(
-    0,
-    Math.round(peersWithoutThePresenter.length / 2) - 1
-  );
-  const rightPeers = peersWithoutThePresenter.slice(
-    Math.round(peersWithoutThePresenter.length / 2) - 1
-  );
-
-  const peerAnimationProps = {
-    initial: { opacity: 0, scale: 0.8 },
-    animate: { opacity: 1, scale: 1 },
-    transition: { duration: 0.5, ease: "easeInOut" },
-  };
-
-  // Define a special animation for the central video (zoom-in with rotation)
-  const centralVideoAnimationProps = {
-    initial: { opacity: 0, scale: 0.5, rotate: 45 },
-    animate: { opacity: 1, scale: 1, rotate: 0 },
-    transition: { duration: 1, ease: "easeOut" }, // Slower and more dramatic
-  };
-
   return (
-    <Box
-      height="calc(100vh - 300px)"
-      bg={cardBg}
-      color={cardTextColor}
-      position="relative"
-    >
-      <Flex p={4} display="flex" justifyContent="space-between" height={"100%"}>
-        {/* Peer Videos - Left */}
-        <Flex direction="column" gap={4}>
-          <MotionBox
-            width="240px"
-            height="180px"
-            borderRadius="10px"
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-            position="relative"
-            {...peerAnimationProps} // Apply animation properties
-          >
-            <MyVideo
-              isMicOn={isMicOn}
-              isVideoOn={isVideoOn}
-              onToggleMic={onToggleMic}
-              onToggleVideo={onToggleVideo}
-              localVideoRef={localVideoRef}
-            />
-          </MotionBox>
-          {leftPeers.map((peer, index) => (
-            <MotionBox
-              key={index}
-              width="200px"
-              height="120px"
-              borderRadius="10px"
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-              {...peerAnimationProps} // Apply animation properties
-            >
-              <PeerVideo peer={peer.peer} />
-              {/* <video
-                autoPlay
-                playsInline
-                src={"/sample-video.mp4"}
-                width="100%"
-                height="100%"
-                style={{ borderRadius: "10px" }}
-              /> */}
-            </MotionBox>
-          ))}
-        </Flex>
-
-        {/* Central Video */}
-        <MotionBox
-          position="relative"
-          bg="gray.700"
-          borderRadius="10px"
-          height="40%"
-          width="50%"
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-          marginTop="10%"
-          {...centralVideoAnimationProps} // Apply special animation
+    <Box height={"100%"} width={"100%"} padding={10}>
+      <Grid
+        templateColumns="33% 1fr" // First column takes 40% of the width, second column fills the remaining space
+        templateRows="repeat(3, 1fr)" // Dynamic row heights
+        gap={4}
+        width="100%"
+        maxHeight="70vh"
+        alignItems={"center"}
+        overflow={"scroll"}
+        _before={{
+          content: '""',
+          position: "absolute",
+          top: 20,
+          bottom: 40,
+          left: "33%",
+          width: "1px",
+          backgroundColor: "red",
+          transform: "translateX(-50%)",
+        }}
+      >
+        {/* First Column - 3 Rows */}
+        <GridItem
+          gridColumn={1}
+          gridRow={1}
+          position={"relative"}
+          maxWidth={"350px"}
         >
           {thePresenter ? (
-            <PeerVideo peer={thePresenter.peer} />
+            <>
+              <Flex
+                direction={"column"}
+                gap={4}
+                fontSize={{ base: "s", md: "s" }}
+                fontWeight={"bold"}
+                color={"white"}
+              >
+                <Box textTransform={"uppercase"}>
+                  {thePresenter.user.firstName},{" "}
+                  {calculateAge(
+                    new Date(thePresenter.user?.userProfile?.birthDate!)
+                  )}
+                </Box>
+                <PeerVideo peer={thePresenter.peer} />
+              </Flex>
+            </>
           ) : (
-            <Box>Hmm.. where is the presenter?</Box>
-          )}
-        </MotionBox>
-
-        {/* Peer Videos - Right */}
-        <Flex direction="column" gap={4}>
-          {rightPeers.map((peer, index) => (
-            <MotionBox
-              key={index}
-              width="200px"
-              height="120px"
-              borderRadius="10px"
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-              {...peerAnimationProps} // Apply animation properties
+            <Text
+              fontSize="lg"
+              bgGradient={presenterBgGradient}
+              color="white"
+              p={4}
+              borderRadius="lg"
+              boxShadow="lg"
+              textAlign="center"
+              border="1px solid white"
+              w="50%"
+              align="center"
+              transform="scale(1)"
+              transition="transform 0.3s ease-in-out"
+              _hover={{ transform: "scale(1.05)" }}
             >
-              <PeerVideo peer={peer.peer} />
-              {/* <video
-                autoPlay
-                playsInline
-                src={"/sample-video.mp4"}
-                width="100%"
-                height="100%"
-                style={{ borderRadius: "10px" }}
-              /> */}
-            </MotionBox>
-          ))}
-        </Flex>
-      </Flex>
-      {/* Rounds go here */}
-      <Box
-        width="100%"
-        overflow={"auto"}
-        p={4}
-        color={cardTextColor}
-        background={
-          currentRound !== null
-            ? "linear-gradient(135deg, black 0%, #fecfef 130%)"
-            : "transparent"
-        }
-        borderRadius="10px"
-        position={"relative"}
-        mb={{ base: "20px", lg: "0" }}
-        flexGrow={{ base: "unset", lg: 1 }}
-        minHeight={"150px"}
-        display={"flex"}
-        justifyContent={"center"}
-      >
-        {currentRound !== null && (
+              The presenter appears here &#128525;
+            </Text>
+          )}
+        </GridItem>
+
+        <GridItem gridColumn={1} gridRow={2}>
           <Flex
-            justifyContent={"space-between"}
+            color={cardTextColor}
+            justify="center"
+            align="center"
+            alignItems="center"
+            position="relative"
+            width="200px"
+          >
+            <MyVideo localVideoRef={localVideoRef} />
+          </Flex>
+        </GridItem>
+
+        <GridItem gridColumn={1} gridRow={3}>
+          {peers?.length >= 3 ? (
+            <Text fontSize="xl">
+              You and {peers.length - 1} watchers are attending.
+            </Text>
+          ) : (
+            <Text fontSize="md" opacity={"80%"}>
+              You are the only one attending this room so far. Enjoy!;
+            </Text>
+          )}
+        </GridItem>
+
+        {/* Second Column */}
+        <GridItem gridRow={"1 / span 3"} gridColumn={2} width={"100%"}>
+          {/* Rounds section */}
+          <Flex
+            width={"100%"}
+            p={4}
+            color={cardTextColor}
+            borderRadius="10px"
+            position={"relative"}
+            mb={{ base: "20px", lg: "0" }}
             alignItems={"center"}
             height={"100%"}
+            // justify={"center"}
+            gap={8}
           >
-            <RoundPlayground
-              currentIndexForSystemQuestion={currentIndexForSystemQuestion}
-              currentRound={currentRound}
-            />
-            <Flex gap={4} direction={{ base: "column", lg: "row" }}>
-              {/* Timer section */}
-              <Timer
-                progressCircleSize={progressCircleSize}
-                progressCircleThickness={progressCircleThickness}
-                currentRound={currentRound}
-                timer={timer}
-              />
-            </Flex>
+            {activeRoom?.roomState?.currentRound !== undefined && (
+              <Flex
+                height={"100%"}
+                direction={"column"}
+                justifyContent={"center"}
+                gap={4}
+                maxWidth={"70%"}
+                marginLeft={10}
+              >
+                <Text textAlign={"left"}>
+                  Round {activeRoom?.roomState?.currentRound! + 1}
+                </Text>
+                <RoundPlayground
+                  onNextQuestionClicked={nextQuestionClicked}
+                  currentIndexForSystemQuestion={
+                    activeRoom?.roomState?.questionIndex || 0
+                  }
+                  currentRound={activeRoom?.roomState?.currentRound!}
+                />
+                <Box
+                  position={"absolute"}
+                  top={"50%"}
+                  right={8}
+                  transform="translateY(-50%)"
+                >
+                  {/* Timer section */}
+                  <Timer
+                    progressCircleSize={progressCircleSize}
+                    progressCircleThickness={progressCircleThickness}
+                    currentRound={activeRoom?.roomState?.currentRound!}
+                    timer={
+                      activeRoom?.roomState?.timeRemainingForRoundBeforePause!
+                    }
+                  />
+                </Box>
+              </Flex>
+            )}
+            {activeRoom?.roomState?.currentRound === undefined ? (
+              <Flex
+                direction="column"
+                align="center"
+                justify="center"
+                height="100%"
+                gap={6}
+              >
+                <Text fontSize="xl">
+                  Waiting for the first round to start..
+                </Text>
+                <AnimatedHeart />
+              </Flex>
+            ) : null}
           </Flex>
-        )}
+        </GridItem>
+      </Grid>
 
-        {currentRound === null && <Text>Rounds play here</Text>}
-      </Box>
+      {/* timer controls */}
+      <RoomControls
+        currentRound={activeRoom?.roomState?.currentRound!}
+        isPaused={activeRoom?.roomState?.isRoundPaused!}
+        pauseRound={pauseCurrentRound}
+        resumeRound={resumeCurrentRound}
+        skipRound={skipCurrentRound}
+        onToggleVideo={onToggleVideo}
+        onToggleMic={onToggleMic}
+        isMicOn={isMicOn}
+        isVideoOn={isVideoOn}
+        isRoomOwner={activeRoom?.user?.id === user?.id}
+      />
+      <Button
+        variant="link"
+        colorScheme="red"
+        onClick={() => {
+          window.location.href = "/browse-rooms";
+        }}
+        leftIcon={<FaArrowLeft />}
+        position="fixed"
+        left="0"
+        bottom="100px"
+        px={4}
+        py={2}
+      >
+        Exit Room
+      </Button>
     </Box>
   );
 };
 
-export default Watcher;
+export default WatcherDisplay;

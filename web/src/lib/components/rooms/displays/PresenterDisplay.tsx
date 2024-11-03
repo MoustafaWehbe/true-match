@@ -39,6 +39,7 @@ const PresenterDisplay = ({ peers, localVideoRef }: PresenterDisplayProps) => {
   const [isUpperPanelCollapsed, setIsUpperPanelCollapsed] = useState(true);
   const [isVideoOn, setIsVideoOn] = useState(true);
   const { activeRoom } = useSelector((state: RootState) => state.room);
+  const { user } = useSelector((state: RootState) => state.user);
 
   const {
     rounds,
@@ -266,7 +267,7 @@ const PresenterDisplay = ({ peers, localVideoRef }: PresenterDisplayProps) => {
             direction={"column"}
             justifyContent={"center"}
             gap={4}
-            // mt={"100px"}
+            maxWidth={{ base: "95vw", md: "65vw" }}
           >
             <Text textAlign={"left"}>
               Round {activeRoom?.roomState?.currentRound! + 1}
@@ -312,6 +313,7 @@ const PresenterDisplay = ({ peers, localVideoRef }: PresenterDisplayProps) => {
         onToggleMic={onToggleMic}
         isMicOn={isMicOn}
         isVideoOn={isVideoOn}
+        isRoomOwner={activeRoom?.user?.id === user?.id}
       />
       <Button
         variant="link"

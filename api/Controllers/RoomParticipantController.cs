@@ -100,8 +100,12 @@ namespace api.Controllers
         [HttpPost("join/{id}")]
         [Authorize]
         [ProducesResponseType(typeof(ApiResponse<SimpleApiResponse>), 200)]
-        public async Task<IActionResult> joinRoom(int id)
+        public async Task<IActionResult> joinRoom(int id, [FromBody] JoinRoomDto joinRoomDto)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             var user = await _userManager.FindByEmailAsync(User.GetEmail());
 
             var room = await _roomRepo.GetByIdAsync(id);
@@ -130,7 +134,8 @@ namespace api.Controllers
                     Left = false,
                     AttendedFromTime = DateTime.UtcNow,
                     AttendedToTime = null,
-                    CreatedAt = DateTime.UtcNow
+                    CreatedAt = DateTime.UtcNow,
+                    SocketId = joinRoomDto.SocketId
                 };
                 await _roomParticipantRepo.CreateRoomParticipantEventAsync(newRoomParticipantEvent);
             }
@@ -149,7 +154,8 @@ namespace api.Controllers
                     Left = false,
                     AttendedFromTime = DateTime.UtcNow,
                     AttendedToTime = null,
-                    CreatedAt = DateTime.UtcNow
+                    CreatedAt = DateTime.UtcNow,
+                    SocketId = joinRoomDto.SocketId
                 };
                 await _roomParticipantRepo.CreateRoomParticipantEventAsync(newRoomParticipantEvent);
             }

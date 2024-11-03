@@ -16,6 +16,7 @@ interface RoomControlsProps {
   onToggleMic: () => void;
   isMicOn: boolean;
   isVideoOn: boolean;
+  isRoomOwner: boolean;
 }
 
 const RoomControls = ({
@@ -28,6 +29,7 @@ const RoomControls = ({
   onToggleMic,
   isMicOn,
   isVideoOn,
+  isRoomOwner,
 }: RoomControlsProps) => {
   const { roomContent: rounds } = useSelector((state: RootState) => state.room);
 
@@ -39,28 +41,30 @@ const RoomControls = ({
     <Box
       display="flex"
       alignItems={"center"}
-      justifyContent={"space-between"}
+      justifyContent={isRoomOwner ? "space-between" : "center"}
       position={"absolute"}
       bottom={0}
       width={"100%"}
       left={0}
       borderTop={"1px solid gray"}
-      padding={10}
+      padding={4}
     >
-      <Button
-        aria-label="toggle mic"
-        variant="outline"
-        width={"205px"}
-        colorScheme="blue"
-        leftIcon={isPaused ? <FaPlay /> : <FaPause />}
-        onClick={() => (isPaused ? resumeRound() : pauseRound())}
-        size={"lg"}
-        isDisabled={
-          currentRound === undefined || currentRound! >= rounds.length - 1
-        }
-      >
-        {isPaused ? "Resume Round" : "Pause Round"}
-      </Button>
+      {isRoomOwner && (
+        <Button
+          aria-label="toggle mic"
+          variant="outline"
+          width={"205px"}
+          colorScheme="blue"
+          leftIcon={isPaused ? <FaPlay /> : <FaPause />}
+          onClick={() => (isPaused ? resumeRound() : pauseRound())}
+          size={"lg"}
+          isDisabled={
+            currentRound === undefined || currentRound! >= rounds.length - 1
+          }
+        >
+          {isPaused ? "Resume Round" : "Pause Round"}
+        </Button>
+      )}
       <Box>
         <VideoControls
           onToggleMic={onToggleMic}
@@ -69,20 +73,22 @@ const RoomControls = ({
           isVideoOn={isVideoOn}
         />
       </Box>
-      <Button
-        aria-label="skip round"
-        variant="outline"
-        width={"205px"}
-        colorScheme="red"
-        leftIcon={<FaForward />}
-        onClick={skipRound}
-        size={"lg"}
-        isDisabled={
-          currentRound === undefined || currentRound! >= rounds.length - 1
-        }
-      >
-        Skip Round
-      </Button>
+      {isRoomOwner && (
+        <Button
+          aria-label="skip round"
+          variant="outline"
+          width={"205px"}
+          colorScheme="red"
+          leftIcon={<FaForward />}
+          onClick={skipRound}
+          size={"lg"}
+          isDisabled={
+            currentRound === undefined || currentRound! >= rounds.length - 1
+          }
+        >
+          Skip Round
+        </Button>
+      )}
     </Box>
   );
 };

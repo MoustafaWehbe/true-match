@@ -33,7 +33,7 @@ const RoundPlayground = ({
       align="start"
       justify="center"
       borderRadius="lg"
-      maxWidth={{ base: "95vw", md: "65vw" }}
+      width={"100%"}
     >
       <Flex justifyContent={"center"} alignItems={"start"} gap={2}>
         <Text fontSize={{ base: "md", lg: "3xl" }} mb={2} fontWeight={"bold"}>

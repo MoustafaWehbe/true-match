@@ -7,7 +7,10 @@ import { roomService } from "./services";
 
 class SocketHandler {
   private io: SocketIOServer;
-  private timersMap: Map<string, NodeJS.Timeout>;
+  private timersMap: Map<
+    string,
+    { timer: NodeJS.Timeout; timeRemaining: number }
+  >;
 
   constructor(io: SocketIOServer) {
     this.io = io;
@@ -92,7 +95,13 @@ class SocketHandler {
           user,
         } as socketEventTypes.UserJoinedPayload);
         // send the current room state to this user
-        socket.emit("room-state", room.data?.roomState);
+        const previousTimer = this.timersMap.get(roomId.toString());
+        socket.emit("room-state-sent", {
+          roomState: {
+            ...room.data?.roomState,
+            timeRemainingForRoundBeforePause: previousTimer?.timeRemaining || 0,
+          },
+        } as socketEventTypes.SendRoomStatePayload);
       } else {
         throw Error("Could not find room");
       }
@@ -135,9 +144,24 @@ class SocketHandler {
           throw Error(leaveRes?.message || "Failed to leave room.");
         }
       }
-      const previousTimer = this.timersMap.get(socket.id);
-      clearInterval(previousTimer);
-      this.timersMap.delete(socket.id);
+      const rooms = Array.from(socket.rooms).filter(room => room !== socket.id); // Filter out the socket's own room
+
+      rooms.forEach(room => {
+        // Get the number of clients in the room before disconnection
+        const roomClients = this.io.sockets.adapter.rooms.get(room);
+        const clientCount = roomClients ? roomClients.size : 0;
+
+        console.log(`Room: ${room}, Clients before disconnect: ${clientCount}`);
+
+        // Perform actions based on the number of remaining clients
+        if (clientCount <= 1) {
+          console.log(`Room ${room} is now empty or has only one client left.`);
+          const previousTimer = this.timersMap.get(room);
+          clearInterval(previousTimer?.timer);
+          this.timersMap.delete(socket.id);
+        }
+      });
+
       socket.disconnect(true);
     } catch (e) {
       socket.disconnect(true);
@@ -204,7 +228,7 @@ class SocketHandler {
           { roomState: finalRoomState },
           room?.data?.id!
         );
-        clearInterval(this.timersMap.get(socket.id));
+        clearInterval(this.timersMap.get(payload.roomId.toString())?.timer);
       } else {
         throw Error("Could not find room");
       }
@@ -323,9 +347,9 @@ class SocketHandler {
     token: string,
     socketId: string
   ) {
-    const previousTimer = this.timersMap.get(socketId);
-    clearInterval(previousTimer);
-    previousTimer?.unref();
+    const previousTimer = this.timersMap.get(roomId.toString());
+    clearInterval(previousTimer?.timer);
+    previousTimer?.timer?.unref();
     let theEnd = false;
     let goToNextRound = false;
     const timer = setInterval(async () => {
@@ -364,11 +388,14 @@ class SocketHandler {
           this.setTimer(roomId, roomState, token, socketId);
         }
       }
-    }, 1000);
 
-    if (timer) {
-      this.timersMap.set(socketId, timer);
-    }
+      if (timer) {
+        this.timersMap.set(roomId.toString(), {
+          timer,
+          timeRemaining: roomState.timeRemainingForRoundBeforePause,
+        });
+      }
+    }, 1000);
   }
 }
 

@@ -61,6 +61,9 @@ const Room = ({ roomId }: { roomId: string }) => {
     },
     [dispatch]
   );
+
+  const onRoomStateReceived = () => {};
+
   const onRoundPaused = useCallback(
     (payload: socketEventTypes.RoundPausedPayload) => {
       dispatch(
@@ -129,6 +132,7 @@ const Room = ({ roomId }: { roomId: string }) => {
       onGoToNextQuestion,
       onTimerUpdated,
       onPeersChanged: setPeers,
+      onRoomStateReceived,
     });
     webRTCHandler.current.init(localVideoRef);
 
@@ -151,9 +155,7 @@ const Room = ({ roomId }: { roomId: string }) => {
       {activeRoom?.user?.id === user?.id ? (
         <PresenterDisplay peers={peers} localVideoRef={localVideoRef} />
       ) : (
-        <Box position="relative" width="full">
-          <WatcherDisplay peers={peers} localVideoRef={localVideoRef} />
-        </Box>
+        <WatcherDisplay peers={peers} localVideoRef={localVideoRef} />
       )}
     </Box>
   );
