@@ -1,5 +1,4 @@
 ﻿using api.Models;
-using ChatApp.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -40,6 +39,7 @@ namespace api.Data
             builder.ApplyConfiguration(new MatchConfiguration());
             builder.ApplyConfiguration(new GenderConfiguration());
             builder.ApplyConfiguration(new AvailableDescriptorConfiguration());
+            builder.ApplyConfiguration(new MessageConfiguration());
 
             SeedRelevantData.Seed(builder);
         }

@@ -7,6 +7,6 @@ namespace api.Interfaces
     {
         Task<Message> SaveMessageAsync(Message message);
         Task<IEnumerable<Message>> GetMessagesByConversationAsync(string senderId, string receiverId);
-        Task UpdateMessageStatusAsync(int messageId, string status);
+        Task UpdateMessageStatusAsync(int messageId, MessageStatus status);
     }
 }

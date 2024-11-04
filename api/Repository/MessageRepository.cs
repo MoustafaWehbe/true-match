@@ -30,7 +30,7 @@ namespace api.Repository
                 .ToListAsync();
         }
 
-        public async Task UpdateMessageStatusAsync(int messageId, string status)
+        public async Task UpdateMessageStatusAsync(int messageId, MessageStatus status)
         {
             var message = await _context.Messages.FindAsync(messageId);
             if (message != null)

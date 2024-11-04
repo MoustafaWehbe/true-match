@@ -1,19 +1,14 @@
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+using api.Models;
 
-namespace api.Models
+namespace api.Dtos
 {
-    public class Message
+    public class MessageDto
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
-        [ForeignKey("Sender")]
         public required string SenderId { get; set; }
         public User? Sender { get; set; }
 
-        [ForeignKey("Receiver")]
         public required string ReceiverId { get; set; }
         public User? Receiver { get; set; }
 
