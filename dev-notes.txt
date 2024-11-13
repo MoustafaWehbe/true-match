@@ -5,6 +5,13 @@
   "password": "$@$Ffsfsd(f000fFFF)"
 }
 
+5dcb4b53-b26e-45cd-97ed-25d59c31550b: mostafa@example.com
+47673439-745b-4e92-bf1b-e554eade84e2: rach@example.com
+8bc3a054-7ca2-40e3-9a47-0d4d59ce74ac: hassan@example.com
+
+insert into public."Matches" ("User1Id", "User2Id", "Origin", "CreatedAt", "UpdatedAt") values 
+('5dcb4b53-b26e-45cd-97ed-25d59c31550b', '47673439-745b-4e92-bf1b-e554eade84e2', 0, '2023-11-29 20:09:06.169432+02', '2023-11-29 20:09:06.169432+02');
+
 symlinks:
   in shared: yarn link
   in web: yarn link shared

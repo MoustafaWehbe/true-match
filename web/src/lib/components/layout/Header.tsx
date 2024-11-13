@@ -6,6 +6,7 @@ import {
   Heading,
   keyframes,
   Link,
+  Text,
   useColorModeValue,
 } from "@chakra-ui/react";
 
@@ -75,6 +76,8 @@ const Header = () => {
           DAPP
         </Heading>
       </Box>
+
+      {/* <Text>Title here</Text> */}
 
       {user && <HeaderPopover onLogout={onLogout} user={user} />}
     </Flex>

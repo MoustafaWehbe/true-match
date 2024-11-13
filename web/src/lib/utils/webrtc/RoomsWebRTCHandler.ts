@@ -4,7 +4,7 @@ import { socketEventTypes } from "@dapp/shared/src/types/custom";
 import { PeerItem } from "~/lib/components/rooms/Room";
 import { socket } from "~/lib/utils/socket/socket";
 
-export class WebRTCHandler {
+export class RoomsWebRTCHandler {
   private stream: MediaStream | null = null;
   private peers: PeerItem[] = [];
   private roomId: string;
@@ -65,6 +65,7 @@ export class WebRTCHandler {
   }
 
   async init(localVideoRef: React.RefObject<HTMLVideoElement>) {
+    socket.connect();
     this.stream = await this.fetchUserMedia();
     if (localVideoRef.current) {
       localVideoRef.current.srcObject = this.stream;
@@ -104,6 +105,7 @@ export class WebRTCHandler {
       this.onRoomStateReceived
     );
 
+    socket.disconnect();
     const tracks = this.stream?.getTracks();
     tracks?.forEach((track) => track.stop());
   }

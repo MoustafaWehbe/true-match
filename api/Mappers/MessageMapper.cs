@@ -23,13 +23,9 @@ namespace api.Mappers
         {
             return new Message
             {
-                Id = messageDto.Id,
                 SenderId = messageDto.SenderId,
                 ReceiverId = messageDto.ReceiverId,
                 Content = messageDto.Content,
-                CreatedAt = messageDto.CreatedAt,
-                UpdatedAt = messageDto.UpdatedAt,
-                Status = messageDto.Status,
             };
         }
     }

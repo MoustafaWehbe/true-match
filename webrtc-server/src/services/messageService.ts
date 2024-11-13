@@ -1,3 +1,9 @@
+import {
+  CreateMessageDto,
+  MessageDtoApiResponse,
+  MessageStatus,
+} from "@dapp/shared/src/types/openApiGen";
+
 import axiosInstance from "./axiosInstance";
 import { handleError } from "./errorHandler";
 
@@ -21,7 +27,7 @@ const updateMessageStatus = async (
   token: string,
   messageStatus: MessageStatus,
   messageId: number
-): Promise<{}> => {
+) => {
   try {
     const response = await axiosInstance.put<{}>(
       `api/message/${messageId}/status`,

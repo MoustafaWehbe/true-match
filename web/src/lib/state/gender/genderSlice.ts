@@ -8,7 +8,7 @@ import {
 
 import axiosInstance, { defaultHeaders } from "~/lib/utils/api/axiosConfig";
 
-export interface QuestionSate {
+export interface GenderSate {
   genders: Array<GenderDto> | null;
   gendersLoading: boolean;
 }
@@ -33,13 +33,13 @@ export const getGenders = createAsyncThunk<
   }
 });
 
-const initialState: QuestionSate = {
+const initialState: GenderSate = {
   genders: null,
   gendersLoading: false,
 };
 
-const questionSlice = createSlice({
-  name: "question",
+const genderSlice = createSlice({
+  name: "gender",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -60,4 +60,4 @@ const questionSlice = createSlice({
   },
 });
 
-export default questionSlice.reducer;
+export default genderSlice.reducer;

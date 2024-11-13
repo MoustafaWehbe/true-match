@@ -50,6 +50,7 @@ namespace api.Controllers
 
         [HttpGet("{id}")]
         [Authorize]
+        [ProducesResponseType(typeof(ApiResponse<MatchDto>), 200)]
         public async Task<IActionResult> GetMatch(int id)
         {
             var match = await _matchRepo.GetByIdAsync(id);
@@ -62,9 +63,10 @@ namespace api.Controllers
             return Ok(ResponseHelper.CreateSuccessResponse(match.ToMatchDto()));
         }
 
-        [HttpGet("myMatches")]
+        [HttpGet]
         [Authorize]
-        public async Task<IActionResult> GetMyMatches()
+        [ProducesResponseType(typeof(ApiResponse<List<MatchDto>>), 200)]
+        public async Task<IActionResult> GetAll()
         {
             var user = await _userManager.FindByEmailAsync(User.GetEmail());
 
@@ -73,10 +75,8 @@ namespace api.Controllers
                 return NotFound("User was not found!");
             }
             var matches = await _matchRepo.GetMatchesForUserAsync(user.Id);
-
             var matchesDto = matches.Select(m => m.ToMatchDto()).ToList();
-
-            return Ok(matchesDto);
+            return Ok(ResponseHelper.CreateSuccessResponse(matchesDto));
         }
     }
 }

@@ -32,6 +32,7 @@ namespace api.Data
         {
             base.OnModelCreating(builder);
             builder.HasPostgresExtension("postgis");
+            builder.HasPostgresEnum<MessageStatus>("messagestatus");
 
             builder.ApplyConfiguration(new UserProfileGenderConfiguration());
             builder.ApplyConfiguration(new RoomParticipantConfiguration());

@@ -15,7 +15,7 @@ import {
   updateActiveRoomStatePartially,
 } from "~/lib/state/room/roomSlice";
 import { AppDispatch, RootState } from "~/lib/state/store";
-import { WebRTCHandler } from "~/lib/utils/webrtc/WebRTCHandler";
+import { RoomsWebRTCHandler } from "~/lib/utils/webrtc/RoomsWebRTCHandler";
 
 export interface PeerItem {
   peerID: string;
@@ -25,7 +25,7 @@ export interface PeerItem {
 
 const Room = ({ roomId }: { roomId: string }) => {
   const localVideoRef = useRef<HTMLVideoElement>(null);
-  const webRTCHandler = useRef<WebRTCHandler | null>(null);
+  const webRTCHandler = useRef<RoomsWebRTCHandler | null>(null);
   const [peers, setPeers] = useState<PeerItem[]>([]);
 
   const { activeRoom } = useSelector((state: RootState) => state.room);
@@ -123,7 +123,7 @@ const Room = ({ roomId }: { roomId: string }) => {
   );
 
   useEffect(() => {
-    webRTCHandler.current = new WebRTCHandler(roomId, {
+    webRTCHandler.current = new RoomsWebRTCHandler(roomId, {
       onRoundPaused,
       onRoundResumed,
       onRoundSkiped,

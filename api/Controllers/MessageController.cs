@@ -34,10 +34,11 @@ namespace api.Controllers
                 return BadRequest(ModelState);
             }
             // TODO: check if the user "senderId" is a match with the receiver "receiverId" so they can exchange messages.
-            messageDto.CreatedAt = DateTime.UtcNow;
-            messageDto.Status = MessageStatus.Sent;  // Default status on creation
+            var message = messageDto.ToMessageFromCreate();
+            message.CreatedAt = DateTime.UtcNow;
+            message.Status = MessageStatus.Sent;  // Default status on creation
 
-            var savedMessage = await _messageRepository.SaveMessageAsync(messageDto.ToMessageFromCreate());
+            var savedMessage = await _messageRepository.SaveMessageAsync(message);
 
             return Ok(ResponseHelper.CreateSuccessResponse(savedMessage.ToMessageDto()));
         }

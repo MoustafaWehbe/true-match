@@ -9,7 +9,9 @@ import {
   Grid,
   Heading,
   Stack,
-  Text,
+  Tab,
+  TabList,
+  Tabs,
   useColorModeValue,
   useToast,
 } from "@chakra-ui/react";
@@ -17,7 +19,7 @@ import { useRouter } from "next/navigation";
 
 import { MyRoomStatus, RoomDto } from "@dapp/shared/src/types/openApiGen";
 
-import MenuButton, { Option } from "../shared/buttons/CustomMenuButton";
+import { Option } from "../shared/buttons/CustomMenuButton";
 import GradientButton from "../shared/buttons/GradientButton";
 
 import RoomCard from "./RoomCard";
@@ -186,13 +188,29 @@ function MyRooms() {
 
   return (
     <Box bg={bg} color={textColor} px={8} py={4} borderRadius="lg">
-      <Flex p={6} float={"right"} alignItems={"center"} gap={2}>
-        <MenuButton
-          options={options}
-          placeholder="Select option"
-          handleSelect={handleSelect}
-          selectedOption={selectedStatus}
-        />
+      <Flex p={6} alignItems={"center"} gap={2}>
+        <Stack spacing={4} align="center" sx={{ clear: "both" }}>
+          <Heading fontSize="4xl">My Rooms</Heading>
+        </Stack>
+        <Tabs
+          maxWidth={{ base: "90%", md: "75%", lg: "50%" }}
+          margin={"0 auto"}
+          marginTop={{ base: "50px", md: "0px" }}
+        >
+          <TabList>
+            {options.map((option) => {
+              return (
+                <Tab
+                  key={option.value + "1"}
+                  onClick={() => handleSelect(option)}
+                  flex={"auto"}
+                >
+                  {option.label}
+                </Tab>
+              );
+            })}
+          </TabList>
+        </Tabs>
         <GradientButton
           size="sm"
           color="white"
@@ -202,11 +220,6 @@ function MyRooms() {
           Schedule room
         </GradientButton>
       </Flex>
-
-      <Stack spacing={4} align="center" sx={{ clear: "both" }}>
-        <Heading fontSize="4xl">My Rooms</Heading>
-        <Text fontSize="lg">You rooms appear here</Text>
-      </Stack>
       <Grid
         templateColumns={{
           base: "repeat(1, 1fr)", // For screens less than 48em (768px)

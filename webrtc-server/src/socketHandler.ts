@@ -4,7 +4,7 @@ import { SOCKET_EVENTS } from "@dapp/shared/src/consts/socketEvents";
 import { socketEventTypes } from "@dapp/shared/src/types/custom";
 import { RoomState, UserDto } from "@dapp/shared/src/types/openApiGen";
 
-import { roomService } from "./services";
+import { messageService, roomService } from "./services";
 
 class SocketHandler {
   private io: SocketIOServer;
@@ -96,8 +96,8 @@ class SocketHandler {
 
       socket.on(
         SOCKET_EVENTS.CLIENT.SEND_MESSAGE,
-        (payload: socketEventTypes.SendMessageSkipRoundPayload) =>
-          this.handleMessageSent(payload, socket, userId)
+        (payload: socketEventTypes.SendMessagePayload) =>
+          this.handleMessageSent(payload, socket, userId!)
       );
     });
   }
@@ -385,31 +385,38 @@ class SocketHandler {
     }
   }
 
+  // individual users chat
   private async handleMessageSent(
-    payload: socketEventTypes.SendMessageSkipRoundPayload,
-    _socket: Socket,
+    payload: socketEventTypes.SendMessagePayload,
+    socket: Socket,
     senderId: string
   ) {
     const { receiverId, content } = payload;
+    const token = socket.handshake.auth.token;
+
     const messageData = {
       senderId,
       receiverId,
       content,
-      timestamp: new Date(),
     };
 
-    await sendMessageToApi(messageData);
+    try {
+      await messageService.saveMessage(messageData, token);
+    } catch {
+      console.log("unable to save message!!");
+    }
     const receiverSocketId = this.userSocketsMap.get(
       `user_socket:${receiverId}`
     );
     if (receiverSocketId) {
       this.io
         .to(receiverSocketId)
-        .emit(SOCKET_EVENTS.SERVER.SEND_MESSAGE, messageData);
+        .emit(
+          SOCKET_EVENTS.SERVER.SEND_MESSAGE,
+          messageData as socketEventTypes.MessageSentPayload
+        );
     }
   }
-
-  // individual users chat
 
   // helpers
   private async setTimer(

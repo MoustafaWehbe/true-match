@@ -11,9 +11,13 @@ namespace api.Data
             builder.HasAnnotation("Npgsql:Enum:message_status", "Sent,Delivered,Read");
 
             builder
-                .Property(m => m.Status)
-                .HasConversion<string>()
-                .HasColumnType("message_status");
+            .Property(m => m.Status)
+            .HasConversion<string>();
+
+            // builder
+            //     .Property(m => m.Status)
+            //     .HasConversion<string>()
+            //     .HasColumnType("message_status");
         }
     }
 }
