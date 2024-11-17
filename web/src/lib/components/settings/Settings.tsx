@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   Box,
   Button,
@@ -23,13 +23,14 @@ import {
   VStack,
 } from "@chakra-ui/react";
 
-import { AppDispatch } from "~/lib/state/store";
+import { AppDispatch, RootState } from "~/lib/state/store";
 import { createOrUpdateUserProfile } from "~/lib/state/user/userSlice";
 
 const SettingsPage = () => {
-  const [ageFilter, setAgeFilter] = useState<[number, number]>([18, 50]); // Min and Max age
-  const [distanceFilter, setDistanceFilter] = useState(30); // Default distance
+  const [ageFilter, setAgeFilter] = useState<[number, number]>([18, 50]);
+  const [distanceFilter, setDistanceFilter] = useState(30);
   const [hideProfile, setHideProfile] = useState(false);
+  const { user } = useSelector((state: RootState) => state.user);
 
   const toast = useToast();
   const dispatch = useDispatch<AppDispatch>();
@@ -38,12 +39,24 @@ const SettingsPage = () => {
   const sectionBgColor = useColorModeValue("white", "gray.700");
 
   const handleSave = async () => {
-    await dispatch(
+    const res = await dispatch(
       createOrUpdateUserProfile({
         ageFilterMin: ageFilter[0],
         ageFilterMax: ageFilter[1],
+        distanceFilter: distanceFilter,
+        hidden: hideProfile,
       })
     );
+
+    if (res.meta.requestStatus === "rejected") {
+      toast({
+        title: "Failed to update settings",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+      return;
+    }
 
     toast({
       title: "Settings Updated",
@@ -64,6 +77,21 @@ const SettingsPage = () => {
       isClosable: true,
     });
   };
+
+  useEffect(() => {
+    if (user?.userProfile?.ageFilterMax && user.userProfile.ageFilterMin) {
+      setAgeFilter([
+        user?.userProfile?.ageFilterMin,
+        user?.userProfile?.ageFilterMax,
+      ]);
+    }
+    setHideProfile(!!user?.userProfile?.hidden);
+    setDistanceFilter(user?.userProfile?.distanceFilter || 30);
+  }, [user]);
+
+  if (!user) {
+    return null;
+  }
 
   return (
     <Box
@@ -90,7 +118,7 @@ const SettingsPage = () => {
           </Heading>
           <FormControl>
             <RangeSlider
-              defaultValue={ageFilter}
+              value={ageFilter}
               min={18}
               max={100}
               step={1}
@@ -109,14 +137,13 @@ const SettingsPage = () => {
           </FormControl>
         </Box>
 
-        {/* Distance Filter */}
         <Box>
           <Heading size="md" color={textColor} mb={4}>
             Distance Filter
           </Heading>
           <FormControl>
             <Slider
-              defaultValue={distanceFilter}
+              value={distanceFilter}
               min={1}
               max={200}
               step={1}
@@ -134,7 +161,6 @@ const SettingsPage = () => {
           </FormControl>
         </Box>
 
-        {/* Hide Profile */}
         <Box>
           <Heading size="md" color={textColor} mb={4}>
             Privacy
@@ -151,12 +177,10 @@ const SettingsPage = () => {
           </FormControl>
         </Box>
 
-        {/* Save Button */}
         <Button colorScheme="pink" w="full" onClick={handleSave}>
           Save Settings
         </Button>
 
-        {/* Delete Account */}
         <Button colorScheme="red" w="full" onClick={handleDeleteAccount}>
           Delete Account
         </Button>
