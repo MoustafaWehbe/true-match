@@ -108,25 +108,17 @@ namespace api.Controllers
                 return Unauthorized("Action not allowed.");
             }
 
-            // after one hour passed, you can't start the room anymore,
-            // otherwise you can start the room if it is after the scheduled datetime
-            if (room.ScheduledAt > DateTime.UtcNow || !room.canStart)
+            if (!room.canStart)
             {
                 return BadRequest("Cannot start room");
             }
-            // first time starting it
-            else if (room.StartedAt == null)
+            else if (room.StartedAt != null)
             {
-                room.StartedAt = DateTime.UtcNow;
-                room.UpdatedAt = DateTime.UtcNow;
-                await _roomRepo.UpdateAsync(room);
+                return BadRequest("Room already started!");
             }
-            // starting the room again while it is still valid
-            else
-            {
-                room.UpdatedAt = DateTime.UtcNow;
-                await _roomRepo.UpdateAsync(room);
-            }
+            room.StartedAt = DateTime.UtcNow;
+            room.UpdatedAt = DateTime.UtcNow;
+            await _roomRepo.UpdateAsync(room);
 
             return Ok(ResponseHelper.CreateSuccessResponse(room.ToRoomDto()));
         }

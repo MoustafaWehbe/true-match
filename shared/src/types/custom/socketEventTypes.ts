@@ -97,6 +97,16 @@ interface NextQuestionClickedPayload {
   roomState: RoomState;
 }
 
+interface SendMessagePayload {
+  receiverId: string;
+  content: string;
+}
+
+interface MessageSentPayload {
+  senderId: string;
+  receiverId: string;
+  content: string;
+}
 // end round events
 
 export type {
@@ -120,4 +130,6 @@ export type {
   GoToNextQuestionPayload,
   NextQuestionClickedPayload,
   SendRoomStatePayload,
+  SendMessagePayload,
+  MessageSentPayload,
 };

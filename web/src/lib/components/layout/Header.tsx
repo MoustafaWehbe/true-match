@@ -76,6 +76,8 @@ const Header = () => {
         </Heading>
       </Box>
 
+      {/* <Text>Title here</Text> */}
+
       {user && <HeaderPopover onLogout={onLogout} user={user} />}
     </Flex>
   );

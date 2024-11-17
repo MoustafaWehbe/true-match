@@ -1,13 +1,20 @@
 import { useState } from "react";
 import { FaHeart } from "react-icons/fa";
+import { FiMoreVertical } from "react-icons/fi";
+import { IoCloseOutline } from "react-icons/io5";
 import { LuHeartOff } from "react-icons/lu";
-import { MdBlock } from "react-icons/md";
 import { useSelector } from "react-redux";
-import { CalendarIcon, CloseIcon, TimeIcon } from "@chakra-ui/icons";
+import { CalendarIcon, TimeIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
+  Flex,
   IconButton,
+  Popover,
+  PopoverArrow,
+  PopoverBody,
+  PopoverContent,
+  PopoverTrigger,
   Stack,
   Text,
   useColorModeValue,
@@ -83,6 +90,10 @@ const RoomCard = ({
     setIsPreviewProfileModalOpen(false);
   };
 
+  const moreOptionsBgColor = useColorModeValue("whiteAlpha.900", "gray.700");
+  const moreOptionsTextColor = useColorModeValue("gray.800", "whiteAlpha.900");
+  const moreOptionsHoverColor = useColorModeValue("pink.500", "pink.300");
+
   return (
     <Box
       role="group"
@@ -97,7 +108,85 @@ const RoomCard = ({
       position={"relative"}
       display={"flex"}
       flexDirection={"column"}
+      gap={0}
     >
+      <Flex
+        direction={"column"}
+        paddingTop={2}
+        paddingLeft={6}
+        paddingBottom={2}
+        gap={4}
+        background={"linear-gradient(45deg, gray, transparent)"}
+      >
+        <Flex justifyContent={"space-between"} alignItems={"center"}>
+          <Text
+            fontWeight="bold"
+            fontSize={"medium"}
+            sx={{
+              textOverflow: "ellipsis",
+              overflow: "hidden",
+              lineClamp: "2",
+              display: "-webkit-box",
+              "-webkit-box-orient": "vertical",
+              "-webkit-line-clamp": "1",
+            }}
+          >
+            {room.title}
+          </Text>
+          {!isOwner && (
+            <Popover trigger="click" placement="top-end">
+              <PopoverTrigger>
+                <Button
+                  as={IconButton}
+                  aria-label="Options"
+                  icon={<FiMoreVertical />}
+                  variant="ghost"
+                  bg="transparent"
+                  _hover={{ bg: "transparent" }}
+                  height={"auto"}
+                  width={"fit-content"}
+                  padding={0}
+                />
+              </PopoverTrigger>
+              <PopoverContent bg={moreOptionsBgColor} width={"auto"}>
+                <PopoverArrow />
+                <PopoverBody
+                  display={"flex"}
+                  flexDir={"column"}
+                  width={"fit-content"}
+                  alignItems={"start"}
+                >
+                  <Button
+                    aria-label="view user"
+                    variant="link"
+                    onClick={handleViewProfile}
+                    color={moreOptionsTextColor}
+                    _hover={{ color: moreOptionsHoverColor }}
+                    cursor={"pointer"}
+                    mt="10px"
+                  >
+                    View profile
+                  </Button>
+                  <Button
+                    aria-label="block user"
+                    variant="link"
+                    onClick={() => handleOnBlock && handleOnBlock(room.id!)}
+                    color={moreOptionsTextColor}
+                    _hover={{ color: moreOptionsHoverColor }}
+                    cursor={"pointer"}
+                    mt="10px"
+                  >
+                    Block user
+                  </Button>
+                </PopoverBody>
+              </PopoverContent>
+            </Popover>
+          )}
+        </Flex>
+        <Text fontSize={"small"} mt={"-10px"}>
+          by {room.user?.firstName} {room.user?.lastName}
+        </Text>
+      </Flex>
       <Box
         height={"50%"}
         bgImage={"url(/images/default-user-image-female.jpg)"}
@@ -106,7 +195,7 @@ const RoomCard = ({
       />
       <Button
         position="absolute"
-        top="20%"
+        top="30%"
         left="50%"
         transform="translate(-50%, -50%)"
         size="sm"
@@ -119,46 +208,48 @@ const RoomCard = ({
         View Profile
       </Button>
       <Box p={6} flex={8}>
-        <Stack spacing={4} justifyContent={"space-between"} height={"100%"}>
-          <Text
-            fontWeight="bold"
-            fontSize="2xl"
-            sx={{
-              textOverflow: "ellipsis",
-              overflow: "hidden",
-              lineClamp: "2",
-              display: "-webkit-box",
-              "-webkit-box-orient": "vertical",
-              "-webkit-line-clamp": "1",
-            }}
-          >
-            {room.title}
-          </Text>
+        <Stack justifyContent={"space-between"} height={"100%"}>
           <CustomTooltip label={room.description || ""}>
-            <Text
-              sx={{
-                textOverflow: "ellipsis",
-                overflow: "hidden",
-                lineClamp: "2",
-                display: "-webkit-box",
-                "-webkit-box-orient": "vertical",
-                "-webkit-line-clamp": "1",
-                whiteSpace: "nowrap",
-              }}
-            >
-              {room.description}
-            </Text>
+            <Box>
+              <Text as="label" fontSize={"small"}>
+                Room description
+              </Text>
+              <Text
+                fontSize={"medium"}
+                sx={{
+                  textOverflow: "ellipsis",
+                  overflow: "hidden",
+                  lineClamp: "2",
+                  display: "-webkit-box",
+                  "-webkit-box-orient": "vertical",
+                  "-webkit-line-clamp": "1",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                {room.description}
+              </Text>
+            </Box>
           </CustomTooltip>
-          <Stack direction="row" align="center">
-            <CalendarIcon />
-            <Text>
-              {format(new Date(room.scheduledAt!), "MMMM do, yyyy h:mm:ss a")}
+          <Box>
+            <Text as="label" fontSize={"small"}>
+              Scheduled at
             </Text>
-          </Stack>
-          <Stack direction="row" align="center">
-            <TimeIcon />
-            <Text>{20} mins</Text>
-          </Stack>
+            <Stack direction="row" align="center">
+              <CalendarIcon fontSize={"x-small"} />
+              <Text fontSize={"medium"}>
+                {format(new Date(room.scheduledAt!), "MMMM do, yyyy h:mm:ss a")}
+              </Text>
+            </Stack>
+          </Box>
+          <Box>
+            <Text as="label" fontSize={"small"}>
+              Live duration
+            </Text>
+            <Stack direction="row" align="center">
+              <TimeIcon />
+              <Text fontSize={"medium"}>{20} mins</Text>
+            </Stack>
+          </Box>
           {isOwner ? (
             <Stack direction="row" spacing={4} mt={4}>
               <Button
@@ -183,80 +274,58 @@ const RoomCard = ({
           ) : (
             <Stack
               direction="row"
-              spacing={4}
               mt={4}
               alignItems={"center"}
               justifyContent={"space-between"}
             >
-              <CustomTooltip label="Do not show rooms from this person again">
-                <IconButton
-                  onClick={() => handleOnBlock && handleOnBlock(room.id!)}
-                  colorScheme="red"
-                  color="red"
-                  icon={<MdBlock />}
+              <Button
+                onClick={() => handleOnHideRoom && handleOnHideRoom(room.id!)}
+                colorScheme="red"
+                color="red.300"
+                leftIcon={<IoCloseOutline />}
+                variant="outline"
+                aria-label="Hide room"
+                size={"sm"}
+                isLoading={ishidingRoom && actionPerformedOnRoomId === room.id}
+              >
+                Hide room
+              </Button>
+              {room.isParticipanting ? (
+                <Button
+                  onClick={() =>
+                    handleOnNotInterestedAnymore &&
+                    handleOnNotInterestedAnymore(room.id!)
+                  }
+                  colorScheme="pink"
+                  color="pink.400"
+                  leftIcon={<LuHeartOff />}
                   variant="outline"
-                  width={"48px"}
-                  height={"48px"}
-                  aria-label="Block"
-                />
-              </CustomTooltip>
-              <Stack direction={"row"} spacing={4} alignItems={"center"}>
-                <CustomTooltip label="Hide this room">
-                  <IconButton
-                    onClick={() =>
-                      handleOnHideRoom && handleOnHideRoom(room.id!)
-                    }
-                    colorScheme="yellow"
-                    color="yellow"
-                    icon={<CloseIcon />}
-                    variant="outline"
-                    width={"48px"}
-                    height={"48px"}
-                    aria-label="Hide room"
-                    isLoading={
-                      ishidingRoom && actionPerformedOnRoomId === room.id
-                    }
-                  />
-                </CustomTooltip>
-                {room.isParticipanting ? (
-                  <CustomTooltip label="Not interested anymore">
-                    <IconButton
-                      onClick={() =>
-                        handleOnNotInterestedAnymore &&
-                        handleOnNotInterestedAnymore(room.id!)
-                      }
-                      colorScheme="pink"
-                      color="pink.400"
-                      icon={<LuHeartOff />}
-                      variant="outline"
-                      width={"48px"}
-                      height={"48px"}
-                      aria-label="Sign me out"
-                      isLoading={
-                        isdeRegistering && actionPerformedOnRoomId === room.id
-                      }
-                    />
-                  </CustomTooltip>
-                ) : (
-                  <CustomTooltip label="Interested to attend this room">
-                    <IconButton
-                      onClick={() =>
-                        handleOnInterested && handleOnInterested(room.id!)
-                      }
-                      colorScheme="pink"
-                      color="pink.400"
-                      icon={<FaHeart />}
-                      variant="outline"
-                      width={"48px"}
-                      height={"48px"}
-                      aria-label="Sign me in"
-                      isLoading={
-                        isRegistering && actionPerformedOnRoomId === room.id
-                      }
-                    />
-                  </CustomTooltip>
-                )}
-              </Stack>
+                  aria-label="Opt Out"
+                  size={"sm"}
+                  isLoading={
+                    isdeRegistering && actionPerformedOnRoomId === room.id
+                  }
+                >
+                  Opt Out
+                </Button>
+              ) : (
+                <Button
+                  onClick={() =>
+                    handleOnInterested && handleOnInterested(room.id!)
+                  }
+                  colorScheme="pink"
+                  color="pink.400"
+                  leftIcon={<FaHeart />}
+                  variant="outline"
+                  aria-label="I'm Interested"
+                  size={"sm"}
+                  isLoading={
+                    isRegistering && actionPerformedOnRoomId === room.id
+                  }
+                >
+                  I'm Interested
+                </Button>
+              )}
             </Stack>
           )}
         </Stack>

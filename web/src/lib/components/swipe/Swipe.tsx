@@ -69,7 +69,7 @@ const Swipe = () => {
   };
 
   return (
-    <Box display="flex" justifyContent="center" height="100vh">
+    <Box display="flex" justifyContent="center" height="100%">
       {users.map((_, index) => (
         <SwipeCard
           key={index}

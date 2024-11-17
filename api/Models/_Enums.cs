@@ -37,4 +37,12 @@ namespace api.Models
         MultiSelection,
         Measurement
     }
+
+    [JsonConverter(typeof(StringEnumConverter))]
+    public enum MessageStatus
+    {
+        Sent,
+        Delivered,
+        Read
+    }
 }

@@ -8,7 +8,7 @@ import {
 
 import axiosInstance, { defaultHeaders } from "~/lib/utils/api/axiosConfig";
 
-export interface QuestionSate {
+export interface AvailableDescriptorSate {
   availableDescriptors: Array<AvailableDescriptorDto> | null;
   availableDescriptorsLoading: boolean;
 }
@@ -34,13 +34,13 @@ export const getAvailableDescriptors = createAsyncThunk<
   }
 });
 
-const initialState: QuestionSate = {
+const initialState: AvailableDescriptorSate = {
   availableDescriptors: null,
   availableDescriptorsLoading: false,
 };
 
-const questionSlice = createSlice({
-  name: "question",
+const availableDescriptorSlice = createSlice({
+  name: "availableDescriptor",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -64,4 +64,4 @@ const questionSlice = createSlice({
   },
 });
 
-export default questionSlice.reducer;
+export default availableDescriptorSlice.reducer;

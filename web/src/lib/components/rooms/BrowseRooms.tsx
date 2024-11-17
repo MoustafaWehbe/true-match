@@ -7,15 +7,17 @@ import {
   Button,
   Flex,
   Grid,
-  Heading,
   Stack,
+  Tab,
+  TabList,
+  Tabs,
   Text,
   useColorModeValue,
 } from "@chakra-ui/react";
 
 import { AllRoomStatus } from "@dapp/shared/src/types/openApiGen";
 
-import MenuButton, { Option } from "../shared/buttons/CustomMenuButton";
+import { Option } from "../shared/buttons/CustomMenuButton";
 import ConfirmDialog from "../shared/ConfirmDialog";
 import Loader from "../shared/Loader";
 
@@ -120,24 +122,30 @@ function BrowseRooms() {
 
   return (
     <Box bg={bg} color={textColor} px={8} py={4} borderRadius="lg">
-      <Box p={6} float={"right"}>
-        <MenuButton
-          options={options}
-          placeholder="Select option"
-          handleSelect={handleSelect}
-          selectedOption={selectedStatus}
-        />
-      </Box>
+      <Tabs
+        maxWidth={{ base: "90%", md: "75%", lg: "50%" }}
+        margin={"0 auto"}
+        marginTop={{ base: "50px", md: "0px" }}
+      >
+        <TabList>
+          {options.map((option) => {
+            return (
+              <Tab
+                key={option.value + "1"}
+                onClick={() => handleSelect(option)}
+                flex={"auto"}
+              >
+                {option.label}
+              </Tab>
+            );
+          })}
+        </TabList>
+      </Tabs>
       <Loader isLoading={getRoomsLoading} />
 
       <Stack spacing={4} align="center" sx={{ clear: "both" }}>
-        <Heading fontSize="4xl">Browse Rooms</Heading>
-        {rooms?.data?.length ? (
-          <Text fontSize="lg">
-            Join us for these exciting live rooms happening soon!
-          </Text>
-        ) : (
-          <Text>No available rooms at the moment!</Text>
+        {rooms?.data?.length ? null : (
+          <Text mt={6}>No available rooms at the moment!</Text>
         )}
       </Stack>
       <Grid

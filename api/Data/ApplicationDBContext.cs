@@ -23,13 +23,17 @@ namespace api.Data
         public DbSet<HiddenRoom> HiddenRooms { get; set; }
         public DbSet<Gender> Genders { get; set; }
         public DbSet<UserProfileGender> UserProfileGenders { get; set; }
+        public DbSet<Country> Countries { get; set; }
 
         public DbSet<AvailableDescriptor> AvailableDescriptors { get; set; }
+        public DbSet<Message> Messages { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
             builder.HasPostgresExtension("postgis");
+            builder.HasPostgresEnum<MessageStatus>("messagestatus");
 
             builder.ApplyConfiguration(new UserProfileGenderConfiguration());
             builder.ApplyConfiguration(new RoomParticipantConfiguration());
@@ -37,8 +41,9 @@ namespace api.Data
             builder.ApplyConfiguration(new MatchConfiguration());
             builder.ApplyConfiguration(new GenderConfiguration());
             builder.ApplyConfiguration(new AvailableDescriptorConfiguration());
+            builder.ApplyConfiguration(new MessageConfiguration());
 
-            SeedRelevantData.Seed(builder);
+            SeedDataOnModelCreation.Seed(builder);
         }
     }
 }

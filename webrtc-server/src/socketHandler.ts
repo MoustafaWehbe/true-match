@@ -4,24 +4,31 @@ import { SOCKET_EVENTS } from "@dapp/shared/src/consts/socketEvents";
 import { socketEventTypes } from "@dapp/shared/src/types/custom";
 import { RoomState, UserDto } from "@dapp/shared/src/types/openApiGen";
 
-import { roomService } from "./services";
+import { maxAllowedUsersTojoin } from "./utils/consts";
+import { messageService, roomService } from "./services";
 
 class SocketHandler {
   private io: SocketIOServer;
+  // TODO: move to redis
   private timersMap: Map<
     string,
     { timer: NodeJS.Timeout; timeRemaining: number }
   >;
+  // TODO: move to redis
+  private userSocketsMap: Map<string, string>;
 
   constructor(io: SocketIOServer) {
     this.io = io;
     this.timersMap = new Map();
+    this.userSocketsMap = new Map();
     this.handleConnection();
   }
 
   private handleConnection(): void {
     this.io.on("connection", socket => {
       console.log("New client connected");
+      const userId = (socket.data.user as UserDto).id;
+      this.userSocketsMap.set(`user_socket:${userId}`, socket.id);
 
       socket.on(
         SOCKET_EVENTS.CLIENT.JOIN_ROOM_EVENT,
@@ -87,6 +94,12 @@ class SocketHandler {
         (payload: socketEventTypes.GoToNextQuestionPayload) =>
           this.handleGoToNextQuestion(payload, socket)
       );
+
+      socket.on(
+        SOCKET_EVENTS.CLIENT.SEND_MESSAGE,
+        (payload: socketEventTypes.SendMessagePayload) =>
+          this.handleMessageSent(payload, socket, userId!)
+      );
     });
   }
 
@@ -99,6 +112,20 @@ class SocketHandler {
     try {
       const room = await roomService.getRoomById(token, roomId);
       if (room) {
+        const rooms = Array.from(socket.rooms).filter(
+          room => room !== socket.id
+        ); // Filter out the socket's own room
+
+        rooms.forEach(room => {
+          const roomClients = this.io.sockets.adapter.rooms.get(room);
+          const clientCount = roomClients ? roomClients.size : 0;
+
+          if (clientCount >= maxAllowedUsersTojoin) {
+            throw Error(
+              "The maximum number of allowed users has been reached."
+            );
+          }
+        });
         const joinRes = await roomService.joinRoom(token, roomId, socket.id);
         if (joinRes?.statusCode !== 200 && joinRes?.statusCode !== 201) {
           throw Error(joinRes?.message || "Failed to join room.");
@@ -370,6 +397,39 @@ class SocketHandler {
       }
     } catch (e) {
       console.error("failed to go to next question..", e);
+    }
+  }
+
+  // individual users chat
+  private async handleMessageSent(
+    payload: socketEventTypes.SendMessagePayload,
+    socket: Socket,
+    senderId: string
+  ) {
+    const { receiverId, content } = payload;
+    const token = socket.handshake.auth.token;
+
+    const messageData = {
+      senderId,
+      receiverId,
+      content,
+    };
+
+    try {
+      await messageService.saveMessage(messageData, token);
+    } catch {
+      console.log("unable to save message!!");
+    }
+    const receiverSocketId = this.userSocketsMap.get(
+      `user_socket:${receiverId}`
+    );
+    if (receiverSocketId) {
+      this.io
+        .to(receiverSocketId)
+        .emit(
+          SOCKET_EVENTS.SERVER.SEND_MESSAGE,
+          messageData as socketEventTypes.MessageSentPayload
+        );
     }
   }
 
