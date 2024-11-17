@@ -8,8 +8,8 @@ namespace api.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
-        public required int RoomId { get; set; }
+        public Guid Id { get; set; } = Guid.NewGuid();
+        public required Guid RoomId { get; set; }
         public required string UserId { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;

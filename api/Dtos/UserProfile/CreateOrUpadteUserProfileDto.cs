@@ -12,6 +12,7 @@ namespace api.Dtos
         public int? AgeFilterMax { get; set; }
         public int? AgeFilterMin { get; set; }
         public int? DistanceFilter { get; set; }
+        public bool? Hidden { get; set; }
         public Point? pos { get; set; }
         public UserLocation? Location { get; set; }
         public string? Job { get; set; }

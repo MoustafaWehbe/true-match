@@ -9,7 +9,7 @@ namespace api.Dtos
         public string? Description { get; set; }
         public JsonDocument? Offers { get; set; }
         public RoomState? RoomState { get; set; }
-        public List<int>? QuestionsCategories { get; set; }
+        public List<Guid>? QuestionsCategories { get; set; }
         public DateTime? ScheduledAt { get; set; }
         public DateTime? FinishedAt { get; set; }
     }

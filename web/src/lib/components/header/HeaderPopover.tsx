@@ -1,5 +1,6 @@
 import React from "react";
 import { CiUser } from "react-icons/ci";
+import { CiSettings } from "react-icons/ci";
 import { IoIosLogOut } from "react-icons/io";
 import { RiMoonFill, RiSunLine } from "react-icons/ri";
 import {
@@ -59,6 +60,7 @@ const HeaderPopover = ({ onLogout, user }: Props) => {
         width="170px"
         bg={bgColor}
         borderColor={useColorModeValue("gray.200", "gray.600")}
+        animation={`${bounceAnimation} 2s infinite`}
       >
         <PopoverArrow />
         <PopoverBody>
@@ -69,10 +71,21 @@ const HeaderPopover = ({ onLogout, user }: Props) => {
               leftIcon={<Icon as={CiUser} />}
               color={textColor}
               _hover={{ color: hoverColor }}
-              animation={`${bounceAnimation} 2s infinite`}
               onClick={() => router.push("/profile")}
             >
               View profile
+            </Button>
+          </Box>
+          <Box mt="10px">
+            <Button
+              aria-label="Settings"
+              variant="link"
+              leftIcon={<Icon as={CiSettings} />}
+              color={textColor}
+              _hover={{ color: hoverColor }}
+              onClick={() => router.push("/settings")}
+            >
+              Settings
             </Button>
           </Box>
           <Box mt="10px">
@@ -83,7 +96,6 @@ const HeaderPopover = ({ onLogout, user }: Props) => {
               onClick={toggleColorMode}
               color={textColor}
               _hover={{ color: hoverColor }}
-              animation={`${bounceAnimation} 2s infinite`}
             >
               {colorMode === "light" ? "Dark mode" : "Light mode"}
             </Button>
@@ -98,7 +110,6 @@ const HeaderPopover = ({ onLogout, user }: Props) => {
               onClick={onLogout}
               color={textColor}
               _hover={{ color: hoverColor }}
-              animation={`${bounceAnimation} 2s infinite`}
             >
               Logout
             </Button>

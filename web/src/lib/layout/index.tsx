@@ -6,7 +6,7 @@ import { useDispatch } from "react-redux";
 import { AUTH_ROUTES, ONBOARDING_ROUTE } from "../consts";
 import useProfileGuard from "../hooks/useProfileGuard";
 import { AppDispatch } from "../state/store";
-import { fetchUser } from "../state/user/userSlice";
+import { fetchMe } from "../state/user/userSlice";
 
 import AuthLayout from "./AuthLayout";
 import MainLayout from "./MainLayout";
@@ -28,7 +28,7 @@ const Layout = ({ children }: LayoutProps) => {
   }, []);
 
   useEffect(() => {
-    dispatch(fetchUser());
+    dispatch(fetchMe());
   }, [dispatch]);
 
   if (!isMounted) {

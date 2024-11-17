@@ -6,7 +6,7 @@ namespace api.Models
     public class BlockedUser
     {
         [Key]
-        public int Id { get; set; }
+        public Guid Id { get; set; } = Guid.NewGuid();
 
         [Required]
         public required string BlockerUserId { get; set; }

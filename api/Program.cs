@@ -124,7 +124,7 @@ if (args.Length > 0 && args[0].ToLower() == "seed-fake-data")
 
         var seeder = new SeedFakeData(dbContext);
         await seeder.SeedAsync();
-        return; // Exit the application after seeding
+        return;
     }
 }
 else if (args.Length > 0 && args[0].ToLower() == "seed-required-data")
@@ -136,7 +136,21 @@ else if (args.Length > 0 && args[0].ToLower() == "seed-required-data")
 
         var seeder = new SeedRequiredData(dbContext);
         await seeder.SeedAsync();
-        return; // Exit the application after seeding
+        return;
+    }
+}
+else if (args.Length > 0 && args[0].ToLower() == "seed-all")
+{
+    using (var scope = app.Services.CreateScope())
+    {
+        var services = scope.ServiceProvider;
+        var dbContext = services.GetRequiredService<ApplicationDBContext>();
+
+        var seederRequiredData = new SeedRequiredData(dbContext);
+        var seederFakeData = new SeedFakeData(dbContext);
+        await seederFakeData.SeedAsync();
+        await seederRequiredData.SeedAsync();
+        return;
     }
 }
 

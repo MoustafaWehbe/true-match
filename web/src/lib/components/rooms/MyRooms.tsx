@@ -21,6 +21,7 @@ import { MyRoomStatus, RoomDto } from "@dapp/shared/src/types/openApiGen";
 
 import { Option } from "../shared/buttons/CustomMenuButton";
 import GradientButton from "../shared/buttons/GradientButton";
+import Loader from "../shared/Loader";
 
 import RoomCard from "./RoomCard";
 import RoomModal from "./RoomModal";
@@ -46,13 +47,9 @@ function MyRooms() {
   const bg = useColorModeValue("gray.50", "gray.800");
   const textColor = useColorModeValue("gray.800", "whiteAlpha.900");
   const dispatch = useDispatch<AppDispatch>();
-  const { myRooms, createRoomLoading, updateRoomLoading } = useSelector(
-    (state: RootState) => state.room
-  );
+  const { myRooms, createRoomLoading, updateRoomLoading, getMyRoomsLoading } =
+    useSelector((state: RootState) => state.room);
   const [selectedStatus, setSelectedStatus] = useState<Option>(options[0]);
-  const { categories, categoriesLoading } = useSelector(
-    (state: RootState) => state.question
-  );
   const toast = useToast();
   const [isAgreementChecked, setIsAgreementChecked] = useState(false);
   const [roomToEdit, setRoomToEdit] = useState<RoomDto>();
@@ -79,10 +76,8 @@ function MyRooms() {
   }, [dispatch, selectedStatus.value, page, loadRooms]);
 
   useEffect(() => {
-    if (!categories && !categoriesLoading) {
-      dispatch(getQuestionCategories());
-    }
-  }, [dispatch, categories, categoriesLoading]);
+    dispatch(getQuestionCategories());
+  }, [dispatch]);
 
   useEffect(() => {
     dispatch(getAvailableDescriptors());
@@ -102,26 +97,28 @@ function MyRooms() {
   };
 
   const handleCreateRoom = async (values: any) => {
-    await dispatch(
+    const res = await dispatch(
       createRoom({
         title: values.title,
         description: values.description,
         scheduledAt: new Date(values.scheduledAt),
         questionsCategories: values.selectedQuestionCategories.map(
-          (e: string) => parseInt(e)
+          (e: string) => e
         ),
       })
     );
-    handleCloseRoomModal();
-    toast({
-      title: "Room created.",
-      description: "Your room has been created successfully.",
-      status: "success",
-      duration: 5000,
-      isClosable: true,
-    });
-    page.current = 1;
-    loadRooms();
+    if (res.meta.requestStatus !== "rejected") {
+      handleCloseRoomModal();
+      toast({
+        title: "Room created.",
+        description: "Your room has been created successfully.",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+      });
+      page.current = 1;
+      loadRooms();
+    }
   };
 
   const handleUpdateRoom = async (values: any, room: RoomDto) => {
@@ -132,7 +129,7 @@ function MyRooms() {
         description: values.description,
         scheduledAt: new Date(values.scheduledAt),
         questionsCategories: values.selectedQuestionCategories.map(
-          (e: string) => parseInt(e)
+          (e: string) => e
         ),
       })
     );
@@ -188,7 +185,8 @@ function MyRooms() {
 
   return (
     <Box bg={bg} color={textColor} px={8} py={4} borderRadius="lg">
-      <Flex p={6} alignItems={"center"} gap={2}>
+      <Loader isLoading={getMyRoomsLoading} />
+      <Flex alignItems={"center"} gap={2}>
         <Stack spacing={4} align="center" sx={{ clear: "both" }}>
           <Heading fontSize="4xl">My Rooms</Heading>
         </Stack>

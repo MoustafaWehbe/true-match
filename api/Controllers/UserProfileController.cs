@@ -50,9 +50,9 @@ namespace api.Controllers
             return CreatedAtAction(nameof(GetUserProfileById), new { id = createdUserProfile.Id }, ResponseHelper.CreateSuccessResponse(createdUserProfile.ToUserProfileDto()));
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id:guid}")]
         [ProducesResponseType(typeof(ApiResponse<UserProfileDto>), 200)]
-        public async Task<ActionResult<UserProfile>> GetUserProfileById(int id)
+        public async Task<ActionResult<UserProfile>> GetUserProfileById(Guid id)
         {
             var userProfile = await _userProfileRepo.GetByIdAsync(id);
 

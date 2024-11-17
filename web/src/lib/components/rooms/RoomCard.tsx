@@ -38,13 +38,13 @@ interface RoomCardProps {
   isComingUp?: boolean;
   isInProgress?: boolean;
   isArchived?: boolean;
-  onJoin?: (roomId: number) => void;
-  onUpdate?: (roomId: number) => void;
-  onDelete?: (roomId: number) => void;
-  handleOnInterested?: (roomId: number) => void;
-  handleOnBlock?: (roomId: number) => void;
-  handleOnHideRoom?: (roomId: number) => void;
-  handleOnNotInterestedAnymore?: (roomId: number) => void;
+  onJoin?: (roomId: string) => void;
+  onUpdate?: (roomId: string) => void;
+  onDelete?: (roomId: string) => void;
+  handleOnInterested?: (roomId: string) => void;
+  handleOnBlock?: (roomId: string) => void;
+  handleOnHideRoom?: (roomId: string) => void;
+  handleOnNotInterestedAnymore?: (roomId: string) => void;
   onEditClicked?: (room: RoomDto) => void;
   onStartRoom?: (room: RoomDto) => void;
 }

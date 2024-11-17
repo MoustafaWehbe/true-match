@@ -48,10 +48,10 @@ namespace api.Controllers
             return CreatedAtAction(nameof(GetMatch), new { id = match.Id }, match.ToMatchDto());
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id:guid}")]
         [Authorize]
         [ProducesResponseType(typeof(ApiResponse<MatchDto>), 200)]
-        public async Task<IActionResult> GetMatch(int id)
+        public async Task<IActionResult> GetMatch(Guid id)
         {
             var match = await _matchRepo.GetByIdAsync(id);
 

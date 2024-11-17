@@ -25,7 +25,7 @@ namespace api.Repository
                 .ToListAsync();
         }
 
-        public async Task<SystemQuestion?> GetByIdAsync(int id)
+        public async Task<SystemQuestion?> GetByIdAsync(Guid id)
         {
             return await _context.SystemQuestions
                 .Include(sq => sq.Category)
@@ -45,7 +45,7 @@ namespace api.Repository
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task DeleteAsync(Guid id)
         {
             var question = await _context.SystemQuestions.FindAsync(id);
             if (question != null)

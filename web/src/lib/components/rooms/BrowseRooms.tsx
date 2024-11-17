@@ -53,7 +53,7 @@ function BrowseRooms() {
   const { isBlockingUser } = useSelector((state: RootState) => state.user);
   const [selectedStatus, setSelectedStatus] = useState<Option>(options[0]);
   const page = useRef(1);
-  const [roomIdToBlock, setRoomIdToBlock] = useState<number>();
+  const [roomIdToBlock, setRoomIdToBlock] = useState<string>();
 
   const openDialog = () => setIsDialogOpen(true);
   const closeDialog = () => setIsDialogOpen(false);
@@ -105,15 +105,15 @@ function BrowseRooms() {
     }
   };
 
-  const handleOnInterested = (roomId: number) => {
+  const handleOnInterested = (roomId: string) => {
     dispatch(registerRoom(roomId));
   };
 
-  const handleOnHideRoom = (roomId: number) => {
+  const handleOnHideRoom = (roomId: string) => {
     dispatch(hideRoom({ roomId }));
   };
 
-  const handleOnNotInterestedAnymore = async (roomId: number) => {
+  const handleOnNotInterestedAnymore = async (roomId: string) => {
     await dispatch(deregisterRoom(roomId));
     if (selectedStatus.value === 2) {
       dispatch(removeRoomById(roomId));
@@ -163,7 +163,7 @@ function BrowseRooms() {
             isInProgress={selectedStatus.value === 1}
             key={room.id}
             room={room}
-            handleOnBlock={(roomId: number) => {
+            handleOnBlock={(roomId: string) => {
               openDialog();
               setRoomIdToBlock(roomId);
             }}

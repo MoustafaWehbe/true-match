@@ -6,11 +6,12 @@ namespace api.Dtos
 {
     public class UserProfileDto
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string? Bio { get; set; }
         public int? AgeFilterMax { get; set; }
         public int? AgeFilterMin { get; set; }
         public int? DistanceFilter { get; set; }
+        public bool Hidden { get; set; }
         public Point? pos { get; set; }
         public UserLocation? Location { get; set; }
         public string? Job { get; set; }

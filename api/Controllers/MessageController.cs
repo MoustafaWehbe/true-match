@@ -4,6 +4,7 @@ using api.Helpers;
 using api.Interfaces;
 using api.Mappers;
 using api.Models;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -16,11 +17,13 @@ namespace api.Controllers
     {
         private readonly IMessageRepository _messageRepository;
         private readonly UserManager<User> _userManager;
+        private readonly IMapper _mapper;
 
-        public MessageController(IMessageRepository messageRepository, UserManager<User> userManager)
+        public MessageController(IMessageRepository messageRepository, UserManager<User> userManager, IMapper mapper)
         {
             _messageRepository = messageRepository;
             _userManager = userManager;
+            _mapper = mapper;
         }
 
         // POST: api/message

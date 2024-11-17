@@ -8,11 +8,11 @@ namespace api.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public Guid Id { get; set; } = Guid.NewGuid();
         public string Name { get; set; } = string.Empty;
 
         [ForeignKey("QuestionCategory")]
-        public required int CategoryId { get; set; }
+        public required Guid CategoryId { get; set; }
         [ForeignKey("CategoryId")]
         public QuestionCategory? Category { get; set; }
 

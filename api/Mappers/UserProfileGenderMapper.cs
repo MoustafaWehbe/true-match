@@ -5,7 +5,7 @@ namespace api.Mappers
 {
     public static class UserProfileGenderMapper
     {
-        public static UserProfileGender ToUserProfileGenderFromCreate(this UserProfileGenderDto userProfileGenderModel, int userProfileId)
+        public static UserProfileGender ToUserProfileGenderFromCreate(this UserProfileGenderDto userProfileGenderModel, Guid userProfileId)
         {
             return new UserProfileGender
             {

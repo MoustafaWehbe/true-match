@@ -106,5 +106,32 @@ namespace api.Controllers
                 return StatusCode(500, e);
             }
         }
+
+        [HttpDelete]
+        [Authorize]
+        public async Task<IActionResult> DeleteAccount()
+        {
+            var userId = User.Identity?.Name;
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return NotFound("User not found");
+            }
+            try
+            {
+                await _userManager.DeleteAsync(user);
+
+                return Ok(new { message = "Account deleted successfully." });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { error = ex.Message });
+            }
+        }
     }
 }

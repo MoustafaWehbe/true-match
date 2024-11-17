@@ -7,7 +7,7 @@ import ConfirmDialog from "../shared/ConfirmDialog";
 import { deleteRoom } from "~/lib/state/room/roomSlice";
 import { AppDispatch } from "~/lib/state/store";
 
-const DeleteRoomButton: React.FC<{ roomId: number }> = ({ roomId }) => {
+const DeleteRoomButton: React.FC<{ roomId: string }> = ({ roomId }) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const dispatch = useDispatch<AppDispatch>();

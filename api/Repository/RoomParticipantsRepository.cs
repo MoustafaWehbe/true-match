@@ -32,7 +32,7 @@ namespace api.Repository
             return roomParticipant;
         }
 
-        public async Task DeleteAsync(int roomId, string userId)
+        public async Task DeleteAsync(Guid roomId, string userId)
         {
             var roomParticipant = await _context.RoomParticipants
                 .Where(rp => rp.RoomId == roomId && rp.UserId == userId).FirstOrDefaultAsync();

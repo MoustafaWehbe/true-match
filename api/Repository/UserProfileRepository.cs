@@ -74,7 +74,7 @@ namespace api.Repository
             }
         }
 
-        public async Task<UserProfile?> GetByIdAsync(int id)
+        public async Task<UserProfile?> GetByIdAsync(Guid id)
         {
             return await _context.UserProfiles
                 .Include(a => a.User)

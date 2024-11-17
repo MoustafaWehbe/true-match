@@ -7,6 +7,6 @@ namespace api.Interfaces
     {
         Task<UserProfile> CreateOrUpdateAsync(CreateOrUpdateUserProfileDto userProfileDto, string userId);
         Task<UserProfile?> GetByUserId(string userId);
-        Task<UserProfile?> GetByIdAsync(int id);
+        Task<UserProfile?> GetByIdAsync(Guid id);
     }
 }

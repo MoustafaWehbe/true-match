@@ -4,7 +4,7 @@ namespace api.Dtos
 {
     public class MessageDto
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         public required string SenderId { get; set; }
         public User? Sender { get; set; }

@@ -8,13 +8,14 @@ namespace api.Models
     public class UserProfile
     {
         [Key]
-        public int Id { get; set; }
+        public Guid Id { get; set; } = Guid.NewGuid();
 
         [Column(TypeName = "VARCHAR(255)")]
         public string? Bio { get; set; }
         public int? AgeFilterMax { get; set; }
         public int? AgeFilterMin { get; set; }
         public int? DistanceFilter { get; set; }
+        public bool Hidden { get; set; }
 
         // pos = $"({longitude}, {latitude})"
         // exact location: you obtain it after user enables location

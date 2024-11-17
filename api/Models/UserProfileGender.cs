@@ -8,11 +8,11 @@ namespace api.Models
     {
         [Key, Column(Order = 1)]
         [ForeignKey("UserProfile")]
-        public int UserProfileId { get; set; }
+        public Guid UserProfileId { get; set; }
 
         [Key, Column(Order = 2)]
         [ForeignKey("Gender")]
-        public int GenderId { get; set; }
+        public Guid GenderId { get; set; }
         public bool? isMain { get; set; }
         public UserProfile? UserProfile { get; set; }
         public Gender? Gender { get; set; }

@@ -14,7 +14,7 @@ export interface MatchSate {
   getMatchesLoading: boolean;
   getMessagesLoading: boolean;
   matches: Array<MatchDto> | null;
-  activeMatchId: number | null;
+  activeMatchId: string | null;
   messages: Array<MessageDto> | null;
 }
 

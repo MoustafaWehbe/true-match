@@ -15,6 +15,7 @@ namespace api.Mappers
                 AgeFilterMax = userProfileModel.AgeFilterMax,
                 AgeFilterMin = userProfileModel.AgeFilterMin,
                 DistanceFilter = userProfileModel.DistanceFilter,
+                Hidden = userProfileModel.Hidden,
                 pos = userProfileModel.pos,
                 Location = userProfileModel.Location != null ? JsonSerializer.Deserialize<UserLocation>(userProfileModel.Location) : null,
                 Job = userProfileModel.Job,
@@ -34,6 +35,7 @@ namespace api.Mappers
                 AgeFilterMax = userProfileDto.AgeFilterMax,
                 AgeFilterMin = userProfileDto.AgeFilterMin,
                 DistanceFilter = userProfileDto.DistanceFilter,
+                Hidden = userProfileDto.Hidden ?? false,
                 pos = userProfileDto.pos,
                 Location = JsonDocument.Parse(JsonSerializer.Serialize(userProfileDto.Location)),
                 Job = userProfileDto.Job,
@@ -52,6 +54,7 @@ namespace api.Mappers
             existingUserProfile.AgeFilterMax = userProfileDto.AgeFilterMax ?? existingUserProfile.AgeFilterMax;
             existingUserProfile.AgeFilterMin = userProfileDto.AgeFilterMin ?? existingUserProfile.AgeFilterMin;
             existingUserProfile.DistanceFilter = userProfileDto.DistanceFilter ?? existingUserProfile.DistanceFilter;
+            existingUserProfile.Hidden = userProfileDto.Hidden.HasValue ? userProfileDto.Hidden.Value : existingUserProfile.Hidden;
             existingUserProfile.pos = userProfileDto.pos ?? existingUserProfile.pos;
             existingUserProfile.Job = userProfileDto.Job ?? existingUserProfile.Job;
             existingUserProfile.School = userProfileDto.School ?? existingUserProfile.School;

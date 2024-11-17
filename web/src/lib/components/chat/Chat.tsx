@@ -108,7 +108,7 @@ function Chat() {
     dispatch(getMatches());
   }, [dispatch]);
 
-  const onMatchClick = (matchId: number) => {
+  const onMatchClick = (matchId: string) => {
     const match = matches?.find((m) => m.id === matchId);
     if (match) {
       const otherPersonId =

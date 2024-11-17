@@ -29,16 +29,12 @@ type Props = {
 
 const ContentModal = ({ isModalOpen, setIsModalOpen }: Props) => {
   const dispatch = useDispatch<AppDispatch>();
-  const { roomContent, roomContentLoading } = useSelector(
-    (state: RootState) => state.room
-  );
+  const { roomContent } = useSelector((state: RootState) => state.room);
   const listItemBgColor = useColorModeValue("gray.100", "gray.600");
 
   useEffect(() => {
-    if (!roomContent && !roomContentLoading) {
-      dispatch(getRoomContent());
-    }
-  }, [dispatch, roomContent, roomContentLoading]);
+    dispatch(getRoomContent());
+  }, [dispatch]);
 
   return (
     <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>

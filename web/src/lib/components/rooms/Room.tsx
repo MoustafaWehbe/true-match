@@ -34,7 +34,7 @@ const Room = ({ roomId }: { roomId: string }) => {
   const toast = useToast();
 
   useEffect(() => {
-    dispatch(getRoomById(parseInt(roomId)));
+    dispatch(getRoomById(roomId));
   }, [dispatch, roomId]);
 
   const onRoundsStarted = useCallback(

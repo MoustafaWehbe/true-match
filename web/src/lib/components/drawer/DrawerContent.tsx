@@ -4,9 +4,7 @@ import { BsEmojiHeartEyes } from "react-icons/bs";
 import { BsChatDots } from "react-icons/bs";
 import { GrSchedulePlay } from "react-icons/gr";
 import { MdOutlineLiveTv } from "react-icons/md";
-import { useSelector } from "react-redux";
 import {
-  Avatar,
   Box,
   Heading,
   Link,
@@ -18,16 +16,12 @@ import {
 } from "@chakra-ui/react";
 import NextLink from "next/link";
 
-import { RootState } from "~/lib/state/store";
-
 const DrawerContent = () => {
   const bgColor = useColorModeValue("whiteAlpha.900", "gray.700");
   const headingColor = useColorModeValue("gray.800", "whiteAlpha.900");
   const linkColor = useColorModeValue("gray.800", "whiteAlpha.900");
   const hoverColor = useColorModeValue("pink.500", "pink.300");
   const iconColor = useColorModeValue("pink.400", "pink.200");
-
-  const { user } = useSelector((state: RootState) => state.user);
 
   return (
     <Box
@@ -71,25 +65,6 @@ const DrawerContent = () => {
             <Link _hover={{ textDecoration: "none", color: hoverColor }}>
               <ListIcon as={BsChatDots} color={iconColor} />
               Chat
-            </Link>
-          </NextLink>
-        </ListItem>
-        <ListItem>
-          <NextLink href="/profile" passHref prefetch={true}>
-            <Link
-              display="flex"
-              alignItems="center"
-              _hover={{ textDecoration: "none", color: hoverColor }}
-            >
-              <Avatar
-                size={"xs"}
-                name={user?.firstName!}
-                backgroundColor="pink.400"
-                color={"white"}
-                cursor={"pointer"}
-                mr="20px"
-              />
-              Profile
             </Link>
           </NextLink>
         </ListItem>

@@ -27,7 +27,7 @@ namespace api.Repository
             return match;
         }
 
-        public async Task<Match?> GetByIdAsync(int id)
+        public async Task<Match?> GetByIdAsync(Guid id)
         {
             return await _context.Matches
                 .Include(m => m.User1)

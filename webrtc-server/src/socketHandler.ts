@@ -130,16 +130,14 @@ class SocketHandler {
         if (joinRes?.statusCode !== 200 && joinRes?.statusCode !== 201) {
           throw Error(joinRes?.message || "Failed to join room.");
         }
-        socket.join(roomId.toString());
+        socket.join(roomId);
         // notify everyone that this user has joined
-        socket.broadcast
-          .to(roomId.toString())
-          .emit(SOCKET_EVENTS.SERVER.JOIN_ROOM_EVENT, {
-            userToSignal: socket.id,
-            user,
-          } as socketEventTypes.UserJoinedPayload);
+        socket.broadcast.to(roomId).emit(SOCKET_EVENTS.SERVER.JOIN_ROOM_EVENT, {
+          userToSignal: socket.id,
+          user,
+        } as socketEventTypes.UserJoinedPayload);
         // send the current room state to this user
-        const previousTimer = this.timersMap.get(roomId.toString());
+        const previousTimer = this.timersMap.get(roomId);
         socket.emit(SOCKET_EVENTS.SERVER.SEND_ROOM_STATE_EVENT, {
           roomState: {
             ...room.data?.roomState,
@@ -242,7 +240,7 @@ class SocketHandler {
           room?.data?.id!
         );
         this.io
-          .in(payload.roomId.toString())
+          .in(payload.roomId)
           .emit(SOCKET_EVENTS.SERVER.START_ROUND_EVENT, {
             roomState: finalRoomState,
           } as socketEventTypes.RoundsStartedPayload);
@@ -272,7 +270,7 @@ class SocketHandler {
           timeRemainingForRoundBeforePause: payload.timeRemaining,
         };
         this.io
-          .in(payload.roomId.toString())
+          .in(payload.roomId)
           .emit(SOCKET_EVENTS.SERVER.PAUSE_ROUND_EVENT, {
             roomState: finalRoomState,
           } as socketEventTypes.RoundPausedPayload);
@@ -282,7 +280,7 @@ class SocketHandler {
           { roomState: finalRoomState },
           room?.data?.id!
         );
-        clearInterval(this.timersMap.get(payload.roomId.toString())?.timer);
+        clearInterval(this.timersMap.get(payload.roomId)?.timer);
       } else {
         throw Error("Could not find room");
       }
@@ -306,7 +304,7 @@ class SocketHandler {
           isRoundPaused: false,
         };
         this.io
-          .in(payload.roomId.toString())
+          .in(payload.roomId)
           .emit(SOCKET_EVENTS.SERVER.RESUME_ROUND_EVENT, {
             roomState: finalRoomState,
           } as socketEventTypes.RoundResumedPayload);
@@ -343,11 +341,9 @@ class SocketHandler {
             existingRoomState?.rounds![existingRoomState?.currentRound! + 1]
               .duration!,
         };
-        this.io
-          .in(payload.roomId.toString())
-          .emit(SOCKET_EVENTS.SERVER.SKIP_ROUND_EVENT, {
-            roomState: finalRoomState,
-          } as socketEventTypes.RoundSkipedPayload);
+        this.io.in(payload.roomId).emit(SOCKET_EVENTS.SERVER.SKIP_ROUND_EVENT, {
+          roomState: finalRoomState,
+        } as socketEventTypes.RoundSkipedPayload);
 
         await roomService.updateRoom(
           token,
@@ -380,7 +376,7 @@ class SocketHandler {
           existingRoomState.questionIndex =
             existingRoomState.questionIndex! + 1;
           this.io
-            .in(payload.roomId.toString())
+            .in(payload.roomId)
             .emit(SOCKET_EVENTS.SERVER.GO_TO_NEXT_QUESTION_EVENT, {
               roomState: existingRoomState,
             } as socketEventTypes.NextQuestionClickedPayload);
@@ -435,12 +431,12 @@ class SocketHandler {
 
   // helpers
   private async setTimer(
-    roomId: number,
+    roomId: string,
     roomState: RoomState,
     token: string,
     socketId: string
   ) {
-    const previousTimer = this.timersMap.get(roomId.toString());
+    const previousTimer = this.timersMap.get(roomId);
     clearInterval(previousTimer?.timer);
     previousTimer?.timer?.unref();
     let theEnd = false;
@@ -470,24 +466,20 @@ class SocketHandler {
         }
       }
       if (theEnd) {
-        this.io
-          .in(roomId.toString())
-          .emit(SOCKET_EVENTS.SERVER.END_ROUNDS_EVENT, {
-            roomState,
-          } as socketEventTypes.RoundsEndedPayload);
+        this.io.in(roomId).emit(SOCKET_EVENTS.SERVER.END_ROUNDS_EVENT, {
+          roomState,
+        } as socketEventTypes.RoundsEndedPayload);
       } else {
-        this.io
-          .in(roomId.toString())
-          .emit(SOCKET_EVENTS.SERVER.UPDATE_TIMER_EVENT, {
-            roomState,
-          } as socketEventTypes.TimerUpdatedPayload);
+        this.io.in(roomId).emit(SOCKET_EVENTS.SERVER.UPDATE_TIMER_EVENT, {
+          roomState,
+        } as socketEventTypes.TimerUpdatedPayload);
         if (goToNextRound) {
           this.setTimer(roomId, roomState, token, socketId);
         }
       }
 
       if (timer) {
-        this.timersMap.set(roomId.toString(), {
+        this.timersMap.set(roomId, {
           timer,
           timeRemaining: roomState.timeRemainingForRoundBeforePause,
         });

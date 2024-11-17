@@ -31,7 +31,7 @@ namespace api.Controllers
         [HttpGet]
         [Authorize]
         [ProducesResponseType(typeof(ApiResponse<List<SystemQuestionDto>>), 200)]
-        public async Task<ActionResult<IEnumerable<SystemQuestionDto>>> GetSystemQuestions([FromQuery] List<int> categories, [FromQuery] int roomId)
+        public async Task<ActionResult<IEnumerable<SystemQuestionDto>>> GetSystemQuestions([FromQuery] List<Guid> categories, [FromQuery] Guid roomId)
         {
             if (!ModelState.IsValid)
             {
@@ -91,9 +91,9 @@ namespace api.Controllers
             }
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id:guid}")]
         [Authorize]
-        public async Task<ActionResult<SystemQuestion>> GetSystemQuestion(int id)
+        public async Task<ActionResult<SystemQuestion>> GetSystemQuestion(Guid id)
         {
             var question = await _systemQuestionRepository.GetByIdAsync(id);
 
@@ -120,12 +120,12 @@ namespace api.Controllers
             return CreatedAtAction(nameof(GetSystemQuestion), new { id = systemQuestion.Id }, systemQuestion);
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("{id:guid}")]
         [Authorize(Roles = "Admin")]
         [ProducesResponseType(204)]
         [ProducesResponseType(403)]
         [ProducesResponseType(404)]
-        public async Task<IActionResult> UpdateSystemQuestion(int id, UpdateSystemQuestionDto systemQuestionDto)
+        public async Task<IActionResult> UpdateSystemQuestion(Guid id, UpdateSystemQuestionDto systemQuestionDto)
         {
             var systemQuestion = await _systemQuestionRepository.GetByIdAsync(id);
             if (systemQuestion == null)
@@ -142,12 +142,12 @@ namespace api.Controllers
             return NoContent();
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:guid}")]
         [Authorize(Roles = "Admin")]
         [ProducesResponseType(204)]
         [ProducesResponseType(403)]
         [ProducesResponseType(404)]
-        public async Task<IActionResult> DeleteSystemQuestion(int id)
+        public async Task<IActionResult> DeleteSystemQuestion(Guid id)
         {
             var question = await _systemQuestionRepository.GetByIdAsync(id);
             if (question == null)

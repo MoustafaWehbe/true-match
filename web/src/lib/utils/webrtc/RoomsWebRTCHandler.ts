@@ -72,7 +72,7 @@ export class RoomsWebRTCHandler {
     }
     this.registerSocketEvents();
     socket.emit(SOCKET_EVENTS.CLIENT.JOIN_ROOM_EVENT, {
-      roomId: parseInt(this.roomId),
+      roomId: this.roomId,
     } as socketEventTypes.JoinRoomPayload);
   }
 
@@ -80,7 +80,7 @@ export class RoomsWebRTCHandler {
     this.peers.forEach(({ peer }) => peer.close());
 
     socket.emit(SOCKET_EVENTS.CLIENT.LEAVE_ROOM_EVENT, {
-      roomId: parseInt(this.roomId),
+      roomId: this.roomId,
     } as socketEventTypes.LeaveRoomPayload);
 
     socket.off(SOCKET_EVENTS.SERVER.JOIN_ROOM_EVENT, this.handleUserJoined);

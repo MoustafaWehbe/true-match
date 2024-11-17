@@ -8,8 +8,8 @@ namespace api.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
-        public int? RoomParticipantId { get; set; } = null;
+        public Guid Id { get; set; } = Guid.NewGuid();
+        public Guid? RoomParticipantId { get; set; } = null;
         public bool Left { get; set; } = false;
         public DateTime? AttendedFromTime { get; set; } = null;
         public DateTime? AttendedToTime { get; set; } = null;

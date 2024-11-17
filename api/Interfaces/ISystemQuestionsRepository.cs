@@ -6,9 +6,9 @@ namespace api.Interfaces
     {
         Task<IEnumerable<SystemQuestion>> GetAllAsync();
         IQueryable<SystemQuestion> GetAll();
-        Task<SystemQuestion?> GetByIdAsync(int id);
+        Task<SystemQuestion?> GetByIdAsync(Guid id);
         Task<SystemQuestion> CreateAsync(SystemQuestion question);
         Task UpdateAsync(SystemQuestion question);
-        Task DeleteAsync(int id);
+        Task DeleteAsync(Guid id);
     }
 }

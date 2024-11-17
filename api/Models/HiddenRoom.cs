@@ -6,7 +6,7 @@ namespace api.Models
     public class HiddenRoom
     {
         [Key]
-        public int Id { get; set; }
+        public Guid Id { get; set; } = Guid.NewGuid();
 
         [Required]
         public required string UserId { get; set; }
@@ -15,7 +15,7 @@ namespace api.Models
         public User? User { get; set; }
 
         [Required]
-        public required int RoomId { get; set; }
+        public required Guid RoomId { get; set; }
 
         [ForeignKey("RoomId")]
         public Room? Room { get; set; }

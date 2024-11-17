@@ -10,7 +10,7 @@ import { handleError } from "./errorHandler";
 
 const getRoomById = async (
   token: string,
-  roomId: number
+  roomId: string
 ): Promise<RoomDtoApiResponse | undefined> => {
   try {
     const response = await axiosInstance.get<RoomDtoApiResponse>(
@@ -26,7 +26,7 @@ const getRoomById = async (
 };
 
 const leaveRoom = async (
-  roomId: number,
+  roomId: string,
   token: string
 ): Promise<SimpleApiResponseApiResponse | undefined> => {
   try {
@@ -44,7 +44,7 @@ const leaveRoom = async (
 const updateRoom = async (
   token: string,
   room: UpdateRoomDto,
-  roomId: number
+  roomId: string
 ): Promise<RoomDtoApiResponse | undefined> => {
   try {
     const response = await axiosInstance.put<RoomDtoApiResponse>(
@@ -62,7 +62,7 @@ const updateRoom = async (
 
 const joinRoom = async (
   token: string,
-  roomId: number,
+  roomId: string,
   socketId: string
 ): Promise<RoomParticipantDtoApiResponse | undefined> => {
   try {

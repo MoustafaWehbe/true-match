@@ -9,7 +9,7 @@ namespace api.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public Guid Id { get; set; } = Guid.NewGuid();
         public string Title { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
         public DateTime? StartedAt { get; set; }
@@ -19,7 +19,7 @@ namespace api.Models
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
         public JsonDocument? Offers { get; set; }
         public JsonDocument? RoomStateJson { get; set; }
-        public List<int> QuestionsCategories { get; set; } = new List<int>();
+        public List<Guid> QuestionsCategories { get; set; } = new List<Guid>();
         public bool IsDeleted { get; set; } = false;
 
         [ForeignKey("UserId")]
@@ -32,7 +32,7 @@ namespace api.Models
         [NotMapped]
         public bool canStart => ScheduledAt.HasValue ?
             DateTime.UtcNow.AddMinutes(-RoomConstants.TheRoomIsValidFor) <= ScheduledAt.Value
-                && DateTime.UtcNow <= ScheduledAt.Value.AddMinutes(-1) : false;
+                && DateTime.UtcNow >= ScheduledAt.Value.AddMinutes(-1) : false;
 
         // TODO: 1 should be the total time used by the user to pause the room
         // A maximum of 3 pauses, each lasting 15 seconds, is permitted per room.

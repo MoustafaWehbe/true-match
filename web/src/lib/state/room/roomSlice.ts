@@ -26,7 +26,7 @@ export interface RoomSate {
   isdeRegistering: boolean;
   ishidingRoom: boolean;
   isStartingRoom: boolean;
-  actionPerformedOnRoomId: number | null;
+  actionPerformedOnRoomId: string | null;
 }
 
 export const getRoomContent = createAsyncThunk<
@@ -155,7 +155,7 @@ export const hideRoom = createAsyncThunk<
 
 export const updateRoom = createAsyncThunk<
   openApiTypes.RoomDto | undefined,
-  openApiTypes.UpdateRoomDto & { id: number },
+  openApiTypes.UpdateRoomDto & { id: string },
   { rejectValue: string }
 >("room/update", async (roomData, { rejectWithValue }) => {
   try {
@@ -176,7 +176,7 @@ export const updateRoom = createAsyncThunk<
 
 export const getRoomById = createAsyncThunk<
   openApiTypes.RoomDto | null,
-  number,
+  string,
   { rejectValue: string }
 >("room/getRoomById", async (roomId, { rejectWithValue }) => {
   try {
@@ -196,7 +196,7 @@ export const getRoomById = createAsyncThunk<
 
 export const deleteRoom = createAsyncThunk<
   openApiTypes.SimpleApiResponseApiResponse,
-  number,
+  string,
   { rejectValue: string }
 >("room/delete", async (roomId, { rejectWithValue }) => {
   try {
@@ -216,7 +216,7 @@ export const deleteRoom = createAsyncThunk<
 
 export const startRoom = createAsyncThunk<
   openApiTypes.RoomDtoApiResponse | undefined,
-  { id: number },
+  { id: string },
   { rejectValue: RejectErrorCustomType }
 >("room/start", async (roomData, { rejectWithValue }) => {
   try {
@@ -244,7 +244,7 @@ export const startRoom = createAsyncThunk<
 // start room-participant
 export const registerRoom = createAsyncThunk<
   openApiTypes.RoomParticipantDto | undefined,
-  number,
+  string,
   { rejectValue: RejectErrorCustomType }
 >("room/registerRoom", async (roomId, { rejectWithValue }) => {
   try {
@@ -272,7 +272,7 @@ export const registerRoom = createAsyncThunk<
 
 export const deregisterRoom = createAsyncThunk<
   openApiTypes.SimpleApiResponseApiResponse,
-  number,
+  string,
   { rejectValue: RejectErrorCustomType }
 >("room/deregisterRoom", async (roomId, { rejectWithValue }) => {
   try {

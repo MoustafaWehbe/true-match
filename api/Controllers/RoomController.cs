@@ -79,10 +79,10 @@ namespace api.Controllers
             return Ok(response);
         }
 
-        [HttpPost("start-room/{id}")]
+        [HttpPost("start-room/{id:guid}")]
         [Authorize]
         [ProducesResponseType(typeof(ApiResponse<RoomDto>), 200)]
-        public async Task<IActionResult> StartRoom([FromRoute] int id)
+        public async Task<IActionResult> StartRoom([FromRoute] Guid id)
         {
             if (!ModelState.IsValid)
             {
@@ -123,10 +123,10 @@ namespace api.Controllers
             return Ok(ResponseHelper.CreateSuccessResponse(room.ToRoomDto()));
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:guid}")]
         [Authorize]
         [ProducesResponseType(typeof(ApiResponse<SimpleApiResponse>), 200)]
-        public async Task<IActionResult> SoftDeleteRoom(int id)
+        public async Task<IActionResult> SoftDeleteRoom(Guid id)
         {
             var user = await _userManager.FindByEmailAsync(User.GetEmail());
             if (user == null)
@@ -183,10 +183,10 @@ namespace api.Controllers
         }
 
         [HttpPut]
-        [Route("{id:int}")]
+        [Route("{id:guid}")]
         [ProducesResponseType(typeof(ApiResponse<RoomDto>), 200)]
         [Authorize]
-        public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateRoomDto updateRoomDto)
+        public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateRoomDto updateRoomDto)
         {
             if (!ModelState.IsValid)
             {
@@ -216,10 +216,10 @@ namespace api.Controllers
             return Ok(ResponseHelper.CreateSuccessResponse(room.ToRoomDto()));
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id:guid}")]
         [ProducesResponseType(typeof(ApiResponse<RoomDto>), 200)]
         [Authorize]
-        public async Task<ActionResult<Room>> GetRoomById(int id)
+        public async Task<ActionResult<Room>> GetRoomById(Guid id)
         {
             if (!ModelState.IsValid)
             {

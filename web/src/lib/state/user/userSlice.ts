@@ -105,11 +105,11 @@ export const logoutUser = createAsyncThunk<
   }
 });
 
-export const fetchUser = createAsyncThunk<
+export const fetchMe = createAsyncThunk<
   UserDto | null, // Return type
   void, // Argument type
   { rejectValue: string } // Error type
->("user/fetchUser", async (_, { rejectWithValue }) => {
+>("user/fetchMe", async (_, { rejectWithValue }) => {
   try {
     const response = await axiosInstance.get<UserDtoApiResponse>("/me", {
       headers: defaultHeaders,
@@ -294,17 +294,17 @@ const userSlice = createSlice({
           state.loginError = action.payload || "Unknown error";
         }
       )
-      .addCase(fetchUser.pending, (state) => {
+      .addCase(fetchMe.pending, (state) => {
         state.isFetchingUser = true;
       })
       .addCase(
-        fetchUser.fulfilled,
+        fetchMe.fulfilled,
         (state, action: PayloadAction<User | null>) => {
           state.user = action.payload;
           state.isFetchingUser = false;
         }
       )
-      .addCase(fetchUser.rejected, (state) => {
+      .addCase(fetchMe.rejected, (state) => {
         state.isFetchingUser = false;
       })
       .addCase(getUserById.pending, (state) => {

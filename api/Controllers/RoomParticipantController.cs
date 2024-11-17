@@ -26,10 +26,10 @@ namespace api.Controllers
             _userManager = userManager;
         }
 
-        [HttpPost("deregister/{id}")]
+        [HttpPost("deregister/{id:guid}")]
         [Authorize]
         [ProducesResponseType(typeof(ApiResponse<SimpleApiResponse>), 200)]
-        public async Task<IActionResult> deregisterRoom([FromRoute] int id)
+        public async Task<IActionResult> deregisterRoom([FromRoute] Guid id)
         {
             var user = await _userManager.FindByEmailAsync(User.GetEmail());
 
@@ -56,10 +56,10 @@ namespace api.Controllers
         }
 
 
-        [HttpPost("register/{id}")]
+        [HttpPost("register/{id:guid}")]
         [Authorize]
         [ProducesResponseType(typeof(ApiResponse<RoomParticipantDto>), 200)]
-        public async Task<IActionResult> registerRoom([FromRoute] int id)
+        public async Task<IActionResult> registerRoom([FromRoute] Guid id)
         {
             var user = await _userManager.FindByEmailAsync(User.GetEmail());
 
@@ -98,10 +98,10 @@ namespace api.Controllers
             return Ok(ResponseHelper.CreateSuccessResponse(newRoomParticipant.ToRoomParticipantDto()));
         }
 
-        [HttpPost("join/{id}")]
+        [HttpPost("join/{id:guid}")]
         [Authorize]
         [ProducesResponseType(typeof(ApiResponse<SimpleApiResponse>), 200)]
-        public async Task<IActionResult> joinRoom(int id, [FromBody] JoinRoomDto joinRoomDto)
+        public async Task<IActionResult> joinRoom(Guid id, [FromBody] JoinRoomDto joinRoomDto)
         {
             if (!ModelState.IsValid)
             {
@@ -169,9 +169,9 @@ namespace api.Controllers
         }
 
         [HttpPost]
-        [Route("leave/{id:int}")]
+        [Route("leave/{id:guid}")]
         [ProducesResponseType(typeof(ApiResponse<SimpleApiResponse>), 200)]
-        public async Task<IActionResult> LeaveRoom([FromRoute] int id)
+        public async Task<IActionResult> LeaveRoom([FromRoute] Guid id)
         {
 
             var user = await _userManager.FindByEmailAsync(User.GetEmail());

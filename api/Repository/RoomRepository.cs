@@ -61,7 +61,7 @@ namespace api.Repository
                 .ToList()); // Use synchronous ToList after switching to in-memory processing
         }
 
-        public async Task<Room?> GetByIdAsync(int id)
+        public async Task<Room?> GetByIdAsync(Guid id)
         {
             return await _context.Rooms
                 .Include(ls => ls.User)

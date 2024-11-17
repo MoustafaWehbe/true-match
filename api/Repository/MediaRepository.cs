@@ -2,7 +2,6 @@ using api.Data;
 using api.Helpers;
 using api.Interfaces;
 using api.Models;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Any;
 
 namespace api.Repository

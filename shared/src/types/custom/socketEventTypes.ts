@@ -5,11 +5,11 @@ import {
 } from "@dapp/shared/src/types/openApiGen";
 
 interface JoinRoomPayload {
-  roomId: number;
+  roomId: string;
 }
 
 interface LeaveRoomPayload {
-  roomId: number;
+  roomId: string;
 }
 
 interface OfferPayload {
@@ -44,25 +44,25 @@ interface OfferProducedPayload {
 
 // round events
 interface StartRoundPayload {
-  roomId: number;
+  roomId: string;
   rounds?: Array<RoomContentDto>;
 }
 
 interface PauseRoundPayload {
-  roomId: number;
+  roomId: string;
   timeRemaining: number;
 }
 
 interface SkipRoundPayload {
-  roomId: number;
+  roomId: string;
 }
 
 interface GoToNextQuestionPayload {
-  roomId: number;
+  roomId: string;
 }
 
 interface ResumeRoundPayload {
-  roomId: number;
+  roomId: string;
 }
 
 interface RoundPausedPayload {
