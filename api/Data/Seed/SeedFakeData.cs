@@ -2,13 +2,13 @@ using Bogus;
 using api.Models;
 using api.Data;
 
-public class SeedRandomData
+public class SeedFakeData
 {
     private readonly ApplicationDBContext _context;
     private readonly Faker _faker;
     private readonly Random _random = new Random();
 
-    public SeedRandomData(ApplicationDBContext context)
+    public SeedFakeData(ApplicationDBContext context)
     {
         _context = context;
         _faker = new Faker();
@@ -16,28 +16,32 @@ public class SeedRandomData
 
     public async Task SeedAsync(int userCount = 100, int roomCount = 50, int maxParticipantsPerRoom = 10)
     {
-        var users = GenerateUsers(userCount);
-        for (int i = 0; i < userCount; i++)
+        if (!_context.Users.Any())
         {
-            var user = users[i];
-            var profile = CreateRandomUserProfile(user.Id);
-            user.UserProfile = profile;
-            user.Media = CreateRandomMedia(user.Id);
-            await _context.Users.AddAsync(user);
+            var users = GenerateUsers(userCount);
+            for (int i = 0; i < userCount; i++)
+            {
+                var user = users[i];
+                var profile = CreateRandomUserProfile(user.Id);
+                user.UserProfile = profile;
+                user.Media = CreateRandomMedia(user.Id);
+                await _context.Users.AddAsync(user);
+            }
+            await _context.SaveChangesAsync();
         }
-        await _context.SaveChangesAsync();
 
-        var rooms = GenerateRooms(roomCount);
-        await _context.Rooms.AddRangeAsync(rooms);
-        await _context.SaveChangesAsync();
-
-        var participants = GenerateRoomParticipants(rooms, maxParticipantsPerRoom);
-        await _context.RoomParticipants.AddRangeAsync(participants);
-        await _context.SaveChangesAsync();
-
-        var participantEvents = GenerateRoomParticipantEvents(participants, 2);
-        await _context.RoomParticipantEvents.AddRangeAsync(participantEvents);
-        await _context.SaveChangesAsync();
+        if (!_context.Rooms.Any())
+        {
+            var rooms = GenerateRooms(roomCount);
+            await _context.Rooms.AddRangeAsync(rooms);
+            await _context.SaveChangesAsync();
+            var participants = GenerateRoomParticipants(rooms, maxParticipantsPerRoom);
+            await _context.RoomParticipants.AddRangeAsync(participants);
+            await _context.SaveChangesAsync();
+            var participantEvents = GenerateRoomParticipantEvents(participants, 2);
+            await _context.RoomParticipantEvents.AddRangeAsync(participantEvents);
+            await _context.SaveChangesAsync();
+        }
     }
 
 

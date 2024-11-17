@@ -115,19 +115,31 @@ builder.Services.AddSwaggerGen(option =>
 
 var app = builder.Build();
 
-if (args.Length > 0 && args[0].ToLower() == "seed-random")
+if (args.Length > 0 && args[0].ToLower() == "seed-fake-data")
 {
-    // Create a scope to access the services
     using (var scope = app.Services.CreateScope())
     {
         var services = scope.ServiceProvider;
         var dbContext = services.GetRequiredService<ApplicationDBContext>();
 
-        var seeder = new SeedRandomData(dbContext);
-        await seeder.SeedAsync(); // Run your seed logic
+        var seeder = new SeedFakeData(dbContext);
+        await seeder.SeedAsync();
         return; // Exit the application after seeding
     }
 }
+else if (args.Length > 0 && args[0].ToLower() == "seed-required-data")
+{
+    using (var scope = app.Services.CreateScope())
+    {
+        var services = scope.ServiceProvider;
+        var dbContext = services.GetRequiredService<ApplicationDBContext>();
+
+        var seeder = new SeedRequiredData(dbContext);
+        await seeder.SeedAsync();
+        return; // Exit the application after seeding
+    }
+}
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

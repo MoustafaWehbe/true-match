@@ -43,7 +43,7 @@ namespace api.Data
             builder.ApplyConfiguration(new AvailableDescriptorConfiguration());
             builder.ApplyConfiguration(new MessageConfiguration());
 
-            SeedRelevantData.Seed(builder);
+            SeedDataOnModelCreation.Seed(builder);
         }
     }
 }
