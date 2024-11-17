@@ -2,6 +2,10 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using api.Models;
 using System.Text.Json;
+using NetTopologySuite.IO;
+using NetTopologySuite.Geometries;
+using System.Globalization;
+using CsvHelper;
 
 namespace api.Data
 {
@@ -14,6 +18,7 @@ namespace api.Data
             seedRoomContent(builder);
             seedGenders(builder);
             seedAvailableDescriptors(builder);
+            // seedCountries(builder);
         }
 
         private static void seedRoomContent(ModelBuilder builder)
@@ -213,5 +218,36 @@ namespace api.Data
             }
         }
 
+        // private static void seedCountries(ModelBuilder builder)
+        // {
+        //     Console.WriteLine(Path.Combine("Data", "CSVSchema", "countries.csv"));
+        //     var countries = GetCountriesFromCsv(Path.Combine("Data", "CSVSchema", "countries.csv"));
+        //     builder.Entity<Country>().HasData(countries);
+        // }
+
+        // private static List<Country> GetCountriesFromCsv(string csvFilePath)
+        // {
+        //     using var reader = new StreamReader(csvFilePath);
+        //     using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
+
+        //     var countries = new List<Country>();
+        //     csv.Read();
+        //     csv.ReadHeader();
+        //     while (csv.Read())
+        //     {
+        //         var country = new Country
+        //         {
+        //             Id = Guid.NewGuid(),
+        //             Name = csv.GetField<string>("name")!,
+        //             IsoA2 = csv.GetField<string?>("iso_a2"),
+        //             IsoA3 = csv.GetField<string?>("iso_a3"),
+        //             WkbGeometry = (new WKBReader().Read(csv.GetField<byte[]>("wkb_geometry")) as MultiPolygon)!, // Convert WKB to Geometry
+        //             CreatedAt = DateTime.UtcNow,
+        //             UpdatedAt = DateTime.UtcNow
+        //         };
+        //         countries.Add(country);
+        //     }
+        //     return countries;
+        // }
     }
 }

@@ -28,11 +28,19 @@ namespace api.Models
 
         public ICollection<RoomParticipant> RoomParticipants { get; set; } = new List<RoomParticipant>();
 
-        // The room will be valid for 10 mins after the scheduled time. If you don't start it within those 10 mins,
-        // you won't be able to start it anymore
+        // scheduled + 10mins > now > scheduled - 1min
         [NotMapped]
         public bool canStart => ScheduledAt.HasValue ?
-            DateTime.UtcNow.AddMinutes(-RoomConstants.TheRoomIsValidFor) <= ScheduledAt : false;
+            DateTime.UtcNow.AddMinutes(-RoomConstants.TheRoomIsValidFor) <= ScheduledAt.Value
+                && DateTime.UtcNow <= ScheduledAt.Value.AddMinutes(-1) : false;
+
+        // TODO: 1 should be the total time used by the user to pause the room
+        // A maximum of 3 pauses, each lasting 15 seconds, is permitted per room.
+        [NotMapped]
+        public DateTime? expiresAt => StartedAt.HasValue ? StartedAt.Value.AddMinutes(RoomConstants.TotalRoundsDuration + 1) : null;
+
+        [NotMapped]
+        public bool isExpired => expiresAt != null && DateTime.UtcNow > expiresAt.Value;
 
         // We know that the room never started if the rounds itself has not started and we passed the first specified 10 mins
         [NotMapped]

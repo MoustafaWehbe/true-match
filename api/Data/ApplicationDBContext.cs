@@ -23,6 +23,7 @@ namespace api.Data
         public DbSet<HiddenRoom> HiddenRooms { get; set; }
         public DbSet<Gender> Genders { get; set; }
         public DbSet<UserProfileGender> UserProfileGenders { get; set; }
+        public DbSet<Country> Countries { get; set; }
 
         public DbSet<AvailableDescriptor> AvailableDescriptors { get; set; }
         public DbSet<Message> Messages { get; set; }

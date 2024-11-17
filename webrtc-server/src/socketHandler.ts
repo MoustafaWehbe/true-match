@@ -4,6 +4,7 @@ import { SOCKET_EVENTS } from "@dapp/shared/src/consts/socketEvents";
 import { socketEventTypes } from "@dapp/shared/src/types/custom";
 import { RoomState, UserDto } from "@dapp/shared/src/types/openApiGen";
 
+import { maxAllowedUsersTojoin } from "./utils/consts";
 import { messageService, roomService } from "./services";
 
 class SocketHandler {
@@ -111,6 +112,20 @@ class SocketHandler {
     try {
       const room = await roomService.getRoomById(token, roomId);
       if (room) {
+        const rooms = Array.from(socket.rooms).filter(
+          room => room !== socket.id
+        ); // Filter out the socket's own room
+
+        rooms.forEach(room => {
+          const roomClients = this.io.sockets.adapter.rooms.get(room);
+          const clientCount = roomClients ? roomClients.size : 0;
+
+          if (clientCount >= maxAllowedUsersTojoin) {
+            throw Error(
+              "The maximum number of allowed users has been reached."
+            );
+          }
+        });
         const joinRes = await roomService.joinRoom(token, roomId, socket.id);
         if (joinRes?.statusCode !== 200 && joinRes?.statusCode !== 201) {
           throw Error(joinRes?.message || "Failed to join room.");

@@ -6,7 +6,6 @@ import {
   Heading,
   keyframes,
   Link,
-  Text,
   useColorModeValue,
 } from "@chakra-ui/react";
 

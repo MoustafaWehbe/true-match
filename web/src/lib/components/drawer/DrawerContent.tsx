@@ -1,3 +1,5 @@
+"use client";
+
 import { BsEmojiHeartEyes } from "react-icons/bs";
 import { BsChatDots } from "react-icons/bs";
 import { GrSchedulePlay } from "react-icons/gr";

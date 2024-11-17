@@ -4,6 +4,7 @@ using api.Helpers;
 using api.Interfaces;
 using api.Mappers;
 using api.Models;
+using Bogus.DataSets;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -120,9 +121,14 @@ namespace api.Controllers
                 return BadRequest("User does not exist");
             }
 
-            if (user.Id != room.UserId && room.StartedAt == null)
+            if (room.StartedAt == null)
             {
                 return BadRequest("Room has not started yet");
+            }
+
+            if (room.isExpired)
+            {
+                return BadRequest("Can't join. Room has expired");
             }
 
             var roomParticipants = await _roomParticipantRepo.GetRoomParticipantsAsync(user);

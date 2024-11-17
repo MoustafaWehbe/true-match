@@ -4,7 +4,10 @@ export const styles: DeepPartial<Theme["styles"]> = {
   global: (props: any) => {
     return {
       ".profile-geocoder input": {
-        color: props.colorMode === "dark" ? "white" : "black",
+        color: props.colorMode === "dark" ? "white" : "white",
+        ":focus": {
+          color: props.colorMode === "dark" ? "white" : "white",
+        },
         // "div[role='option']": {
         //   color: "black!important",
         //   // ":hover": {

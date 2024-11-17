@@ -31,3 +31,83 @@ todos:
 - in the watcher display, make sure all videos to the side have the same size.
 - random questions are not showing
 - 
+
+
+
+Logic:
+
+I- Start Time Restrictions
+
+  The room can only be started within 10 minutes of its scheduled start time. It cannot be started earlier or later than this window.
+  For example, if the room is scheduled for 6:00 PM, the user can only start it between 6:00 PM and 6:10 PM.
+  If the user attempts to start the room before the scheduled time, the app should display a message indicating, "It’s not time to start the room yet."
+  If the user attempts to start the room after the 10-minute window, the app should display a message stating, "The room is no longer valid. Please create a new one."
+  If the user has already started the room but is disconnected (e.g., due to connectivity issues), they should be allowed to rejoin as long as the room has not yet expired.
+
+II- Room Expiry Logic
+
+  The room is considered active until it expires. The expiry time depends on the scheduled start time and the total duration of the rounds.
+  For instance, if the rounds take 30 minutes and the room is scheduled to start at 6:00 PM, the room will expire at 6:30 PM.
+  However, since users are allowed to start the room up to 10 minutes late, the expiry time is adjusted based on the actual start time. For example:
+  If the user starts the room at 6:05 PM, the room will expire at 6:35 PM.
+  Automatic Expiry: At the expiry time, all participants will be removed from the room.
+
+III- Pause Rounds Logic
+
+  Users are allowed to pause the rounds, and each pause affects the expiry time.
+  A maximum of 3 pauses, each lasting 15 seconds, is permitted per room.
+  The expiry time is extended by the total pause duration:
+  3 × 15 = 45 seconds
+
+  For example, if the room is scheduled to start at 6:00 PM and the user starts it at 6:05 PM, the adjusted expiry time is:
+  6:35:00+45 seconds = 6:35:45
+
+  After the expiry time (including pauses), no one will be able to start or join the room.
+
+IV- End Time Restrictions
+
+  The room typically ends when all rounds are completed. However, if no participants join the room or if the rounds finish early (e.g., through quick completion or by using a "skip" button), the room remains active until its calculated expiry time.
+  This ensures that users have sufficient time within the allowed window to complete their activities.
+
+V- How many users can join?
+
+  All users without a limit are allowed to enter the room after they show interest in joining (ie. presses the I am interested button). However, when the room starts, once it reaches 5 participants we should not allow more people to join..
+
+VI- Users interested in joining
+
+  They will receive an email/notification 10 minutes before the room's scheduled time. It is gonna be first come first serve. Only 5 of them are allowed to be in the room.
+
+VII- Gender/room management
+  You will only see rooms created by the gender you like.
+
+VIII- Preferences
+  
+  Filters for Matching:
+    Age range
+    Distance range
+    Gender(s) of interest
+  Discovery:
+    hide my profile
+
+IX- Privacy and Safety Settings
+  Report
+  Block
+  Verification Status
+
+X- Notification Settings
+  Push notifications, email, or SMS preferences.
+  Reminders for scheduled chat rooms or round timers.
+
+XI- Account Management
+  Change password
+  Enable two-factor authentication
+  delete the account
+
+XII- Feedback and Support
+  Contact customer support
+  FAQs or troubleshooting guides
+  Feedback: Option to provide feedback on matches, rooms, or the app experience
+
+XIII- Country management
+
+  The app should use postgis and countries borders to filter out people based on where they live

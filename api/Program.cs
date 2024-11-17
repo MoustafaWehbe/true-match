@@ -1,6 +1,7 @@
 ﻿using api.Data;
 using api.Interfaces;
 using api.Models;
+using api.Repositories;
 using api.Repository;
 using api.Service;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -76,6 +77,9 @@ builder.Services.AddScoped<IMediaRepository, MediaRepository>();
 builder.Services.AddScoped<IAvailableDescriptorRepository, AvailableDescriptorRepository>();
 builder.Services.AddScoped<IGenderRepository, GenderRepository>();
 builder.Services.AddScoped<IMessageRepository, MessageRepository>();
+builder.Services.AddScoped<ICountryRepository, CountryRepository>();
+
+builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
