@@ -24,6 +24,7 @@ namespace api.Mappers
                 SelectedDescriptors = userProfileModel.SelectedDescriptors != null ? JsonSerializer.Deserialize<List<SelectedDescriptor>>(userProfileModel.SelectedDescriptors) : null,
                 UserProfileGenders = userProfileModel.UserProfileGenders
                     .Select(ul => ul.ToUserProfileGenderDto()).ToList(),
+                UserProfileGenderPreferences = userProfileModel.UserProfileGenderPreferences
             };
         }
 
@@ -45,6 +46,7 @@ namespace api.Mappers
                 UpdatedAt = DateTime.UtcNow,
                 UserId = userId,
                 SelectedDescriptors = JsonDocument.Parse(JsonSerializer.Serialize(userProfileDto.SelectedDescriptors)),
+                UserProfileGenderPreferences = userProfileDto.UserProfileGenderPreferences ?? new List<Guid>()
             };
         }
 
@@ -69,6 +71,7 @@ namespace api.Mappers
             existingUserProfile.UserProfileGenders = userProfileDto.UserProfileGenders != null ?
                     userProfileDto.UserProfileGenders.Select(upg => upg.ToUserProfileGenderFromCreate(existingUserProfile.Id)).ToList() :
                     existingUserProfile.UserProfileGenders;
+            existingUserProfile.UserProfileGenderPreferences = userProfileDto.UserProfileGenderPreferences ?? existingUserProfile.UserProfileGenderPreferences;
         }
     }
 }

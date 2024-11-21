@@ -1,6 +1,7 @@
 using System.Text.Json;
 using api.Data;
 using api.Dtos;
+using api.Expressions;
 using api.Extensions;
 using api.Helpers;
 using api.Interfaces;
@@ -36,12 +37,33 @@ namespace api.Repository
                 .Select(hr => hr.RoomId)
                 .ToListAsync();
 
+            var currentUserProfile = await _context.UserProfiles
+             .Include(up => up.UserProfileGenders)
+             .Where(up => up.UserId == userId)
+             .FirstAsync();
+
+            if (currentUserProfile == null || currentUserProfile.UserProfileGenderPreferences == null)
+            {
+                throw new Exception("User does not have a profile yet or it is not complete");
+            }
+
+            // Step 1: Create a reusable gender filter for UserProfile
+            var genderFilter = GenderFilter.MatchesGenderPreferences(currentUserProfile);
+
+            // Step 2: Adapt the gender filter for the User context
+            var userGenderFilter = genderFilter.Compose<User, UserProfile>(user => user.UserProfile!);
+
+            // Step 3: Adapt the userGenderFilter for the Room context
+            var roomGenderFilter = userGenderFilter.Compose<Room, User>(room => room.User!);
+
+
             return await Task.Run(() => _context.Rooms
                 .IncludeRoomDetails()
                 .FindAllRoomByStatus(query.Status, userId)
                 .Where(r => r.UserId != userId && !blockedUsersIds.Contains(r.UserId) &&
                     !hiddenRoomIds.Contains(r.Id))
                 .FindNotDeleted()
+                .Where(roomGenderFilter)
                 .OrderByDescending(r => r.CreatedAt)
                 .Skip((query.PageNumber - 1) * query.PageSize)
                 .Take(query.PageSize)
@@ -50,6 +72,16 @@ namespace api.Repository
 
         public async Task<List<Room>> GetMyRoomsAsync(MyRoomQueryObject query, string userId)
         {
+            var currentUserProfile = await _context.UserProfiles
+             .Include(up => up.UserProfileGenders)
+             .Where(up => up.UserId == userId)
+             .FirstAsync();
+
+            if (currentUserProfile == null || currentUserProfile.UserProfileGenderPreferences == null)
+            {
+                throw new Exception("User does not have a profile yet or it is not complete");
+            }
+
             return await Task.Run(() => _context.Rooms
                 .IncludeRoomDetails()
                 .Where(r => r.UserId == userId)
@@ -91,9 +123,31 @@ namespace api.Repository
                 .Select(hr => hr.RoomId)
                 .ToListAsync();
 
+
+            var currentUserProfile = await _context.UserProfiles
+             .Include(up => up.UserProfileGenders)
+             .Where(up => up.UserId == userId)
+             .FirstAsync();
+
+            if (currentUserProfile == null || currentUserProfile.UserProfileGenderPreferences == null)
+            {
+                throw new Exception("User does not have a profile yet or it is not complete");
+            }
+
+            // Step 1: Create a reusable gender filter for UserProfile
+            var genderFilter = GenderFilter.MatchesGenderPreferences(currentUserProfile);
+
+            // Step 2: Adapt the gender filter for the User context
+            var userGenderFilter = genderFilter.Compose<User, UserProfile>(user => user.UserProfile!);
+
+            // Step 3: Adapt the userGenderFilter for the Room context
+            var roomGenderFilter = userGenderFilter.Compose<Room, User>(room => room.User!);
+
+
             var filteredQuery = _context.Rooms
                 .Where(r => r.UserId != userId && !blockedUsersIds.Contains(r.UserId)
                     && !hiddenRoomIds.Contains(r.Id))
+                .Where(roomGenderFilter)
                 .FindNotDeleted()
                 .FindAllRoomByStatus(query.Status, userId);
 

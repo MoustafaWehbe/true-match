@@ -1,19 +1,16 @@
-import { Box, Flex } from "@chakra-ui/react";
+"use client";
+
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 const Home = () => {
-  return (
-    <Box>
-      <Flex
-        direction="column"
-        alignItems="center"
-        justifyContent="center"
-        minHeight="70vh"
-        gap={4}
-        mb={8}
-        w="full"
-      ></Flex>
-    </Box>
-  );
+  const router = useRouter();
+
+  useEffect(() => {
+    router.push("/browse-rooms");
+  }, [router]);
+
+  return null;
 };
 
 export default Home;

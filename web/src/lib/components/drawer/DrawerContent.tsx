@@ -2,7 +2,6 @@
 
 import { BsEmojiHeartEyes } from "react-icons/bs";
 import { BsChatDots } from "react-icons/bs";
-import { GrSchedulePlay } from "react-icons/gr";
 import { MdOutlineLiveTv } from "react-icons/md";
 import {
   Box,
@@ -36,18 +35,18 @@ const DrawerContent = () => {
         </Heading>
       </Stack>
       <List fontSize="1.2em" spacing={4} color={linkColor}>
-        <ListItem>
+        {/* <ListItem>
           <NextLink href="/swipe-to-match" passHref prefetch={true}>
             <Link _hover={{ textDecoration: "none", color: hoverColor }}>
               <ListIcon as={BsEmojiHeartEyes} color={iconColor} />
               Swipe to match
             </Link>
           </NextLink>
-        </ListItem>
+        </ListItem> */}
         <ListItem>
           <NextLink href="/browse-rooms" passHref prefetch={true}>
             <Link _hover={{ textDecoration: "none", color: hoverColor }}>
-              <ListIcon as={MdOutlineLiveTv} color={iconColor} />
+              <ListIcon as={BsEmojiHeartEyes} color={iconColor} />
               Browse rooms
             </Link>
           </NextLink>
@@ -55,7 +54,7 @@ const DrawerContent = () => {
         <ListItem>
           <NextLink href="/my-rooms" passHref prefetch={true}>
             <Link _hover={{ textDecoration: "none", color: hoverColor }}>
-              <ListIcon as={GrSchedulePlay} color={iconColor} />
+              <ListIcon as={MdOutlineLiveTv} color={iconColor} />
               My rooms
             </Link>
           </NextLink>

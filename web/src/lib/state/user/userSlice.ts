@@ -23,6 +23,7 @@ export interface UserState {
   registerResult: UserApiResponse | null;
   registerLoading: boolean;
   loginLoading: boolean;
+  deleteAccountLoading: boolean;
   loginError: string | null;
   registerError: string | null;
   user: UserDto | null;
@@ -95,6 +96,27 @@ export const logoutUser = createAsyncThunk<
       { headers: defaultHeaders }
     );
     localStorage.removeItem(TOKEN);
+    return response.data;
+  } catch (error) {
+    let errorMessage = "Something went wrong!";
+    if (axios.isAxiosError(error) && error.response) {
+      errorMessage = error.response.data.message || errorMessage;
+    }
+    return rejectWithValue(errorMessage);
+  }
+});
+
+export const deleteAccount = createAsyncThunk<
+  SimpleApiResponseApiResponse,
+  undefined,
+  { rejectValue: string }
+>("user/deleteAccount", async (_, { rejectWithValue }) => {
+  try {
+    const response = await axiosInstance.delete<SimpleApiResponseApiResponse>(
+      "/api/account",
+      { headers: defaultHeaders }
+    );
+    // localStorage.removeItem(TOKEN);
     return response.data;
   } catch (error) {
     let errorMessage = "Something went wrong!";
@@ -238,6 +260,7 @@ const initialState: UserState = {
   registerResult: null,
   registerLoading: false,
   loginLoading: false,
+  deleteAccountLoading: false,
   loginError: null,
   registerError: null,
   user: null,
@@ -378,7 +401,23 @@ const userSlice = createSlice({
       })
       .addCase(unBlockUser.rejected, (state) => {
         state.isUnBlockingUser = false;
-      });
+      })
+      .addCase(deleteAccount.pending, (state) => {
+        state.loginLoading = true;
+        state.loginError = null;
+      })
+      .addCase(
+        deleteAccount.fulfilled,
+        (state, _action: PayloadAction<SimpleApiResponseApiResponse>) => {
+          state.deleteAccountLoading = false;
+        }
+      )
+      .addCase(
+        deleteAccount.rejected,
+        (state, _action: PayloadAction<string | undefined>) => {
+          state.deleteAccountLoading = false;
+        }
+      );
   },
 });
 

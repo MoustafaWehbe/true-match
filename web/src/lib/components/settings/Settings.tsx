@@ -2,12 +2,21 @@
 
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { ChevronDownIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
+  Checkbox,
   FormControl,
   FormLabel,
   Heading,
+  Popover,
+  PopoverArrow,
+  PopoverBody,
+  PopoverCloseButton,
+  PopoverContent,
+  PopoverHeader,
+  PopoverTrigger,
   RangeSlider,
   RangeSliderFilledTrack,
   RangeSliderThumb,
@@ -23,20 +32,34 @@ import {
   VStack,
 } from "@chakra-ui/react";
 
+import ConfirmDialog from "../shared/ConfirmDialog";
+
+import { getGenders } from "~/lib/state/gender/genderSlice";
 import { AppDispatch, RootState } from "~/lib/state/store";
-import { createOrUpdateUserProfile } from "~/lib/state/user/userSlice";
+import {
+  createOrUpdateUserProfile,
+  deleteAccount,
+} from "~/lib/state/user/userSlice";
 
 const SettingsPage = () => {
   const [ageFilter, setAgeFilter] = useState<[number, number]>([18, 50]);
   const [distanceFilter, setDistanceFilter] = useState(30);
   const [hideProfile, setHideProfile] = useState(false);
-  const { user } = useSelector((state: RootState) => state.user);
+  const { user, deleteAccountLoading } = useSelector(
+    (state: RootState) => state.user
+  );
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [genderPreferences, setGenderPreferences] = useState<string[]>([]);
 
   const toast = useToast();
   const dispatch = useDispatch<AppDispatch>();
 
   const textColor = useColorModeValue("gray.800", "white");
   const sectionBgColor = useColorModeValue("white", "gray.700");
+  const { genders } = useSelector((state: RootState) => state.gender);
+
+  const openDialog = () => setIsDialogOpen(true);
+  const closeDialog = () => setIsDialogOpen(false);
 
   const handleSave = async () => {
     const res = await dispatch(
@@ -45,6 +68,7 @@ const SettingsPage = () => {
         ageFilterMax: ageFilter[1],
         distanceFilter: distanceFilter,
         hidden: hideProfile,
+        userProfileGenderPreferences: genderPreferences,
       })
     );
 
@@ -67,8 +91,9 @@ const SettingsPage = () => {
     });
   };
 
-  const handleDeleteAccount = () => {
-    // TODO: Call API to delete the account
+  const handleDeleteAccount = async () => {
+    await dispatch(deleteAccount());
+    window.location.href = "/login";
     toast({
       title: "Account Deleted",
       description: "Your account has been deleted.",
@@ -88,6 +113,24 @@ const SettingsPage = () => {
     setHideProfile(!!user?.userProfile?.hidden);
     setDistanceFilter(user?.userProfile?.distanceFilter || 30);
   }, [user]);
+
+  useEffect(() => {
+    dispatch(getGenders());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (user?.userProfile) {
+      setGenderPreferences(user.userProfile.userProfileGenderPreferences || []);
+    }
+  }, [user?.userProfile]);
+
+  const handleCheckboxChange = (id: string) => {
+    setGenderPreferences((prev) =>
+      prev.includes(id)
+        ? prev.filter((genderId) => genderId !== id)
+        : [...prev, id]
+    );
+  };
 
   if (!user) {
     return null;
@@ -110,10 +153,11 @@ const SettingsPage = () => {
         <Heading size="lg" color={textColor}>
           Settings
         </Heading>
+        <hr style={{ width: "100%", margin: "0 auto" }} />
 
         {/* Age Filter */}
         <Box>
-          <Heading size="md" color={textColor} mb={4}>
+          <Heading size="sm" color={textColor} mb={4}>
             Age Filter
           </Heading>
           <FormControl>
@@ -138,7 +182,7 @@ const SettingsPage = () => {
         </Box>
 
         <Box>
-          <Heading size="md" color={textColor} mb={4}>
+          <Heading size="sm" color={textColor} mb={4}>
             Distance Filter
           </Heading>
           <FormControl>
@@ -162,7 +206,50 @@ const SettingsPage = () => {
         </Box>
 
         <Box>
-          <Heading size="md" color={textColor} mb={4}>
+          <Heading size="sm" color={textColor} mb={4}>
+            Gender Preferences
+          </Heading>
+          <FormControl>
+            <Box>
+              <Popover>
+                <PopoverTrigger>
+                  <Button
+                    size={"md"}
+                    colorScheme="pink"
+                    rightIcon={<ChevronDownIcon />}
+                  >
+                    {genderPreferences.length > 0
+                      ? `Selected (${genderPreferences.length})`
+                      : "Select Gender Preferences"}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent>
+                  <PopoverArrow />
+                  <PopoverCloseButton />
+                  <PopoverHeader>Select Preferences</PopoverHeader>
+                  <PopoverBody>
+                    <VStack align="start">
+                      {genders
+                        ?.filter((gender) => gender.parentId === null)
+                        .map((gender) => (
+                          <Checkbox
+                            key={gender.id}
+                            isChecked={genderPreferences.includes(gender.id!)}
+                            onChange={() => handleCheckboxChange(gender.id!)}
+                          >
+                            {gender.name}
+                          </Checkbox>
+                        ))}
+                    </VStack>
+                  </PopoverBody>
+                </PopoverContent>
+              </Popover>
+            </Box>
+          </FormControl>
+        </Box>
+
+        <Box>
+          <Heading size="sm" color={textColor} mb={4}>
             Privacy
           </Heading>
           <FormControl display="flex" alignItems="center">
@@ -181,10 +268,21 @@ const SettingsPage = () => {
           Save Settings
         </Button>
 
-        <Button colorScheme="red" w="full" onClick={handleDeleteAccount}>
+        <Button colorScheme="red" w="full" onClick={openDialog}>
           Delete Account
         </Button>
       </VStack>
+
+      <ConfirmDialog
+        isOpen={isDialogOpen}
+        onClose={closeDialog}
+        onConfirm={handleDeleteAccount}
+        title="Delete Account?"
+        description="Are you sure you want to delete your account?<br /><br />Instead of deleting, you have the option to hide your account."
+        confirmText="Delete"
+        cancelText="Cancel"
+        isLoading={deleteAccountLoading}
+      />
     </Box>
   );
 };

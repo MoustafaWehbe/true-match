@@ -5,6 +5,7 @@ namespace api.Extensions
 {
     public static class QueryExtensions
     {
+        // Rooms
         public static IQueryable<Room> FindAllRoomByStatus(this IQueryable<Room> query, AllRoomStatus? roomStatus, string userId)
         {
             switch (roomStatus)

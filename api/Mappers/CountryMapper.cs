@@ -2,11 +2,11 @@ using AutoMapper;
 using api.Dtos;
 using api.Models;
 
-namespace api.Mapping
+namespace api.Mappers
 {
-    public class MappingProfile : Profile
+    public class CountryMappingProfile : Profile
     {
-        public MappingProfile()
+        public CountryMappingProfile()
         {
             CreateMap<Country, CountryDto>();
         }

@@ -1,4 +1,6 @@
+using api.Data;
 using api.Dtos;
+using api.Extensions;
 using api.Helpers;
 using api.Interfaces;
 using api.Models;
@@ -16,11 +18,14 @@ namespace api.Controllers
         private readonly UserManager<User> _userManager;
         private readonly ITokenService _tokenService;
         private readonly SignInManager<User> _signinManager;
-        public AccountController(UserManager<User> userManager, ITokenService tokenService, SignInManager<User> signInManager)
+        private readonly ApplicationDBContext _context;
+
+        public AccountController(UserManager<User> userManager, ITokenService tokenService, SignInManager<User> signInManager, ApplicationDBContext context)
         {
             _userManager = userManager;
             _tokenService = tokenService;
             _signinManager = signInManager;
+            _context = context;
         }
 
         [HttpPost("login")]
@@ -109,29 +114,47 @@ namespace api.Controllers
 
         [HttpDelete]
         [Authorize]
+        [ProducesResponseType(typeof(ApiResponse<SimpleApiResponse>), 200)]
         public async Task<IActionResult> DeleteAccount()
         {
-            var userId = User.Identity?.Name;
-            if (userId == null)
-            {
-                return Unauthorized();
-            }
+            var email = User.GetEmail();
+            var user = await _userManager.FindByEmailAsync(email);
 
-            var user = await _userManager.FindByIdAsync(userId);
             if (user == null)
             {
-                return NotFound("User not found");
+                return NotFound("User was not found!");
             }
+
+            using var transaction = await _context.Database.BeginTransactionAsync();
             try
             {
-                await _userManager.DeleteAsync(user);
+                var userProfile = await _context.UserProfiles
+                    .FirstOrDefaultAsync(up => up.UserId == user.Id);
 
-                return Ok(new { message = "Account deleted successfully." });
+                if (userProfile != null)
+                {
+                    _context.UserProfiles.Remove(userProfile);
+                    await _context.SaveChangesAsync();
+                }
+
+                var result = await _userManager.DeleteAsync(user);
+
+                if (!result.Succeeded)
+                {
+                    await transaction.RollbackAsync();
+                    return StatusCode(500, new { error = "Failed to delete user account." });
+                }
+
+                await transaction.CommitAsync();
+
+                return Ok(ResponseHelper.CreateSuccessResponse(new { message = "Account deleted successfully." }));
             }
             catch (Exception ex)
             {
+                await transaction.RollbackAsync();
                 return StatusCode(500, new { error = ex.Message });
             }
         }
+
     }
 }

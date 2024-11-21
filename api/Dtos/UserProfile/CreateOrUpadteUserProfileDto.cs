@@ -21,5 +21,6 @@ namespace api.Dtos
         public string? UserId { get; set; }
         public List<SelectedDescriptor>? SelectedDescriptors { get; set; }
         public List<UserProfileGenderDto>? UserProfileGenders { get; set; }
+        public List<Guid>? UserProfileGenderPreferences { get; set; }
     }
 }

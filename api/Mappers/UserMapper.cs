@@ -10,7 +10,7 @@ namespace api.Mappers
             return new UserDto
             {
                 Id = userModel.Id,
-                Media = userModel.Media,
+                Media = userModel.Media.Select(m => m.ToMediaDto()).ToList(),
                 UserProfile = userModel.UserProfile?.ToUserProfileDto(),
                 FirstName = userModel.FirstName,
                 LastName = userModel.LastName,

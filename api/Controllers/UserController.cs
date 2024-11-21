@@ -31,8 +31,15 @@ namespace api.Controllers
                 return BadRequest(ModelState);
             }
 
-            var users = await _userRepo.GetAllAsync(query);
-            var totalUsers = await _userRepo.GetTotalUsersAsync();
+            var currentUser = await _userManager.FindByEmailAsync(User.GetEmail());
+
+            if (currentUser == null)
+            {
+                return NotFound("User not found.");
+            }
+
+            var users = await _userRepo.GetAllAsync(query, currentUser);
+            var totalUsers = await _userRepo.GetTotalUsersAsync(currentUser);
             var totalPages = _userRepo.GetTotalPages(query.PageSize, totalUsers);
 
             var userDto = users.Select(u => u.ToUserDto()).ToList();
@@ -47,7 +54,9 @@ namespace api.Controllers
         public async Task<IActionResult> GetById([FromRoute] string id)
         {
             if (!ModelState.IsValid)
+            {
                 return BadRequest(ModelState);
+            }
             var user = await _userRepo.GetByIdAsync(id);
             if (user == null)
             {

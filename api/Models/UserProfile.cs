@@ -39,6 +39,7 @@ namespace api.Models
         public User? User { get; set; }
 
         public JsonDocument? SelectedDescriptors { get; set; }
+        public List<Guid>? UserProfileGenderPreferences { get; set; }
         public List<UserProfileGender> UserProfileGenders { get; set; } = new List<UserProfileGender>();
     }
 }

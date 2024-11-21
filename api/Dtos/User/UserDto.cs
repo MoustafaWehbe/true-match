@@ -1,6 +1,4 @@
 
-using api.Models;
-
 namespace api.Dtos
 {
     public class UserDto
@@ -8,7 +6,7 @@ namespace api.Dtos
         public required string Id { get; set; }
         public required string FirstName { get; set; }
         public required string LastName { get; set; }
-        public List<Media> Media { get; set; } = new List<Media>();
+        public List<MediaDto> Media { get; set; } = new List<MediaDto>();
         public UserProfileDto? UserProfile { get; set; }
     }
 }
