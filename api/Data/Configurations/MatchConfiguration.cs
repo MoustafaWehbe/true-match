@@ -1,6 +1,6 @@
+using api.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using api.Models;
 
 namespace api.Data
 {
@@ -9,10 +9,10 @@ namespace api.Data
         public void Configure(EntityTypeBuilder<Match> builder)
         {
             builder
-               .HasOne(m => m.User1)
-               .WithMany(u => u.MatchesAsUser1)
-               .HasForeignKey(m => m.User1Id)
-               .OnDelete(DeleteBehavior.Restrict);
+                .HasOne(m => m.User1)
+                .WithMany(u => u.MatchesAsUser1)
+                .HasForeignKey(m => m.User1Id)
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder
                 .HasOne(m => m.User2)

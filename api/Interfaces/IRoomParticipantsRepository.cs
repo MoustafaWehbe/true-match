@@ -7,7 +7,9 @@ namespace api.Interfaces
     {
         Task<List<RoomParticipant>> GetRoomParticipantsAsync(User user);
         Task<RoomParticipant?> CreateAsync(RoomParticipant roomParticipant);
-        Task<RoomParticipantEvent?> CreateRoomParticipantEventAsync(RoomParticipantEvent roomParticipantEvent);
+        Task<RoomParticipantEvent?> CreateRoomParticipantEventAsync(
+            RoomParticipantEvent roomParticipantEvent
+        );
         Task DeleteAsync(Guid roomId, string userId);
     }
 }

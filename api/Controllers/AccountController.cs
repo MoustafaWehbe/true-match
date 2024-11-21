@@ -20,7 +20,12 @@ namespace api.Controllers
         private readonly SignInManager<User> _signinManager;
         private readonly ApplicationDBContext _context;
 
-        public AccountController(UserManager<User> userManager, ITokenService tokenService, SignInManager<User> signInManager, ApplicationDBContext context)
+        public AccountController(
+            UserManager<User> userManager,
+            ITokenService tokenService,
+            SignInManager<User> signInManager,
+            ApplicationDBContext context
+        )
         {
             _userManager = userManager;
             _tokenService = tokenService;
@@ -38,22 +43,29 @@ namespace api.Controllers
                 return BadRequest(ModelState);
             }
 
-            var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Email == loginDto.Email.ToLower());
+            var user = await _userManager.Users.FirstOrDefaultAsync(x =>
+                x.Email == loginDto.Email.ToLower()
+            );
 
             if (user == null)
             {
                 return Unauthorized("Invalid email!");
             }
 
-            var result = await _signinManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
+            var result = await _signinManager.CheckPasswordSignInAsync(
+                user,
+                loginDto.Password,
+                false
+            );
 
-            if (!result.Succeeded) return Unauthorized("Username not found and/or password incorrect");
+            if (!result.Succeeded)
+                return Unauthorized("Username not found and/or password incorrect");
 
-            return Ok(ResponseHelper.CreateSuccessResponse(new NewUserDto
-            {
-                Email = user.Email!,
-                Token = _tokenService.CreateToken(user)
-            }));
+            return Ok(
+                ResponseHelper.CreateSuccessResponse(
+                    new NewUserDto { Email = user.Email!, Token = _tokenService.CreateToken(user) }
+                )
+            );
         }
 
         [HttpPost("logout")]
@@ -62,7 +74,9 @@ namespace api.Controllers
         public async Task<IActionResult> Logout()
         {
             await _signinManager.SignOutAsync();
-            return Ok(ResponseHelper.CreateSuccessResponse(new { message = "Successfully logged out." }));
+            return Ok(
+                ResponseHelper.CreateSuccessResponse(new { message = "Successfully logged out." })
+            );
         }
 
         [HttpPost("register")]
@@ -80,7 +94,7 @@ namespace api.Controllers
                     Email = registerDto.Email,
                     FirstName = registerDto.FirstName,
                     LastName = registerDto.LastName,
-                    UserName = registerDto.Email
+                    UserName = registerDto.Email,
                 };
 
                 var createdUser = await _userManager.CreateAsync(user, registerDto.Password);
@@ -90,11 +104,15 @@ namespace api.Controllers
                     var roleResult = await _userManager.AddToRoleAsync(user, "User");
                     if (roleResult.Succeeded)
                     {
-                        return Ok(ResponseHelper.CreateSuccessResponse(new NewUserDto
-                        {
-                            Email = user.Email!,
-                            Token = _tokenService.CreateToken(user)
-                        }));
+                        return Ok(
+                            ResponseHelper.CreateSuccessResponse(
+                                new NewUserDto
+                                {
+                                    Email = user.Email!,
+                                    Token = _tokenService.CreateToken(user),
+                                }
+                            )
+                        );
                     }
                     else
                     {
@@ -128,8 +146,9 @@ namespace api.Controllers
             using var transaction = await _context.Database.BeginTransactionAsync();
             try
             {
-                var userProfile = await _context.UserProfiles
-                    .FirstOrDefaultAsync(up => up.UserId == user.Id);
+                var userProfile = await _context.UserProfiles.FirstOrDefaultAsync(up =>
+                    up.UserId == user.Id
+                );
 
                 if (userProfile != null)
                 {
@@ -147,7 +166,14 @@ namespace api.Controllers
 
                 await transaction.CommitAsync();
 
-                return Ok(ResponseHelper.CreateSuccessResponse(new { message = "Account deleted successfully." }));
+                return Ok(
+                    ResponseHelper.CreateSuccessResponse(
+                        new
+                        {
+                            message = "Account deleted dsmfgjsdhfgsdhfg jhsdgf jdhsgfjhsg fjhdsgfjhdsgfj gsfjhsgdfjh hghjfgfjhsdgf jsgfjhsbfjdhs fhsdfnbsdvfn svnfbvdsnfvn sdvfnbsdvfnsdvfnbsdvf bdsvfnsbd vfnvsdnvf successfully.",
+                        }
+                    )
+                );
             }
             catch (Exception ex)
             {
@@ -155,6 +181,5 @@ namespace api.Controllers
                 return StatusCode(500, new { error = ex.Message });
             }
         }
-
     }
 }

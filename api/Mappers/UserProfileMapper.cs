@@ -17,18 +17,30 @@ namespace api.Mappers
                 DistanceFilter = userProfileModel.DistanceFilter,
                 Hidden = userProfileModel.Hidden,
                 pos = userProfileModel.pos,
-                Location = userProfileModel.Location != null ? JsonSerializer.Deserialize<UserLocation>(userProfileModel.Location) : null,
+                Location =
+                    userProfileModel.Location != null
+                        ? JsonSerializer.Deserialize<UserLocation>(userProfileModel.Location)
+                        : null,
                 Job = userProfileModel.Job,
                 School = userProfileModel.School,
                 BirthDate = userProfileModel.BirthDate,
-                SelectedDescriptors = userProfileModel.SelectedDescriptors != null ? JsonSerializer.Deserialize<List<SelectedDescriptor>>(userProfileModel.SelectedDescriptors) : null,
-                UserProfileGenders = userProfileModel.UserProfileGenders
-                    .Select(ul => ul.ToUserProfileGenderDto()).ToList(),
-                UserProfileGenderPreferences = userProfileModel.UserProfileGenderPreferences
+                SelectedDescriptors =
+                    userProfileModel.SelectedDescriptors != null
+                        ? JsonSerializer.Deserialize<List<SelectedDescriptor>>(
+                            userProfileModel.SelectedDescriptors
+                        )
+                        : null,
+                UserProfileGenders = userProfileModel
+                    .UserProfileGenders.Select(ul => ul.ToUserProfileGenderDto())
+                    .ToList(),
+                UserProfileGenderPreferences = userProfileModel.UserProfileGenderPreferences,
             };
         }
 
-        public static UserProfile ToUserProfileFromCreate(this CreateOrUpdateUserProfileDto userProfileDto, string userId)
+        public static UserProfile ToUserProfileFromCreate(
+            this CreateOrUpdateUserProfileDto userProfileDto,
+            string userId
+        )
         {
             return new UserProfile
             {
@@ -45,33 +57,57 @@ namespace api.Mappers
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow,
                 UserId = userId,
-                SelectedDescriptors = JsonDocument.Parse(JsonSerializer.Serialize(userProfileDto.SelectedDescriptors)),
-                UserProfileGenderPreferences = userProfileDto.UserProfileGenderPreferences ?? new List<Guid>()
+                SelectedDescriptors = JsonDocument.Parse(
+                    JsonSerializer.Serialize(userProfileDto.SelectedDescriptors)
+                ),
+                UserProfileGenderPreferences =
+                    userProfileDto.UserProfileGenderPreferences ?? new List<Guid>(),
             };
         }
 
-        public static void ToUserProfileFromUpdate(this CreateOrUpdateUserProfileDto userProfileDto, UserProfile existingUserProfile, string userId)
+        public static void ToUserProfileFromUpdate(
+            this CreateOrUpdateUserProfileDto userProfileDto,
+            UserProfile existingUserProfile,
+            string userId
+        )
         {
             existingUserProfile.Bio = userProfileDto.Bio ?? existingUserProfile.Bio;
-            existingUserProfile.AgeFilterMax = userProfileDto.AgeFilterMax ?? existingUserProfile.AgeFilterMax;
-            existingUserProfile.AgeFilterMin = userProfileDto.AgeFilterMin ?? existingUserProfile.AgeFilterMin;
-            existingUserProfile.DistanceFilter = userProfileDto.DistanceFilter ?? existingUserProfile.DistanceFilter;
-            existingUserProfile.Hidden = userProfileDto.Hidden.HasValue ? userProfileDto.Hidden.Value : existingUserProfile.Hidden;
+            existingUserProfile.AgeFilterMax =
+                userProfileDto.AgeFilterMax ?? existingUserProfile.AgeFilterMax;
+            existingUserProfile.AgeFilterMin =
+                userProfileDto.AgeFilterMin ?? existingUserProfile.AgeFilterMin;
+            existingUserProfile.DistanceFilter =
+                userProfileDto.DistanceFilter ?? existingUserProfile.DistanceFilter;
+            existingUserProfile.Hidden = userProfileDto.Hidden.HasValue
+                ? userProfileDto.Hidden.Value
+                : existingUserProfile.Hidden;
             existingUserProfile.pos = userProfileDto.pos ?? existingUserProfile.pos;
             existingUserProfile.Job = userProfileDto.Job ?? existingUserProfile.Job;
             existingUserProfile.School = userProfileDto.School ?? existingUserProfile.School;
-            existingUserProfile.BirthDate = userProfileDto.BirthDate ?? existingUserProfile.BirthDate;
+            existingUserProfile.BirthDate =
+                userProfileDto.BirthDate ?? existingUserProfile.BirthDate;
             existingUserProfile.UpdatedAt = DateTime.UtcNow;
-            existingUserProfile.Location = userProfileDto.Location != null
-                ? JsonDocument.Parse(JsonSerializer.Serialize(userProfileDto.Location))
-                : existingUserProfile.Location;
-            existingUserProfile.SelectedDescriptors = userProfileDto.SelectedDescriptors != null
-                ? JsonDocument.Parse(JsonSerializer.Serialize(userProfileDto.SelectedDescriptors))
-                : existingUserProfile.SelectedDescriptors;
-            existingUserProfile.UserProfileGenders = userProfileDto.UserProfileGenders != null ?
-                    userProfileDto.UserProfileGenders.Select(upg => upg.ToUserProfileGenderFromCreate(existingUserProfile.Id)).ToList() :
-                    existingUserProfile.UserProfileGenders;
-            existingUserProfile.UserProfileGenderPreferences = userProfileDto.UserProfileGenderPreferences ?? existingUserProfile.UserProfileGenderPreferences;
+            existingUserProfile.Location =
+                userProfileDto.Location != null
+                    ? JsonDocument.Parse(JsonSerializer.Serialize(userProfileDto.Location))
+                    : existingUserProfile.Location;
+            existingUserProfile.SelectedDescriptors =
+                userProfileDto.SelectedDescriptors != null
+                    ? JsonDocument.Parse(
+                        JsonSerializer.Serialize(userProfileDto.SelectedDescriptors)
+                    )
+                    : existingUserProfile.SelectedDescriptors;
+            existingUserProfile.UserProfileGenders =
+                userProfileDto.UserProfileGenders != null
+                    ? userProfileDto
+                        .UserProfileGenders.Select(upg =>
+                            upg.ToUserProfileGenderFromCreate(existingUserProfile.Id)
+                        )
+                        .ToList()
+                    : existingUserProfile.UserProfileGenders;
+            existingUserProfile.UserProfileGenderPreferences =
+                userProfileDto.UserProfileGenderPreferences
+                ?? existingUserProfile.UserProfileGenderPreferences;
         }
     }
 }

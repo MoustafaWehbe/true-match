@@ -1,7 +1,7 @@
-using Bogus;
-using api.Models;
-using api.Data;
 using System.Text.Json;
+using api.Data;
+using api.Models;
+using Bogus;
 using Microsoft.EntityFrameworkCore;
 
 public class SeedFakeData
@@ -16,7 +16,11 @@ public class SeedFakeData
         _faker = new Faker();
     }
 
-    public async Task SeedAsync(int userCount = 2000, int roomCount = 500, int maxParticipantsPerRoom = 5)
+    public async Task SeedAsync(
+        int userCount = 2000,
+        int roomCount = 500,
+        int maxParticipantsPerRoom = 5
+    )
     {
         if (!_context.Users.Any())
         {
@@ -47,14 +51,17 @@ public class SeedFakeData
         }
     }
 
-
     private UserProfile CreateRandomUserProfile(string userId, List<Gender> genders)
     {
-        var randomGenderIds1 = _faker.Make(_faker.Random.Int(1, 3),
-            () => _faker.PickRandom(genders).Id).Distinct().ToList();
+        var randomGenderIds1 = _faker
+            .Make(_faker.Random.Int(1, 3), () => _faker.PickRandom(genders).Id)
+            .Distinct()
+            .ToList();
 
-        var randomGenderIds2 = _faker.Make(_faker.Random.Int(1, 3),
-            () => _faker.PickRandom(genders).Id).Distinct().ToList();
+        var randomGenderIds2 = _faker
+            .Make(_faker.Random.Int(1, 3), () => _faker.PickRandom(genders).Id)
+            .Distinct()
+            .ToList();
 
         return new UserProfile
         {
@@ -73,13 +80,16 @@ public class SeedFakeData
                 _faker.Address.Latitude(),
                 _faker.Address.Longitude()
             )
-            { SRID = 4326 },
-            Location = JsonDocument.Parse($"{{\"name\":\"{_faker.Address.City()}\",\"region\":\"{_faker.Address.State()}\"}}"),
-            UserProfileGenderPreferences = randomGenderIds1,
-            UserProfileGenders = randomGenderIds2.Select(genderId => new UserProfileGender
             {
-                GenderId = genderId
-            }).ToList(),
+                SRID = 4326,
+            },
+            Location = JsonDocument.Parse(
+                $"{{\"name\":\"{_faker.Address.City()}\",\"region\":\"{_faker.Address.State()}\"}}"
+            ),
+            UserProfileGenderPreferences = randomGenderIds1,
+            UserProfileGenders = randomGenderIds2
+                .Select(genderId => new UserProfileGender { GenderId = genderId })
+                .ToList(),
         };
     }
 
@@ -90,14 +100,16 @@ public class SeedFakeData
 
         for (int i = 0; i < mediaCount; i++)
         {
-            mediaList.Add(new Media
-            {
-                Url = _faker.Image.PicsumUrl(),
-                MediaType = (MediaType)_random.Next(0, 2),
-                UserId = userId,
-                CreatedAt = DateTime.UtcNow,
-                UpdatedAt = DateTime.UtcNow
-            });
+            mediaList.Add(
+                new Media
+                {
+                    Url = _faker.Image.PicsumUrl(),
+                    MediaType = (MediaType)_random.Next(0, 2),
+                    UserId = userId,
+                    CreatedAt = DateTime.UtcNow,
+                    UpdatedAt = DateTime.UtcNow,
+                }
+            );
         }
 
         return mediaList;
@@ -125,32 +137,41 @@ public class SeedFakeData
             .RuleFor(r => r.UpdatedAt, f => f.Date.Recent().ToUniversalTime())
             .RuleFor(r => r.ScheduledAt, f => f.Date.Future().ToUniversalTime())
             .RuleFor(r => r.User, f => f.PickRandom(users))
-            .RuleFor(r => r.StartedAt, (f, r) =>
-            {
-                // Sometimes StartedAt is null
-                return f.Random.Bool() ? null : f.Date.Past().ToUniversalTime();
-            })
-            .RuleFor(r => r.FinishedAt, (f, r) =>
-            {
-                // FinishedAt can be null, and if it's not null, StartedAt must not be null
-                if (f.Random.Bool())
+            .RuleFor(
+                r => r.StartedAt,
+                (f, r) =>
                 {
-                    return null;
+                    // Sometimes StartedAt is null
+                    return f.Random.Bool() ? null : f.Date.Past().ToUniversalTime();
                 }
-                else
+            )
+            .RuleFor(
+                r => r.FinishedAt,
+                (f, r) =>
                 {
-                    if (r.StartedAt == null)
+                    // FinishedAt can be null, and if it's not null, StartedAt must not be null
+                    if (f.Random.Bool())
                     {
-                        r.StartedAt = f.Date.Past().ToUniversalTime(); // Ensure StartedAt is set
+                        return null;
                     }
-                    return f.Date.Future().ToUniversalTime();
+                    else
+                    {
+                        if (r.StartedAt == null)
+                        {
+                            r.StartedAt = f.Date.Past().ToUniversalTime(); // Ensure StartedAt is set
+                        }
+                        return f.Date.Future().ToUniversalTime();
+                    }
                 }
-            });
+            );
 
         return faker.Generate(count);
     }
 
-    private List<RoomParticipant> GenerateRoomParticipants(List<Room> rooms, int maxParticipantsPerRoom)
+    private List<RoomParticipant> GenerateRoomParticipants(
+        List<Room> rooms,
+        int maxParticipantsPerRoom
+    )
     {
         var users = _context.Users.ToList();
         var participants = new List<RoomParticipant>();
@@ -160,17 +181,22 @@ public class SeedFakeData
             var participantCount = new Random().Next(1, maxParticipantsPerRoom);
             var selectedUsers = _faker.PickRandom(users, participantCount).ToList();
 
-            participants.AddRange(selectedUsers.Select(user => new RoomParticipant
-            {
-                RoomId = room.Id,
-                UserId = user.Id,
-            }));
+            participants.AddRange(
+                selectedUsers.Select(user => new RoomParticipant
+                {
+                    RoomId = room.Id,
+                    UserId = user.Id,
+                })
+            );
         }
 
         return participants;
     }
 
-    private List<RoomParticipantEvent> GenerateRoomParticipantEvents(List<RoomParticipant> roomParticipants, int maxParticipantEventsPerParticipant)
+    private List<RoomParticipantEvent> GenerateRoomParticipantEvents(
+        List<RoomParticipant> roomParticipants,
+        int maxParticipantEventsPerParticipant
+    )
     {
         var participants = _context.RoomParticipants.ToList();
         var participantEvents = new List<RoomParticipantEvent>();
@@ -178,15 +204,19 @@ public class SeedFakeData
         foreach (var room in roomParticipants)
         {
             var participantEventCount = new Random().Next(1, maxParticipantEventsPerParticipant);
-            var selectedParticipants = _faker.PickRandom(participants, participantEventCount).ToList();
+            var selectedParticipants = _faker
+                .PickRandom(participants, participantEventCount)
+                .ToList();
 
-            participantEvents.AddRange(selectedParticipants.Select(participant => new RoomParticipantEvent
-            {
-                AttendedFromTime = DateTime.UtcNow.AddMinutes(-new Random().Next(0, 120)), // Random join time within 2 hours
-                AttendedToTime = DateTime.UtcNow.AddMinutes(new Random().Next(0, 60)),   // Random leave time within 1 hour
-                Left = _faker.Random.Bool(),
-                RoomParticipantId = participant.Id
-            }));
+            participantEvents.AddRange(
+                selectedParticipants.Select(participant => new RoomParticipantEvent
+                {
+                    AttendedFromTime = DateTime.UtcNow.AddMinutes(-new Random().Next(0, 120)), // Random join time within 2 hours
+                    AttendedToTime = DateTime.UtcNow.AddMinutes(new Random().Next(0, 60)), // Random leave time within 1 hour
+                    Left = _faker.Random.Bool(),
+                    RoomParticipantId = participant.Id,
+                })
+            );
         }
 
         return participantEvents;

@@ -1,6 +1,6 @@
+using api.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using api.Models;
 
 namespace api.Data
 {
@@ -10,9 +10,7 @@ namespace api.Data
         {
             builder.HasAnnotation("Npgsql:Enum:message_status", "Sent,Delivered,Read");
 
-            builder
-            .Property(m => m.Status)
-            .HasConversion<string>();
+            builder.Property(m => m.Status).HasConversion<string>();
 
             // builder
             //     .Property(m => m.Status)

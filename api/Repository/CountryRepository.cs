@@ -26,7 +26,9 @@ namespace api.Repositories
 
         public async Task<Country?> GetCountryByLocationAsync(Point location)
         {
-            return await _context.Countries.FirstOrDefaultAsync(c => c.WkbGeometry.Contains(location));
+            return await _context.Countries.FirstOrDefaultAsync(c =>
+                c.WkbGeometry.Contains(location)
+            );
         }
     }
 }

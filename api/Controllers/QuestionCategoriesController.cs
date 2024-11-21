@@ -1,9 +1,9 @@
-using Microsoft.AspNetCore.Mvc;
-using api.Models;
 using api.Dtos;
-using api.Interfaces;
 using api.Helpers;
+using api.Interfaces;
+using api.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controllers
 {
@@ -43,12 +43,11 @@ namespace api.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        public async Task<ActionResult<QuestionCategory>> CreateQuestionCategory(QuestionCategoryDto categoryDto)
+        public async Task<ActionResult<QuestionCategory>> CreateQuestionCategory(
+            QuestionCategoryDto categoryDto
+        )
         {
-            var category = new QuestionCategory
-            {
-                Name = categoryDto.Name
-            };
+            var category = new QuestionCategory { Name = categoryDto.Name };
 
             await _questionCategoryRepository.CreateAsync(category);
 
@@ -60,7 +59,10 @@ namespace api.Controllers
         [ProducesResponseType(204)]
         [ProducesResponseType(403)]
         [ProducesResponseType(404)]
-        public async Task<IActionResult> UpdateQuestionCategory(int id, QuestionCategoryDto categoryDto)
+        public async Task<IActionResult> UpdateQuestionCategory(
+            int id,
+            QuestionCategoryDto categoryDto
+        )
         {
             var category = await _questionCategoryRepository.GetByIdAsync(id);
             if (category == null)

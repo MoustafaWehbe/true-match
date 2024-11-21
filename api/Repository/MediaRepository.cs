@@ -9,6 +9,7 @@ namespace api.Repository
     public class MediaRepository : IMediaRepository
     {
         private readonly ApplicationDBContext _context;
+
         public MediaRepository(ApplicationDBContext context)
         {
             _context = context;
@@ -21,7 +22,6 @@ namespace api.Repository
                 _context.Media.Add(media);
                 await _context.SaveChangesAsync();
                 return media;
-
             }
             catch (Exception ex)
             {

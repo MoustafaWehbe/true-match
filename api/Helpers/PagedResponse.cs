@@ -8,7 +8,13 @@ namespace api.Helpers
         public int PageSize { get; set; }
         public List<T> Data { get; set; }
 
-        public PagedResponse(int totalItems, int totalPages, int currentPage, int pageSize, List<T> data)
+        public PagedResponse(
+            int totalItems,
+            int totalPages,
+            int currentPage,
+            int pageSize,
+            List<T> data
+        )
         {
             TotalItems = totalItems;
             TotalPages = totalPages;

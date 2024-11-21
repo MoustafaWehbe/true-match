@@ -6,7 +6,9 @@ namespace api.Mappers
 {
     public static class AvailableDescriptorMapper
     {
-        public static AvailableDescriptorDto ToAvailableDescriptorDto(this AvailableDescriptor availableDescriptorModel)
+        public static AvailableDescriptorDto ToAvailableDescriptorDto(
+            this AvailableDescriptor availableDescriptorModel
+        )
         {
             return new AvailableDescriptorDto
             {
@@ -14,7 +16,9 @@ namespace api.Mappers
                 SectionName = availableDescriptorModel.SectionName,
                 DisplayType = availableDescriptorModel.DisplayType,
                 Prompt = availableDescriptorModel.Prompt,
-                Descriptors = JsonSerializer.Deserialize<List<Descriptor>>(availableDescriptorModel.Descriptors!)
+                Descriptors = JsonSerializer.Deserialize<List<Descriptor>>(
+                    availableDescriptorModel.Descriptors!
+                ),
             };
         }
     }

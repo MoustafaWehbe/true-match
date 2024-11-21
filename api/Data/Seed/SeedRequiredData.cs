@@ -1,9 +1,9 @@
-using api.Models;
-using api.Data;
-using CsvHelper;
 using System.Globalization;
-using NetTopologySuite.IO;
+using api.Data;
+using api.Models;
+using CsvHelper;
 using NetTopologySuite.Geometries;
+using NetTopologySuite.IO;
 
 public class SeedRequiredData
 {
@@ -22,7 +22,6 @@ public class SeedRequiredData
             await _context.Countries.AddRangeAsync(countries);
             await _context.SaveChangesAsync();
         }
-
     }
 
     private static List<Country> GetCountriesFromCsv(string csvFilePath)
@@ -41,9 +40,11 @@ public class SeedRequiredData
                 Name = csv.GetField<string>("name")!,
                 IsoA2 = csv.GetField<string?>("iso_a2"),
                 IsoA3 = csv.GetField<string?>("iso_a3"),
-                WkbGeometry = (new WKBReader().Read(csv.GetField<byte[]>("wkb_geometry")) as MultiPolygon)!, // Convert WKB to Geometry
+                WkbGeometry = (
+                    new WKBReader().Read(csv.GetField<byte[]>("wkb_geometry")) as MultiPolygon
+                )!, // Convert WKB to Geometry
                 CreatedAt = DateTime.UtcNow,
-                UpdatedAt = DateTime.UtcNow
+                UpdatedAt = DateTime.UtcNow,
             };
             countries.Add(country);
         }

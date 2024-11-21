@@ -8,6 +8,7 @@ namespace api.Repository
     public class MatchRepository : IMatchRepository
     {
         private readonly ApplicationDBContext _context;
+
         public MatchRepository(ApplicationDBContext context)
         {
             _context = context;
@@ -29,16 +30,16 @@ namespace api.Repository
 
         public async Task<Match?> GetByIdAsync(Guid id)
         {
-            return await _context.Matches
-                .Include(m => m.User1)
+            return await _context
+                .Matches.Include(m => m.User1)
                 .Include(m => m.User2)
                 .FirstOrDefaultAsync(m => m.Id == id);
         }
 
         public async Task<List<Match>> GetMatchesForUserAsync(string userId)
         {
-            return await _context.Matches
-                .Include(m => m.User1)
+            return await _context
+                .Matches.Include(m => m.User1)
                 .Include(m => m.User2)
                 .Where(m => m.User1Id == userId || m.User2Id == userId)
                 .ToListAsync();

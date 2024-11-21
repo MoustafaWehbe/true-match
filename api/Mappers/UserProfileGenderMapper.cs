@@ -5,17 +5,22 @@ namespace api.Mappers
 {
     public static class UserProfileGenderMapper
     {
-        public static UserProfileGender ToUserProfileGenderFromCreate(this UserProfileGenderDto userProfileGenderModel, Guid userProfileId)
+        public static UserProfileGender ToUserProfileGenderFromCreate(
+            this UserProfileGenderDto userProfileGenderModel,
+            Guid userProfileId
+        )
         {
             return new UserProfileGender
             {
                 UserProfileId = userProfileId,
                 GenderId = userProfileGenderModel.GenderId,
-                isMain = userProfileGenderModel.isMain
+                isMain = userProfileGenderModel.isMain,
             };
         }
 
-        public static UserProfileGenderDto ToUserProfileGenderDto(this UserProfileGender userProfileGenderModel)
+        public static UserProfileGenderDto ToUserProfileGenderDto(
+            this UserProfileGender userProfileGenderModel
+        )
         {
             return new UserProfileGenderDto
             {

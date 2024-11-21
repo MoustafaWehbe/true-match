@@ -21,9 +21,10 @@ namespace api.Models
         // exact location: you obtain it after user enables location
         [Column(TypeName = "geometry (point)")]
         public Point? pos { get; set; }
+
         // {
-        //     coords: {lat, long}, 
-        //     name: Beirut, 
+        //     coords: {lat, long},
+        //     name: Beirut,
         //     region: Lebanon
         // }
         // obtained from autocomplete resources like Mapbox...
@@ -40,6 +41,7 @@ namespace api.Models
 
         public JsonDocument? SelectedDescriptors { get; set; }
         public List<Guid>? UserProfileGenderPreferences { get; set; }
-        public List<UserProfileGender> UserProfileGenders { get; set; } = new List<UserProfileGender>();
+        public List<UserProfileGender> UserProfileGenders { get; set; } =
+            new List<UserProfileGender>();
     }
 }

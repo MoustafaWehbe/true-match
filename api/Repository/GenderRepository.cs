@@ -1,7 +1,7 @@
-using Microsoft.EntityFrameworkCore;
-using api.Models;
-using api.Interfaces;
 using api.Data;
+using api.Interfaces;
+using api.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace api.Repository
 {
@@ -16,8 +16,7 @@ namespace api.Repository
 
         public async Task<IEnumerable<Gender>> GetAllAsync()
         {
-            return await _context.Genders
-                .ToListAsync();
+            return await _context.Genders.ToListAsync();
         }
     }
 }

@@ -46,7 +46,13 @@ namespace api.Controllers
             var totalPages = _roomRepo.GetTotalPages(query.PageSize, totalRooms);
 
             var roomDtos = rooms.Select(s => s.ToRoomDto(user.Id)).ToList();
-            var response = ResponseHelper.CreatePagedResponse(totalRooms, totalPages, query.PageNumber, query.PageSize, roomDtos);
+            var response = ResponseHelper.CreatePagedResponse(
+                totalRooms,
+                totalPages,
+                query.PageNumber,
+                query.PageSize,
+                roomDtos
+            );
 
             return Ok(response);
         }
@@ -74,7 +80,13 @@ namespace api.Controllers
             var totalPages = _roomRepo.GetTotalPages(query.PageSize, totalRooms);
 
             var roomDtos = rooms.Select(s => s.ToRoomDto(user.Id)).ToList();
-            var response = ResponseHelper.CreatePagedResponse(totalRooms, totalPages, query.PageNumber, query.PageSize, roomDtos);
+            var response = ResponseHelper.CreatePagedResponse(
+                totalRooms,
+                totalPages,
+                query.PageNumber,
+                query.PageSize,
+                roomDtos
+            );
 
             return Ok(response);
         }
@@ -150,7 +162,9 @@ namespace api.Controllers
 
             await _roomRepo.UpdateAsync(room);
 
-            return Ok(ResponseHelper.CreateSuccessResponse(new { message = "Room deleted successfully." }));
+            return Ok(
+                ResponseHelper.CreateSuccessResponse(new { message = "Room deleted successfully." })
+            );
         }
 
         [HttpPost]
@@ -179,14 +193,21 @@ namespace api.Controllers
 
             var createdRoom = await _roomRepo.CreateAsync(room);
 
-            return CreatedAtAction(nameof(GetRoomById), new { id = createdRoom.Id }, ResponseHelper.CreateSuccessResponse(room.ToRoomDto()));
+            return CreatedAtAction(
+                nameof(GetRoomById),
+                new { id = createdRoom.Id },
+                ResponseHelper.CreateSuccessResponse(room.ToRoomDto())
+            );
         }
 
         [HttpPut]
         [Route("{id:guid}")]
         [ProducesResponseType(typeof(ApiResponse<RoomDto>), 200)]
         [Authorize]
-        public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateRoomDto updateRoomDto)
+        public async Task<IActionResult> Update(
+            [FromRoute] Guid id,
+            [FromBody] UpdateRoomDto updateRoomDto
+        )
         {
             if (!ModelState.IsValid)
             {
@@ -258,9 +279,12 @@ namespace api.Controllers
                 return NotFound("Room not found.");
             }
 
-            await _roomRepo.HideRoom(hideRoomDto, user); ;
+            await _roomRepo.HideRoom(hideRoomDto, user);
+            ;
 
-            return Ok(ResponseHelper.CreateSuccessResponse(new { message = "Room has been hidden." }));
+            return Ok(
+                ResponseHelper.CreateSuccessResponse(new { message = "Room has been hidden." })
+            );
         }
     }
 }

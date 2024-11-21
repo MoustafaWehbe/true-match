@@ -14,7 +14,7 @@ namespace api.Mappers
                 CreatedAt = mediaModel.CreatedAt,
                 UpdatedAt = mediaModel.UpdatedAt,
                 MediaType = mediaModel.MediaType,
-                UserId = mediaModel.UserId
+                UserId = mediaModel.UserId,
             };
         }
     }

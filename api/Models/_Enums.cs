@@ -9,25 +9,27 @@ namespace api.Models
         Image = 0,
         Video = 1,
     }
+
     [JsonConverter(typeof(StringEnumConverter))]
     public enum MatchOrigin
     {
         Room,
-        Swipe
+        Swipe,
     }
+
     [JsonConverter(typeof(StringEnumConverter))]
     public enum AllRoomStatus
     {
         Coming,
         InProgress,
-        InterestedIn
+        InterestedIn,
     }
 
     [JsonConverter(typeof(StringEnumConverter))]
     public enum MyRoomStatus
     {
         Coming,
-        Archived
+        Archived,
     }
 
     [JsonConverter(typeof(StringEnumConverter))]
@@ -35,7 +37,7 @@ namespace api.Models
     {
         SingleSelection,
         MultiSelection,
-        Measurement
+        Measurement,
     }
 
     [JsonConverter(typeof(StringEnumConverter))]
@@ -43,6 +45,6 @@ namespace api.Models
     {
         Sent,
         Delivered,
-        Read
+        Read,
     }
 }

@@ -1,13 +1,13 @@
-using Microsoft.AspNetCore.Mvc;
-using api.Models;
 using api.Data;
-using api.Extensions;
-using Microsoft.AspNetCore.Identity;
-using api.Mappers;
-using api.Interfaces;
 using api.Dtos;
-using Microsoft.AspNetCore.Authorization;
+using api.Extensions;
 using api.Helpers;
+using api.Interfaces;
+using api.Mappers;
+using api.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controllers
 {
@@ -19,7 +19,11 @@ namespace api.Controllers
         private readonly UserManager<User> _userManager;
         private readonly IMatchRepository _matchRepo;
 
-        public MatchController(ApplicationDBContext context, UserManager<User> userManager, IMatchRepository matchRepo)
+        public MatchController(
+            ApplicationDBContext context,
+            UserManager<User> userManager,
+            IMatchRepository matchRepo
+        )
         {
             _context = context;
             _userManager = userManager;

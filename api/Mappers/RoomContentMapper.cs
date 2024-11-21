@@ -18,6 +18,5 @@ namespace api.Mappers
                 UpdatedAt = roomContentModel.UpdatedAt,
             };
         }
-
     }
 }

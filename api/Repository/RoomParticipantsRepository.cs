@@ -8,6 +8,7 @@ namespace api.Repository
     public class RoomParticipantsRepository : IRoomParticipantsRepository
     {
         private readonly ApplicationDBContext _context;
+
         public RoomParticipantsRepository(ApplicationDBContext context)
         {
             _context = context;
@@ -18,7 +19,9 @@ namespace api.Repository
             return await _context.RoomParticipants.Where(rp => rp.UserId == user.Id).ToListAsync();
         }
 
-        public async Task<RoomParticipantEvent?> CreateRoomParticipantEventAsync(RoomParticipantEvent roomParticipantEvent)
+        public async Task<RoomParticipantEvent?> CreateRoomParticipantEventAsync(
+            RoomParticipantEvent roomParticipantEvent
+        )
         {
             await _context.RoomParticipantEvents.AddAsync(roomParticipantEvent);
             await _context.SaveChangesAsync();
@@ -34,8 +37,9 @@ namespace api.Repository
 
         public async Task DeleteAsync(Guid roomId, string userId)
         {
-            var roomParticipant = await _context.RoomParticipants
-                .Where(rp => rp.RoomId == roomId && rp.UserId == userId).FirstOrDefaultAsync();
+            var roomParticipant = await _context
+                .RoomParticipants.Where(rp => rp.RoomId == roomId && rp.UserId == userId)
+                .FirstOrDefaultAsync();
 
             if (roomParticipant != null)
             {
@@ -47,6 +51,5 @@ namespace api.Repository
                 throw new KeyNotFoundException("roomParticipant not found.");
             }
         }
-
     }
 }

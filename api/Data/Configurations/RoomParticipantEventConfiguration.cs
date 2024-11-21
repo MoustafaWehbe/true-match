@@ -1,6 +1,6 @@
+using api.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using api.Models;
 
 namespace api.Data
 {

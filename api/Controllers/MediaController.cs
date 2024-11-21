@@ -16,7 +16,11 @@ namespace api.Controllers
         private readonly UserManager<User> _userManager;
         private readonly IMediaRepository _mediaRepo;
 
-        public MediaController(IWebHostEnvironment env, UserManager<User> userManager, IMediaRepository mediaRepo)
+        public MediaController(
+            IWebHostEnvironment env,
+            UserManager<User> userManager,
+            IMediaRepository mediaRepo
+        )
         {
             _env = env;
             _userManager = userManager;
@@ -45,7 +49,8 @@ namespace api.Controllers
                 return NotFound("User was not found!");
             }
 
-            var webRootPath = _env.WebRootPath ?? Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
+            var webRootPath =
+                _env.WebRootPath ?? Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
 
             var uploadsFolderPath = Path.Combine(webRootPath, "uploads");
 
@@ -70,7 +75,7 @@ namespace api.Controllers
                 MediaType = MediaType.Image,
                 UserId = user.Id,
                 CreatedAt = DateTime.UtcNow,
-                UpdatedAt = DateTime.UtcNow
+                UpdatedAt = DateTime.UtcNow,
             };
 
             await _mediaRepo.CreateAsync(media);

@@ -1,9 +1,9 @@
-using Microsoft.AspNetCore.Mvc;
-using api.Interfaces;
-using Microsoft.AspNetCore.Authorization;
-using api.Helpers;
-using api.Mappers;
 using api.Dtos;
+using api.Helpers;
+using api.Interfaces;
+using api.Mappers;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controllers
 {

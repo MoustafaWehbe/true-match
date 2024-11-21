@@ -21,11 +21,16 @@ namespace api.Repository
             return message;
         }
 
-        public async Task<IEnumerable<Message>> GetMessagesByConversationAsync(string senderId, string receiverId)
+        public async Task<IEnumerable<Message>> GetMessagesByConversationAsync(
+            string senderId,
+            string receiverId
+        )
         {
-            return await _context.Messages
-                .Where(m => (m.SenderId == senderId && m.ReceiverId == receiverId) ||
-                            (m.SenderId == receiverId && m.ReceiverId == senderId))
+            return await _context
+                .Messages.Where(m =>
+                    (m.SenderId == senderId && m.ReceiverId == receiverId)
+                    || (m.SenderId == receiverId && m.ReceiverId == senderId)
+                )
                 .OrderBy(m => m.CreatedAt)
                 .ToListAsync();
         }

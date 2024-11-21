@@ -19,7 +19,8 @@ namespace api.Dtos
         public DateTime? BirthDate { get; set; }
         public string? UserId { get; set; }
         public List<SelectedDescriptor>? SelectedDescriptors { get; set; }
-        public List<UserProfileGenderDto> UserProfileGenders { get; set; } = new List<UserProfileGenderDto>();
+        public List<UserProfileGenderDto> UserProfileGenders { get; set; } =
+            new List<UserProfileGenderDto>();
         public List<Guid>? UserProfileGenderPreferences { get; set; }
     }
 }

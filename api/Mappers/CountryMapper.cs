@@ -1,6 +1,6 @@
-using AutoMapper;
 using api.Dtos;
 using api.Models;
+using AutoMapper;
 
 namespace api.Mappers
 {

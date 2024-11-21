@@ -1,15 +1,15 @@
-using Microsoft.AspNetCore.Mvc;
-using api.Models;
-using api.Dtos;
-using api.Interfaces;
-using Microsoft.AspNetCore.Authorization;
-using api.Helpers;
-using Microsoft.OpenApi.Any;
-using Microsoft.EntityFrameworkCore;
-using api.Mappers;
 using System.Text.Json;
-using Microsoft.AspNetCore.Identity;
+using api.Dtos;
 using api.Extensions;
+using api.Helpers;
+using api.Interfaces;
+using api.Mappers;
+using api.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Any;
 
 namespace api.Controllers
 {
@@ -21,7 +21,11 @@ namespace api.Controllers
         private readonly IRoomRepository _roomRepo;
         private readonly UserManager<User> _userManager;
 
-        public SystemQuestionsController(ISystemQuestionRepository systemQuestionRepository, IRoomRepository roomRepo, UserManager<User> userManager)
+        public SystemQuestionsController(
+            ISystemQuestionRepository systemQuestionRepository,
+            IRoomRepository roomRepo,
+            UserManager<User> userManager
+        )
         {
             _systemQuestionRepository = systemQuestionRepository;
             _roomRepo = roomRepo;
@@ -31,7 +35,10 @@ namespace api.Controllers
         [HttpGet]
         [Authorize]
         [ProducesResponseType(typeof(ApiResponse<List<SystemQuestionDto>>), 200)]
-        public async Task<ActionResult<IEnumerable<SystemQuestionDto>>> GetSystemQuestions([FromQuery] List<Guid> categories, [FromQuery] Guid roomId)
+        public async Task<ActionResult<IEnumerable<SystemQuestionDto>>> GetSystemQuestions(
+            [FromQuery] List<Guid> categories,
+            [FromQuery] Guid roomId
+        )
         {
             if (!ModelState.IsValid)
             {
@@ -44,10 +51,7 @@ namespace api.Controllers
                 query = query.Where(q => categories.Contains(q.CategoryId));
                 var questions = await query.ToListAsync();
 
-                var randomQuestions = questions
-                    .OrderBy(q => Guid.NewGuid())
-                    .Take(3)
-                    .ToList();
+                var randomQuestions = questions.OrderBy(q => Guid.NewGuid()).Take(3).ToList();
 
                 var room = await _roomRepo.GetByIdAsync(roomId);
 
@@ -55,7 +59,6 @@ namespace api.Controllers
                 {
                     return NotFound("Room was not found.");
                 }
-
 
                 var user = await _userManager.FindByEmailAsync(User.GetEmail());
 
@@ -72,22 +75,39 @@ namespace api.Controllers
                 var existingRoomState = room.RoomState;
                 if (existingRoomState != null)
                 {
-                    existingRoomState.RoundQuestions = randomQuestions.Select(q => q.ToSystemQuestionDto()).ToList();
+                    existingRoomState.RoundQuestions = randomQuestions
+                        .Select(q => q.ToSystemQuestionDto())
+                        .ToList();
                 }
                 else
                 {
-                    existingRoomState = new RoomState { RoundQuestions = randomQuestions.Select(q => q.ToSystemQuestionDto()).ToList() };
+                    existingRoomState = new RoomState
+                    {
+                        RoundQuestions = randomQuestions
+                            .Select(q => q.ToSystemQuestionDto())
+                            .ToList(),
+                    };
                 }
-                room.RoomStateJson = JsonDocument.Parse(JsonSerializer.Serialize(existingRoomState));
+                room.RoomStateJson = JsonDocument.Parse(
+                    JsonSerializer.Serialize(existingRoomState)
+                );
 
                 await _roomRepo.UpdateAsync(room);
 
-                return Ok(ResponseHelper.CreateSuccessResponse(randomQuestions.Select(q => q.ToSystemQuestionDto())));
+                return Ok(
+                    ResponseHelper.CreateSuccessResponse(
+                        randomQuestions.Select(q => q.ToSystemQuestionDto())
+                    )
+                );
             }
             else
             {
                 var questions = await _systemQuestionRepository.GetAllAsync();
-                return Ok(ResponseHelper.CreateSuccessResponse(questions.Select(q => q.ToSystemQuestionDto())));
+                return Ok(
+                    ResponseHelper.CreateSuccessResponse(
+                        questions.Select(q => q.ToSystemQuestionDto())
+                    )
+                );
             }
         }
 
@@ -107,17 +127,23 @@ namespace api.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        public async Task<ActionResult<SystemQuestion>> CreateSystemQuestion(CreateSystemQuestionDto systemQuestionDto)
+        public async Task<ActionResult<SystemQuestion>> CreateSystemQuestion(
+            CreateSystemQuestionDto systemQuestionDto
+        )
         {
             var systemQuestion = new SystemQuestion
             {
                 Name = systemQuestionDto.Name,
-                CategoryId = systemQuestionDto.CategoryId
+                CategoryId = systemQuestionDto.CategoryId,
             };
 
             await _systemQuestionRepository.CreateAsync(systemQuestion);
 
-            return CreatedAtAction(nameof(GetSystemQuestion), new { id = systemQuestion.Id }, systemQuestion);
+            return CreatedAtAction(
+                nameof(GetSystemQuestion),
+                new { id = systemQuestion.Id },
+                systemQuestion
+            );
         }
 
         [HttpPut("{id:guid}")]
@@ -125,7 +151,10 @@ namespace api.Controllers
         [ProducesResponseType(204)]
         [ProducesResponseType(403)]
         [ProducesResponseType(404)]
-        public async Task<IActionResult> UpdateSystemQuestion(Guid id, UpdateSystemQuestionDto systemQuestionDto)
+        public async Task<IActionResult> UpdateSystemQuestion(
+            Guid id,
+            UpdateSystemQuestionDto systemQuestionDto
+        )
         {
             var systemQuestion = await _systemQuestionRepository.GetByIdAsync(id);
             if (systemQuestion == null)
@@ -164,7 +193,6 @@ namespace api.Controllers
                 var errorResponse = ResponseHelper.CreateErrorResponse<AnyType>(ex.Message);
                 return StatusCode(500, errorResponse);
             }
-
 
             return NoContent();
         }

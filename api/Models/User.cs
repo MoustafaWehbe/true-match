@@ -19,4 +19,3 @@ namespace api.Models
         public List<Match> MatchesAsUser2 { get; set; } = new List<Match>();
     }
 }
-

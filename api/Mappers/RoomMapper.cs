@@ -22,7 +22,7 @@ namespace api.Mappers
                 UpdatedAt = roomModel.UpdatedAt,
                 Offers = roomModel.Offers,
                 RoomState = roomModel.RoomState,
-                QuestionsCategories = roomModel.QuestionsCategories
+                QuestionsCategories = roomModel.QuestionsCategories,
             };
         }
 
@@ -34,7 +34,7 @@ namespace api.Mappers
                 Description = roomDto.Description,
                 ScheduledAt = roomDto.ScheduledAt,
                 QuestionsCategories = roomDto.QuestionsCategories,
-                UserId = userId
+                UserId = userId,
             };
         }
     }

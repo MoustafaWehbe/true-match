@@ -1,1 +1,53 @@
-{}
+{
+  "[csharp]": {
+    "editor.defaultFormatter": "csharpier.csharpier-vscode"
+  },
+  "[github-actions-workflow]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[go]": {
+    "editor.defaultFormatter": "golang.go"
+  },
+  "[html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[python]": {
+    "editor.defaultFormatter": "ms-python.black-formatter"
+  },
+  "[sql]": {
+    "editor.defaultFormatter": "adpyke.vscode-sql-formatter"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "black-formatter.importStrategy": "fromEnvironment",
+  "csharp.experimental.debug.hotReload": true,
+  "editor.accessibilitySupport": "off",
+  "editor.defaultFoldingRangeProvider": "ms-python.flake8",
+  "editor.defaultFormatter": "ms-python.flake8",
+  "editor.formatOnSave": true,
+  "flake8.importStrategy": "fromEnvironment",
+  "omnisharp.organizeImportsOnFormat": true,
+  "python.analysis.typeCheckingMode": "basic",
+  "security.workspace.trust.untrustedFiles": "open",
+  "terminal.integrated.env.osx": {
+    "FIG_NEW_SESSION": "1",
+    "Q_NEW_SESSION": "1"
+  },
+  "window.zoomLevel": 1,
+  "workbench.editorAssociations": {
+    "*.sql": "default"
+  }
+}

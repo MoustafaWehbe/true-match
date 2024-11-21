@@ -1,5 +1,5 @@
-using NetTopologySuite.Geometries;
 using System.ComponentModel.DataAnnotations;
+using NetTopologySuite.Geometries;
 
 namespace api.Models
 {

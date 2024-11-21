@@ -8,5 +8,4 @@ namespace api.Dtos
         public Guid? ParentId { get; set; }
         public ICollection<GenderDto>? Children { get; set; }
     }
-
 }

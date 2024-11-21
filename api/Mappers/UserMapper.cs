@@ -23,7 +23,7 @@ namespace api.Mappers
             {
                 Id = userModel.Id,
                 FirstName = userModel.FirstName,
-                LastName = userModel.LastName
+                LastName = userModel.LastName,
             };
         }
     }

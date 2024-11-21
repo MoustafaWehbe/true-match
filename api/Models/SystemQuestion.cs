@@ -13,6 +13,7 @@ namespace api.Models
 
         [ForeignKey("QuestionCategory")]
         public required Guid CategoryId { get; set; }
+
         [ForeignKey("CategoryId")]
         public QuestionCategory? Category { get; set; }
 

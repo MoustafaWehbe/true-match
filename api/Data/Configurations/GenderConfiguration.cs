@@ -1,6 +1,6 @@
+using api.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using api.Models;
 
 namespace api.Data
 {
@@ -9,10 +9,10 @@ namespace api.Data
         public void Configure(EntityTypeBuilder<Gender> builder)
         {
             builder
-            .HasMany(g => g.Children)
-            .WithOne(g => g.Parent)
-            .HasForeignKey(g => g.ParentId)
-            .OnDelete(DeleteBehavior.Restrict);
+                .HasMany(g => g.Children)
+                .WithOne(g => g.Parent)
+                .HasForeignKey(g => g.ParentId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

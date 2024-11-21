@@ -4,7 +4,6 @@ using api.Helpers;
 using api.Interfaces;
 using api.Mappers;
 using api.Models;
-using Bogus.DataSets;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -19,7 +18,11 @@ namespace api.Controllers
         private readonly IRoomParticipantsRepository _roomParticipantRepo;
         private readonly UserManager<User> _userManager;
 
-        public RoomParticipantController(IRoomParticipantsRepository roomParticipantRepo, UserManager<User> userManager, IRoomRepository roomRepo)
+        public RoomParticipantController(
+            IRoomParticipantsRepository roomParticipantRepo,
+            UserManager<User> userManager,
+            IRoomRepository roomRepo
+        )
         {
             _roomParticipantRepo = roomParticipantRepo;
             _roomRepo = roomRepo;
@@ -52,9 +55,10 @@ namespace api.Controllers
 
             await _roomParticipantRepo.DeleteAsync(id, user.Id);
 
-            return Ok(ResponseHelper.CreateSuccessResponse(new { message = "Successfully deregistered." }));
+            return Ok(
+                ResponseHelper.CreateSuccessResponse(new { message = "Successfully deregistered." })
+            );
         }
-
 
         [HttpPost("register/{id:guid}")]
         [Authorize]
@@ -87,15 +91,13 @@ namespace api.Controllers
                 return BadRequest("Already registered");
             }
 
-            var newRoomParticipant = new RoomParticipant
-            {
-                RoomId = id,
-                UserId = user.Id
-            };
+            var newRoomParticipant = new RoomParticipant { RoomId = id, UserId = user.Id };
 
             await _roomParticipantRepo.CreateAsync(newRoomParticipant);
 
-            return Ok(ResponseHelper.CreateSuccessResponse(newRoomParticipant.ToRoomParticipantDto()));
+            return Ok(
+                ResponseHelper.CreateSuccessResponse(newRoomParticipant.ToRoomParticipantDto())
+            );
         }
 
         [HttpPost("join/{id:guid}")]
@@ -141,13 +143,15 @@ namespace api.Controllers
                     AttendedFromTime = DateTime.UtcNow,
                     AttendedToTime = null,
                     CreatedAt = DateTime.UtcNow,
-                    SocketId = joinRoomDto.SocketId
+                    SocketId = joinRoomDto.SocketId,
                 };
                 await _roomParticipantRepo.CreateRoomParticipantEventAsync(newRoomParticipantEvent);
             }
             else if (roomParticipants.Any(rp => rp.RoomId == room.Id))
             {
-                var alreadyParticipatedRoom = roomParticipants.Where(rp => rp.RoomId == id).FirstOrDefault();
+                var alreadyParticipatedRoom = roomParticipants
+                    .Where(rp => rp.RoomId == id)
+                    .FirstOrDefault();
 
                 if (alreadyParticipatedRoom == null)
                 {
@@ -161,7 +165,7 @@ namespace api.Controllers
                     AttendedFromTime = DateTime.UtcNow,
                     AttendedToTime = null,
                     CreatedAt = DateTime.UtcNow,
-                    SocketId = joinRoomDto.SocketId
+                    SocketId = joinRoomDto.SocketId,
                 };
                 await _roomParticipantRepo.CreateRoomParticipantEventAsync(newRoomParticipantEvent);
             }
@@ -173,7 +177,6 @@ namespace api.Controllers
         [ProducesResponseType(typeof(ApiResponse<SimpleApiResponse>), 200)]
         public async Task<IActionResult> LeaveRoom([FromRoute] Guid id)
         {
-
             var user = await _userManager.FindByEmailAsync(User.GetEmail());
 
             var room = await _roomRepo.GetByIdAsync(id);
@@ -197,7 +200,9 @@ namespace api.Controllers
 
             if (roomParticipants.Any(rp => rp.RoomId == room.Id))
             {
-                var alreadyParticipatedRoom = roomParticipants.Where(rp => rp.RoomId == id).FirstOrDefault();
+                var alreadyParticipatedRoom = roomParticipants
+                    .Where(rp => rp.RoomId == id)
+                    .FirstOrDefault();
 
                 if (alreadyParticipatedRoom == null)
                 {
@@ -209,7 +214,7 @@ namespace api.Controllers
                     RoomParticipantId = alreadyParticipatedRoom.Id,
                     Left = true,
                     AttendedToTime = DateTime.UtcNow,
-                    CreatedAt = DateTime.UtcNow
+                    CreatedAt = DateTime.UtcNow,
                 };
                 await _roomParticipantRepo.CreateRoomParticipantEventAsync(newRoomParticipantEvent);
             }

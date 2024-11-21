@@ -11,7 +11,7 @@ namespace api.Mappers
             {
                 Id = questionModel.Id,
                 Name = questionModel.Name,
-                CategoryId = questionModel.CategoryId
+                CategoryId = questionModel.CategoryId,
             };
         }
     }

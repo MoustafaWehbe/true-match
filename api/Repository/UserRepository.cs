@@ -13,6 +13,7 @@ namespace api.Repository
     public class UserRepository : IUserRepository
     {
         private readonly ApplicationDBContext _context;
+
         public UserRepository(ApplicationDBContext context)
         {
             _context = context;
@@ -25,47 +26,60 @@ namespace api.Repository
                 throw new ArgumentException("Page number and page size must be greater than zero.");
             }
 
-            var currentUserProfile = await _context.UserProfiles
-                .Include(up => up.UserProfileGenders)
+            var currentUserProfile = await _context
+                .UserProfiles.Include(up => up.UserProfileGenders)
                 .Where(up => up.UserId == currentUser.Id)
                 .FirstAsync();
 
-            if (currentUserProfile == null || currentUserProfile.UserProfileGenderPreferences == null)
+            if (
+                currentUserProfile == null
+                || currentUserProfile.UserProfileGenderPreferences == null
+            )
             {
                 throw new Exception("User does not have a profile yet or it is not complete");
             }
             var genderFilter = GenderFilter.MatchesPreferencesFilter(currentUserProfile);
-            var userGenderFilter = genderFilter.Compose<User, UserProfile>(user => user.UserProfile!);
+            var userGenderFilter = genderFilter.Compose<User, UserProfile>(user =>
+                user.UserProfile!
+            );
 
-            return await _context.Users
-                .Include(u => u.Rooms)
-                    .ThenInclude(ls => ls.RoomParticipants)
+            return await _context
+                .Users.Include(u => u.Rooms)
+                .ThenInclude(ls => ls.RoomParticipants)
                 .Include(u => u.Media)
                 .Include(u => u.UserProfile)
-                    .ThenInclude(up => up != null ? up.UserProfileGenders : null)
+                .ThenInclude(up => up != null ? up.UserProfileGenders : null)
                 .Where(u => u.Id != currentUser.Id)
                 .Where(userGenderFilter)
                 .Skip((query.PageNumber - 1) * query.PageSize)
                 .Take(query.PageSize)
                 .ToListAsync();
         }
+
         public async Task<int> GetTotalUsersAsync(User currentUser)
         {
-            var currentUserProfile = await _context.UserProfiles
-              .Include(up => up.UserProfileGenders)
-              .Where(up => up.UserId == currentUser.Id)
-              .FirstAsync();
+            var currentUserProfile = await _context
+                .UserProfiles.Include(up => up.UserProfileGenders)
+                .Where(up => up.UserId == currentUser.Id)
+                .FirstAsync();
 
-            if (currentUserProfile == null || currentUserProfile.UserProfileGenderPreferences == null)
+            if (
+                currentUserProfile == null
+                || currentUserProfile.UserProfileGenderPreferences == null
+            )
             {
                 throw new Exception("User does not have a profile yet or it is not complete");
             }
 
             var genderFilter = GenderFilter.MatchesPreferencesFilter(currentUserProfile);
-            var userGenderFilter = genderFilter.Compose<User, UserProfile>(user => user.UserProfile!);
+            var userGenderFilter = genderFilter.Compose<User, UserProfile>(user =>
+                user.UserProfile!
+            );
 
-            return await _context.Users.Where(u => u.Id != currentUser.Id)
-                .Where(userGenderFilter).CountAsync();
+            return await _context
+                .Users.Where(u => u.Id != currentUser.Id)
+                .Where(userGenderFilter)
+                .CountAsync();
         }
 
         public int GetTotalPages(int pageSize, int totalUsers)
@@ -80,8 +94,8 @@ namespace api.Repository
 
         public async Task<User?> GetByIdAsync(string userId)
         {
-            return await _context.Users
-                .Include(u => u.Media)
+            return await _context
+                .Users.Include(u => u.Media)
                 .Include(u => u.UserProfile)
                 .ThenInclude(up => up != null ? up.UserProfileGenders : null)
                 .FirstOrDefaultAsync(u => u.Id == userId);
@@ -96,8 +110,9 @@ namespace api.Repository
 
         public async Task<bool> UnBlockUser(User currentUser, BlockUserDto unblockUserDto)
         {
-            var blockedUser = await _context.BlockedUsers
-                .FirstOrDefaultAsync(b => b.BlockerUserId == currentUser.Id && b.BlockedUserId == unblockUserDto.BlockedUserId);
+            var blockedUser = await _context.BlockedUsers.FirstOrDefaultAsync(b =>
+                b.BlockerUserId == currentUser.Id && b.BlockedUserId == unblockUserDto.BlockedUserId
+            );
 
             if (blockedUser == null)
             {

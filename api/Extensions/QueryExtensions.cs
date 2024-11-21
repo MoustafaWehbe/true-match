@@ -6,7 +6,11 @@ namespace api.Extensions
     public static class QueryExtensions
     {
         // Rooms
-        public static IQueryable<Room> FindAllRoomByStatus(this IQueryable<Room> query, AllRoomStatus? roomStatus, string userId)
+        public static IQueryable<Room> FindAllRoomByStatus(
+            this IQueryable<Room> query,
+            AllRoomStatus? roomStatus,
+            string userId
+        )
         {
             switch (roomStatus)
             {
@@ -15,13 +19,19 @@ namespace api.Extensions
                 case AllRoomStatus.Coming:
                     return query.Where(r => r.StartedAt == null);
                 case AllRoomStatus.InterestedIn:
-                    return query.Where(r => r.StartedAt == null && r.RoomParticipants.Any(rp => rp.UserId == userId));
+                    return query.Where(r =>
+                        r.StartedAt == null && r.RoomParticipants.Any(rp => rp.UserId == userId)
+                    );
                 default:
                     return query;
             }
         }
 
-        public static IQueryable<Room> FindMyRoomByStatus(this IQueryable<Room> query, MyRoomStatus? roomStatus, string userId)
+        public static IQueryable<Room> FindMyRoomByStatus(
+            this IQueryable<Room> query,
+            MyRoomStatus? roomStatus,
+            string userId
+        )
         {
             switch (roomStatus)
             {
@@ -41,8 +51,7 @@ namespace api.Extensions
 
         public static IQueryable<Room> IncludeRoomDetails(this IQueryable<Room> query)
         {
-            return query.Include(ls => ls.User)
-                .Include(ls => ls.RoomParticipants);
+            return query.Include(ls => ls.User).Include(ls => ls.RoomParticipants);
         }
     }
 }

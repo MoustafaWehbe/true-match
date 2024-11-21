@@ -17,7 +17,10 @@ namespace api.Controllers
         private readonly IUserProfileRepository _userProfileRepo;
         private readonly UserManager<User> _userManager;
 
-        public UserProfileController(IUserProfileRepository userProfileRepo, UserManager<User> userManager)
+        public UserProfileController(
+            IUserProfileRepository userProfileRepo,
+            UserManager<User> userManager
+        )
         {
             _userProfileRepo = userProfileRepo;
             _userManager = userManager;
@@ -26,7 +29,9 @@ namespace api.Controllers
         [HttpPost]
         [Authorize]
         [ProducesResponseType(typeof(ApiResponse<UserProfileDto>), 200)]
-        public async Task<ActionResult<UserProfileDto>> CreateOrUpdateUserProfile([FromBody] CreateOrUpdateUserProfileDto userProfileDto)
+        public async Task<ActionResult<UserProfileDto>> CreateOrUpdateUserProfile(
+            [FromBody] CreateOrUpdateUserProfileDto userProfileDto
+        )
         {
             if (!ModelState.IsValid)
             {
@@ -45,9 +50,16 @@ namespace api.Controllers
                 return NotFound("User was not found.");
             }
 
-            var createdUserProfile = await _userProfileRepo.CreateOrUpdateAsync(userProfileDto, user.Id);
+            var createdUserProfile = await _userProfileRepo.CreateOrUpdateAsync(
+                userProfileDto,
+                user.Id
+            );
 
-            return CreatedAtAction(nameof(GetUserProfileById), new { id = createdUserProfile.Id }, ResponseHelper.CreateSuccessResponse(createdUserProfile.ToUserProfileDto()));
+            return CreatedAtAction(
+                nameof(GetUserProfileById),
+                new { id = createdUserProfile.Id },
+                ResponseHelper.CreateSuccessResponse(createdUserProfile.ToUserProfileDto())
+            );
         }
 
         [HttpGet("{id:guid}")]

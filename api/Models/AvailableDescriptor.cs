@@ -9,10 +9,13 @@ namespace api.Models
         [Key]
         [JsonPropertyName("id")]
         public int Id { get; set; }
+
         [JsonPropertyName("sectionName")]
         public string? SectionName { get; set; }
+
         [JsonPropertyName("displayType")]
         public string? DisplayType { get; set; }
+
         [JsonPropertyName("prompt")]
         public string? Prompt { get; set; }
 

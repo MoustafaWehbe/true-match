@@ -24,7 +24,7 @@ namespace api.Mappers
             {
                 User1Id = userId,
                 Origin = matchDto.Origin,
-                User2Id = matchDto.User2Id
+                User2Id = matchDto.User2Id,
             };
         }
     }

@@ -1,4 +1,3 @@
-
 namespace api.Dtos
 {
     public class UserSimplifiedDto

@@ -19,7 +19,11 @@ namespace api.Controllers
         private readonly UserManager<User> _userManager;
         private readonly IMapper _mapper;
 
-        public MessageController(IMessageRepository messageRepository, UserManager<User> userManager, IMapper mapper)
+        public MessageController(
+            IMessageRepository messageRepository,
+            UserManager<User> userManager,
+            IMapper mapper
+        )
         {
             _messageRepository = messageRepository;
             _userManager = userManager;
@@ -39,7 +43,7 @@ namespace api.Controllers
             // TODO: check if the user "senderId" is a match with the receiver "receiverId" so they can exchange messages.
             var message = messageDto.ToMessageFromCreate();
             message.CreatedAt = DateTime.UtcNow;
-            message.Status = MessageStatus.Sent;  // Default status on creation
+            message.Status = MessageStatus.Sent; // Default status on creation
 
             var savedMessage = await _messageRepository.SaveMessageAsync(message);
 
@@ -50,7 +54,10 @@ namespace api.Controllers
         [HttpGet("conversation/{senderId}/{receiverId}")]
         [Authorize]
         [ProducesResponseType(typeof(ApiResponse<List<MessageDto>>), 200)]
-        public async Task<ActionResult<IEnumerable<Message>>> GetMessages(string senderId, string receiverId)
+        public async Task<ActionResult<IEnumerable<Message>>> GetMessages(
+            string senderId,
+            string receiverId
+        )
         {
             if (!ModelState.IsValid)
             {
@@ -69,7 +76,10 @@ namespace api.Controllers
                 return Unauthorized("Not authorized.");
             }
 
-            var messages = await _messageRepository.GetMessagesByConversationAsync(senderId, receiverId);
+            var messages = await _messageRepository.GetMessagesByConversationAsync(
+                senderId,
+                receiverId
+            );
 
             return Ok(ResponseHelper.CreateSuccessResponse(messages.Select(m => m.ToMessageDto())));
         }
@@ -77,7 +87,10 @@ namespace api.Controllers
         // PUT: api/message/{id}/status
         [HttpPut("{id}/status")]
         [Authorize]
-        public async Task<IActionResult> UpdateMessageStatus(int id, [FromBody] MessageStatus status)
+        public async Task<IActionResult> UpdateMessageStatus(
+            int id,
+            [FromBody] MessageStatus status
+        )
         {
             if (!ModelState.IsValid)
             {

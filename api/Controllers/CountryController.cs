@@ -33,7 +33,6 @@ namespace api.Controllers
         [HttpGet("{id:guid}")]
         [Authorize]
         [ProducesResponseType(typeof(ApiResponse<CountryDto>), 200)]
-
         public async Task<IActionResult> GetCountryById(Guid id)
         {
             var country = await _repository.GetCountryByIdAsync(id);

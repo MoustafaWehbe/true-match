@@ -16,6 +16,7 @@ namespace api.Controllers
     {
         private readonly IUserRepository _userRepo;
         private readonly UserManager<User> _userManager;
+
         public UserController(IUserRepository userRepo, UserManager<User> userManager)
         {
             _userRepo = userRepo;
@@ -44,7 +45,13 @@ namespace api.Controllers
 
             var userDto = users.Select(u => u.ToUserDto()).ToList();
 
-            var response = ResponseHelper.CreatePagedResponse(totalUsers, totalPages, query.PageNumber, query.PageSize, userDto);
+            var response = ResponseHelper.CreatePagedResponse(
+                totalUsers,
+                totalPages,
+                query.PageNumber,
+                query.PageSize,
+                userDto
+            );
 
             return Ok(response);
         }
@@ -112,13 +119,14 @@ namespace api.Controllers
             var block = new BlockedUser
             {
                 BlockerUserId = currentUser.Id,
-                BlockedUserId = blockUserDto.BlockedUserId
+                BlockedUserId = blockUserDto.BlockedUserId,
             };
             await _userRepo.BlockUser(block);
 
-            return Ok(ResponseHelper.CreateSuccessResponse(new { message = "User blocked successfully." }));
+            return Ok(
+                ResponseHelper.CreateSuccessResponse(new { message = "User blocked successfully." })
+            );
         }
-
 
         [HttpPost("unblock-user")]
         [Authorize]
@@ -133,8 +141,9 @@ namespace api.Controllers
             }
 
             await _userRepo.UnBlockUser(currentUser, unblockUserDto);
-            return Ok(ResponseHelper.CreateSuccessResponse(new { message = "User blocked successfully." }));
+            return Ok(
+                ResponseHelper.CreateSuccessResponse(new { message = "User blocked successfully." })
+            );
         }
-
     }
 }

@@ -17,6 +17,7 @@ namespace api.Service
             _config = config;
             _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["JWT:SigningKey"]!));
         }
+
         public string CreateToken(User user)
         {
             var claims = new List<Claim>
@@ -34,7 +35,7 @@ namespace api.Service
                 Expires = DateTime.Now.AddDays(7),
                 SigningCredentials = creds,
                 Issuer = _config["JWT:Issuer"],
-                Audience = _config["JWT:Audience"]
+                Audience = _config["JWT:Audience"],
             };
 
             var tokenHandler = new JwtSecurityTokenHandler();

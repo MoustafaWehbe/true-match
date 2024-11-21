@@ -12,6 +12,7 @@ namespace api.Controllers
     public class RoomContentController : ControllerBase
     {
         private readonly IRoomContentRepository _roomContentRepo;
+
         public RoomContentController(IRoomContentRepository roomContentRepo)
         {
             _roomContentRepo = roomContentRepo;

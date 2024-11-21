@@ -18,6 +18,7 @@ namespace api.Models
         // Navigation property for child genders
         public ICollection<Gender>? Children { get; set; }
 
-        public List<UserProfileGender> UserProfileGenders { get; set; } = new List<UserProfileGender>();
+        public List<UserProfileGender> UserProfileGenders { get; set; } =
+            new List<UserProfileGender>();
     }
 }

@@ -8,6 +8,7 @@ namespace api.Repository
     public class RoomContentRepository : IRoomContentRepository
     {
         private readonly ApplicationDBContext _context;
+
         public RoomContentRepository(ApplicationDBContext context)
         {
             _context = context;
@@ -17,6 +18,5 @@ namespace api.Repository
         {
             return await _context.RoomContent.ToListAsync();
         }
-
     }
 }

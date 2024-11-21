@@ -7,9 +7,8 @@ namespace api.Data
     public class ApplicationDBContext : IdentityDbContext<User>
     {
         public ApplicationDBContext(DbContextOptions<ApplicationDBContext> dbContextOptions)
-            : base(dbContextOptions)
-        {
-        }
+            : base(dbContextOptions) { }
+
         public DbSet<Room> Rooms { get; set; }
         public DbSet<RoomContent> RoomContent { get; set; }
         public DbSet<RoomParticipantEvent> RoomParticipantEvents { get; set; }
@@ -27,7 +26,6 @@ namespace api.Data
 
         public DbSet<AvailableDescriptor> AvailableDescriptors { get; set; }
         public DbSet<Message> Messages { get; set; }
-
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -47,4 +45,3 @@ namespace api.Data
         }
     }
 }
-
