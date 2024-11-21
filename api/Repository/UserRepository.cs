@@ -34,7 +34,7 @@ namespace api.Repository
             {
                 throw new Exception("User does not have a profile yet or it is not complete");
             }
-            var genderFilter = GenderFilter.MatchesGenderPreferences(currentUserProfile);
+            var genderFilter = GenderFilter.MatchesPreferencesFilter(currentUserProfile);
             var userGenderFilter = genderFilter.Compose<User, UserProfile>(user => user.UserProfile!);
 
             return await _context.Users
@@ -61,7 +61,7 @@ namespace api.Repository
                 throw new Exception("User does not have a profile yet or it is not complete");
             }
 
-            var genderFilter = GenderFilter.MatchesGenderPreferences(currentUserProfile);
+            var genderFilter = GenderFilter.MatchesPreferencesFilter(currentUserProfile);
             var userGenderFilter = genderFilter.Compose<User, UserProfile>(user => user.UserProfile!);
 
             return await _context.Users.Where(u => u.Id != currentUser.Id)

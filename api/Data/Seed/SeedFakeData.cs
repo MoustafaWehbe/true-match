@@ -1,6 +1,8 @@
 using Bogus;
 using api.Models;
 using api.Data;
+using System.Text.Json;
+using Microsoft.EntityFrameworkCore;
 
 public class SeedFakeData
 {
@@ -14,15 +16,16 @@ public class SeedFakeData
         _faker = new Faker();
     }
 
-    public async Task SeedAsync(int userCount = 100, int roomCount = 50, int maxParticipantsPerRoom = 10)
+    public async Task SeedAsync(int userCount = 2000, int roomCount = 500, int maxParticipantsPerRoom = 5)
     {
         if (!_context.Users.Any())
         {
             var users = GenerateUsers(userCount);
+            var genders = await _context.Genders.Where(g => g.ParentId == null).ToListAsync();
             for (int i = 0; i < userCount; i++)
             {
                 var user = users[i];
-                var profile = CreateRandomUserProfile(user.Id);
+                var profile = CreateRandomUserProfile(user.Id, genders);
                 user.UserProfile = profile;
                 user.Media = CreateRandomMedia(user.Id);
                 await _context.Users.AddAsync(user);
@@ -45,17 +48,38 @@ public class SeedFakeData
     }
 
 
-    private UserProfile CreateRandomUserProfile(string userId)
+    private UserProfile CreateRandomUserProfile(string userId, List<Gender> genders)
     {
+        var randomGenderIds1 = _faker.Make(_faker.Random.Int(1, 3),
+            () => _faker.PickRandom(genders).Id).Distinct().ToList();
+
+        var randomGenderIds2 = _faker.Make(_faker.Random.Int(1, 3),
+            () => _faker.PickRandom(genders).Id).Distinct().ToList();
+
         return new UserProfile
         {
             UserId = userId,
-            Job = _faker.Address.Country(),
+            Job = _faker.Company.CompanyName(),
             School = _faker.Address.City(),
             Bio = _faker.Lorem.Sentence(10),
-            BirthDate = _faker.Date.Past(20).ToUniversalTime(),
+            BirthDate = _faker.Date.Past(20, DateTime.UtcNow.AddYears(-18)), // Ensure user is at least 18 years old
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow,
+            AgeFilterMax = _faker.Random.Int(30, 50),
+            AgeFilterMin = _faker.Random.Int(18, 29),
+            DistanceFilter = _faker.Random.Int(5, 50),
+            Hidden = _faker.Random.Bool(),
+            pos = new NetTopologySuite.Geometries.Point(
+                _faker.Address.Latitude(),
+                _faker.Address.Longitude()
+            )
+            { SRID = 4326 },
+            Location = JsonDocument.Parse($"{{\"name\":\"{_faker.Address.City()}\",\"region\":\"{_faker.Address.State()}\"}}"),
+            UserProfileGenderPreferences = randomGenderIds1,
+            UserProfileGenders = randomGenderIds2.Select(genderId => new UserProfileGender
+            {
+                GenderId = genderId
+            }).ToList(),
         };
     }
 

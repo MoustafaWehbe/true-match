@@ -20,5 +20,4 @@ namespace api.Models
 
         public List<UserProfileGender> UserProfileGenders { get; set; } = new List<UserProfileGender>();
     }
-
 }

@@ -147,9 +147,10 @@ else if (args.Length > 0 && args[0].ToLower() == "seed-all")
         var dbContext = services.GetRequiredService<ApplicationDBContext>();
 
         var seederRequiredData = new SeedRequiredData(dbContext);
+        await seederRequiredData.SeedAsync();
+
         var seederFakeData = new SeedFakeData(dbContext);
         await seederFakeData.SeedAsync();
-        await seederRequiredData.SeedAsync();
         return;
     }
 }

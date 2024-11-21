@@ -38,9 +38,9 @@ namespace api.Repository
                 .ToListAsync();
 
             var currentUserProfile = await _context.UserProfiles
-             .Include(up => up.UserProfileGenders)
-             .Where(up => up.UserId == userId)
-             .FirstAsync();
+            .Include(up => up.UserProfileGenders)
+            .Where(up => up.UserId == userId)
+            .FirstAsync();
 
             if (currentUserProfile == null || currentUserProfile.UserProfileGenderPreferences == null)
             {
@@ -48,7 +48,7 @@ namespace api.Repository
             }
 
             // Step 1: Create a reusable gender filter for UserProfile
-            var genderFilter = GenderFilter.MatchesGenderPreferences(currentUserProfile);
+            var genderFilter = GenderFilter.MatchesPreferencesFilter(currentUserProfile);
 
             // Step 2: Adapt the gender filter for the User context
             var userGenderFilter = genderFilter.Compose<User, UserProfile>(user => user.UserProfile!);
@@ -114,9 +114,9 @@ namespace api.Repository
         public async Task<int> GetTotalRoomsAsync(AllRoomQueryObject query, string userId)
         {
             var blockedUsersIds = _context.BlockedUsers
-              .Where(b => b.BlockerUserId == userId)
-              .Select(b => b.BlockedUserId)
-              .ToList();
+            .Where(b => b.BlockerUserId == userId)
+            .Select(b => b.BlockedUserId)
+            .ToList();
 
             var hiddenRoomIds = await _context.HiddenRooms
                 .Where(hr => hr.UserId == userId)
@@ -125,9 +125,9 @@ namespace api.Repository
 
 
             var currentUserProfile = await _context.UserProfiles
-             .Include(up => up.UserProfileGenders)
-             .Where(up => up.UserId == userId)
-             .FirstAsync();
+            .Include(up => up.UserProfileGenders)
+            .Where(up => up.UserId == userId)
+            .FirstAsync();
 
             if (currentUserProfile == null || currentUserProfile.UserProfileGenderPreferences == null)
             {
@@ -135,7 +135,7 @@ namespace api.Repository
             }
 
             // Step 1: Create a reusable gender filter for UserProfile
-            var genderFilter = GenderFilter.MatchesGenderPreferences(currentUserProfile);
+            var genderFilter = GenderFilter.MatchesPreferencesFilter(currentUserProfile);
 
             // Step 2: Adapt the gender filter for the User context
             var userGenderFilter = genderFilter.Compose<User, UserProfile>(user => user.UserProfile!);
