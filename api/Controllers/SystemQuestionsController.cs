@@ -35,7 +35,7 @@ namespace api.Controllers
         [HttpGet]
         [Authorize]
         [ProducesResponseType(typeof(ApiResponse<List<SystemQuestionDto>>), 200)]
-        public async Task<ActionResult<IEnumerable<SystemQuestionDto>>> GetSystemQuestions(
+        public async Task<ActionResult<IEnumerable<SystemQuestionDto>>> GetAll(
             [FromQuery] List<Guid> categories,
             [FromQuery] Guid roomId
         )

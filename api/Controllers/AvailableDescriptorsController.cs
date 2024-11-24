@@ -23,9 +23,7 @@ namespace api.Controllers
         [HttpGet]
         [Authorize]
         [ProducesResponseType(typeof(ApiResponse<List<AvailableDescriptorDto>>), 200)]
-        public async Task<
-            ActionResult<IEnumerable<AvailableDescriptorDto>>
-        > GetAvailableDescriptors()
+        public async Task<ActionResult<IEnumerable<AvailableDescriptorDto>>> GetAll()
         {
             if (!ModelState.IsValid)
             {

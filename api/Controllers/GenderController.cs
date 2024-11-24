@@ -21,7 +21,7 @@ namespace api.Controllers
         [HttpGet]
         [Authorize]
         [ProducesResponseType(typeof(ApiResponse<List<GenderDto>>), 200)]
-        public async Task<ActionResult<IEnumerable<GenderDto>>> GetAvailableDescriptors()
+        public async Task<ActionResult<IEnumerable<GenderDto>>> GetAll()
         {
             if (!ModelState.IsValid)
             {

@@ -26,7 +26,11 @@ namespace api.Mappers
             };
         }
 
-        public static Room ToRoomFromCreate(this CreateRoomDto roomDto, string userId)
+        public static Room ToRoomFromCreate(
+            this CreateRoomDto roomDto,
+            string userId,
+            RoomState roomState
+        )
         {
             return new Room
             {
@@ -35,6 +39,7 @@ namespace api.Mappers
                 ScheduledAt = roomDto.ScheduledAt,
                 QuestionsCategories = roomDto.QuestionsCategories,
                 UserId = userId,
+                RoomStateJson = JsonDocument.Parse(JsonSerializer.Serialize(roomState)),
             };
         }
     }

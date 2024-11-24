@@ -10,5 +10,6 @@ namespace api.Interfaces
         Task<SystemQuestion> CreateAsync(SystemQuestion question);
         Task UpdateAsync(SystemQuestion question);
         Task DeleteAsync(Guid id);
+        Task<List<SystemQuestion>> GenerateRandomQuestions(List<Guid> categories);
     }
 }

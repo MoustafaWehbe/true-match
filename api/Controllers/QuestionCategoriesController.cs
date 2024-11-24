@@ -21,7 +21,7 @@ namespace api.Controllers
         [HttpGet]
         [Authorize]
         [ProducesResponseType(typeof(ApiResponse<List<QuestionCategoryDto>>), 200)]
-        public async Task<ActionResult<IEnumerable<QuestionCategory>>> GetQuestionCategories()
+        public async Task<ActionResult<IEnumerable<QuestionCategory>>> GetAll()
         {
             var categories = await _questionCategoryRepository.GetAllAsync();
             return Ok(ResponseHelper.CreateSuccessResponse(categories));
@@ -29,7 +29,7 @@ namespace api.Controllers
 
         [HttpGet("{id}")]
         [Authorize]
-        public async Task<ActionResult<QuestionCategory>> GetQuestionCategory(int id)
+        public async Task<ActionResult<QuestionCategory>> GetById(int id)
         {
             var category = await _questionCategoryRepository.GetByIdAsync(id);
 
@@ -51,7 +51,7 @@ namespace api.Controllers
 
             await _questionCategoryRepository.CreateAsync(category);
 
-            return CreatedAtAction(nameof(GetQuestionCategory), new { id = category.Id }, category);
+            return CreatedAtAction(nameof(GetById), new { id = category.Id }, category);
         }
 
         [HttpPut("{id}")]
@@ -59,10 +59,7 @@ namespace api.Controllers
         [ProducesResponseType(204)]
         [ProducesResponseType(403)]
         [ProducesResponseType(404)]
-        public async Task<IActionResult> UpdateQuestionCategory(
-            int id,
-            QuestionCategoryDto categoryDto
-        )
+        public async Task<IActionResult> Update(int id, QuestionCategoryDto categoryDto)
         {
             var category = await _questionCategoryRepository.GetByIdAsync(id);
             if (category == null)
@@ -83,7 +80,7 @@ namespace api.Controllers
         [ProducesResponseType(204)]
         [ProducesResponseType(403)]
         [ProducesResponseType(404)]
-        public async Task<IActionResult> DeleteQuestionCategory(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             var category = await _questionCategoryRepository.GetByIdAsync(id);
             if (category == null)

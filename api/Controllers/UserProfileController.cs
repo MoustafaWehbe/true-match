@@ -56,7 +56,7 @@ namespace api.Controllers
             );
 
             return CreatedAtAction(
-                nameof(GetUserProfileById),
+                nameof(GetById),
                 new { id = createdUserProfile.Id },
                 ResponseHelper.CreateSuccessResponse(createdUserProfile.ToUserProfileDto())
             );
@@ -64,7 +64,7 @@ namespace api.Controllers
 
         [HttpGet("{id:guid}")]
         [ProducesResponseType(typeof(ApiResponse<UserProfileDto>), 200)]
-        public async Task<ActionResult<UserProfile>> GetUserProfileById(Guid id)
+        public async Task<ActionResult<UserProfile>> GetById(Guid id)
         {
             var userProfile = await _userProfileRepo.GetByIdAsync(id);
 

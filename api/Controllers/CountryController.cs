@@ -11,21 +11,21 @@ namespace api.Controllers
     [Route("api/[controller]")]
     public class CountriesController : ControllerBase
     {
-        private readonly ICountryRepository _repository;
+        private readonly ICountryRepository _countryRepository;
         private readonly IMapper _mapper;
 
-        public CountriesController(ICountryRepository repository, IMapper mapper)
+        public CountriesController(ICountryRepository countryRepository, IMapper mapper)
         {
-            _repository = repository;
+            _countryRepository = countryRepository;
             _mapper = mapper;
         }
 
         [HttpGet]
         [Authorize]
         [ProducesResponseType(typeof(ApiResponse<List<CountryDto>>), 200)]
-        public async Task<IActionResult> GetAllCountries()
+        public async Task<IActionResult> GetAll()
         {
-            var countries = await _repository.GetAllCountriesAsync();
+            var countries = await _countryRepository.GetAllCountriesAsync();
             var countryDtos = _mapper.Map<IEnumerable<CountryDto>>(countries);
             return Ok(ResponseHelper.CreateSuccessResponse(countryDtos));
         }
@@ -35,7 +35,7 @@ namespace api.Controllers
         [ProducesResponseType(typeof(ApiResponse<CountryDto>), 200)]
         public async Task<IActionResult> GetCountryById(Guid id)
         {
-            var country = await _repository.GetCountryByIdAsync(id);
+            var country = await _countryRepository.GetCountryByIdAsync(id);
             if (country == null)
             {
                 return NotFound();
@@ -50,7 +50,7 @@ namespace api.Controllers
         // public async Task<IActionResult> GetCountryByLocation([FromQuery] double latitude, [FromQuery] double longitude)
         // {
         //     var location = new Point(longitude, latitude) { SRID = 4326 }; // Ensure SRID matches your DB
-        //     var country = await _repository.GetCountryByLocationAsync(location);
+        //     var country = await _countryRepository.GetCountryByLocationAsync(location);
 
         //     if (country == null)
         //         return NotFound("Location does not belong to any country.");

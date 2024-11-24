@@ -18,18 +18,21 @@ namespace api.Controllers
         private readonly UserManager<User> _userManager;
         private readonly IUserProfileRepository _userProfileRepo;
         private readonly IUserRepository _userRepo;
+        private readonly ISystemQuestionRepository _systemQuestionRepository;
 
         public RoomController(
             IRoomRepository roomRepo,
             UserManager<User> userManager,
             IUserProfileRepository userProfileRepo,
-            IUserRepository userRepo
+            IUserRepository userRepo,
+            ISystemQuestionRepository systemQuestionRepository
         )
         {
             _roomRepo = roomRepo;
             _userManager = userManager;
             _userProfileRepo = userProfileRepo;
             _userRepo = userRepo;
+            _systemQuestionRepository = systemQuestionRepository;
         }
 
         [HttpGet]
@@ -168,7 +171,7 @@ namespace api.Controllers
         [HttpDelete("{id:guid}")]
         [Authorize]
         [ProducesResponseType(typeof(ApiResponse<SimpleApiResponse>), 200)]
-        public async Task<IActionResult> SoftDeleteRoom(Guid id)
+        public async Task<IActionResult> DeleteRoom(Guid id)
         {
             var user = await _userManager.FindByEmailAsync(User.GetEmail());
             if (user == null)
@@ -219,12 +222,22 @@ namespace api.Controllers
                 return NotFound("User was not found.");
             }
 
-            var room = roomDto.ToRoomFromCreate(user.Id);
+            var randomQuestions = await _systemQuestionRepository.GenerateRandomQuestions(
+                roomDto.QuestionsCategories
+            );
+
+            var room = roomDto.ToRoomFromCreate(
+                user.Id,
+                new RoomState
+                {
+                    RoundQuestions = randomQuestions.Select(q => q.ToSystemQuestionDto()).ToList(),
+                }
+            );
 
             var createdRoom = await _roomRepo.CreateAsync(room);
 
             return CreatedAtAction(
-                nameof(GetRoomById),
+                nameof(GetById),
                 new { id = createdRoom.Id },
                 ResponseHelper.CreateSuccessResponse(room.ToRoomDto())
             );
@@ -262,6 +275,32 @@ namespace api.Controllers
                 return Unauthorized("Action not allowed");
             }
 
+            if (
+                updateRoomDto.QuestionsCategories != null
+                && updateRoomDto.QuestionsCategories.SequenceEqual(existingRoom.QuestionsCategories)
+            )
+            {
+                var randomQuestions = await _systemQuestionRepository.GenerateRandomQuestions(
+                    updateRoomDto.QuestionsCategories
+                );
+
+                if (updateRoomDto.RoomState != null)
+                {
+                    updateRoomDto.RoomState.RoundQuestions = randomQuestions
+                        .Select(q => q.ToSystemQuestionDto())
+                        .ToList();
+                }
+                else
+                {
+                    updateRoomDto.RoomState = new RoomState
+                    {
+                        RoundQuestions = randomQuestions
+                            .Select(q => q.ToSystemQuestionDto())
+                            .ToList(),
+                    };
+                }
+            }
+
             var room = await _roomRepo.UpdateAsync(existingRoom, updateRoomDto);
 
             return Ok(ResponseHelper.CreateSuccessResponse(room.ToRoomDto()));
@@ -270,7 +309,7 @@ namespace api.Controllers
         [HttpGet("{id:guid}")]
         [ProducesResponseType(typeof(ApiResponse<RoomDto>), 200)]
         [Authorize]
-        public async Task<ActionResult<Room>> GetRoomById(Guid id)
+        public async Task<ActionResult<Room>> GetById(Guid id)
         {
             if (!ModelState.IsValid)
             {

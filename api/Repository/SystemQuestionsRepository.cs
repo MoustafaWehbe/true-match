@@ -57,5 +57,16 @@ namespace api.Repository
                 throw new KeyNotFoundException("user not found.");
             }
         }
+
+        public async Task<List<SystemQuestion>> GenerateRandomQuestions(List<Guid> categories)
+        {
+            IQueryable<SystemQuestion> query = GetAll();
+            query = query.Where(q => categories.Contains(q.CategoryId));
+            var questions = await query.ToListAsync();
+
+            var randomQuestions = questions.OrderBy(q => Guid.NewGuid()).Take(3).ToList();
+
+            return randomQuestions;
+        }
     }
 }

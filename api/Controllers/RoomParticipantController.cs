@@ -63,7 +63,7 @@ namespace api.Controllers
         [HttpPost("register/{id:guid}")]
         [Authorize]
         [ProducesResponseType(typeof(ApiResponse<RoomParticipantDto>), 200)]
-        public async Task<IActionResult> registerRoom([FromRoute] Guid id)
+        public async Task<IActionResult> registerTo([FromRoute] Guid id)
         {
             var user = await _userManager.FindByEmailAsync(User.GetEmail());
 
@@ -103,7 +103,7 @@ namespace api.Controllers
         [HttpPost("join/{id:guid}")]
         [Authorize]
         [ProducesResponseType(typeof(ApiResponse<SimpleApiResponse>), 200)]
-        public async Task<IActionResult> joinRoom(Guid id, [FromBody] JoinRoomDto joinRoomDto)
+        public async Task<IActionResult> join(Guid id, [FromBody] JoinRoomDto joinRoomDto)
         {
             if (!ModelState.IsValid)
             {
@@ -175,7 +175,7 @@ namespace api.Controllers
         [HttpPost]
         [Route("leave/{id:guid}")]
         [ProducesResponseType(typeof(ApiResponse<SimpleApiResponse>), 200)]
-        public async Task<IActionResult> LeaveRoom([FromRoute] Guid id)
+        public async Task<IActionResult> Leave([FromRoute] Guid id)
         {
             var user = await _userManager.FindByEmailAsync(User.GetEmail());
 

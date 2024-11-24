@@ -1,4 +1,3 @@
-using api.Data;
 using api.Dtos;
 using api.Extensions;
 using api.Helpers;
@@ -15,24 +14,18 @@ namespace api.Controllers
     [ApiController]
     public class MatchController : ControllerBase
     {
-        private readonly ApplicationDBContext _context;
         private readonly UserManager<User> _userManager;
         private readonly IMatchRepository _matchRepo;
 
-        public MatchController(
-            ApplicationDBContext context,
-            UserManager<User> userManager,
-            IMatchRepository matchRepo
-        )
+        public MatchController(UserManager<User> userManager, IMatchRepository matchRepo)
         {
-            _context = context;
             _userManager = userManager;
             _matchRepo = matchRepo;
         }
 
         [HttpPost]
         [Authorize]
-        public async Task<ActionResult<Match>> CreateMatch([FromBody] CreateMatchDto createMatchDto)
+        public async Task<ActionResult<Match>> Create([FromBody] CreateMatchDto createMatchDto)
         {
             if (!ModelState.IsValid)
             {
@@ -49,13 +42,13 @@ namespace api.Controllers
 
             var createdMatch = await _matchRepo.CreateAsync(match);
 
-            return CreatedAtAction(nameof(GetMatch), new { id = match.Id }, match.ToMatchDto());
+            return CreatedAtAction(nameof(GetById), new { id = match.Id }, match.ToMatchDto());
         }
 
         [HttpGet("{id:guid}")]
         [Authorize]
         [ProducesResponseType(typeof(ApiResponse<MatchDto>), 200)]
-        public async Task<IActionResult> GetMatch(Guid id)
+        public async Task<IActionResult> GetById(Guid id)
         {
             var match = await _matchRepo.GetByIdAsync(id);
 
