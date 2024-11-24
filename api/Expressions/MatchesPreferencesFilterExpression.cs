@@ -3,7 +3,7 @@ using api.Models;
 
 namespace api.Expressions
 {
-    public static class GenderFilter
+    public static class PreferencesFilter
     {
         public static Expression<Func<UserProfile, bool>> MatchesPreferencesFilter(
             UserProfile currentUserProfile

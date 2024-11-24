@@ -15,12 +15,18 @@ namespace api.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserRepository _userRepo;
+        private readonly IUserProfileRepository _userProfileRepo;
         private readonly UserManager<User> _userManager;
 
-        public UserController(IUserRepository userRepo, UserManager<User> userManager)
+        public UserController(
+            IUserRepository userRepo,
+            UserManager<User> userManager,
+            IUserProfileRepository userProfileRepo
+        )
         {
             _userRepo = userRepo;
             _userManager = userManager;
+            _userProfileRepo = userProfileRepo;
         }
 
         [HttpGet]
@@ -39,8 +45,14 @@ namespace api.Controllers
                 return NotFound("User not found.");
             }
 
-            var users = await _userRepo.GetAllAsync(query, currentUser);
-            var totalUsers = await _userRepo.GetTotalUsersAsync(currentUser);
+            var userProfile = await _userProfileRepo.GetByUserId(currentUser.Id);
+            if (userProfile == null)
+            {
+                return BadRequest("User profile missing.");
+            }
+
+            var users = await _userRepo.GetAllAsync(query, userProfile);
+            var totalUsers = await _userRepo.GetTotalUsersAsync(userProfile);
             var totalPages = _userRepo.GetTotalPages(query.PageSize, totalUsers);
 
             var userDto = users.Select(u => u.ToUserDto()).ToList();

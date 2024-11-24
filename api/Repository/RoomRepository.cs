@@ -26,54 +26,38 @@ namespace api.Repository
             return room;
         }
 
-        public async Task<List<Room>> GetAllAsync(AllRoomQueryObject query, string userId)
+        public async Task<List<Room>> GetAllAsync(
+            AllRoomQueryObject query,
+            UserProfile userProfile,
+            List<string> blockedUsersIds,
+            List<Guid> hiddenRoomIds
+        )
         {
-            var blockedUsersIds = _context
-                .BlockedUsers.Where(b => b.BlockerUserId == userId)
-                .Select(b => b.BlockedUserId)
-                .ToList();
-
-            var hiddenRoomIds = await _context
-                .HiddenRooms.Where(hr => hr.UserId == userId)
-                .Select(hr => hr.RoomId)
-                .ToListAsync();
-
-            var currentUserProfile = await _context
-                .UserProfiles.Include(up => up.UserProfileGenders)
-                .Where(up => up.UserId == userId)
-                .FirstAsync();
-
-            if (
-                currentUserProfile == null
-                || currentUserProfile.UserProfileGenderPreferences == null
-            )
+            if (userProfile.UserProfileGenderPreferences == null)
             {
                 throw new Exception("User does not have a profile yet or it is not complete");
             }
 
-            // Step 1: Create a reusable gender filter for UserProfile
-            var genderFilter = GenderFilter.MatchesPreferencesFilter(currentUserProfile);
-
-            // Step 2: Adapt the gender filter for the User context
-            var userGenderFilter = genderFilter.Compose<User, UserProfile>(user =>
+            var preferencesFilter = PreferencesFilter.MatchesPreferencesFilter(userProfile);
+            var userPreferencesFilter = preferencesFilter.Compose<User, UserProfile>(user =>
                 user.UserProfile!
             );
-
-            // Step 3: Adapt the userGenderFilter for the Room context
-            var roomGenderFilter = userGenderFilter.Compose<Room, User>(room => room.User!);
+            var roomPreferencesFilter = userPreferencesFilter.Compose<Room, User>(room =>
+                room.User!
+            );
 
             return await Task.Run(
                 () =>
                     _context
                         .Rooms.IncludeRoomDetails()
-                        .FindAllRoomByStatus(query.Status, userId)
+                        .FindAllRoomByStatus(query.Status, userProfile.UserId!)
                         .Where(r =>
-                            r.UserId != userId
+                            r.UserId != userProfile.UserId
                             && !blockedUsersIds.Contains(r.UserId)
                             && !hiddenRoomIds.Contains(r.Id)
                         )
                         .FindNotDeleted()
-                        .Where(roomGenderFilter)
+                        .Where(roomPreferencesFilter)
                         .OrderByDescending(r => r.CreatedAt)
                         .Skip((query.PageNumber - 1) * query.PageSize)
                         .Take(query.PageSize)
@@ -128,51 +112,35 @@ namespace api.Repository
             return (int)Math.Ceiling(totalRooms / (double)pageSize);
         }
 
-        public async Task<int> GetTotalRoomsAsync(AllRoomQueryObject query, string userId)
+        public async Task<int> GetTotalRoomsAsync(
+            AllRoomQueryObject query,
+            UserProfile userProfile,
+            List<string> blockedUsersIds,
+            List<Guid> hiddenRoomIds
+        )
         {
-            var blockedUsersIds = _context
-                .BlockedUsers.Where(b => b.BlockerUserId == userId)
-                .Select(b => b.BlockedUserId)
-                .ToList();
-
-            var hiddenRoomIds = await _context
-                .HiddenRooms.Where(hr => hr.UserId == userId)
-                .Select(hr => hr.RoomId)
-                .ToListAsync();
-
-            var currentUserProfile = await _context
-                .UserProfiles.Include(up => up.UserProfileGenders)
-                .Where(up => up.UserId == userId)
-                .FirstAsync();
-
-            if (
-                currentUserProfile == null
-                || currentUserProfile.UserProfileGenderPreferences == null
-            )
+            if (userProfile.UserProfileGenderPreferences == null)
             {
                 throw new Exception("User does not have a profile yet or it is not complete");
             }
 
-            // Step 1: Create a reusable gender filter for UserProfile
-            var genderFilter = GenderFilter.MatchesPreferencesFilter(currentUserProfile);
-
-            // Step 2: Adapt the gender filter for the User context
-            var userGenderFilter = genderFilter.Compose<User, UserProfile>(user =>
+            var preferencesFilter = PreferencesFilter.MatchesPreferencesFilter(userProfile);
+            var userPreferencesFilter = preferencesFilter.Compose<User, UserProfile>(user =>
                 user.UserProfile!
             );
-
-            // Step 3: Adapt the userGenderFilter for the Room context
-            var roomGenderFilter = userGenderFilter.Compose<Room, User>(room => room.User!);
+            var roomPreferencesFilter = userPreferencesFilter.Compose<Room, User>(room =>
+                room.User!
+            );
 
             var filteredQuery = _context
                 .Rooms.Where(r =>
-                    r.UserId != userId
+                    r.UserId != userProfile.UserId
                     && !blockedUsersIds.Contains(r.UserId)
                     && !hiddenRoomIds.Contains(r.Id)
                 )
-                .Where(roomGenderFilter)
+                .Where(roomPreferencesFilter)
                 .FindNotDeleted()
-                .FindAllRoomByStatus(query.Status, userId);
+                .FindAllRoomByStatus(query.Status, userProfile.UserId!);
 
             var rooms = filteredQuery.AsEnumerable();
 
@@ -238,6 +206,11 @@ namespace api.Repository
             await _context.SaveChangesAsync();
 
             return hideRoomDto;
+        }
+
+        public async Task<List<HiddenRoom>> RoomsIHid(string userId)
+        {
+            return await _context.HiddenRooms.Where(hr => hr.UserId == userId).ToListAsync();
         }
     }
 }

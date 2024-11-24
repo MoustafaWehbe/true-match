@@ -16,11 +16,20 @@ namespace api.Controllers
     {
         private readonly IRoomRepository _roomRepo;
         private readonly UserManager<User> _userManager;
+        private readonly IUserProfileRepository _userProfileRepo;
+        private readonly IUserRepository _userRepo;
 
-        public RoomController(IRoomRepository roomRepo, UserManager<User> userManager)
+        public RoomController(
+            IRoomRepository roomRepo,
+            UserManager<User> userManager,
+            IUserProfileRepository userProfileRepo,
+            IUserRepository userRepo
+        )
         {
             _roomRepo = roomRepo;
             _userManager = userManager;
+            _userProfileRepo = userProfileRepo;
+            _userRepo = userRepo;
         }
 
         [HttpGet]
@@ -40,9 +49,30 @@ namespace api.Controllers
                 return NotFound("User was not found.");
             }
 
-            var rooms = await _roomRepo.GetAllAsync(query, user.Id);
+            var userProfile = await _userProfileRepo.GetByUserId(user.Id);
+            if (userProfile == null)
+            {
+                return BadRequest("User profile missing.");
+            }
 
-            var totalRooms = await _roomRepo.GetTotalRoomsAsync(query, user.Id);
+            var blockedUsersIds = (await _userRepo.UsersIbBlocked(user.Id))
+                .Select(b => b.BlockedUserId)
+                .ToList();
+            var hiddenRooms = (await _roomRepo.RoomsIHid(user.Id)).Select(hr => hr.RoomId).ToList();
+
+            var rooms = await _roomRepo.GetAllAsync(
+                query,
+                userProfile,
+                blockedUsersIds,
+                hiddenRooms
+            );
+
+            var totalRooms = await _roomRepo.GetTotalRoomsAsync(
+                query,
+                userProfile,
+                blockedUsersIds,
+                hiddenRooms
+            );
             var totalPages = _roomRepo.GetTotalPages(query.PageSize, totalRooms);
 
             var roomDtos = rooms.Select(s => s.ToRoomDto(user.Id)).ToList();

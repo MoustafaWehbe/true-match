@@ -19,27 +19,19 @@ namespace api.Repository
             _context = context;
         }
 
-        public async Task<List<User>> GetAllAsync(UserQueryObject query, User currentUser)
+        public async Task<List<User>> GetAllAsync(UserQueryObject query, UserProfile userProfile)
         {
             if (query.PageNumber <= 0 || query.PageSize <= 0)
             {
                 throw new ArgumentException("Page number and page size must be greater than zero.");
             }
 
-            var currentUserProfile = await _context
-                .UserProfiles.Include(up => up.UserProfileGenders)
-                .Where(up => up.UserId == currentUser.Id)
-                .FirstAsync();
-
-            if (
-                currentUserProfile == null
-                || currentUserProfile.UserProfileGenderPreferences == null
-            )
+            if (userProfile.UserProfileGenderPreferences == null)
             {
                 throw new Exception("User does not have a profile yet or it is not complete");
             }
-            var genderFilter = GenderFilter.MatchesPreferencesFilter(currentUserProfile);
-            var userGenderFilter = genderFilter.Compose<User, UserProfile>(user =>
+            var preferencesFilter = PreferencesFilter.MatchesPreferencesFilter(userProfile);
+            var userPreferencesFilter = preferencesFilter.Compose<User, UserProfile>(user =>
                 user.UserProfile!
             );
 
@@ -49,36 +41,28 @@ namespace api.Repository
                 .Include(u => u.Media)
                 .Include(u => u.UserProfile)
                 .ThenInclude(up => up != null ? up.UserProfileGenders : null)
-                .Where(u => u.Id != currentUser.Id)
-                .Where(userGenderFilter)
+                .Where(u => u.Id != userProfile.UserId)
+                .Where(userPreferencesFilter)
                 .Skip((query.PageNumber - 1) * query.PageSize)
                 .Take(query.PageSize)
                 .ToListAsync();
         }
 
-        public async Task<int> GetTotalUsersAsync(User currentUser)
+        public async Task<int> GetTotalUsersAsync(UserProfile userProfile)
         {
-            var currentUserProfile = await _context
-                .UserProfiles.Include(up => up.UserProfileGenders)
-                .Where(up => up.UserId == currentUser.Id)
-                .FirstAsync();
-
-            if (
-                currentUserProfile == null
-                || currentUserProfile.UserProfileGenderPreferences == null
-            )
+            if (userProfile.UserProfileGenderPreferences == null)
             {
                 throw new Exception("User does not have a profile yet or it is not complete");
             }
 
-            var genderFilter = GenderFilter.MatchesPreferencesFilter(currentUserProfile);
-            var userGenderFilter = genderFilter.Compose<User, UserProfile>(user =>
+            var preferencesFilter = PreferencesFilter.MatchesPreferencesFilter(userProfile);
+            var userPreferencesFilter = preferencesFilter.Compose<User, UserProfile>(user =>
                 user.UserProfile!
             );
 
             return await _context
-                .Users.Where(u => u.Id != currentUser.Id)
-                .Where(userGenderFilter)
+                .Users.Where(u => u.Id != userProfile.UserId)
+                .Where(userPreferencesFilter)
                 .CountAsync();
         }
 
@@ -122,6 +106,11 @@ namespace api.Repository
             _context.BlockedUsers.Remove(blockedUser);
             await _context.SaveChangesAsync();
             return true;
+        }
+
+        public async Task<List<BlockedUser>> UsersIbBlocked(string userId)
+        {
+            return await _context.BlockedUsers.Where(b => b.BlockerUserId == userId).ToListAsync();
         }
     }
 }
