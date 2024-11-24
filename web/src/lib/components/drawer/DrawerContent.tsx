@@ -2,6 +2,7 @@
 
 import { BsEmojiHeartEyes } from "react-icons/bs";
 import { BsChatDots } from "react-icons/bs";
+import { CiUser } from "react-icons/ci";
 import { MdOutlineLiveTv } from "react-icons/md";
 import {
   Box,
@@ -35,14 +36,6 @@ const DrawerContent = () => {
         </Heading>
       </Stack>
       <List fontSize="1.2em" spacing={4} color={linkColor}>
-        {/* <ListItem>
-          <NextLink href="/swipe-to-match" passHref prefetch={true}>
-            <Link _hover={{ textDecoration: "none", color: hoverColor }}>
-              <ListIcon as={BsEmojiHeartEyes} color={iconColor} />
-              Swipe to match
-            </Link>
-          </NextLink>
-        </ListItem> */}
         <ListItem>
           <NextLink href="/browse-rooms" passHref prefetch={true}>
             <Link _hover={{ textDecoration: "none", color: hoverColor }}>
@@ -64,6 +57,14 @@ const DrawerContent = () => {
             <Link _hover={{ textDecoration: "none", color: hoverColor }}>
               <ListIcon as={BsChatDots} color={iconColor} />
               Chat
+            </Link>
+          </NextLink>
+        </ListItem>
+        <ListItem>
+          <NextLink href="/profile" passHref prefetch={true}>
+            <Link _hover={{ textDecoration: "none", color: hoverColor }}>
+              <ListIcon as={CiUser} color={iconColor} />
+              Profile
             </Link>
           </NextLink>
         </ListItem>

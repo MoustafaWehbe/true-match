@@ -30,22 +30,23 @@ const ImageSelector = ({ media }: ImageSelectorProps) => {
 
   useEffect(() => {
     const fetchImages = async () => {
+      if (!media) {
+        return;
+      }
       const mediaImages: File[] = [];
-      await new Promise<void>((res, reject) =>
-        media!.forEach((item, index) => {
-          urlToFile(env.apiUrl + item.url, "profile " + index, "image/jpeg")
-            .then((file) => {
-              mediaImages.push(file);
-              if (index === media?.length! - 1) {
-                res();
-              }
-            })
-            .catch((error) => {
-              console.error("Error creating File:", error);
-              reject(error);
-            });
-        })
-      );
+      for (let i = 0; i < media.length; i++) {
+        const item = media[i];
+        try {
+          const file = await urlToFile(
+            env.apiUrl + item.url,
+            "profile " + i,
+            "image/jpeg"
+          );
+          mediaImages.push(file);
+        } catch (error) {
+          console.error("Error creating File:", error);
+        }
+      }
       setImages(mediaImages);
     };
     if (media && media.length) {
