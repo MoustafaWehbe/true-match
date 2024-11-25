@@ -1,10 +1,16 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json;
+using Microsoft.EntityFrameworkCore;
 
 namespace api.Models
 {
     [Table("Rooms")]
+    [Index(nameof(StartedAt))]
+    [Index(nameof(UserId))]
+    [Index(nameof(CreatedAt))]
+    [Index(nameof(FinishedAt))]
+    [Index(nameof(IsDeleted))]
     public class Room
     {
         [Key]

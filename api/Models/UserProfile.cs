@@ -1,10 +1,17 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json;
+using Microsoft.EntityFrameworkCore;
 using NetTopologySuite.Geometries;
 
 namespace api.Models
 {
+    [Index(nameof(AgeFilterMin))]
+    [Index(nameof(AgeFilterMax))]
+    [Index(nameof(BirthDate))]
+    [Index(nameof(DistanceFilter))]
+    [Index(nameof(pos))]
+    [Index(nameof(Hidden))]
     public class UserProfile
     {
         [Key]
