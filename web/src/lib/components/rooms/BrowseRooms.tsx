@@ -144,9 +144,9 @@ function BrowseRooms() {
       <Loader isLoading={getRoomsLoading} />
 
       <Stack spacing={4} align="center" sx={{ clear: "both" }}>
-        {rooms?.data?.length ? null : (
+        {!rooms?.data?.length && !getRoomsLoading ? (
           <Text mt={6}>No available rooms at the moment!</Text>
-        )}
+        ) : null}
       </Stack>
       <Grid
         templateColumns={{

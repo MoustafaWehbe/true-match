@@ -7,8 +7,6 @@ import {
   Button,
   Flex,
   Grid,
-  Heading,
-  Stack,
   Tab,
   TabList,
   Tabs,
@@ -184,40 +182,45 @@ function MyRooms() {
   };
 
   return (
-    <Box bg={bg} color={textColor} px={8} py={4} borderRadius="lg">
+    <Box
+      bg={bg}
+      color={textColor}
+      px={8}
+      py={4}
+      borderRadius="lg"
+      position={"relative"}
+    >
       <Loader isLoading={getMyRoomsLoading} />
-      <Flex alignItems={"center"} gap={2}>
-        <Stack spacing={4} align="center" sx={{ clear: "both" }}>
-          <Heading fontSize="4xl">My Rooms</Heading>
-        </Stack>
-        <Tabs
-          maxWidth={{ base: "90%", md: "75%", lg: "50%" }}
-          margin={"0 auto"}
-          marginTop={{ base: "50px", md: "0px" }}
-        >
-          <TabList>
-            {options.map((option) => {
-              return (
-                <Tab
-                  key={option.value + "1"}
-                  onClick={() => handleSelect(option)}
-                  flex={"auto"}
-                >
-                  {option.label}
-                </Tab>
-              );
-            })}
-          </TabList>
-        </Tabs>
-        <GradientButton
-          size="sm"
-          color="white"
-          boxShadow="xl"
-          onClick={handleOpenRoomModal}
-        >
-          Schedule room
-        </GradientButton>
-      </Flex>
+      <Tabs
+        maxWidth={{ base: "90%", md: "75%", lg: "50%" }}
+        margin={"0 auto"}
+        marginTop={{ base: "50px", md: "0px" }}
+      >
+        <TabList>
+          {options.map((option) => {
+            return (
+              <Tab
+                key={option.value + "1"}
+                onClick={() => handleSelect(option)}
+                flex={"auto"}
+              >
+                {option.label}
+              </Tab>
+            );
+          })}
+        </TabList>
+      </Tabs>
+      <GradientButton
+        size="sm"
+        color="white"
+        boxShadow="xl"
+        onClick={handleOpenRoomModal}
+        position={"absolute"}
+        top={4}
+        right={4}
+      >
+        Schedule room
+      </GradientButton>
       <Grid
         templateColumns={{
           base: "repeat(1, 1fr)", // For screens less than 48em (768px)

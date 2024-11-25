@@ -19,8 +19,10 @@ const OnboardingLocationAccess = ({
 }: OnboardingLocationAccessProps) => {
   const { colorMode } = useColorMode();
   const [locationAccessGranted, setLocationAccessGranted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const requestLocationAccess = () => {
+    setIsLoading(true);
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
@@ -33,13 +35,16 @@ const OnboardingLocationAccess = ({
             coordinates: [longitude, latitude],
           };
           onSubmit({ pos: point });
+          setIsLoading(false);
         },
         (error) => {
           console.error("Location Access Denied", error);
+          setIsLoading(false);
         }
       );
     } else {
       alert("Geolocation is not supported by this browser.");
+      setIsLoading(false);
     }
   };
 
@@ -80,7 +85,12 @@ const OnboardingLocationAccess = ({
         />
 
         {!locationAccessGranted ? (
-          <Button colorScheme="teal" onClick={requestLocationAccess}>
+          <Button
+            colorScheme="teal"
+            onClick={requestLocationAccess}
+            loadingText="Location..."
+            isLoading={isLoading}
+          >
             Allow Location Access
           </Button>
         ) : (

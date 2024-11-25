@@ -179,6 +179,32 @@ function Chat() {
               </MotionAvatarBox>
             );
           })}
+
+          {/* No matches */}
+          {!matches?.length &&
+            [1, 2].map((index) => {
+              return (
+                <MotionAvatarBox
+                  key={index}
+                  cursor="pointer"
+                  bg={cardBg}
+                  borderRadius="md"
+                  boxShadow="md"
+                  p={2}
+                  mr={2}
+                  minW="80px"
+                  textAlign="center"
+                  whileHover={{
+                    scale: 1.05,
+                  }}
+                  transition="all 0.2s"
+                  style={{
+                    transition: "all 0.2s",
+                    height: "100px",
+                  }}
+                />
+              );
+            })}
         </Box>
 
         <HStack justifyContent="space-between">
@@ -245,6 +271,8 @@ function Chat() {
             </HStack>
           </>
         )}
+
+        {!activeMatchId && <Text>Select a match to chat with.</Text>}
       </VStack>
     </Container>
   );

@@ -16,7 +16,7 @@ namespace api.Repository
 
         public async Task<IEnumerable<AvailableDescriptor>> GetAllAsync()
         {
-            return await _context.AvailableDescriptors.ToListAsync();
+            return await _context.AvailableDescriptors.OrderBy(avd => avd.Id).ToListAsync();
         }
     }
 }

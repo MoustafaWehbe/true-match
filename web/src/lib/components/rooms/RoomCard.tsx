@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { CiUser } from "react-icons/ci";
 import { FaHeart } from "react-icons/fa";
 import { FiMoreVertical } from "react-icons/fi";
 import { IoCloseOutline } from "react-icons/io5";
@@ -248,6 +249,15 @@ const RoomCard = ({
             <Stack direction="row" align="center">
               <TimeIcon />
               <Text fontSize={"medium"}>{20} mins</Text>
+            </Stack>
+          </Box>
+          <Box>
+            <Text as="label" fontSize={"small"}>
+              People interested to join
+            </Text>
+            <Stack direction="row" align="center">
+              <CiUser />
+              <Text fontSize={"medium"}>{room.participantCount}</Text>
             </Stack>
           </Box>
           {isOwner ? (
