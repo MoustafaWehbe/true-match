@@ -1,4 +1,5 @@
-﻿using api.Models;
+﻿using api.Expressions;
+using api.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace api.Extensions
@@ -15,9 +16,11 @@ namespace api.Extensions
             switch (roomStatus)
             {
                 case AllRoomStatus.InProgress:
-                    return query.AsEnumerable().Where(r => r.IsInProgress(userId)).AsQueryable();
+                    return query.Where(RoomExpressions.IsInProgress);
                 case AllRoomStatus.Coming:
-                    return query.Where(r => r.StartedAt == null);
+                    return query
+                        .Where(r => !r.StartedAt.HasValue)
+                        .Where(RoomExpressions.IsExpired.Not());
                 case AllRoomStatus.InterestedIn:
                     return query.Where(r =>
                         r.StartedAt == null && r.RoomParticipants.Any(rp => rp.UserId == userId)
@@ -29,16 +32,17 @@ namespace api.Extensions
 
         public static IQueryable<Room> FindMyRoomByStatus(
             this IQueryable<Room> query,
-            MyRoomStatus? roomStatus,
-            string userId
+            MyRoomStatus? roomStatus
         )
         {
             switch (roomStatus)
             {
                 case MyRoomStatus.Coming:
-                    return query.Where(r => r.StartedAt == null);
+                    return query
+                        .Where(r => !r.StartedAt.HasValue)
+                        .Where(RoomExpressions.IsExpired.Not());
                 case MyRoomStatus.Archived:
-                    return query.AsEnumerable().Where(r => r.IsArchived(userId)).AsQueryable();
+                    return query.Where(RoomExpressions.IsArchived);
                 default:
                     return query;
             }

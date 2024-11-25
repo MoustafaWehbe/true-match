@@ -128,7 +128,7 @@ namespace api.Controllers
                 return BadRequest("Room has not started yet");
             }
 
-            if (room.isExpired)
+            if (room.IsExpired)
             {
                 return BadRequest("Can't join. Room has expired");
             }

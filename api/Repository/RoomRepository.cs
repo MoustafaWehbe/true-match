@@ -46,23 +46,20 @@ namespace api.Repository
                 room.User!
             );
 
-            return await Task.Run(
-                () =>
-                    _context
-                        .Rooms.IncludeRoomDetails()
-                        .FindAllRoomByStatus(query.Status, userProfile.UserId!)
-                        .Where(r =>
-                            r.UserId != userProfile.UserId
-                            && !blockedUsersIds.Contains(r.UserId)
-                            && !hiddenRoomIds.Contains(r.Id)
-                        )
-                        .FindNotDeleted()
-                        .Where(roomPreferencesFilter)
-                        .OrderByDescending(r => r.CreatedAt)
-                        .Skip((query.PageNumber - 1) * query.PageSize)
-                        .Take(query.PageSize)
-                        .ToList()
-            );
+            return await _context
+                .Rooms.IncludeRoomDetails()
+                .FindAllRoomByStatus(query.Status, userProfile.UserId!)
+                .Where(r =>
+                    r.UserId != userProfile.UserId
+                    && !blockedUsersIds.Contains(r.UserId)
+                    && !hiddenRoomIds.Contains(r.Id)
+                )
+                .FindNotDeleted()
+                .Where(roomPreferencesFilter)
+                .OrderByDescending(r => r.CreatedAt)
+                .Skip((query.PageNumber - 1) * query.PageSize)
+                .Take(query.PageSize)
+                .ToListAsync();
         }
 
         public async Task<List<Room>> GetMyRoomsAsync(MyRoomQueryObject query, string userId)
@@ -80,18 +77,15 @@ namespace api.Repository
                 throw new Exception("User does not have a profile yet or it is not complete");
             }
 
-            return await Task.Run(
-                () =>
-                    _context
-                        .Rooms.IncludeRoomDetails()
-                        .Where(r => r.UserId == userId)
-                        .FindMyRoomByStatus(query.Status, userId) // This has AsEnumerable() inside, switching to LINQ-to-Objects
-                        .FindNotDeleted()
-                        .OrderByDescending(r => r.CreatedAt)
-                        .Skip((query.PageNumber - 1) * query.PageSize)
-                        .Take(query.PageSize)
-                        .ToList()
-            ); // Use synchronous ToList after switching to in-memory processing
+            return await _context
+                .Rooms.IncludeRoomDetails()
+                .Where(r => r.UserId == userId)
+                .FindMyRoomByStatus(query.Status)
+                .FindNotDeleted()
+                .OrderByDescending(r => r.CreatedAt)
+                .Skip((query.PageNumber - 1) * query.PageSize)
+                .Take(query.PageSize)
+                .ToListAsync();
         }
 
         public async Task<Room?> GetByIdAsync(Guid id)
@@ -152,14 +146,10 @@ namespace api.Repository
             // Fetch the part that can be evaluated by the database (FinishedAt or neverStarted)
             var filteredQuery = _context
                 .Rooms.Where(r => r.UserId == userId)
-                .FindMyRoomByStatus(query.Status, userId) // This handles part of the filtering, which might include AsEnumerable()
+                .FindMyRoomByStatus(query.Status) // This handles part of the filtering, which might include AsEnumerable()
                 .FindNotDeleted();
 
-            // If the FindMyRoomByStatus uses AsEnumerable (client-side logic), switch to in-memory filtering
-            var rooms = filteredQuery.AsEnumerable();
-
-            // Apply the in-memory filtering for IsArchived logic
-            var count = rooms.Count(r => r.IsArchived(userId));
+            var count = filteredQuery.Count();
 
             return await Task.FromResult(count);
         }

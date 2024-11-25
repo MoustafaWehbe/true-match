@@ -64,7 +64,10 @@ namespace api.Repository
             query = query.Where(q => categories.Contains(q.CategoryId));
             var questions = await query.ToListAsync();
 
-            var randomQuestions = questions.OrderBy(q => Guid.NewGuid()).Take(3).ToList();
+            var randomQuestions = questions
+                .OrderBy(q => Guid.NewGuid())
+                .Take(RoomConstants.NumberOfSystemQuestionsPerRoom)
+                .ToList();
 
             return randomQuestions;
         }

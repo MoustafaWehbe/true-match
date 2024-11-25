@@ -5,7 +5,6 @@ import {
   QuestionCategoryDto,
   QuestionCategoryDtoListApiResponse,
   SystemQuestionDto,
-  SystemQuestionDtoListApiResponse,
 } from "@dapp/shared/src/types/openApiGen";
 
 import axiosInstance, { defaultHeaders } from "~/lib/utils/api/axiosConfig";
@@ -28,36 +27,6 @@ export const getQuestionCategories = createAsyncThunk<
         "/api/question-category",
         { headers: defaultHeaders }
       );
-    return response.data.data ?? null;
-  } catch (error) {
-    let errorMessage = "Something went wrong!";
-    if (axios.isAxiosError(error) && error.response) {
-      errorMessage = error.response.data.message || errorMessage;
-    }
-    return rejectWithValue(errorMessage);
-  }
-});
-
-export const getSystemQuestions = createAsyncThunk<
-  Array<SystemQuestionDto> | null,
-  { categories?: number[]; roomId: string },
-  { rejectValue: string }
->("question/system-question", async (params, { rejectWithValue }) => {
-  try {
-    const searchParams = new URLSearchParams();
-    params.categories?.forEach((category) =>
-      searchParams.append("categories", category.toString())
-    );
-
-    searchParams.append("roomId", params.roomId);
-
-    const response = await axiosInstance.get<SystemQuestionDtoListApiResponse>(
-      "/api/system-question",
-      {
-        params: searchParams,
-        headers: defaultHeaders,
-      }
-    );
     return response.data.data ?? null;
   } catch (error) {
     let errorMessage = "Something went wrong!";
@@ -93,19 +62,6 @@ const questionSlice = createSlice({
       )
       .addCase(getQuestionCategories.rejected, (state) => {
         state.categoriesLoading = false;
-      })
-      .addCase(getSystemQuestions.pending, (state) => {
-        state.systemQuestionsLoading = true;
-      })
-      .addCase(
-        getSystemQuestions.fulfilled,
-        (state, action: PayloadAction<Array<SystemQuestionDto> | null>) => {
-          state.systemQuestionsLoading = false;
-          state.systemQuestions = action.payload;
-        }
-      )
-      .addCase(getSystemQuestions.rejected, (state) => {
-        state.systemQuestionsLoading = false;
       });
   },
 });

@@ -1,6 +1,4 @@
-using System.Text.Json;
 using api.Dtos;
-using api.Extensions;
 using api.Helpers;
 using api.Interfaces;
 using api.Mappers;
@@ -8,7 +6,6 @@ using api.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Any;
 
 namespace api.Controllers
@@ -33,82 +30,19 @@ namespace api.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         [ProducesResponseType(typeof(ApiResponse<List<SystemQuestionDto>>), 200)]
-        public async Task<ActionResult<IEnumerable<SystemQuestionDto>>> GetAll(
-            [FromQuery] List<Guid> categories,
-            [FromQuery] Guid roomId
-        )
+        public async Task<ActionResult<IEnumerable<SystemQuestionDto>>> GetAll()
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (categories != null && categories.Count > 0)
-            {
-                IQueryable<SystemQuestion> query = _systemQuestionRepository.GetAll();
-                query = query.Where(q => categories.Contains(q.CategoryId));
-                var questions = await query.ToListAsync();
-
-                var randomQuestions = questions.OrderBy(q => Guid.NewGuid()).Take(3).ToList();
-
-                var room = await _roomRepo.GetByIdAsync(roomId);
-
-                if (room == null)
-                {
-                    return NotFound("Room was not found.");
-                }
-
-                var user = await _userManager.FindByEmailAsync(User.GetEmail());
-
-                if (user == null)
-                {
-                    return NotFound("User was not found!");
-                }
-
-                if (user.Id != room.UserId || room.IsArchived(user.Id))
-                {
-                    return BadRequest("Room/User validation failed.");
-                }
-
-                var existingRoomState = room.RoomState;
-                if (existingRoomState != null)
-                {
-                    existingRoomState.RoundQuestions = randomQuestions
-                        .Select(q => q.ToSystemQuestionDto())
-                        .ToList();
-                }
-                else
-                {
-                    existingRoomState = new RoomState
-                    {
-                        RoundQuestions = randomQuestions
-                            .Select(q => q.ToSystemQuestionDto())
-                            .ToList(),
-                    };
-                }
-                room.RoomStateJson = JsonDocument.Parse(
-                    JsonSerializer.Serialize(existingRoomState)
-                );
-
-                await _roomRepo.UpdateAsync(room);
-
-                return Ok(
-                    ResponseHelper.CreateSuccessResponse(
-                        randomQuestions.Select(q => q.ToSystemQuestionDto())
-                    )
-                );
-            }
-            else
-            {
-                var questions = await _systemQuestionRepository.GetAllAsync();
-                return Ok(
-                    ResponseHelper.CreateSuccessResponse(
-                        questions.Select(q => q.ToSystemQuestionDto())
-                    )
-                );
-            }
+            var questions = await _systemQuestionRepository.GetAllAsync();
+            return Ok(
+                ResponseHelper.CreateSuccessResponse(questions.Select(q => q.ToSystemQuestionDto()))
+            );
         }
 
         [HttpGet("{id:guid}")]
@@ -148,9 +82,6 @@ namespace api.Controllers
 
         [HttpPut("{id:guid}")]
         [Authorize(Roles = "Admin")]
-        [ProducesResponseType(204)]
-        [ProducesResponseType(403)]
-        [ProducesResponseType(404)]
         public async Task<IActionResult> UpdateSystemQuestion(
             Guid id,
             UpdateSystemQuestionDto systemQuestionDto
@@ -173,9 +104,6 @@ namespace api.Controllers
 
         [HttpDelete("{id:guid}")]
         [Authorize(Roles = "Admin")]
-        [ProducesResponseType(204)]
-        [ProducesResponseType(403)]
-        [ProducesResponseType(404)]
         public async Task<IActionResult> DeleteSystemQuestion(Guid id)
         {
             var question = await _systemQuestionRepository.GetByIdAsync(id);
