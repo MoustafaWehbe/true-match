@@ -182,21 +182,13 @@ function MyRooms() {
   };
 
   return (
-    <Box
-      bg={bg}
-      color={textColor}
-      px={8}
-      py={4}
-      borderRadius="lg"
-      position={"relative"}
-    >
-      <Loader isLoading={getMyRoomsLoading} />
+    <Box bg={bg} color={textColor} px={8} py={4} borderRadius="lg">
       <Tabs
-        maxWidth={{ base: "90%", md: "75%", lg: "50%" }}
-        margin={"0 auto"}
         marginTop={{ base: "50px", md: "0px" }}
+        display={"flex"}
+        justifyContent={"space-between"}
       >
-        <TabList>
+        <TabList flex={1} maxWidth={{ base: "90%", md: "75%", lg: "50%" }}>
           {options.map((option) => {
             return (
               <Tab
@@ -209,18 +201,19 @@ function MyRooms() {
             );
           })}
         </TabList>
+        <GradientButton
+          size="sm"
+          color="white"
+          boxShadow="xl"
+          onClick={handleOpenRoomModal}
+          top={4}
+          right={4}
+        >
+          Schedule room
+        </GradientButton>
       </Tabs>
-      <GradientButton
-        size="sm"
-        color="white"
-        boxShadow="xl"
-        onClick={handleOpenRoomModal}
-        position={"absolute"}
-        top={4}
-        right={4}
-      >
-        Schedule room
-      </GradientButton>
+      <Loader isLoading={getMyRoomsLoading} />
+
       <Grid
         templateColumns={{
           base: "repeat(1, 1fr)", // For screens less than 48em (768px)

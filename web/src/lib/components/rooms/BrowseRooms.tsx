@@ -1,21 +1,29 @@
 "use client";
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
+import { FaCheck } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
+import { ChevronDownIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
   Flex,
   Grid,
+  Popover,
+  PopoverArrow,
+  PopoverBody,
+  PopoverContent,
+  PopoverTrigger,
   Stack,
   Tab,
   TabList,
   Tabs,
   Text,
   useColorModeValue,
+  VStack,
 } from "@chakra-ui/react";
 
-import { AllRoomStatus } from "@dapp/shared/src/types/openApiGen";
+import { AllRoomStatus, RoomsSortBy } from "@dapp/shared/src/types/openApiGen";
 
 import { Option } from "../shared/buttons/CustomMenuButton";
 import ConfirmDialog from "../shared/ConfirmDialog";
@@ -36,10 +44,16 @@ import {
 import { AppDispatch, RootState } from "~/lib/state/store";
 import { blockUser } from "~/lib/state/user/userSlice";
 
-const options: Option[] = [
+const filterOptions: Option[] = [
   { value: 0, label: "Coming up" },
   { value: 1, label: "In progress" },
   { value: 2, label: "Interested to attend" },
+];
+
+const sortOptions: Option[] = [
+  { value: 0, label: "Recently Created" },
+  { value: 1, label: "Number of Participants" },
+  { value: 2, label: "Schedule Date" },
 ];
 
 function BrowseRooms() {
@@ -51,12 +65,20 @@ function BrowseRooms() {
     (state: RootState) => state.room
   );
   const { isBlockingUser } = useSelector((state: RootState) => state.user);
-  const [selectedStatus, setSelectedStatus] = useState<Option>(options[0]);
+  const [selectedStatus, setSelectedStatus] = useState<Option>(
+    filterOptions[0]
+  );
   const page = useRef(1);
   const [roomIdToBlock, setRoomIdToBlock] = useState<string>();
 
   const openDialog = () => setIsDialogOpen(true);
   const closeDialog = () => setIsDialogOpen(false);
+  const [selectedSortByOption, setSelectedSortByOption] = useState(
+    sortOptions[0]
+  );
+
+  const menuHoverBg = useColorModeValue("pink.200", "pink.600");
+  const menuTextColor = useColorModeValue("gray.800", "white");
 
   const loadRooms = useCallback(() => {
     dispatch(
@@ -64,21 +86,24 @@ function BrowseRooms() {
         PageNumber: page.current,
         PageSize: 10,
         Status: selectedStatus.value as AllRoomStatus,
+        SortBy: selectedSortByOption.value as RoomsSortBy,
       })
     );
-  }, [dispatch, selectedStatus.value]);
-
-  useEffect(() => {
-    loadRooms();
-
-    return () => {
-      dispatch(clearRooms());
-    };
-  }, [dispatch, loadRooms]);
+  }, [dispatch, selectedSortByOption.value, selectedStatus.value]);
 
   useEffect(() => {
     dispatch(getAvailableDescriptors());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (selectedSortByOption) {
+      loadRooms();
+    }
+
+    return () => {
+      dispatch(clearRooms());
+    };
+  }, [dispatch, loadRooms, selectedSortByOption]);
 
   const handleSelect = (option: Option) => {
     if (selectedStatus.value !== option.value) {
@@ -120,15 +145,20 @@ function BrowseRooms() {
     }
   };
 
+  const handleSortChange = (value: Option) => {
+    page.current = 1;
+    setSelectedSortByOption(value);
+  };
+
   return (
     <Box bg={bg} color={textColor} px={8} py={4} borderRadius="lg">
       <Tabs
-        maxWidth={{ base: "90%", md: "75%", lg: "50%" }}
-        margin={"0 auto"}
         marginTop={{ base: "50px", md: "0px" }}
+        display={"flex"}
+        justifyContent={"space-between"}
       >
-        <TabList>
-          {options.map((option) => {
+        <TabList flex={1} maxWidth={{ base: "90%", md: "75%", lg: "50%" }}>
+          {filterOptions.map((option) => {
             return (
               <Tab
                 key={option.value + "1"}
@@ -140,6 +170,57 @@ function BrowseRooms() {
             );
           })}
         </TabList>
+        <Flex justifyContent="flex-end" alignItems="center">
+          <Box>
+            <Popover>
+              <PopoverTrigger>
+                <Button
+                  size={"md"}
+                  colorScheme="pink"
+                  rightIcon={<ChevronDownIcon />}
+                >
+                  Sort by: &nbsp;
+                  <Text as="span" fontWeight={"bolder"}>
+                    {selectedSortByOption.label}
+                  </Text>
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent width={"fit-content"}>
+                <PopoverArrow />
+                <PopoverBody>
+                  <VStack align="start">
+                    {sortOptions.map((option) => (
+                      <Flex
+                        key={option.value}
+                        alignItems={"center"}
+                        onClick={() => handleSortChange(option)}
+                        borderRadius={5}
+                        _hover={{
+                          bg: menuHoverBg,
+                        }}
+                        width={"100%"}
+                      >
+                        {selectedSortByOption.value === option.value ? (
+                          <FaCheck width={"20px"} />
+                        ) : (
+                          <Box width={"20px"}></Box>
+                        )}
+                        <Box
+                          color={menuTextColor}
+                          cursor={"pointer"}
+                          paddingY={1}
+                          paddingX={2}
+                        >
+                          {option.label}
+                        </Box>
+                      </Flex>
+                    ))}
+                  </VStack>
+                </PopoverBody>
+              </PopoverContent>
+            </Popover>
+          </Box>
+        </Flex>
       </Tabs>
       <Loader isLoading={getRoomsLoading} />
 

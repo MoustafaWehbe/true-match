@@ -47,4 +47,11 @@ namespace api.Models
         Delivered,
         Read,
     }
+
+    public enum RoomsSortBy
+    {
+        RecentlyCreated,
+        NumberOfParticipants,
+        ScheduleDate,
+    }
 }

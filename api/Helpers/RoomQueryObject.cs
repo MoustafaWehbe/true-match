@@ -2,17 +2,20 @@ using api.Models;
 
 namespace api.Helpers
 {
-    public class AllRoomQueryObject
+    public abstract class RoomQueryBase
     {
         public int PageNumber { get; set; } = 1;
         public int PageSize { get; set; } = 10;
-        public AllRoomStatus? Status { get; set; }
     }
 
-    public class MyRoomQueryObject
+    public class AllRoomQueryObject : RoomQueryBase
     {
-        public int PageNumber { get; set; } = 1;
-        public int PageSize { get; set; } = 10;
+        public AllRoomStatus? Status { get; set; }
+        public RoomsSortBy SortBy { get; set; } = RoomsSortBy.RecentlyCreated;
+    }
+
+    public class MyRoomQueryObject : RoomQueryBase
+    {
         public MyRoomStatus? Status { get; set; }
     }
 }

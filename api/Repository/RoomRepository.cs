@@ -46,20 +46,32 @@ namespace api.Repository
                 room.User!
             );
 
-            return await _context
-                .Rooms.IncludeRoomDetails()
-                .FindAllRoomByStatus(query.Status, userProfile.UserId!)
-                .Where(r =>
+            var filteredQuery = _context
+                .Rooms.Where(r =>
                     r.UserId != userProfile.UserId
                     && !blockedUsersIds.Contains(r.UserId)
                     && !hiddenRoomIds.Contains(r.Id)
                 )
-                .FindNotDeleted()
                 .Where(roomPreferencesFilter)
-                .OrderByDescending(r => r.CreatedAt)
+                .FindNotDeleted()
+                .FindAllRoomByStatus(query.Status, userProfile.UserId!)
+                .IncludeRoomDetails();
+
+            filteredQuery = query.SortBy switch
+            {
+                RoomsSortBy.RecentlyCreated => filteredQuery.OrderByDescending(r => r.CreatedAt),
+                RoomsSortBy.NumberOfParticipants => filteredQuery.OrderByDescending(r =>
+                    r.RoomParticipants.Count
+                ),
+                RoomsSortBy.ScheduleDate => filteredQuery.OrderBy(r => r.ScheduledAt),
+                _ => filteredQuery.OrderByDescending(r => r.CreatedAt),
+            };
+
+            filteredQuery = filteredQuery
                 .Skip((query.PageNumber - 1) * query.PageSize)
-                .Take(query.PageSize)
-                .ToListAsync();
+                .Take(query.PageSize);
+
+            return await filteredQuery.ToListAsync();
         }
 
         public async Task<List<Room>> GetMyRoomsAsync(MyRoomQueryObject query, string userId)

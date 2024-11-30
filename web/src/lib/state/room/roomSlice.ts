@@ -58,17 +58,18 @@ export const getRooms = createAsyncThunk<
     PageNumber: number;
     PageSize: number;
     Status: openApiTypes.AllRoomStatus;
+    SortBy: openApiTypes.RoomsSortBy;
   },
   { rejectValue: string }
 >(
   "room/getRooms",
-  async ({ PageNumber, PageSize, Status }, { rejectWithValue }) => {
+  async ({ PageNumber, PageSize, Status, SortBy }, { rejectWithValue }) => {
     try {
       const response =
         await axiosInstance.get<openApiTypes.RoomDtoPagedResponse>(
           "/api/room",
           {
-            params: { PageNumber, PageSize, Status },
+            params: { PageNumber, PageSize, Status, SortBy },
             headers: defaultHeaders,
           }
         );
