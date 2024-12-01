@@ -4,8 +4,6 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Box,
-  Button,
-  Flex,
   Grid,
   Tab,
   TabList,
@@ -21,6 +19,7 @@ import { Option } from "../shared/buttons/CustomMenuButton";
 import GradientButton from "../shared/buttons/GradientButton";
 import Loader from "../shared/Loader";
 
+import PaginatedRooms from "./PaginatedRooms";
 import RoomCard from "./RoomCard";
 import RoomModal from "./RoomModal";
 
@@ -89,9 +88,14 @@ function MyRooms() {
     }
   };
 
-  const handleLoadMore = () => {
-    page.current = page.current + 1;
-    loadRooms();
+  const handlePageChange = (newPage: number) => {
+    page.current = newPage;
+    setTimeout(() => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }, 200);
+    setTimeout(() => {
+      loadRooms();
+    }, 500);
   };
 
   const handleCreateRoom = async (values: any) => {
@@ -234,19 +238,7 @@ function MyRooms() {
           />
         ))}
       </Grid>
-      {myRooms &&
-        myRooms.pageSize! * myRooms?.currentPage! <= myRooms?.data?.length! && (
-          <Flex justify="center" mt={8}>
-            <Button
-              onClick={handleLoadMore}
-              size="md"
-              colorScheme="teal"
-              isLoading={createRoomLoading || updateRoomLoading}
-            >
-              Load More
-            </Button>
-          </Flex>
-        )}
+      <PaginatedRooms rooms={myRooms} handlePageChange={handlePageChange} />
 
       <RoomModal
         isOpen={isRoomModalOpen}

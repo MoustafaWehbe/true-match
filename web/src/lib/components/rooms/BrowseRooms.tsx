@@ -29,6 +29,7 @@ import { Option } from "../shared/buttons/CustomMenuButton";
 import ConfirmDialog from "../shared/ConfirmDialog";
 import Loader from "../shared/Loader";
 
+import PaginatedRooms from "./PaginatedRooms";
 import RoomCard from "./RoomCard";
 
 import { getAvailableDescriptors } from "~/lib/state/availableDescriptor/availableDescriptorSlice";
@@ -113,9 +114,14 @@ function BrowseRooms() {
     }
   };
 
-  const handleLoadMore = () => {
-    page.current = page.current + 1;
-    loadRooms();
+  const handlePageChange = (newPage: number) => {
+    page.current = newPage;
+    setTimeout(() => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }, 200);
+    setTimeout(() => {
+      loadRooms();
+    }, 500);
   };
 
   const handleOnBlock = async () => {
@@ -255,19 +261,7 @@ function BrowseRooms() {
           />
         ))}
       </Grid>
-      {rooms &&
-        rooms.pageSize! * rooms?.currentPage! <= rooms?.data?.length! && (
-          <Flex justify="center" mt={8}>
-            <Button
-              onClick={handleLoadMore}
-              size="md"
-              colorScheme="teal"
-              isLoading={getRoomsLoading}
-            >
-              Load More
-            </Button>
-          </Flex>
-        )}
+      <PaginatedRooms rooms={rooms} handlePageChange={handlePageChange} />
       <ConfirmDialog
         isOpen={isDialogOpen}
         onClose={closeDialog}

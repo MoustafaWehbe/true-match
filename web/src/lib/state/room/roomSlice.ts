@@ -435,14 +435,7 @@ const roomSlice = createSlice({
           action: PayloadAction<openApiTypes.RoomDtoPagedResponse | null>
         ) => {
           state.getRoomsLoading = false;
-          if (!state.rooms?.data) {
-            state.rooms = action.payload;
-          } else if (action.payload?.data) {
-            state.rooms = {
-              ...action.payload,
-              data: [...state.rooms?.data, ...action.payload?.data],
-            };
-          }
+          state.rooms = action.payload;
         }
       )
       .addCase(getRooms.rejected, (state) => {

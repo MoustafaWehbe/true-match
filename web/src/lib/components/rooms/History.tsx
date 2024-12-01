@@ -2,18 +2,11 @@
 
 import React, { useCallback, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  Box,
-  Button,
-  Flex,
-  Grid,
-  Stack,
-  Text,
-  useColorModeValue,
-} from "@chakra-ui/react";
+import { Box, Grid, Stack, Text, useColorModeValue } from "@chakra-ui/react";
 
 import Loader from "../shared/Loader";
 
+import PaginatedRooms from "./PaginatedRooms";
 import RoomHistoryCard from "./RoomHistoryCard";
 
 import { getAvailableDescriptors } from "~/lib/state/availableDescriptor/availableDescriptorSlice";
@@ -46,11 +39,15 @@ function History() {
     loadRooms();
   }, [loadRooms]);
 
-  const handleLoadMore = () => {
-    page.current = page.current + 1;
-    loadRooms();
+  const handlePageChange = (newPage: number) => {
+    page.current = newPage;
+    setTimeout(() => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }, 200);
+    setTimeout(() => {
+      loadRooms();
+    }, 500);
   };
-
   return (
     <Box bg={bg} color={textColor} px={8} py={4} borderRadius="lg">
       <Text as="p" margin={"0 auto"} textAlign={"center"}>
@@ -81,21 +78,11 @@ function History() {
             <RoomHistoryCard key={room.id} room={room} />
           ))}
         </Grid>
-        {roomsHistory &&
-          roomsHistory.pageSize! * roomsHistory?.currentPage! <=
-            roomsHistory?.data?.length! && (
-            <Flex justify="center" mt={8}>
-              <Button
-                onClick={handleLoadMore}
-                size="md"
-                colorScheme="teal"
-                isLoading={getRoomsHistoryLoading}
-              >
-                Load More
-              </Button>
-            </Flex>
-          )}
       </Box>
+      <PaginatedRooms
+        rooms={roomsHistory}
+        handlePageChange={handlePageChange}
+      />
     </Box>
   );
 }
