@@ -2,7 +2,8 @@
 
 import { BsEmojiHeartEyes } from "react-icons/bs";
 import { BsChatDots } from "react-icons/bs";
-import { CiUser } from "react-icons/ci";
+import { CiSettings, CiUser } from "react-icons/ci";
+import { MdHistory } from "react-icons/md";
 import { MdOutlineLiveTv } from "react-icons/md";
 import {
   Box,
@@ -71,6 +72,22 @@ const DrawerContent = () => {
           </NextLink>
         </ListItem>
         <ListItem>
+          <NextLink href="/rooms-history" passHref prefetch={true}>
+            <Link
+              _hover={{ textDecoration: "none", color: hoverColor }}
+              color={pathname === "/rooms-history" ? activeColor : linkColor}
+            >
+              <ListIcon
+                as={MdHistory}
+                color={
+                  pathname === "/rooms-history" ? activeIconColor : iconColor
+                }
+              />
+              History
+            </Link>
+          </NextLink>
+        </ListItem>
+        <ListItem>
           <NextLink href="/chat" passHref prefetch={true}>
             <Link
               _hover={{ textDecoration: "none", color: hoverColor }}
@@ -84,6 +101,7 @@ const DrawerContent = () => {
             </Link>
           </NextLink>
         </ListItem>
+        <hr />
         <ListItem>
           <NextLink href="/profile" passHref prefetch={true}>
             <Link
@@ -95,6 +113,20 @@ const DrawerContent = () => {
                 color={pathname === "/profile" ? activeIconColor : iconColor}
               />
               Profile
+            </Link>
+          </NextLink>
+        </ListItem>
+        <ListItem>
+          <NextLink href="/settings" passHref prefetch={true}>
+            <Link
+              _hover={{ textDecoration: "none", color: hoverColor }}
+              color={pathname === "/settings" ? activeColor : linkColor}
+            >
+              <ListIcon
+                as={CiSettings}
+                color={pathname === "/settings" ? activeIconColor : iconColor}
+              />
+              Settings
             </Link>
           </NextLink>
         </ListItem>

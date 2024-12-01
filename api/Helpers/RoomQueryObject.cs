@@ -18,4 +18,6 @@ namespace api.Helpers
     {
         public MyRoomStatus? Status { get; set; }
     }
+
+    public class RoomsHistoryQueryObject : RoomQueryBase { }
 }

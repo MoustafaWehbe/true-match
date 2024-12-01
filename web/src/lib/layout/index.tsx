@@ -41,7 +41,7 @@ const Layout = ({ children }: LayoutProps) => {
       <AuthLayout>{children}</AuthLayout>
     ) : window.location.pathname.slice(1).includes(ONBOARDING_ROUTE) ? (
       <OnboardingLayout>{children}</OnboardingLayout>
-    ) : /^\/rooms\/\d+$/.test(window.location.pathname) ? (
+    ) : /^\/rooms\/[0-9a-fA-F\-]{36}$/.test(window.location.pathname) ? (
       <RoomLayout>{children}</RoomLayout>
     ) : (
       <MainLayout>{children}</MainLayout>

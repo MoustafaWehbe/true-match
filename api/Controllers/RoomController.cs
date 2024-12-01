@@ -124,6 +124,40 @@ namespace api.Controllers
             return Ok(response);
         }
 
+        [HttpGet("history")]
+        [Authorize]
+        [ProducesResponseType(typeof(PagedResponse<RoomDto>), 200)]
+        public async Task<IActionResult> GetRoomsHistory([FromQuery] RoomsHistoryQueryObject query)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var user = await _userManager.FindByEmailAsync(User.GetEmail());
+
+            if (user == null)
+            {
+                return NotFound("User was not found.");
+            }
+
+            var rooms = await _roomRepo.GetRoomsHistoryAsync(user.Id);
+
+            var totalRooms = await _roomRepo.GetTotalRoomsHistorysAsync(user.Id);
+            var totalPages = _roomRepo.GetTotalPages(query.PageSize, totalRooms);
+
+            var roomDtos = rooms.Select(s => s.ToRoomDto(user.Id)).ToList();
+            var response = ResponseHelper.CreatePagedResponse(
+                totalRooms,
+                totalPages,
+                query.PageNumber,
+                query.PageSize,
+                roomDtos
+            );
+
+            return Ok(response);
+        }
+
         [HttpPost("start-room/{id:guid}")]
         [Authorize]
         [ProducesResponseType(typeof(ApiResponse<RoomDto>), 200)]

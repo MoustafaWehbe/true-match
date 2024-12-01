@@ -1,3 +1,4 @@
+using System.Reflection.Metadata.Ecma335;
 using System.Text.Json;
 using api.Data;
 using api.Dtos;
@@ -155,10 +156,9 @@ namespace api.Repository
 
         public async Task<int> GetTotalMyRoomsAsync(MyRoomQueryObject query, string userId)
         {
-            // Fetch the part that can be evaluated by the database (FinishedAt or neverStarted)
             var filteredQuery = _context
                 .Rooms.Where(r => r.UserId == userId)
-                .FindMyRoomByStatus(query.Status) // This handles part of the filtering, which might include AsEnumerable()
+                .FindMyRoomByStatus(query.Status)
                 .FindNotDeleted();
 
             var count = filteredQuery.Count();
@@ -213,6 +213,34 @@ namespace api.Repository
         public async Task<List<HiddenRoom>> RoomsIHid(string userId)
         {
             return await _context.HiddenRooms.Where(hr => hr.UserId == userId).ToListAsync();
+        }
+
+        public async Task<List<Room>> GetRoomsHistoryAsync(string userId)
+        {
+            return await _context
+                .Rooms.IncludeRoomDetails()
+                .Where(RoomExpressions.IsExpired)
+                .Where(room =>
+                    room.RoomParticipants.Any(participant =>
+                        participant.UserId == userId && participant.RoomParticipantEvents.Any()
+                    )
+                )
+                .ToListAsync();
+        }
+
+        public async Task<int> GetTotalRoomsHistorysAsync(string userId)
+        {
+            var filteredQuery = _context
+                .Rooms.Where(RoomExpressions.IsExpired)
+                .Where(room =>
+                    room.RoomParticipants.Any(participant =>
+                        participant.UserId == userId && participant.RoomParticipantEvents.Any()
+                    )
+                );
+
+            var count = filteredQuery.Count();
+
+            return await Task.FromResult(count);
         }
     }
 }

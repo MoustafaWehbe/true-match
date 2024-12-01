@@ -16,7 +16,9 @@ export interface RoomSate {
   createRoomLoading: boolean;
   getRoomsLoading: boolean;
   getMyRoomsLoading: boolean;
+  getRoomsHistoryLoading: boolean;
   rooms: openApiTypes.RoomDtoPagedResponse | null;
+  roomsHistory: openApiTypes.RoomDtoPagedResponse | null;
   myRooms: openApiTypes.RoomDtoPagedResponse | null;
   activeRoom: openApiTypes.RoomDto | null;
   activeRoomLoading: boolean;
@@ -70,6 +72,36 @@ export const getRooms = createAsyncThunk<
           "/api/room",
           {
             params: { PageNumber, PageSize, Status, SortBy },
+            headers: defaultHeaders,
+          }
+        );
+      return response.data ?? null;
+    } catch (error) {
+      let errorMessage = "Something went wrong!";
+      if (axios.isAxiosError(error) && error.response) {
+        errorMessage = error.response.data.message || errorMessage;
+      }
+      return rejectWithValue(errorMessage);
+    }
+  }
+);
+
+export const getRoomsHistory = createAsyncThunk<
+  openApiTypes.RoomDtoPagedResponse,
+  {
+    PageNumber: number;
+    PageSize: number;
+  },
+  { rejectValue: string }
+>(
+  "room/getRoomsHitory",
+  async ({ PageNumber, PageSize }, { rejectWithValue }) => {
+    try {
+      const response =
+        await axiosInstance.get<openApiTypes.RoomDtoPagedResponse>(
+          "/api/room/history",
+          {
+            params: { PageNumber, PageSize },
             headers: defaultHeaders,
           }
         );
@@ -306,11 +338,13 @@ const initialState: RoomSate = {
   createRoomLoading: false,
   getRoomsLoading: false,
   rooms: null,
+  roomsHistory: null,
   activeRoom: null,
   activeRoomLoading: false,
   updateRoomLoading: false,
   myRooms: null,
   getMyRoomsLoading: false,
+  getRoomsHistoryLoading: false,
   deletingRoom: false,
   isRegistering: false,
   isdeRegistering: false,
@@ -429,6 +463,22 @@ const roomSlice = createSlice({
       )
       .addCase(getMyRooms.rejected, (state) => {
         state.getMyRoomsLoading = false;
+      })
+      .addCase(getRoomsHistory.pending, (state) => {
+        state.getRoomsHistoryLoading = true;
+      })
+      .addCase(
+        getRoomsHistory.fulfilled,
+        (
+          state,
+          action: PayloadAction<openApiTypes.RoomDtoPagedResponse | null>
+        ) => {
+          state.getRoomsHistoryLoading = false;
+          state.roomsHistory = action.payload;
+        }
+      )
+      .addCase(getRoomsHistory.rejected, (state) => {
+        state.getRoomsHistoryLoading = false;
       })
       .addCase(getRoomById.pending, (state) => {
         state.activeRoomLoading = true;

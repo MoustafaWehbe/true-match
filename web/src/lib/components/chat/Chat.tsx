@@ -272,7 +272,7 @@ function Chat() {
           </>
         )}
 
-        {!activeMatchId && <Text>Select a match to chat with.</Text>}
+        {!activeMatchId && <Text>Select a match to chat with..</Text>}
       </VStack>
     </Container>
   );
