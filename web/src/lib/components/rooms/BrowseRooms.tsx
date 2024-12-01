@@ -178,6 +178,7 @@ function BrowseRooms() {
                   size={"md"}
                   colorScheme="pink"
                   rightIcon={<ChevronDownIcon />}
+                  variant={"ghost"}
                 >
                   Sort by: &nbsp;
                   <Text as="span" fontWeight={"bolder"}>
