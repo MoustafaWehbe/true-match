@@ -261,7 +261,9 @@ function BrowseRooms() {
           />
         ))}
       </Grid>
-      <PaginatedRooms rooms={rooms} handlePageChange={handlePageChange} />
+      {!!rooms?.data?.length && (
+        <PaginatedRooms rooms={rooms} handlePageChange={handlePageChange} />
+      )}
       <ConfirmDialog
         isOpen={isDialogOpen}
         onClose={closeDialog}

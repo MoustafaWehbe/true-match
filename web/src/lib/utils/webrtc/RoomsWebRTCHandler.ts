@@ -8,6 +8,7 @@ export class RoomsWebRTCHandler {
   private stream: MediaStream | null = null;
   private peers: PeerItem[] = [];
   private roomId: string;
+  private config: { roomOwner: boolean };
   private onPeersChanged: (peers: PeerItem[]) => void;
   private onRoundsStarted: (
     payload: socketEventTypes.RoundsStartedPayload
@@ -44,9 +45,11 @@ export class RoomsWebRTCHandler {
       onRoomStateReceived: (
         payload: socketEventTypes.SendRoomStatePayload
       ) => void;
-    }
+    },
+    config: { roomOwner: boolean }
   ) {
     this.roomId = roomId;
+    this.config = config;
 
     this.onPeersChanged = callbacks.onPeersChanged;
     this.onRoundsStarted = callbacks.onRoundsStarted;
@@ -64,11 +67,16 @@ export class RoomsWebRTCHandler {
     this.handleICECandidate = this.handleICECandidate.bind(this);
   }
 
-  async init(localVideoRef: React.RefObject<HTMLVideoElement>) {
+  async init(
+    localVideoRef: React.RefObject<HTMLVideoElement>,
+    localAudioRef: React.RefObject<HTMLAudioElement>
+  ) {
     socket.connect();
-    this.stream = await this.fetchUserMedia();
-    if (localVideoRef.current) {
+    this.stream = await this.fetchUserMedia(true, this.config.roomOwner);
+    if (localVideoRef.current && this.config.roomOwner) {
       localVideoRef.current.srcObject = this.stream;
+    } else if (localAudioRef.current && !this.config.roomOwner) {
+      localAudioRef.current.srcObject = this.stream;
     }
     this.registerSocketEvents();
     socket.emit(SOCKET_EVENTS.CLIENT.JOIN_ROOM_EVENT, {
@@ -115,16 +123,19 @@ export class RoomsWebRTCHandler {
     this.onPeersChanged(this.peers);
   }
 
-  private async fetchUserMedia(): Promise<MediaStream> {
+  private async fetchUserMedia(
+    audio: boolean,
+    video: boolean
+  ): Promise<MediaStream> {
     return navigator.mediaDevices.getUserMedia({
-      video: true,
-      audio: true,
+      video,
+      audio,
     });
   }
 
   private createPeerConnection(userToSignal: string): RTCPeerConnection {
     const peer = new RTCPeerConnection({
-      iceServers: [{ urls: "stun:stun.stunprotocol.org" }],
+      iceServers: [{ urls: "stun:stun.l.google.com:19302" }],
     });
 
     peer.onicecandidate = (event) => {
@@ -137,9 +148,15 @@ export class RoomsWebRTCHandler {
       }
     };
 
-    this.stream
-      ?.getTracks()
-      .forEach((track) => peer.addTrack(track, this.stream!));
+    if (this.config.roomOwner) {
+      this.stream
+        ?.getTracks()
+        .forEach((track) => peer.addTrack(track, this.stream!));
+    } else {
+      this.stream
+        ?.getAudioTracks()
+        .forEach((track) => peer.addTrack(track, this.stream!));
+    }
 
     return peer;
   }
@@ -202,8 +219,8 @@ export class RoomsWebRTCHandler {
     if (item) {
       const candidate = new RTCIceCandidate(payload.candidate);
       item.peer.addIceCandidate(candidate);
+      this.updatePeers();
     }
-    // TODO: do we need to update peers here???
   }
 
   private registerSocketEvents() {

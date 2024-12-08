@@ -16,7 +16,7 @@ import AnimatedHeart from "../../shared/AnimatedHeart";
 import PeerVideo from "../PeerVideo";
 import { PeerItem } from "../Room";
 
-import MyVideo from "./MyVideo";
+import MyAudio from "./MyAudio";
 import RoomControls from "./RoomControls";
 import RoundPlayground from "./RoundPlayground";
 import Timer from "./Timer";
@@ -25,16 +25,16 @@ import { size } from "~/lib/consts";
 import useRound from "~/lib/hooks/useRound";
 import { RootState } from "~/lib/state/store";
 import { calculateAge } from "~/lib/utils/date/date";
+import isTruthy from "~/lib/utils/truthy";
 
 interface WatcherDisplayProps {
   peers: PeerItem[];
-  localVideoRef: React.RefObject<HTMLVideoElement>;
+  localAudioRef: React.RefObject<HTMLAudioElement>;
 }
 
-const WatcherDisplay = ({ peers, localVideoRef }: WatcherDisplayProps) => {
+const WatcherDisplay = ({ peers, localAudioRef }: WatcherDisplayProps) => {
   const cardTextColor = useColorModeValue("gray.800", "whiteAlpha.900");
   const [isMicOn, setIsMicOn] = useState(true);
-  const [isVideoOn, setIsVideoOn] = useState(true);
   const { activeRoom } = useSelector((state: RootState) => state.room);
   const { user } = useSelector((state: RootState) => state.user);
 
@@ -57,24 +57,14 @@ const WatcherDisplay = ({ peers, localVideoRef }: WatcherDisplayProps) => {
   const progressCircleSize = isLaptopOrDesktop ? 140 : 70;
 
   const onToggleMic = useCallback(() => {
-    if (localVideoRef.current) {
-      const stream = localVideoRef.current.srcObject as MediaStream | null;
+    if (localAudioRef.current) {
+      const stream = localAudioRef.current.srcObject as MediaStream | null;
       stream?.getAudioTracks().forEach((track) => {
         track.enabled = !track.enabled;
       });
       setIsMicOn((prev) => !prev);
     }
-  }, [localVideoRef]);
-
-  const onToggleVideo = useCallback(() => {
-    if (localVideoRef.current) {
-      const stream = localVideoRef.current.srcObject as MediaStream | null;
-      stream?.getVideoTracks().forEach((track) => {
-        track.enabled = !track.enabled;
-      });
-      setIsVideoOn((prev) => !prev);
-    }
-  }, [localVideoRef]);
+  }, [localAudioRef]);
 
   const thePresenter = useMemo(() => {
     return peers.find((peer) => peer.user.id === activeRoom?.user?.id);
@@ -160,7 +150,7 @@ const WatcherDisplay = ({ peers, localVideoRef }: WatcherDisplayProps) => {
             position="relative"
             width="200px"
           >
-            <MyVideo localVideoRef={localVideoRef} />
+            <MyAudio localAudioRef={localAudioRef} />
           </Flex>
         </GridItem>
 
@@ -171,7 +161,7 @@ const WatcherDisplay = ({ peers, localVideoRef }: WatcherDisplayProps) => {
             </Text>
           ) : (
             <Text fontSize="md" opacity={"80%"}>
-              You are the only one attending this room so far. Enjoy!;
+              It’s just you here, enjoy!
             </Text>
           )}
         </GridItem>
@@ -191,7 +181,7 @@ const WatcherDisplay = ({ peers, localVideoRef }: WatcherDisplayProps) => {
             // justify={"center"}
             gap={8}
           >
-            {activeRoom?.roomState?.currentRound !== undefined && (
+            {isTruthy(activeRoom?.roomState?.currentRound) && (
               <Flex
                 height={"100%"}
                 direction={"column"}
@@ -228,7 +218,7 @@ const WatcherDisplay = ({ peers, localVideoRef }: WatcherDisplayProps) => {
                 </Box>
               </Flex>
             )}
-            {activeRoom?.roomState?.currentRound === undefined ? (
+            {!isTruthy(activeRoom?.roomState?.currentRound) ? (
               <Flex
                 direction="column"
                 align="center"
@@ -253,10 +243,10 @@ const WatcherDisplay = ({ peers, localVideoRef }: WatcherDisplayProps) => {
         pauseRound={pauseCurrentRound}
         resumeRound={resumeCurrentRound}
         skipRound={skipCurrentRound}
-        onToggleVideo={onToggleVideo}
+        onToggleVideo={() => {}}
         onToggleMic={onToggleMic}
         isMicOn={isMicOn}
-        isVideoOn={isVideoOn}
+        isVideoOn={false}
         isRoomOwner={activeRoom?.user?.id === user?.id}
       />
       <Button

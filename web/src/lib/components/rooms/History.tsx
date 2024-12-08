@@ -79,10 +79,12 @@ function History() {
           ))}
         </Grid>
       </Box>
-      <PaginatedRooms
-        rooms={roomsHistory}
-        handlePageChange={handlePageChange}
-      />
+      {!!roomsHistory?.data?.length && (
+        <PaginatedRooms
+          rooms={roomsHistory}
+          handlePageChange={handlePageChange}
+        />
+      )}
     </Box>
   );
 }

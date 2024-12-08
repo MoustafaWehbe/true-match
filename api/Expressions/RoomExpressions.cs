@@ -7,9 +7,17 @@ namespace api.Expressions
     {
         public static Expression<Func<Room, bool>> IsExpired =>
             r =>
-                r.StartedAt.HasValue
-                && r.StartedAt.Value.AddMinutes(RoomConstants.TotalRoundsDuration + 1)
-                    <= DateTime.UtcNow;
+                (
+                    r.StartedAt.HasValue
+                    && r.StartedAt.Value.AddMinutes(RoomConstants.TotalRoundsDuration + 1)
+                        <= DateTime.UtcNow
+                )
+                || (
+                    !r.StartedAt.HasValue
+                    && r.ScheduledAt.HasValue
+                    && DateTime.UtcNow
+                        > r.ScheduledAt.Value.AddMinutes(RoomConstants.TheRoomIsValidFor)
+                );
 
         public static Expression<Func<Room, bool>> IsInProgress =>
             r =>
@@ -28,6 +36,12 @@ namespace api.Expressions
                     r.StartedAt.HasValue
                     && r.StartedAt.Value.AddMinutes(RoomConstants.TotalRoundsDuration + 1)
                         <= DateTime.UtcNow
+                )
+                || (
+                    !r.StartedAt.HasValue
+                    && r.ScheduledAt.HasValue
+                    && DateTime.UtcNow
+                        > r.ScheduledAt.Value.AddMinutes(RoomConstants.TheRoomIsValidFor)
                 );
     }
 }

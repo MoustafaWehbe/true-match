@@ -38,9 +38,7 @@ namespace api.Extensions
             switch (roomStatus)
             {
                 case MyRoomStatus.Coming:
-                    return query
-                        .Where(r => !r.StartedAt.HasValue)
-                        .Where(RoomExpressions.IsExpired.Not());
+                    return query.Where(RoomExpressions.IsExpired.Not());
                 case MyRoomStatus.Archived:
                     return query.Where(RoomExpressions.IsArchived);
                 default:

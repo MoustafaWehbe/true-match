@@ -25,6 +25,7 @@ export interface PeerItem {
 
 const Room = ({ roomId }: { roomId: string }) => {
   const localVideoRef = useRef<HTMLVideoElement>(null);
+  const localAudioRef = useRef<HTMLAudioElement>(null);
   const webRTCHandler = useRef<RoomsWebRTCHandler | null>(null);
   const [peers, setPeers] = useState<PeerItem[]>([]);
 
@@ -32,6 +33,7 @@ const Room = ({ roomId }: { roomId: string }) => {
   const { user } = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch<AppDispatch>();
   const toast = useToast();
+  const isRoomOwner = user && user.id === activeRoom?.user?.id;
 
   useEffect(() => {
     dispatch(getRoomById(roomId));
@@ -123,18 +125,29 @@ const Room = ({ roomId }: { roomId: string }) => {
   );
 
   useEffect(() => {
-    webRTCHandler.current = new RoomsWebRTCHandler(roomId, {
-      onRoundPaused,
-      onRoundResumed,
-      onRoundSkiped,
-      onRoundsEnded,
-      onRoundsStarted,
-      onGoToNextQuestion,
-      onTimerUpdated,
-      onPeersChanged: setPeers,
-      onRoomStateReceived,
-    });
-    webRTCHandler.current.init(localVideoRef);
+    if (user && activeRoom?.user) {
+      webRTCHandler.current = new RoomsWebRTCHandler(
+        roomId,
+        {
+          onRoundPaused,
+          onRoundResumed,
+          onRoundSkiped,
+          onRoundsEnded,
+          onRoundsStarted,
+          onGoToNextQuestion,
+          onTimerUpdated,
+          onPeersChanged: setPeers,
+          onRoomStateReceived,
+        },
+        { roomOwner: !!isRoomOwner }
+      );
+
+      try {
+        webRTCHandler.current.init(localVideoRef, localAudioRef);
+      } catch (e) {
+        console.log("Error occured initializing the webrtc handler", e);
+      }
+    }
 
     return () => {
       webRTCHandler.current?.closeConnections();
@@ -148,6 +161,9 @@ const Room = ({ roomId }: { roomId: string }) => {
     onTimerUpdated,
     onGoToNextQuestion,
     roomId,
+    isRoomOwner,
+    user,
+    activeRoom?.user,
   ]);
 
   return (
@@ -155,7 +171,7 @@ const Room = ({ roomId }: { roomId: string }) => {
       {activeRoom?.user?.id === user?.id ? (
         <PresenterDisplay peers={peers} localVideoRef={localVideoRef} />
       ) : (
-        <WatcherDisplay peers={peers} localVideoRef={localVideoRef} />
+        <WatcherDisplay peers={peers} localAudioRef={localAudioRef} />
       )}
     </Box>
   );

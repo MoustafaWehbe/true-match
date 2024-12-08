@@ -18,5 +18,8 @@ namespace api.Dtos
         public UserSimplifiedDto? User { get; set; }
         public int ParticipantCount { get; set; }
         public bool IsParticipanting { get; set; }
+        public bool IsInProgress { get; set; }
+        public bool IsArchived { get; set; }
+        public bool IsExpired { get; set; }
     }
 }

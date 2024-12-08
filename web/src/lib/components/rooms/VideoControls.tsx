@@ -11,11 +11,13 @@ interface VideoControlsProps {
   onToggleVideo: () => void;
   isMicOn: boolean;
   isVideoOn: boolean;
+  isRoomOwner: boolean;
 }
 
 const VideoControls = ({
   isMicOn,
   isVideoOn,
+  isRoomOwner,
   onToggleMic,
   onToggleVideo,
 }: VideoControlsProps) => {
@@ -33,18 +35,20 @@ const VideoControls = ({
         _hover={{ bg: "blackAlpha.400" }}
         aria-label="toggle mic"
       />
-      <IconButton
-        onClick={onToggleVideo}
-        icon={isVideoOn ? <FaVideo /> : <FaVideoSlash />}
-        variant="ghost"
-        width={"48px"}
-        size={"md"}
-        height={"48px"}
-        bg="blackAlpha.600"
-        color="white"
-        _hover={{ bg: "blackAlpha.400" }}
-        aria-label="toggle video"
-      />
+      {isRoomOwner && (
+        <IconButton
+          onClick={onToggleVideo}
+          icon={isVideoOn ? <FaVideo /> : <FaVideoSlash />}
+          variant="ghost"
+          width={"48px"}
+          size={"md"}
+          height={"48px"}
+          bg="blackAlpha.600"
+          color="white"
+          _hover={{ bg: "blackAlpha.400" }}
+          aria-label="toggle video"
+        />
+      )}
     </Stack>
   );
 };

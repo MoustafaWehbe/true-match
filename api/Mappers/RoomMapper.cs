@@ -23,6 +23,9 @@ namespace api.Mappers
                 Offers = roomModel.Offers,
                 RoomState = roomModel.RoomState,
                 QuestionsCategories = roomModel.QuestionsCategories,
+                IsExpired = roomModel.IsExpired,
+                IsArchived = roomModel.IsArchived(),
+                IsInProgress = roomModel.IsInProgress(),
             };
         }
 

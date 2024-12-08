@@ -15,7 +15,7 @@ import {
 } from "@chakra-ui/react";
 
 import AnimatedHeart from "../../shared/AnimatedHeart";
-import PeerVideo from "../PeerVideo";
+import PeerAudio from "../PeerAudio";
 import { PeerItem } from "../Room";
 
 import MyVideo from "./MyVideo";
@@ -28,6 +28,7 @@ import { size } from "~/lib/consts";
 import useRound from "~/lib/hooks/useRound";
 import { RootState } from "~/lib/state/store";
 import { calculateAge } from "~/lib/utils/date/date";
+import isTruthy from "~/lib/utils/truthy";
 
 interface PresenterDisplayProps {
   peers: PeerItem[];
@@ -206,7 +207,7 @@ const PresenterDisplay = ({ peers, localVideoRef }: PresenterDisplayProps) => {
                       {/* <Box>My name is</Box>
                       <Box>My age is</Box> */}
                     </Flex>
-                    <PeerVideo key={index} peer={peer.peer} />
+                    <PeerAudio key={index} peer={peer.peer} />
                     {/* <video
                       key={index}
                       autoPlay
@@ -261,7 +262,7 @@ const PresenterDisplay = ({ peers, localVideoRef }: PresenterDisplayProps) => {
           objectFit="cover"
           rounded={"50%"}
         /> */}
-        {activeRoom?.roomState?.currentRound !== undefined && (
+        {isTruthy(activeRoom?.roomState?.currentRound) && (
           <Flex
             height={"100%"}
             direction={"column"}
@@ -295,7 +296,7 @@ const PresenterDisplay = ({ peers, localVideoRef }: PresenterDisplayProps) => {
             </Box>
           </Flex>
         )}
-        {activeRoom?.roomState?.currentRound === undefined ? (
+        {!isTruthy(activeRoom?.roomState?.currentRound) ? (
           <StartRound
             startRounds={startRounds}
             // isDisabled={peers.length === 0}

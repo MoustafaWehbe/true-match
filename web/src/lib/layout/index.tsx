@@ -2,6 +2,7 @@
 
 import { type ReactNode, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
+import { usePathname } from "next/navigation";
 
 import { AUTH_ROUTES, ONBOARDING_ROUTE } from "../consts";
 import useProfileGuard from "../hooks/useProfileGuard";
@@ -20,6 +21,7 @@ export type LayoutProps = {
 const Layout = ({ children }: LayoutProps) => {
   const [isMounted, setIsMounted] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
+  const pathname = usePathname();
 
   useProfileGuard();
 
@@ -37,11 +39,11 @@ const Layout = ({ children }: LayoutProps) => {
   }
 
   if (typeof window !== "undefined") {
-    return AUTH_ROUTES.includes(window.location.pathname.slice(1)) ? (
+    return AUTH_ROUTES.includes(pathname.slice(1)) ? (
       <AuthLayout>{children}</AuthLayout>
-    ) : window.location.pathname.slice(1).includes(ONBOARDING_ROUTE) ? (
+    ) : pathname.slice(1).includes(ONBOARDING_ROUTE) ? (
       <OnboardingLayout>{children}</OnboardingLayout>
-    ) : /^\/rooms\/[0-9a-fA-F\-]{36}$/.test(window.location.pathname) ? (
+    ) : /^\/rooms\/[0-9a-fA-F\-]{36}$/.test(pathname) ? (
       <RoomLayout>{children}</RoomLayout>
     ) : (
       <MainLayout>{children}</MainLayout>

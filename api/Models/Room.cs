@@ -43,26 +43,18 @@ namespace api.Models
                     && DateTime.UtcNow >= ScheduledAt.Value.AddMinutes(-1)
                 : false;
 
-        // TODO: 1 should be the total time used by the user to pause the room
-        // A maximum of 3 pauses, each lasting 15 seconds, is permitted per room.
-        // [NotMapped]
-        // public DateTime? expiresAt =>
-        //     StartedAt.HasValue
-        //         ? StartedAt.Value.AddMinutes(RoomConstants.TotalRoundsDuration + 1)
-        //         : null;
-
         [NotMapped]
         public bool IsExpired =>
-            StartedAt.HasValue
-            && StartedAt.Value.AddMinutes(RoomConstants.TotalRoundsDuration + 1) <= DateTime.UtcNow;
-
-        // // We know that the room never started if the rounds itself has not started and we passed the grace period
-        // [NotMapped]
-        // public bool neverStarted =>
-        //     RoomState != null
-        //     && !RoomState.RoundStartTime.HasValue
-        //     && ScheduledAt.HasValue
-        //     && DateTime.UtcNow > ScheduledAt.Value.AddMinutes(RoomConstants.TheRoomIsValidFor);
+            (
+                StartedAt.HasValue
+                && StartedAt.Value.AddMinutes(RoomConstants.TotalRoundsDuration + 1)
+                    <= DateTime.UtcNow
+            )
+            || (
+                !StartedAt.HasValue
+                && ScheduledAt.HasValue
+                && DateTime.UtcNow > ScheduledAt.Value.AddMinutes(RoomConstants.TheRoomIsValidFor)
+            );
 
         [NotMapped]
         public RoomState? RoomState =>
@@ -70,48 +62,14 @@ namespace api.Models
                 ? JsonSerializer.Deserialize<RoomState>(RoomStateJson.RootElement.GetRawText())
                 : null;
 
-        // public bool isExpired()
-        // {
-        //     return expiresAt != null && DateTime.UtcNow > expiresAt.Value;
-        // }
-
         public bool IsArchived()
         {
             return FinishedAt < DateTime.UtcNow || IsExpired;
-            // ||
-            // // room started but everyone left
-            // (
-            //     RoomParticipants.Count != 0
-            //     && !RoomParticipants
-            //         .Where(rp => rp.UserId == userId && rp.RoomId == Id)
-            //         .Any(rp => rp.RoomParticipantEvents.Any(rpe => !rpe.Left))
-            // );
         }
 
         public bool IsInProgress()
         {
             return !IsExpired && !FinishedAt.HasValue && StartedAt.HasValue;
-            // return StartedAt != null
-            //     && FinishedAt == null
-            //     && RoomParticipants
-            //         .Where(rp => rp.UserId == userId && rp.RoomId == Id)
-            //         .Any(rp => rp.RoomParticipantEvents.Any(rpe => !rpe.Left));
         }
-
-        // [NotMapped]
-        // public DateTime? EndTime
-        // {
-        //     get
-        //     {
-        //         if (RoomStateDeserialized == null || !RoomStateDeserialized.RoundStartTime.HasValue)
-        //         {
-        //             return null;
-        //         }
-        //         else
-        //         {
-        //             return RoomStateDeserialized.RoundStartTime.Value.AddMinutes(RoomConstants.TotalRoundsDuration);
-        //         }
-        //     }
-        // }
     }
 }

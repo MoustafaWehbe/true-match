@@ -71,6 +71,7 @@ const RoomControls = ({
           onToggleVideo={onToggleVideo}
           isMicOn={isMicOn}
           isVideoOn={isVideoOn}
+          isRoomOwner={isRoomOwner}
         />
       </Box>
       {isRoomOwner && (

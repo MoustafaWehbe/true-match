@@ -238,7 +238,9 @@ function MyRooms() {
           />
         ))}
       </Grid>
-      <PaginatedRooms rooms={myRooms} handlePageChange={handlePageChange} />
+      {!!myRooms?.data?.length && (
+        <PaginatedRooms rooms={myRooms} handlePageChange={handlePageChange} />
+      )}
 
       <RoomModal
         isOpen={isRoomModalOpen}

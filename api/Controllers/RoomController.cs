@@ -294,6 +294,15 @@ namespace api.Controllers
             var existingRoom = await _roomRepo.GetByIdAsync(id);
             var user = await _userManager.FindByEmailAsync(User.GetEmail());
 
+            bool isScheduledAtChanged =
+                existingRoom?.ScheduledAt != updateRoomDto.ScheduledAt
+                && updateRoomDto.ScheduledAt != null;
+            bool isTitleChanged =
+                existingRoom?.Title != updateRoomDto.Title && updateRoomDto.Title != null;
+            bool isDescriptionChanged =
+                existingRoom?.Description != updateRoomDto.Description
+                && updateRoomDto.Description != null;
+
             if (user == null)
             {
                 return NotFound("User was not found.");
@@ -307,6 +316,19 @@ namespace api.Controllers
             if (user.Id != existingRoom.UserId)
             {
                 return Unauthorized("Action not allowed");
+            }
+
+            if (existingRoom.IsExpired)
+            {
+                return BadRequest("Cannot edit. Room is expired");
+            }
+
+            if (
+                existingRoom.IsInProgress()
+                && (isDescriptionChanged || isScheduledAtChanged || isTitleChanged)
+            )
+            {
+                return BadRequest("Cannot edit. Room is in progress");
             }
 
             if (

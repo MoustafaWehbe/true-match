@@ -57,8 +57,6 @@ interface RoomCardProps {
 
 const RoomCard = ({
   room,
-  isArchived: _isArchived,
-  isInProgress,
   isComingUp,
   handleOnInterested,
   handleOnBlock,
@@ -102,6 +100,87 @@ const RoomCard = ({
     setIsPreviewProfileModalOpen(false);
   };
 
+  const renderButtons = () => {
+    if (isOwner && !room.isArchived) {
+      return (
+        <Stack direction="row" spacing={4} mt={4}>
+          <Button
+            colorScheme="blue"
+            variant="outline"
+            flex={1}
+            onClick={() => onEditClicked && onEditClicked(room)}
+          >
+            Edit
+          </Button>
+          <DeleteRoomButton roomId={room.id!} />
+        </Stack>
+      );
+    } else if (room.isInProgress && !isOwner && !room.isArchived) {
+      return (
+        <Button
+          colorScheme="green"
+          variant="outline"
+          mt={4}
+          onClick={() => router.push(`rooms/${room.id}`)}
+        >
+          Join Room
+        </Button>
+      );
+    } else if (!room.isInProgress && !isOwner && !room.isArchived) {
+      return (
+        <Stack
+          direction="row"
+          mt={4}
+          alignItems={"center"}
+          justifyContent={"space-between"}
+        >
+          <Button
+            onClick={() => handleOnHideRoom && handleOnHideRoom(room.id!)}
+            colorScheme="red"
+            color="red.300"
+            leftIcon={<IoCloseOutline />}
+            variant="outline"
+            aria-label="Hide room"
+            size={"sm"}
+            isLoading={ishidingRoom && actionPerformedOnRoomId === room.id}
+          >
+            Hide room
+          </Button>
+          {room.isParticipanting ? (
+            <Button
+              onClick={() =>
+                handleOnNotInterestedAnymore &&
+                handleOnNotInterestedAnymore(room.id!)
+              }
+              colorScheme="pink"
+              color="pink.400"
+              leftIcon={<LuHeartOff />}
+              variant="outline"
+              aria-label="Opt Out"
+              size={"sm"}
+              isLoading={isdeRegistering && actionPerformedOnRoomId === room.id}
+            >
+              Opt Out
+            </Button>
+          ) : (
+            <Button
+              onClick={() => handleOnInterested && handleOnInterested(room.id!)}
+              colorScheme="pink"
+              color="pink.400"
+              leftIcon={<FaHeart />}
+              variant="outline"
+              aria-label="I'm Interested"
+              size={"sm"}
+              isLoading={isRegistering && actionPerformedOnRoomId === room.id}
+            >
+              I'm Interested
+            </Button>
+          )}
+        </Stack>
+      );
+    }
+  };
+
   const moreOptionsBgColor = useColorModeValue("whiteAlpha.900", "gray.700");
   const moreOptionsTextColor = useColorModeValue("gray.800", "whiteAlpha.900");
   const moreOptionsHoverColor = useColorModeValue("pink.500", "pink.300");
@@ -114,7 +193,7 @@ const RoomCard = ({
       borderRadius="lg"
       boxShadow="lg"
       overflow="hidden"
-      height={600}
+      maxHeight={600}
       transition="transform 0.2s"
       _hover={{ transform: "scale(1.05)", cursor: "pointer", opacity: 0.9 }}
       position={"relative"}
@@ -201,7 +280,7 @@ const RoomCard = ({
         </Text>
       </Flex>
       <Box
-        minHeight={"30%"}
+        minHeight={"200px"}
         bgImage={"url(/images/default-user-image-female.jpg)"}
         bgSize="cover"
         bgPosition="center"
@@ -289,84 +368,7 @@ const RoomCard = ({
               <Text fontSize={"medium"}>{room.participantCount}</Text>
             </Stack>
           </Box>
-          {isOwner ? (
-            <Stack direction="row" spacing={4} mt={4}>
-              <Button
-                colorScheme="blue"
-                variant="outline"
-                flex={1}
-                onClick={() => onEditClicked && onEditClicked(room)}
-              >
-                Edit
-              </Button>
-              <DeleteRoomButton roomId={room.id!} />
-            </Stack>
-          ) : isInProgress ? (
-            <Button
-              colorScheme="green"
-              variant="outline"
-              mt={4}
-              onClick={() => router.push(`rooms/${room.id}`)}
-            >
-              Join Room
-            </Button>
-          ) : (
-            <Stack
-              direction="row"
-              mt={4}
-              alignItems={"center"}
-              justifyContent={"space-between"}
-            >
-              <Button
-                onClick={() => handleOnHideRoom && handleOnHideRoom(room.id!)}
-                colorScheme="red"
-                color="red.300"
-                leftIcon={<IoCloseOutline />}
-                variant="outline"
-                aria-label="Hide room"
-                size={"sm"}
-                isLoading={ishidingRoom && actionPerformedOnRoomId === room.id}
-              >
-                Hide room
-              </Button>
-              {room.isParticipanting ? (
-                <Button
-                  onClick={() =>
-                    handleOnNotInterestedAnymore &&
-                    handleOnNotInterestedAnymore(room.id!)
-                  }
-                  colorScheme="pink"
-                  color="pink.400"
-                  leftIcon={<LuHeartOff />}
-                  variant="outline"
-                  aria-label="Opt Out"
-                  size={"sm"}
-                  isLoading={
-                    isdeRegistering && actionPerformedOnRoomId === room.id
-                  }
-                >
-                  Opt Out
-                </Button>
-              ) : (
-                <Button
-                  onClick={() =>
-                    handleOnInterested && handleOnInterested(room.id!)
-                  }
-                  colorScheme="pink"
-                  color="pink.400"
-                  leftIcon={<FaHeart />}
-                  variant="outline"
-                  aria-label="I'm Interested"
-                  size={"sm"}
-                  isLoading={
-                    isRegistering && actionPerformedOnRoomId === room.id
-                  }
-                >
-                  I'm Interested
-                </Button>
-              )}
-            </Stack>
-          )}
+          {renderButtons()}
         </Stack>
       </Box>
       {isOwner && isComingUp && (
@@ -380,9 +382,19 @@ const RoomCard = ({
             right: "10px",
           }}
         >
-          <GradientButton size="md" boxShadow="xl" onClick={onStart}>
-            Start Room
-          </GradientButton>
+          {room.isInProgress ? (
+            <GradientButton
+              size="md"
+              boxShadow="xl"
+              onClick={() => router.push(`rooms/${room.id}`)}
+            >
+              Join Room
+            </GradientButton>
+          ) : (
+            <GradientButton size="md" boxShadow="xl" onClick={onStart}>
+              Start Room
+            </GradientButton>
+          )}
         </motion.div>
       )}
       {isPreviewProfileModalOpen && (
