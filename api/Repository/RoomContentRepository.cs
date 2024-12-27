@@ -16,7 +16,7 @@ namespace api.Repository
 
         public async Task<List<RoomContent>> GetAllAsync()
         {
-            return await _context.RoomContent.ToListAsync();
+            return await _context.RoomContent.OrderBy(rc => rc.Order).ToListAsync();
         }
     }
 }

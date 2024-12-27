@@ -71,7 +71,6 @@ const RoomHistoryCard = ({ room }: RoomHistoryCardProps) => {
       display={"flex"}
       flexDirection={"column"}
       gap={0}
-      overflowY={"auto"}
     >
       <Flex
         direction={"column"}
@@ -172,7 +171,7 @@ const RoomHistoryCard = ({ room }: RoomHistoryCardProps) => {
               position="relative"
             >
               <Text
-                fontSize="medium"
+                fontSize={{ base: "small", md: "medium" }}
                 sx={{
                   textOverflow: isDescriptionExpanded ? "unset" : "ellipsis",
                   overflow: isDescriptionExpanded ? "unset" : "hidden",
@@ -205,7 +204,7 @@ const RoomHistoryCard = ({ room }: RoomHistoryCardProps) => {
             </Text>
             <Stack direction="row" align="center">
               <CalendarIcon fontSize={"x-small"} />
-              <Text fontSize={"medium"}>
+              <Text fontSize={{ base: "small", md: "medium" }}>
                 {format(new Date(room.scheduledAt!), "MMMM do, yyyy h:mm a")}
               </Text>
             </Stack>

@@ -225,6 +225,7 @@ namespace api.Repository
                         participant.UserId == userId && participant.RoomParticipantEvents.Any()
                     )
                 )
+                .OrderByDescending(r => r.ScheduledAt)
                 .ToListAsync();
         }
 

@@ -1,6 +1,14 @@
 import { useEffect, useRef } from "react";
+import { Box, Flex } from "@chakra-ui/react";
 
-const PeerVideo: React.FC<{ peer?: RTCPeerConnection }> = ({ peer }) => {
+import { UserDto } from "@dapp/shared/src/types/openApiGen";
+
+import { calculateAge } from "~/lib/utils/date/date";
+
+const PeerVideo: React.FC<{ peer?: RTCPeerConnection; user?: UserDto }> = ({
+  peer,
+  user,
+}) => {
   const ref = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
@@ -13,15 +21,36 @@ const PeerVideo: React.FC<{ peer?: RTCPeerConnection }> = ({ peer }) => {
     }
   }, [peer]);
 
+  if (!user) {
+    return null;
+  }
+
   return (
-    <video
-      ref={ref}
-      autoPlay
-      playsInline
-      width="100%"
-      height="auto"
-      style={{ borderRadius: "10px", marginTop: "10px" }}
-    />
+    <Flex
+      direction={"column"}
+      gap={4}
+      fontSize={{ base: "s", md: "s" }}
+      fontWeight={"bold"}
+      color={"white"}
+    >
+      <Box
+        textTransform={"uppercase"}
+        position={"absolute"}
+        left={"10px"}
+        bottom={"10px"}
+      >
+        {user.firstName},{" "}
+        {calculateAge(new Date(user?.userProfile?.birthDate!))}
+      </Box>
+      <video
+        ref={ref}
+        autoPlay
+        playsInline
+        width="100%"
+        height="auto"
+        style={{ borderRadius: "10px", marginTop: "10px" }}
+      />
+    </Flex>
   );
 };
 

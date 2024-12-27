@@ -1,23 +1,24 @@
-import { Box, Flex } from "@chakra-ui/react";
+import { useSelector } from "react-redux";
+
+import UserCard from "./UserCard";
+
+import { RootState } from "~/lib/state/store";
+import { colorPalette } from "~/lib/utils/colors/colors";
 
 interface MyAudioProps {
   localAudioRef: React.RefObject<HTMLAudioElement>;
 }
 
 const MyAudio = ({ localAudioRef }: MyAudioProps) => {
+  const { user } = useSelector((state: RootState) => state.user);
+
+  if (!user) {
+    return null;
+  }
+
   return (
     <>
-      <Flex
-        position={"absolute"}
-        bottom={8}
-        left={8}
-        direction={"column"}
-        gap={2}
-        fontSize={{ base: "s", md: "lg", lg: "xl" }}
-        fontWeight={"bold"}
-      >
-        <Box color={"white"}>You</Box>
-      </Flex>
+      <UserCard color={colorPalette[0]} user={user} isMe />
       <audio
         muted
         ref={localAudioRef}

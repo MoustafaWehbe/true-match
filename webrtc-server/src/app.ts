@@ -10,7 +10,7 @@ import SocketHandler from "./socketHandler";
 
 class App {
   public server: Application;
-  public expressServer!: HTTPSServer;
+  public expressServer!: HTTPSServer | any;
   public io!: SocketIOServer;
 
   constructor() {
@@ -39,7 +39,8 @@ class App {
           "https://localhost",
           "http://localhost:3000",
           "https://admin.socket.io",
-          "https://192.168.43.149", //if using a phone or another computer
+          "https://192.168.43.7", // Laptop WebSocket server
+          "http://192.168.43.7:3000", // Laptop React App
         ],
         credentials: true,
         methods: ["GET", "POST"],
@@ -52,7 +53,7 @@ class App {
 
   public start(): void {
     const PORT = process.env.PORT || 8181;
-    this.expressServer.listen(PORT, () => {
+    this.expressServer.listen(PORT, "0.0.0.0", () => {
       console.log(`Server is running on port ${PORT}`);
     });
   }

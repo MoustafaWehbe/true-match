@@ -20,6 +20,7 @@ import {
   Tabs,
   Text,
   useColorModeValue,
+  useToast,
   VStack,
 } from "@chakra-ui/react";
 
@@ -28,6 +29,7 @@ import { AllRoomStatus, RoomsSortBy } from "@dapp/shared/src/types/openApiGen";
 import { Option } from "../shared/buttons/CustomMenuButton";
 import ConfirmDialog from "../shared/ConfirmDialog";
 import Loader from "../shared/Loader";
+import NoDataText from "../shared/NoDataText";
 
 import PaginatedRooms from "./PaginatedRooms";
 import RoomCard from "./RoomCard";
@@ -71,6 +73,7 @@ function BrowseRooms() {
   );
   const page = useRef(1);
   const [roomIdToBlock, setRoomIdToBlock] = useState<string>();
+  const toast = useToast();
 
   const openDialog = () => setIsDialogOpen(true);
   const closeDialog = () => setIsDialogOpen(false);
@@ -138,10 +141,20 @@ function BrowseRooms() {
 
   const handleOnInterested = (roomId: string) => {
     dispatch(registerRoom(roomId));
+    toast({
+      title: "Congrats! You will be notified before the live starts.",
+      status: "success",
+      isClosable: true,
+    });
   };
 
   const handleOnHideRoom = (roomId: string) => {
     dispatch(hideRoom({ roomId }));
+    toast({
+      title: "You won't see this room again.",
+      status: "success",
+      isClosable: true,
+    });
   };
 
   const handleOnNotInterestedAnymore = async (roomId: string) => {
@@ -159,9 +172,11 @@ function BrowseRooms() {
   return (
     <Box bg={bg} color={textColor} px={8} py={4} borderRadius="lg">
       <Tabs
-        marginTop={{ base: "50px", md: "0px" }}
+        marginTop={{ base: "30px", md: "0px" }}
         display={"flex"}
+        flexDir={{ base: "column-reverse", md: "row" }}
         justifyContent={"space-between"}
+        alignItems={{ base: "start", md: "unset" }}
       >
         <TabList flex={1} maxWidth={{ base: "90%", md: "75%", lg: "50%" }}>
           {filterOptions.map((option) => {
@@ -233,7 +248,7 @@ function BrowseRooms() {
 
       <Stack spacing={4} align="center" sx={{ clear: "both" }}>
         {!rooms?.data?.length && !getRoomsLoading ? (
-          <Text mt={6}>No available rooms at the moment!</Text>
+          <NoDataText text="No available rooms at the moment!" />
         ) : null}
       </Stack>
       <Grid

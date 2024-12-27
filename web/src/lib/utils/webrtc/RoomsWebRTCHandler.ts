@@ -1,7 +1,9 @@
 import { SOCKET_EVENTS } from "@dapp/shared/src/consts/socketEvents";
 import { socketEventTypes } from "@dapp/shared/src/types/custom";
+import { UserDto } from "@dapp/shared/src/types/openApiGen";
 
 import { PeerItem } from "~/lib/components/rooms/Room";
+import { peerConfiguration } from "~/lib/consts/webrtc";
 import { socket } from "~/lib/utils/socket/socket";
 
 export class RoomsWebRTCHandler {
@@ -28,6 +30,8 @@ export class RoomsWebRTCHandler {
   private onRoomStateReceived: (
     payload: socketEventTypes.NextQuestionClickedPayload
   ) => void;
+  private onServerError: (payload: socketEventTypes.EmitErrorPayload) => void;
+  private onFetchUserMediaError: (event: any) => void;
 
   constructor(
     roomId: string,
@@ -45,11 +49,14 @@ export class RoomsWebRTCHandler {
       onRoomStateReceived: (
         payload: socketEventTypes.SendRoomStatePayload
       ) => void;
+      onServerError: (payload: socketEventTypes.EmitErrorPayload) => void;
+      onFetchUserMediaError: (payload: any) => void;
     },
     config: { roomOwner: boolean }
   ) {
     this.roomId = roomId;
     this.config = config;
+    this.peers = [];
 
     this.onPeersChanged = callbacks.onPeersChanged;
     this.onRoundsStarted = callbacks.onRoundsStarted;
@@ -65,6 +72,10 @@ export class RoomsWebRTCHandler {
     this.handleIncomingOffer = this.handleIncomingOffer.bind(this);
     this.handleAnswer = this.handleAnswer.bind(this);
     this.handleICECandidate = this.handleICECandidate.bind(this);
+    this.onSocketDisconnected = this.onSocketDisconnected.bind(this);
+
+    this.onServerError = callbacks.onServerError.bind(this);
+    this.onFetchUserMediaError = callbacks.onFetchUserMediaError.bind(this);
   }
 
   async init(
@@ -72,16 +83,26 @@ export class RoomsWebRTCHandler {
     localAudioRef: React.RefObject<HTMLAudioElement>
   ) {
     socket.connect();
-    this.stream = await this.fetchUserMedia(true, this.config.roomOwner);
+    try {
+      console.log(
+        "Fetching user Media for: ",
+        this.config.roomOwner ? "Owner" : "Watcher"
+      );
+      this.stream = await this.fetchUserMedia(true, this.config.roomOwner);
+    } catch (error) {
+      this.onFetchUserMediaError(error);
+    }
     if (localVideoRef.current && this.config.roomOwner) {
       localVideoRef.current.srcObject = this.stream;
     } else if (localAudioRef.current && !this.config.roomOwner) {
       localAudioRef.current.srcObject = this.stream;
     }
     this.registerSocketEvents();
-    socket.emit(SOCKET_EVENTS.CLIENT.JOIN_ROOM_EVENT, {
-      roomId: this.roomId,
-    } as socketEventTypes.JoinRoomPayload);
+    setTimeout(() => {
+      socket.emit(SOCKET_EVENTS.CLIENT.JOIN_ROOM_EVENT, {
+        roomId: this.roomId,
+      } as socketEventTypes.JoinRoomPayload);
+    }, 5000);
   }
 
   closeConnections() {
@@ -112,10 +133,17 @@ export class RoomsWebRTCHandler {
       SOCKET_EVENTS.SERVER.SEND_ROOM_STATE_EVENT,
       this.onRoomStateReceived
     );
+    socket.off(SOCKET_EVENTS.SERVER.EMIT_ERROR, this.onServerError);
+    socket.off(
+      SOCKET_EVENTS.SERVER.EMIT_SOCKET_DISCONNECTED,
+      this.onSocketDisconnected
+    );
 
     socket.disconnect();
     const tracks = this.stream?.getTracks();
     tracks?.forEach((track) => track.stop());
+    this.peers = [];
+    this.updatePeers();
   }
 
   // private method section
@@ -134,9 +162,7 @@ export class RoomsWebRTCHandler {
   }
 
   private createPeerConnection(userToSignal: string): RTCPeerConnection {
-    const peer = new RTCPeerConnection({
-      iceServers: [{ urls: "stun:stun.l.google.com:19302" }],
-    });
+    const peer = new RTCPeerConnection(peerConfiguration);
 
     peer.onicecandidate = (event) => {
       if (event.candidate) {
@@ -174,7 +200,13 @@ export class RoomsWebRTCHandler {
       });
     });
 
-    this.peers.push({ peerID: payload.userToSignal, peer, user: payload.user });
+    const peerObj = {
+      peerID: payload.userToSignal,
+      peer,
+      user: payload.user,
+    };
+
+    this.pushToPeers(peerObj);
     this.updatePeers();
   }
 
@@ -183,7 +215,8 @@ export class RoomsWebRTCHandler {
   ): void {
     const peer = this.createPeerConnection(payload.offerSenderSocketId);
     peer
-      .setRemoteDescription(new RTCSessionDescription(payload.sdp))
+      // .setRemoteDescription(new RTCSessionDescription(payload.sdp))
+      .setRemoteDescription(payload.sdp)
       .then(() => {
         peer.createAnswer().then((answer) => {
           peer.setLocalDescription(answer).then(() => {
@@ -196,11 +229,13 @@ export class RoomsWebRTCHandler {
         });
       });
 
-    this.peers.push({
+    const peerObj = {
       peerID: payload.offerSenderSocketId,
       peer,
       user: payload.user,
-    });
+    };
+
+    this.pushToPeers(peerObj);
     this.updatePeers();
   }
 
@@ -208,7 +243,7 @@ export class RoomsWebRTCHandler {
     const item = this.peers.find(
       (p) => p.peerID === payload.answerSenderSocketId
     );
-    item?.peer.setRemoteDescription(new RTCSessionDescription(payload.sdp));
+    item?.peer.setRemoteDescription(payload.sdp);
     this.updatePeers();
   };
 
@@ -218,8 +253,42 @@ export class RoomsWebRTCHandler {
     );
     if (item) {
       const candidate = new RTCIceCandidate(payload.candidate);
-      item.peer.addIceCandidate(candidate);
+      try {
+        item.peer.addIceCandidate(candidate);
+      } catch (e) {
+        console.error("Failed to add ICE candidate.", e);
+      }
       this.updatePeers();
+    }
+  }
+
+  private onSocketDisconnected(
+    payload: socketEventTypes.EmitDisconnectPayload
+  ): void {
+    const peer = this.peers.find(
+      (peer) => peer.peerID === payload.disconnectedSocketId
+    );
+    if (peer) {
+      this.peers = this.peers.filter(
+        (p) => p.peerID !== payload.disconnectedSocketId
+      );
+      this.updatePeers();
+    }
+  }
+
+  private pushToPeers(peerObj: {
+    peerID: string;
+    peer: RTCPeerConnection;
+    user: UserDto;
+  }) {
+    const userAlreadyExists = this.peers.findIndex(
+      (u) => u.user.id === peerObj.user.id
+    );
+
+    if (userAlreadyExists !== -1) {
+      this.peers[userAlreadyExists] = peerObj;
+    } else {
+      this.peers.push(peerObj);
     }
   }
 
@@ -246,6 +315,13 @@ export class RoomsWebRTCHandler {
     socket.on(
       SOCKET_EVENTS.SERVER.SEND_ROOM_STATE_EVENT,
       this.onRoomStateReceived
+    );
+
+    // errors
+    socket.on(SOCKET_EVENTS.SERVER.EMIT_ERROR, this.onServerError);
+    socket.on(
+      SOCKET_EVENTS.SERVER.EMIT_SOCKET_DISCONNECTED,
+      this.onSocketDisconnected
     );
   }
 }

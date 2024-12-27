@@ -1,20 +1,24 @@
 "use client";
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
+import { MdKeyboardArrowLeft } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
-import { Box, useToast } from "@chakra-ui/react";
+import { Box, Button, useToast } from "@chakra-ui/react";
+import { useRouter } from "next/navigation";
 
 import { socketEventTypes } from "@dapp/shared/src/types/custom";
 import { RoomState, UserDto } from "@dapp/shared/src/types/openApiGen";
 
-import PresenterDisplay from "./displays/PresenterDisplay";
-import WatcherDisplay from "./displays/WatcherDisplay";
+import CustomTooltip from "../shared/CutsomTooltip";
+
+import Display from "./displays/Display";
 
 import {
   getRoomById,
   updateActiveRoomStatePartially,
 } from "~/lib/state/room/roomSlice";
 import { AppDispatch, RootState } from "~/lib/state/store";
+import isTruthy from "~/lib/utils/truthy";
 import { RoomsWebRTCHandler } from "~/lib/utils/webrtc/RoomsWebRTCHandler";
 
 export interface PeerItem {
@@ -33,6 +37,7 @@ const Room = ({ roomId }: { roomId: string }) => {
   const { user } = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch<AppDispatch>();
   const toast = useToast();
+  const router = useRouter();
   const isRoomOwner = user && user.id === activeRoom?.user?.id;
 
   useEffect(() => {
@@ -65,6 +70,41 @@ const Room = ({ roomId }: { roomId: string }) => {
   );
 
   const onRoomStateReceived = () => {};
+
+  const onFetchUserMediaError = useCallback(
+    (error: any) => {
+      console.error("Failed to fetch user media", error);
+      const message =
+        "Failed to fetch user media. Make sure to give access to your camera and/or mic.";
+      toast({
+        title: error.message || message,
+        status: "error",
+        isClosable: true,
+      });
+    },
+    [toast]
+  );
+
+  const onServerError = useCallback(
+    (e: socketEventTypes.EmitErrorPayload) => {
+      const message = "An error has occured";
+      if (e.action === "JOIN" && isTruthy(e.status)) {
+        toast({
+          title: e.message || message,
+          status: "error",
+          isClosable: true,
+        });
+        router.push("/");
+      } else {
+        toast({
+          title: message,
+          status: "error",
+          isClosable: true,
+        });
+      }
+    },
+    [router, toast]
+  );
 
   const onRoundPaused = useCallback(
     (payload: socketEventTypes.RoundPausedPayload) => {
@@ -101,7 +141,6 @@ const Room = ({ roomId }: { roomId: string }) => {
   );
   const onGoToNextQuestion = useCallback(
     (payload: socketEventTypes.NextQuestionClickedPayload) => {
-      console.log("onGoToNextQuestion: ", payload.roomState);
       dispatch(
         updateActiveRoomStatePartially({
           currentRound: payload.roomState.currentRound,
@@ -124,6 +163,11 @@ const Room = ({ roomId }: { roomId: string }) => {
     [toast]
   );
 
+  const onPeersChanged = useCallback((peers: PeerItem[]) => {
+    console.log(peers);
+    setPeers([...peers]);
+  }, []);
+
   useEffect(() => {
     if (user && activeRoom?.user) {
       webRTCHandler.current = new RoomsWebRTCHandler(
@@ -136,8 +180,10 @@ const Room = ({ roomId }: { roomId: string }) => {
           onRoundsStarted,
           onGoToNextQuestion,
           onTimerUpdated,
-          onPeersChanged: setPeers,
+          onPeersChanged,
           onRoomStateReceived,
+          onServerError,
+          onFetchUserMediaError,
         },
         { roomOwner: !!isRoomOwner }
       );
@@ -160,6 +206,9 @@ const Room = ({ roomId }: { roomId: string }) => {
     onRoundsStarted,
     onTimerUpdated,
     onGoToNextQuestion,
+    onServerError,
+    onFetchUserMediaError,
+    onPeersChanged,
     roomId,
     isRoomOwner,
     user,
@@ -168,11 +217,32 @@ const Room = ({ roomId }: { roomId: string }) => {
 
   return (
     <Box height="100%">
-      {activeRoom?.user?.id === user?.id ? (
-        <PresenterDisplay peers={peers} localVideoRef={localVideoRef} />
-      ) : (
-        <WatcherDisplay peers={peers} localAudioRef={localAudioRef} />
-      )}
+      <Display
+        localAudioRef={localAudioRef}
+        localVideoRef={localVideoRef}
+        peers={peers}
+      />
+      <CustomTooltip
+        label="Exit room"
+        bg="white"
+        color={"black"}
+        placement="right"
+      >
+        <Button
+          variant="link"
+          onClick={() => {
+            window.location.href = "/browse-rooms";
+          }}
+          leftIcon={<MdKeyboardArrowLeft />}
+          position="fixed"
+          left="0"
+          top={"20px"}
+          bg={"red.500"}
+          minW={"auto"}
+          height={32}
+          opacity={0.8}
+        />
+      </CustomTooltip>
     </Box>
   );
 };

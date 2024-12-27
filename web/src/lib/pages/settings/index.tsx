@@ -4,7 +4,7 @@ import Settings from "~/lib/components/settings/Settings";
 
 const SettingsPage = () => {
   return (
-    <Box>
+    <Box margin={"20px"}>
       <Settings />
     </Box>
   );

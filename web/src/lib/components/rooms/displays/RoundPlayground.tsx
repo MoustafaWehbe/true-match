@@ -8,12 +8,14 @@ interface RoundPlaygroundProps {
   onNextQuestionClicked?: () => void;
   currentIndexForSystemQuestion: number;
   currentRound: number | null;
+  isOwner: boolean;
 }
 
 const RoundPlayground = ({
   onNextQuestionClicked,
   currentIndexForSystemQuestion = 0,
   currentRound,
+  isOwner,
 }: RoundPlaygroundProps) => {
   const { roomContent: rounds, activeRoom } = useSelector(
     (state: RootState) => state.room
@@ -33,7 +35,7 @@ const RoundPlayground = ({
       align="start"
       justify="center"
       borderRadius="lg"
-      width={"100%"}
+      maxW={{ base: "69%", md: "100%" }}
     >
       <Flex justifyContent={"center"} alignItems={"start"} gap={2}>
         <Text fontSize={{ base: "md", lg: "3xl" }} mb={2} fontWeight={"bold"}>
@@ -79,18 +81,20 @@ const RoundPlayground = ({
             </Text>
           </Flex>
 
-          <Button
-            leftIcon={<FaArrowRight />}
-            onClick={onNextQuestionClicked}
-            colorScheme="pink"
-            color="pink.200"
-            variant="ghost"
-            size={{ base: "sm", lg: "md" }}
-            padding={0}
-            mt={2}
-          >
-            Next question
-          </Button>
+          {isOwner && (
+            <Button
+              leftIcon={<FaArrowRight />}
+              onClick={onNextQuestionClicked}
+              colorScheme="pink"
+              color="pink.200"
+              variant="ghost"
+              size={{ base: "sm", lg: "md" }}
+              padding={0}
+              mt={2}
+            >
+              Next question
+            </Button>
+          )}
         </Box>
       )}
     </Flex>

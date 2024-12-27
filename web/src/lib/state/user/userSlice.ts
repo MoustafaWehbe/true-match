@@ -41,10 +41,15 @@ export interface ExtendedUserApiResponse extends Omit<UserApiResponse, "data"> {
   data: User & { token: string };
 }
 
+interface RegistrationError {
+  status: number;
+  data: any;
+}
+
 export const registerUser = createAsyncThunk<
   ExtendedUserApiResponse, // Return type of the payload creator
   RegisterDto, // First argument to the payload creator
-  { rejectValue: string } // Type for rejectWithValue
+  { rejectValue: RegistrationError } // Type for rejectWithValue
 >("user/registerUser", async (userData, { rejectWithValue }) => {
   try {
     const response = await axiosInstance.post<ExtendedUserApiResponse>(
@@ -55,9 +60,15 @@ export const registerUser = createAsyncThunk<
     localStorage.setItem(TOKEN, response.data.data.token);
     return response.data;
   } catch (error) {
-    let errorMessage = "Something went wrong!";
+    let errorMessage: RegistrationError = {
+      data: "Something went wrong!",
+      status: 200,
+    };
     if (axios.isAxiosError(error) && error.response) {
-      errorMessage = error.response.data.message || errorMessage;
+      errorMessage = {
+        status: error.response.status,
+        data: error.response.data || errorMessage.data,
+      };
     }
     return rejectWithValue(errorMessage);
   }

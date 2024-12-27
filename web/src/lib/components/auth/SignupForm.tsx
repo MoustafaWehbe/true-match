@@ -47,7 +47,7 @@ function SignupForm() {
   }, [registerResult, router, toast]);
 
   useEffect(() => {
-    if (registerError) {
+    if (registerError && typeof registerError === "string") {
       toast({
         title: "Registration Error",
         description: registerError,
@@ -65,13 +65,27 @@ function SignupForm() {
       email: "",
       password: "",
     },
-    onSubmit: (values) => {
-      dispatch(
+    onSubmit: async (values, { setErrors }) => {
+      const res = await dispatch(
         registerUser({
           ...values,
         })
       );
-      formik.handleReset({});
+      // Check if API returns validation errors
+      if (res.meta.requestStatus === "rejected" && res.payload?.data) {
+        const apiErrors = res.payload?.data.reduce((acc, err) => {
+          if (err.code.startsWith("Password")) {
+            acc.password = acc.password
+              ? `${acc.password}\n${err.description}`
+              : err.description;
+          }
+          return acc;
+        }, {});
+
+        setErrors(apiErrors);
+      } else {
+        formik.handleReset({});
+      }
     },
     validationSchema: Yup.object({
       firstName: Yup.string().required("First Name cannot be empty"),

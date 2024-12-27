@@ -2,9 +2,10 @@
 
 import React, { useCallback, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Box, Grid, Stack, Text, useColorModeValue } from "@chakra-ui/react";
+import { Box, Grid, useColorModeValue } from "@chakra-ui/react";
 
 import Loader from "../shared/Loader";
+import NoDataText from "../shared/NoDataText";
 
 import PaginatedRooms from "./PaginatedRooms";
 import RoomHistoryCard from "./RoomHistoryCard";
@@ -50,21 +51,15 @@ function History() {
   };
   return (
     <Box bg={bg} color={textColor} px={8} py={4} borderRadius="lg">
-      <Text as="p" margin={"0 auto"} textAlign={"center"}>
-        All the lives you have atteneded will appear here.
-      </Text>
+      {!roomsHistory?.data?.length && !getRoomsHistoryLoading && (
+        <NoDataText text="All the lives you have attended will appear here." />
+      )}
       <Box
-        marginTop={{ base: "50px", md: "0px" }}
+        marginTop={{ base: "30px", md: "0px" }}
         display={"flex"}
         justifyContent={"space-between"}
       >
         <Loader isLoading={getRoomsHistoryLoading} />
-
-        <Stack spacing={4} align="center" sx={{ clear: "both" }}>
-          {!roomsHistory?.data?.length && !getRoomsHistoryLoading ? (
-            <Text mt={6}>Room history is empty!</Text>
-          ) : null}
-        </Stack>
         <Grid
           templateColumns={{
             base: "repeat(1, 1fr)",

@@ -17,10 +17,14 @@ class SocketHandler {
   // TODO: move to redis
   private userSocketsMap: Map<string, string>;
 
+  // TODO: move to redis
+  private socketRooms: Map<string, string[]>;
+
   constructor(io: SocketIOServer) {
     this.io = io;
     this.timersMap = new Map();
     this.userSocketsMap = new Map();
+    this.socketRooms = new Map();
     this.handleConnection();
   }
 
@@ -112,30 +116,27 @@ class SocketHandler {
     try {
       const room = await roomService.getRoomById(token, roomId);
       if (room) {
-        const rooms = Array.from(socket.rooms).filter(
-          room => room !== socket.id
-        ); // Filter out the socket's own room
+        const roomClients = this.io.sockets.adapter.rooms.get(roomId);
+        const clientCount = roomClients ? roomClients.size : 0;
+        // Check if the room exceeds the maximum allowed users
+        if (clientCount >= maxAllowedUsersTojoin) {
+          throw Error("The maximum number of allowed users has been reached.");
+        }
 
-        rooms.forEach(room => {
-          const roomClients = this.io.sockets.adapter.rooms.get(room);
-          const clientCount = roomClients ? roomClients.size : 0;
-
-          if (clientCount >= maxAllowedUsersTojoin) {
-            throw Error(
-              "The maximum number of allowed users has been reached."
-            );
-          }
-        });
         const joinRes = await roomService.joinRoom(token, roomId, socket.id);
         if (joinRes?.statusCode !== 200 && joinRes?.statusCode !== 201) {
           throw Error(joinRes?.message || "Failed to join room.");
         }
-        socket.join(roomId);
+        await socket.join(roomId);
         // notify everyone that this user has joined
-        socket.broadcast.to(roomId).emit(SOCKET_EVENTS.SERVER.JOIN_ROOM_EVENT, {
-          userToSignal: socket.id,
-          user,
-        } as socketEventTypes.UserJoinedPayload);
+        setImmediate(() => {
+          socket.broadcast
+            .to(roomId)
+            .emit(SOCKET_EVENTS.SERVER.JOIN_ROOM_EVENT, {
+              userToSignal: socket.id,
+              user,
+            } as socketEventTypes.UserJoinedPayload);
+        });
         // send the current room state to this user
         const previousTimer = this.timersMap.get(roomId);
         socket.emit(SOCKET_EVENTS.SERVER.SEND_ROOM_STATE_EVENT, {
@@ -144,10 +145,18 @@ class SocketHandler {
             timeRemainingForRoundBeforePause: previousTimer?.timeRemaining || 0,
           },
         } as socketEventTypes.SendRoomStatePayload);
+        const rooms = this.socketRooms.get(socket.id) || [];
+        rooms.push(roomId);
+        this.socketRooms.set(socket.id, rooms);
       } else {
         throw Error("Could not find room");
       }
-    } catch (e) {
+    } catch (e: any) {
+      socket.emit(SOCKET_EVENTS.SERVER.EMIT_ERROR, {
+        status: e?.status,
+        message: e?.response?.data || e.message,
+        action: "JOIN",
+      } as socketEventTypes.EmitErrorPayload);
       socket.disconnect(true);
       console.error(e);
     }
@@ -191,29 +200,33 @@ class SocketHandler {
         if (leaveRes?.statusCode !== 200 && leaveRes?.statusCode !== 201) {
           throw Error(leaveRes?.message || "Failed to leave room.");
         }
-      }
-      const rooms = Array.from(socket.rooms).filter(room => room !== socket.id); // Filter out the socket's own room
-
-      rooms.forEach(room => {
-        // Get the number of clients in the room before disconnection
-        const roomClients = this.io.sockets.adapter.rooms.get(room);
+        const roomClients = this.io.sockets.adapter.rooms.get(payload.roomId);
         const clientCount = roomClients ? roomClients.size : 0;
-
-        console.log(`Room: ${room}, Clients before disconnect: ${clientCount}`);
-
-        // Perform actions based on the number of remaining clients
         if (clientCount <= 1) {
-          console.log(`Room ${room} is now empty or has only one client left.`);
-          const previousTimer = this.timersMap.get(room);
+          console.log(
+            `Room ${payload.roomId} is now empty or has only one client left.`
+          );
+          const previousTimer = this.timersMap.get(payload.roomId);
           clearInterval(previousTimer?.timer);
-          this.timersMap.delete(socket.id);
+          this.timersMap.delete(payload.roomId);
         }
-      });
+      }
+    } catch (e) {
+      console.error("Failde to leave room!", e);
+    } finally {
+      const rooms = this.socketRooms.get(socket.id) || [];
+      const firstRoom = rooms[0]; // for now one user can only be in one room at once.
+
+      if (firstRoom) {
+        socket.broadcast
+          .to(firstRoom)
+          .emit(SOCKET_EVENTS.SERVER.EMIT_SOCKET_DISCONNECTED, {
+            disconnectedSocketId: socket.id,
+          } as socketEventTypes.EmitDisconnectPayload);
+        this.socketRooms.delete(socket.id);
+      }
 
       socket.disconnect(true);
-    } catch (e) {
-      socket.disconnect(true);
-      console.error("Failde to leave room!", e);
     }
   }
 
@@ -250,7 +263,13 @@ class SocketHandler {
         throw Error("Could not find room");
       }
     } catch (e) {
-      console.error("failed to start round..", e);
+      const errorMessage = "An error occured while starting the rounds";
+      socket.emit(SOCKET_EVENTS.SERVER.EMIT_ERROR, {
+        status: 400,
+        message: errorMessage,
+        action: "START_ROUND",
+      } as socketEventTypes.EmitErrorPayload);
+      console.error(errorMessage, e);
     }
   }
 
@@ -285,7 +304,13 @@ class SocketHandler {
         throw Error("Could not find room");
       }
     } catch (e) {
-      console.error("failed to pause/resume round..", e);
+      const errorMessage = "Failed to pause round..";
+      socket.emit(SOCKET_EVENTS.SERVER.EMIT_ERROR, {
+        status: 400,
+        message: errorMessage,
+        action: "PAUSE_ROUND",
+      } as socketEventTypes.EmitErrorPayload);
+      console.error(errorMessage, e);
     }
   }
 
@@ -319,7 +344,13 @@ class SocketHandler {
         throw Error("Could not find room");
       }
     } catch (e) {
-      console.error("failed to pause/resume round..", e);
+      const errorMessage = "Failed to resume round..";
+      socket.emit(SOCKET_EVENTS.SERVER.EMIT_ERROR, {
+        status: 400,
+        message: errorMessage,
+        action: "RESUME_ROUND",
+      } as socketEventTypes.EmitErrorPayload);
+      console.error(errorMessage, e);
     }
   }
 
@@ -356,7 +387,13 @@ class SocketHandler {
         throw Error("Could not find room");
       }
     } catch (e) {
-      console.error("failed to skip round..", e);
+      const errorMessage = "Failed to skip round..";
+      socket.emit(SOCKET_EVENTS.SERVER.EMIT_ERROR, {
+        status: 400,
+        message: errorMessage,
+        action: "SKIP_ROUND",
+      } as socketEventTypes.EmitErrorPayload);
+      console.error(errorMessage, e);
     }
   }
 
@@ -368,6 +405,11 @@ class SocketHandler {
     try {
       const room = await roomService.getRoomById(token, payload.roomId);
       if (room?.data) {
+        const user = socket.data.user as UserDto;
+
+        if (room.data.user?.id !== user.id) {
+          throw Error("Unauthorized!");
+        }
         const existingRoomState = room.data.roomState as RoomState;
         if (
           existingRoomState.questionIndex! <
@@ -392,7 +434,13 @@ class SocketHandler {
         throw Error("Could not find room");
       }
     } catch (e) {
-      console.error("failed to go to next question..", e);
+      const errorMessage = "Failed to go to the next question..";
+      socket.emit(SOCKET_EVENTS.SERVER.EMIT_ERROR, {
+        status: 400,
+        message: errorMessage,
+        action: "NEXT_QUESTION",
+      } as socketEventTypes.EmitErrorPayload);
+      console.error(errorMessage, e);
     }
   }
 

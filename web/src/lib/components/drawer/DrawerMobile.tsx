@@ -1,6 +1,6 @@
 "use client";
 
-import { type PropsWithChildren, useRef } from "react";
+import { type PropsWithChildren, useEffect, useRef } from "react";
 import { HamburgerIcon } from "@chakra-ui/icons";
 import {
   Box,
@@ -11,12 +11,18 @@ import {
   IconButton,
   useDisclosure,
 } from "@chakra-ui/react";
+import { usePathname } from "next/navigation";
 
 import Content from "./DrawerContent";
 
 function DrawerMobile({ children, ...rest }: PropsWithChildren) {
   const { onClose, isOpen, onOpen } = useDisclosure();
   const btnRef = useRef<any>();
+  const pathname = usePathname();
+
+  useEffect(() => {
+    onClose();
+  }, [onClose, pathname]);
 
   return (
     <Box position={"absolute"}>

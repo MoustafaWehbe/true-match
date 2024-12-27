@@ -22,7 +22,7 @@ const CustomTooltip = ({
       py={2}
       borderRadius="md"
       shadow="md"
-      {...tooltipProps} // Allow overriding any Tooltip props
+      {...tooltipProps}
       label={label}
     >
       {children}

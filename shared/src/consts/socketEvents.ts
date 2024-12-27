@@ -29,6 +29,8 @@ export const SOCKET_EVENTS = {
     GO_TO_NEXT_QUESTION_EVENT: "server:room:go-to-next-question",
     END_ROUNDS_EVENT: "server:room:end-rounds",
     UPDATE_TIMER_EVENT: "server:room:update-timer",
+    EMIT_ERROR: "server:room:error",
     SEND_MESSAGE: "server:chat:send-message",
+    EMIT_SOCKET_DISCONNECTED: "server:socket:disconnect",
   },
 };

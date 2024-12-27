@@ -24,9 +24,9 @@ import {
 
 import { UserDto } from "@dapp/shared/src/types/openApiGen";
 
-import env from "~/lib/consts/env";
 import { RootState } from "~/lib/state/store";
 import { calculateAge } from "~/lib/utils/date/date";
+import { constructMediaUrl } from "~/lib/utils/url";
 
 interface PreviewProfileProps {
   user?: UserDto;
@@ -91,11 +91,7 @@ const PreviewProfile = ({ user }: PreviewProfileProps) => {
       <Box position="relative">
         {/* User Image */}
         <Image
-          src={
-            user?.media?.[currentImageIndex]?.url.startsWith("http")
-              ? user?.media?.[currentImageIndex]?.url
-              : env.apiUrl + "" + user?.media?.[currentImageIndex]?.url
-          }
+          src={constructMediaUrl(user?.media?.[currentImageIndex]?.url)}
           alt={user?.firstName!}
           objectFit="cover"
           w="full"

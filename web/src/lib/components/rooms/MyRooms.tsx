@@ -18,6 +18,7 @@ import { MyRoomStatus, RoomDto } from "@dapp/shared/src/types/openApiGen";
 import { Option } from "../shared/buttons/CustomMenuButton";
 import GradientButton from "../shared/buttons/GradientButton";
 import Loader from "../shared/Loader";
+import NoDataText from "../shared/NoDataText";
 
 import PaginatedRooms from "./PaginatedRooms";
 import RoomCard from "./RoomCard";
@@ -188,9 +189,12 @@ function MyRooms() {
   return (
     <Box bg={bg} color={textColor} px={8} py={4} borderRadius="lg">
       <Tabs
-        marginTop={{ base: "50px", md: "0px" }}
+        marginTop={{ base: "30px", md: "0px" }}
         display={"flex"}
+        flexDir={{ base: "column-reverse", md: "row" }}
         justifyContent={"space-between"}
+        alignItems={{ base: "start", md: "unset" }}
+        gap={{ base: 4, md: 0 }}
       >
         <TabList flex={1} maxWidth={{ base: "90%", md: "75%", lg: "50%" }}>
           {options.map((option) => {
@@ -210,8 +214,7 @@ function MyRooms() {
           color="white"
           boxShadow="xl"
           onClick={handleOpenRoomModal}
-          top={4}
-          right={4}
+          marginLeft={"auto"}
         >
           Schedule room
         </GradientButton>
@@ -240,6 +243,13 @@ function MyRooms() {
       </Grid>
       {!!myRooms?.data?.length && (
         <PaginatedRooms rooms={myRooms} handlePageChange={handlePageChange} />
+      )}
+
+      {!myRooms?.data?.length && (
+        <NoDataText
+          text="No scheduled rooms! Start by scheduling a room at the top right of the
+          page."
+        />
       )}
 
       <RoomModal

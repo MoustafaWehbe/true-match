@@ -109,6 +109,17 @@ interface MessageSentPayload {
 }
 // end round events
 
+// error response
+interface EmitErrorPayload {
+  message?: any;
+  status?: number;
+  action?: string;
+}
+
+interface EmitDisconnectPayload {
+  disconnectedSocketId: string;
+}
+
 export type {
   JoinRoomPayload,
   LeaveRoomPayload,
@@ -132,4 +143,6 @@ export type {
   SendRoomStatePayload,
   SendMessagePayload,
   MessageSentPayload,
+  EmitErrorPayload,
+  EmitDisconnectPayload,
 };
