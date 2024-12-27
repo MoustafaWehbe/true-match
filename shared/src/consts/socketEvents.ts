@@ -15,6 +15,7 @@ export const SOCKET_EVENTS = {
     SKIP_ROUND_EVENT: "client:room:skip-round",
     GO_TO_NEXT_QUESTION_EVENT: "client:room:go-to-next-question",
     SEND_MESSAGE: "client:chat:send-message",
+    REMOVE_USER: "client:room:remove-user",
   },
   SERVER: {
     JOIN_ROOM_EVENT: "server:room:user-joined",
@@ -32,5 +33,6 @@ export const SOCKET_EVENTS = {
     EMIT_ERROR: "server:room:error",
     SEND_MESSAGE: "server:chat:send-message",
     EMIT_SOCKET_DISCONNECTED: "server:socket:disconnect",
+    REMOVE_USER: "server:room:remove-user",
   },
 };

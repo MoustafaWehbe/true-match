@@ -107,6 +107,11 @@ interface MessageSentPayload {
   receiverId: string;
   content: string;
 }
+
+interface UserRemovedPayload {
+  userSocketId: string;
+}
+
 // end round events
 
 // error response
@@ -118,6 +123,11 @@ interface EmitErrorPayload {
 
 interface EmitDisconnectPayload {
   disconnectedSocketId: string;
+}
+
+interface RemoveUserPayload {
+  socketIdToRemove: string;
+  roomId: string;
 }
 
 export type {
@@ -145,4 +155,6 @@ export type {
   MessageSentPayload,
   EmitErrorPayload,
   EmitDisconnectPayload,
+  RemoveUserPayload,
+  UserRemovedPayload,
 };

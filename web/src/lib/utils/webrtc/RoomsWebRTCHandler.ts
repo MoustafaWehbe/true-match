@@ -73,6 +73,7 @@ export class RoomsWebRTCHandler {
     this.handleAnswer = this.handleAnswer.bind(this);
     this.handleICECandidate = this.handleICECandidate.bind(this);
     this.onSocketDisconnected = this.onSocketDisconnected.bind(this);
+    this.handleUserRemoved = this.handleUserRemoved.bind(this);
 
     this.onServerError = callbacks.onServerError.bind(this);
     this.onFetchUserMediaError = callbacks.onFetchUserMediaError.bind(this);
@@ -138,6 +139,7 @@ export class RoomsWebRTCHandler {
       SOCKET_EVENTS.SERVER.EMIT_SOCKET_DISCONNECTED,
       this.onSocketDisconnected
     );
+    socket.off(SOCKET_EVENTS.SERVER.REMOVE_USER, this.handleUserRemoved);
 
     socket.disconnect();
     const tracks = this.stream?.getTracks();
@@ -262,16 +264,20 @@ export class RoomsWebRTCHandler {
     }
   }
 
+  private handleUserRemoved(payload: socketEventTypes.UserRemovedPayload) {
+    this.removeUser(payload.userSocketId);
+  }
+
   private onSocketDisconnected(
     payload: socketEventTypes.EmitDisconnectPayload
   ): void {
-    const peer = this.peers.find(
-      (peer) => peer.peerID === payload.disconnectedSocketId
-    );
+    this.removeUser(payload.disconnectedSocketId);
+  }
+
+  private removeUser(socketId: string) {
+    const peer = this.peers.find((peer) => peer.peerID === socketId);
     if (peer) {
-      this.peers = this.peers.filter(
-        (p) => p.peerID !== payload.disconnectedSocketId
-      );
+      this.peers = this.peers.filter((p) => p.peerID !== socketId);
       this.updatePeers();
     }
   }
@@ -316,7 +322,7 @@ export class RoomsWebRTCHandler {
       SOCKET_EVENTS.SERVER.SEND_ROOM_STATE_EVENT,
       this.onRoomStateReceived
     );
-
+    socket.on(SOCKET_EVENTS.SERVER.REMOVE_USER, this.handleUserRemoved);
     // errors
     socket.on(SOCKET_EVENTS.SERVER.EMIT_ERROR, this.onServerError);
     socket.on(

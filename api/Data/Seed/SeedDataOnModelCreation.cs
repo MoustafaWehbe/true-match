@@ -61,11 +61,20 @@ namespace api.Data
                         new RoomContent
                         {
                             Id = Guid.NewGuid(),
+                            Title = "Pick Two",
+                            Description =
+                                "Get Ready to pick exactly two profiles in case the room has more.",
+                            Duration = 60,
+                            Order = 5,
+                        },
+                        new RoomContent
+                        {
+                            Id = Guid.NewGuid(),
                             Title = "The Final Rose",
                             Description =
                                 "Pop your best question to the remaining contenders, and whoever nails it gets the match!",
                             Duration = 60,
-                            Order = 5,
+                            Order = 6,
                         },
                     }
                 );

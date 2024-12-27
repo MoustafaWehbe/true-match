@@ -104,6 +104,12 @@ class SocketHandler {
         (payload: socketEventTypes.SendMessagePayload) =>
           this.handleMessageSent(payload, socket, userId!)
       );
+
+      socket.on(
+        SOCKET_EVENTS.CLIENT.REMOVE_USER,
+        (payload: socketEventTypes.RemoveUserPayload) =>
+          this.removeUser(payload, socket, userId!)
+      );
     });
   }
 
@@ -474,6 +480,42 @@ class SocketHandler {
           SOCKET_EVENTS.SERVER.SEND_MESSAGE,
           messageData as socketEventTypes.MessageSentPayload
         );
+    }
+  }
+
+  private async removeUser(
+    payload: socketEventTypes.RemoveUserPayload,
+    socket: Socket,
+    senderId: string
+  ) {
+    const token = socket.handshake.auth.token;
+    try {
+      const room = await roomService.getRoomById(token, payload.roomId);
+      if (room?.data) {
+        if (room.data.user?.id !== senderId) {
+          throw Error("Unauthorized!");
+        }
+
+        const socketToKick = this.io.sockets.sockets.get(
+          payload.socketIdToRemove
+        );
+        if (socketToKick) {
+          socketToKick.leave(payload.roomId);
+          this.io.in(payload.roomId).emit(SOCKET_EVENTS.SERVER.REMOVE_USER, {
+            userSocketId: payload.socketIdToRemove,
+          } as socketEventTypes.UserRemovedPayload);
+        }
+      } else {
+        throw Error("Could not find room");
+      }
+    } catch (e) {
+      const errorMessage = "Failed to remove user from the room..";
+      socket.emit(SOCKET_EVENTS.SERVER.EMIT_ERROR, {
+        status: 400,
+        message: errorMessage,
+        action: "REMOVE_USER",
+      } as socketEventTypes.EmitErrorPayload);
+      console.error(errorMessage, e);
     }
   }
 
