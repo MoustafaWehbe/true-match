@@ -501,7 +501,14 @@ class SocketHandler {
         );
         if (socketToKick) {
           socketToKick.leave(payload.roomId);
+
+          // notify everyone about the user who has been removed
           this.io.in(payload.roomId).emit(SOCKET_EVENTS.SERVER.REMOVE_USER, {
+            userSocketId: payload.socketIdToRemove,
+          } as socketEventTypes.UserRemovedPayload);
+
+          //notify the user who has been removed
+          socketToKick.emit(SOCKET_EVENTS.SERVER.REMOVE_USER, {
             userSocketId: payload.socketIdToRemove,
           } as socketEventTypes.UserRemovedPayload);
         }

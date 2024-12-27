@@ -18,7 +18,14 @@ const MyAudio = ({ localAudioRef }: MyAudioProps) => {
 
   return (
     <>
-      <UserCard color={colorPalette[0]} user={user} isMe />
+      <UserCard
+        color={colorPalette[0]}
+        user={user}
+        isMe
+        isOwner={false}
+        onUserCardClicked={() => {}}
+        onRemoveUser={() => {}}
+      />
       <audio
         muted
         ref={localAudioRef}

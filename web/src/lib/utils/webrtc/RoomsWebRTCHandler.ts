@@ -280,6 +280,10 @@ export class RoomsWebRTCHandler {
       this.peers = this.peers.filter((p) => p.peerID !== socketId);
       this.updatePeers();
     }
+
+    if (socket.id === socketId) {
+      window.location.href = "/";
+    }
   }
 
   private pushToPeers(peerObj: {

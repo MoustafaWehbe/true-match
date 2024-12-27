@@ -10,6 +10,11 @@ import {
   WrapItem,
 } from "@chakra-ui/react";
 
+import { SOCKET_EVENTS } from "@dapp/shared/src/consts/socketEvents";
+import { socketEventTypes } from "@dapp/shared/src/types/custom";
+
+import PreviewProfileModal from "../../profile/Preview/PreviewProfileModal";
+import ConfirmDialog from "../../shared/ConfirmDialog";
 import PeerAudio from "../PeerAudio";
 import PeerVideo from "../PeerVideo";
 import { PeerItem } from "../Room";
@@ -27,6 +32,7 @@ import { size } from "~/lib/consts";
 import useRound from "~/lib/hooks/useRound";
 import { RootState } from "~/lib/state/store";
 import { colorPalette } from "~/lib/utils/colors/colors";
+import { socket } from "~/lib/utils/socket/socket";
 import isTruthy from "~/lib/utils/truthy";
 
 interface DisplayProps {
@@ -40,6 +46,10 @@ const Display = ({ peers, localVideoRef, localAudioRef }: DisplayProps) => {
   const [isVideoOn, setIsVideoOn] = useState(true);
   const { activeRoom } = useSelector((state: RootState) => state.room);
   const { user } = useSelector((state: RootState) => state.user);
+  const [previewProfileModalUserId, setPreviewProfileModalUserId] =
+    useState<string>();
+
+  const [userToBeRemoved, setUserToBeRemoved] = useState<string>();
 
   const isOwner = activeRoom?.user?.id === user?.id;
 
@@ -103,12 +113,12 @@ const Display = ({ peers, localVideoRef, localAudioRef }: DisplayProps) => {
 
   const renderVideo = () => {
     if (isOwner) {
-      return <MyVideo localVideoRef={localVideoRef} />;
+      // return <MyVideo localVideoRef={localVideoRef} />;
+      return null;
     } else {
       if (thePresenter) {
-        return (
-          <PeerVideo peer={thePresenter?.peer} user={thePresenter?.user} />
-        );
+        return null;
+        // return <PeerVideo peer={thePresenter?.peer} user={thePresenter?.user} />
       } else {
         return (
           <Text
@@ -130,6 +140,35 @@ const Display = ({ peers, localVideoRef, localAudioRef }: DisplayProps) => {
         );
       }
     }
+  };
+
+  const onUserCardClicked = (userId?: string | null) => {
+    if (userId) {
+      setPreviewProfileModalUserId(userId);
+    }
+  };
+
+  const onRemoveUser = (userId?: string | null) => {
+    if (userId) {
+      setUserToBeRemoved(userId);
+    }
+  };
+
+  const removeTheUser = () => {
+    if (userToBeRemoved && activeRoom?.id) {
+      const p = peers.find((p) => p.user.id === userToBeRemoved);
+
+      socket.emit(SOCKET_EVENTS.CLIENT.REMOVE_USER, {
+        socketIdToRemove: p?.peerID,
+        roomId: activeRoom.id,
+      } as socketEventTypes.RemoveUserPayload);
+    }
+
+    setUserToBeRemoved(undefined);
+  };
+
+  const handleClosePreviewProfileModal = () => {
+    setPreviewProfileModalUserId(undefined);
   };
 
   if (!rounds) {
@@ -206,6 +245,9 @@ const Display = ({ peers, localVideoRef, localAudioRef }: DisplayProps) => {
                     color={colorForUserId[peer.user.id!]}
                     user={peer.user}
                     isMe={false}
+                    onUserCardClicked={onUserCardClicked}
+                    onRemoveUser={onRemoveUser}
+                    isOwner={user?.id === activeRoom?.user?.id}
                   />
                   <PeerAudio peer={peer.peer} />
                 </WrapItem>
@@ -290,6 +332,22 @@ const Display = ({ peers, localVideoRef, localAudioRef }: DisplayProps) => {
         isVideoOn={isVideoOn}
         isRoomOwner={activeRoom?.user?.id === user?.id}
         peersCount={peers.length}
+      />
+      {previewProfileModalUserId && (
+        <PreviewProfileModal
+          isOpen={!!previewProfileModalUserId}
+          onClose={handleClosePreviewProfileModal}
+          userId={previewProfileModalUserId}
+        />
+      )}
+      <ConfirmDialog
+        isOpen={!!userToBeRemoved}
+        onClose={() => setUserToBeRemoved(undefined)}
+        onConfirm={removeTheUser}
+        title="Remove user from room?"
+        description="Are you sure you want to remove this user from the room?"
+        confirmText="Remove"
+        cancelText="Cancel"
       />
     </Box>
   );
