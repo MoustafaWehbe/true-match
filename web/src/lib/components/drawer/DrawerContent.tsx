@@ -5,6 +5,7 @@ import { BsChatDots } from "react-icons/bs";
 import { CiSettings, CiUser } from "react-icons/ci";
 import { MdHistory } from "react-icons/md";
 import { MdOutlineLiveTv } from "react-icons/md";
+import { MdEventNote } from "react-icons/md";
 import {
   Box,
   Heading,
@@ -127,6 +128,20 @@ const DrawerContent = () => {
                 color={pathname === "/settings" ? activeIconColor : iconColor}
               />
               Settings
+            </Link>
+          </NextLink>
+        </ListItem>
+        <ListItem>
+          <NextLink href="/guide" passHref prefetch={true}>
+            <Link
+              _hover={{ textDecoration: "none", color: hoverColor }}
+              color={pathname === "/guide" ? activeColor : linkColor}
+            >
+              <ListIcon
+                as={MdEventNote}
+                color={pathname === "/guide" ? activeIconColor : iconColor}
+              />
+              Room guide
             </Link>
           </NextLink>
         </ListItem>

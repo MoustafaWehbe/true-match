@@ -129,6 +129,13 @@ class SocketHandler {
           throw Error("The maximum number of allowed users has been reached.");
         }
 
+        if (
+          room.data?.roomState?.currentRound &&
+          room.data.roomState.currentRound >= 4
+        ) {
+          throw Error("Too late to join.");
+        }
+
         const joinRes = await roomService.joinRoom(token, roomId, socket.id);
         if (joinRes?.statusCode !== 200 && joinRes?.statusCode !== 201) {
           throw Error(joinRes?.message || "Failed to join room.");

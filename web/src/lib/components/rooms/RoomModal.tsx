@@ -245,7 +245,7 @@ function RoomModal({
                     mr={2}
                   />
                   <FormLabel mb="0">
-                    I have read and agree to the room content
+                    I have read and agreed to the room content
                   </FormLabel>
                   <Link
                     color="pink.400"
