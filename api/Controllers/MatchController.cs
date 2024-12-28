@@ -25,6 +25,7 @@ namespace api.Controllers
 
         [HttpPost]
         [Authorize]
+        [ProducesResponseType(typeof(ApiResponse<MatchDto>), 200)]
         public async Task<ActionResult<Match>> Create([FromBody] CreateMatchDto createMatchDto)
         {
             if (!ModelState.IsValid)

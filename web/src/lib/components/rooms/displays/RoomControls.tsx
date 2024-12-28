@@ -5,6 +5,7 @@ import { Box, Button } from "@chakra-ui/react";
 import VideoControls from "../VideoControls";
 
 import { RootState } from "~/lib/state/store";
+import isTruthy from "~/lib/utils/truthy";
 
 interface RoomControlsProps {
   currentRound: number | null;
@@ -68,7 +69,7 @@ const RoomControls = ({
           onClick={onResumeToggleClicked}
           size={{ base: "xs", md: "lg" }}
           isDisabled={
-            currentRound === undefined ||
+            !isTruthy(currentRound) ||
             currentRound! >= rounds.length - 1 ||
             peersCount === 0
           }
@@ -92,7 +93,7 @@ const RoomControls = ({
           onClick={skipRound}
           size={{ base: "xs", md: "lg" }}
           isDisabled={
-            currentRound === undefined ||
+            !isTruthy(currentRound) ||
             currentRound! >= rounds.length - 1 ||
             peersCount === 0
           }

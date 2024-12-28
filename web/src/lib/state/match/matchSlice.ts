@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 
 import {
+  CreateMatchDto,
   MatchDto,
   MatchDtoListApiResponse,
   MessageDto,
@@ -16,6 +17,8 @@ export interface MatchSate {
   matches: Array<MatchDto> | null;
   activeMatchId: string | null;
   messages: Array<MessageDto> | null;
+  isCreatingMatch: boolean;
+  matchFromCreate?: MatchDto | null;
 }
 
 export const getMatches = createAsyncThunk<
@@ -65,12 +68,35 @@ export const getMessages = createAsyncThunk<
   }
 );
 
+export const createMatch = createAsyncThunk<
+  MatchDto | undefined,
+  CreateMatchDto,
+  { rejectValue: string }
+>("match/create", async (payload, { rejectWithValue }) => {
+  try {
+    const response = await axiosInstance.post<CreateMatchDto>(
+      `/api/match`,
+      payload,
+      { headers: defaultHeaders }
+    );
+    return response.data;
+  } catch (error) {
+    let errorMessage = "Something went wrong!";
+    if (axios.isAxiosError(error) && error.response) {
+      errorMessage = error.response.data.message || errorMessage;
+    }
+    return rejectWithValue(errorMessage);
+  }
+});
+
 const initialState: MatchSate = {
   getMatchesLoading: false,
   getMessagesLoading: false,
   matches: null,
   activeMatchId: null,
   messages: null,
+  isCreatingMatch: false,
+  matchFromCreate: null,
 };
 
 const matchSlice = createSlice({
@@ -112,6 +138,16 @@ const matchSlice = createSlice({
       )
       .addCase(getMessages.rejected, (state) => {
         state.getMessagesLoading = false;
+      })
+      .addCase(createMatch.pending, (state) => {
+        state.isCreatingMatch = true;
+      })
+      .addCase(createMatch.fulfilled, (state, action) => {
+        state.isCreatingMatch = false;
+        state.matchFromCreate = action.payload;
+      })
+      .addCase(createMatch.rejected, (state) => {
+        state.isCreatingMatch = false;
       });
   },
 });

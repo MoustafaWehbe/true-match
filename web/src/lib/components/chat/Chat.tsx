@@ -17,12 +17,14 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { motion } from "framer-motion";
+import { useRouter, useSearchParams } from "next/navigation";
 
 import { SOCKET_EVENTS } from "@dapp/shared/src/consts/socketEvents";
 import { socketEventTypes } from "@dapp/shared/src/types/custom";
 
 import MotionBox from "../motion/Box";
 
+import { CHAT_MATCH_ID_QUERY_PARAM } from "~/lib/consts";
 import {
   getMatches,
   getMessages,
@@ -49,6 +51,8 @@ function Chat() {
   const dispatch = useDispatch<AppDispatch>();
   const webRTCHandler = useRef<IndividualChatWebRTCHandler | null>(null);
   const messageContainerRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
   const sendMessage = () => {
     if (input.trim()) {
@@ -108,16 +112,23 @@ function Chat() {
     dispatch(getMatches());
   }, [dispatch]);
 
-  const onMatchClick = (matchId: string) => {
-    const match = matches?.find((m) => m.id === matchId);
-    if (match) {
-      const otherPersonId =
-        match.user1?.id === me?.id ? match.user2 : match.user1;
-      dispatch(setActiveMatchId(matchId));
-      dispatch(
-        getMessages({ receiverId: otherPersonId?.id!, senderId: me?.id! })
-      );
+  useEffect(() => {
+    const matchId = searchParams.get(CHAT_MATCH_ID_QUERY_PARAM);
+    if (matchId && matches?.length && me?.id) {
+      const match = matches?.find((m) => m.id === matchId);
+      if (match) {
+        dispatch(setActiveMatchId(matchId));
+        const otherPersonId =
+          match.user1?.id === me?.id ? match.user2 : match.user1;
+        dispatch(
+          getMessages({ receiverId: otherPersonId?.id!, senderId: me?.id! })
+        );
+      }
     }
+  }, [searchParams, matches, me, dispatch]);
+
+  const onMatchClick = (matchId: string) => {
+    router.push(`?${CHAT_MATCH_ID_QUERY_PARAM}=${matchId}`);
   };
 
   return (
@@ -153,7 +164,7 @@ function Chat() {
                 : "2px solid rgba(0, 0, 0, 0)";
             return (
               <MotionAvatarBox
-                key={user.id}
+                key={match.id}
                 onClick={() => onMatchClick(match.id!)}
                 cursor="pointer"
                 bg={cardBg}
@@ -224,6 +235,7 @@ function Chat() {
               overflowY="scroll"
               color={cardTextColor}
               ref={messageContainerRef}
+              position={"relative"}
             >
               {messages?.map((msg, idx) => (
                 <MotionBox
@@ -248,6 +260,24 @@ function Chat() {
                   <Text>{msg.content}</Text>
                 </MotionBox>
               ))}
+              {messages?.length === 0 && (
+                <Text
+                  position={"absolute"}
+                  top={"50%"}
+                  left={"50%"}
+                  transform="translate(-50%, -50%)"
+                  maxWidth={"70%"}
+                  margin={"0 auto"}
+                  color="lightgray"
+                >
+                  <Text textAlign={"center"}>
+                    Congratulations on your new match! 🎉
+                  </Text>
+                  <Text mt="4" textAlign={"center"}>
+                    Start chatting now to get to know each other better!
+                  </Text>
+                </Text>
+              )}
             </Box>
 
             <HStack as={Fade} in={true} spacing={3}>
@@ -256,6 +286,7 @@ function Chat() {
                 placeholder="Type a message..."
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
+                autoFocus
                 onKeyPress={(e) => e.key === "Enter" && sendMessage()}
               />
               <IconButton

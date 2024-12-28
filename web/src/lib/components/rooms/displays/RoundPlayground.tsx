@@ -68,7 +68,7 @@ const RoundPlayground = ({
             _hover={{ transform: "scale(1.05)" }}
           >
             <Text
-              fontSize="3xl"
+              fontSize={{ base: "lg", md: "3xl" }}
               fontWeight="bold"
               fontStyle="italic"
               lineHeight="1.2"

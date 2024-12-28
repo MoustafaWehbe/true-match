@@ -1,5 +1,7 @@
 import { Box, Flex, Text } from "@chakra-ui/react";
 
+import AnimatedHeart from "../../shared/AnimatedHeart";
+
 const WatcherWaiting = () => {
   return (
     <Box
@@ -18,7 +20,10 @@ const WatcherWaiting = () => {
         height="100%"
         gap={6}
       >
-        <Text fontSize="xl">It’s just you here, enjoy!</Text>
+        <Text fontSize="xl">
+          Waiting for the presenter to start the rounds.
+        </Text>
+        <AnimatedHeart />
       </Flex>
     </Box>
   );

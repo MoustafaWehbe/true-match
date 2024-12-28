@@ -164,7 +164,6 @@ const Room = ({ roomId }: { roomId: string }) => {
   );
 
   const onPeersChanged = useCallback((peers: PeerItem[]) => {
-    console.log(peers);
     setPeers([...peers]);
   }, []);
 

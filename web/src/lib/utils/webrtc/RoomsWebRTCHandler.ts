@@ -85,10 +85,6 @@ export class RoomsWebRTCHandler {
   ) {
     socket.connect();
     try {
-      console.log(
-        "Fetching user Media for: ",
-        this.config.roomOwner ? "Owner" : "Watcher"
-      );
       this.stream = await this.fetchUserMedia(true, this.config.roomOwner);
     } catch (error) {
       this.onFetchUserMediaError(error);

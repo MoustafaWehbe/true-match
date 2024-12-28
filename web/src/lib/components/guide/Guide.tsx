@@ -4,7 +4,7 @@ import { Box, Heading, useColorModeValue, VStack } from "@chakra-ui/react";
 
 import RoomContent from "../rooms/RoomContent";
 
-const SettingsPage = () => {
+const GuidePage = () => {
   const textColor = useColorModeValue("gray.800", "white");
   const sectionBgColor = useColorModeValue("white", "gray.700");
 
@@ -21,7 +21,7 @@ const SettingsPage = () => {
       bg={sectionBgColor}
       shadow="md"
     >
-      <VStack align="stretch" spacing={6}>
+      <VStack align="stretch" spacing={6} mb={4}>
         <Heading size="lg" color={textColor}>
           Room Guide
         </Heading>
@@ -32,4 +32,4 @@ const SettingsPage = () => {
   );
 };
 
-export default SettingsPage;
+export default GuidePage;

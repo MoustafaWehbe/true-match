@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import {
   Box,
   Flex,
+  Image,
   Text,
   useColorModeValue,
   useMediaQuery,
@@ -27,6 +28,7 @@ import RoundPlayground from "./RoundPlayground";
 import StartRound from "./StartRound";
 import Timer from "./Timer";
 import UserCard from "./UserCard";
+import WatcherWaiting from "./WatcherWaiting";
 
 import { size } from "~/lib/consts";
 import useRound from "~/lib/hooks/useRound";
@@ -113,12 +115,14 @@ const Display = ({ peers, localVideoRef, localAudioRef }: DisplayProps) => {
 
   const renderVideo = () => {
     if (isOwner) {
-      // return <MyVideo localVideoRef={localVideoRef} />;
-      return null;
+      return <MyVideo localVideoRef={localVideoRef} />;
+      // return null;
     } else {
       if (thePresenter) {
-        return null;
-        // return <PeerVideo peer={thePresenter?.peer} user={thePresenter?.user} />
+        // return null;
+        return (
+          <PeerVideo peer={thePresenter?.peer} user={thePresenter?.user} />
+        );
       } else {
         return (
           <Text
@@ -268,15 +272,19 @@ const Display = ({ peers, localVideoRef, localAudioRef }: DisplayProps) => {
         alignItems={"center"}
         justify={"center"}
         gap={8}
-        mt={"10%"}
+        mt={isTruthy(activeRoom?.roomState?.currentRound) ? "7%" : "10%"}
       >
-        {/* <Image
+        <Image
           src="/images/in-a-date.jpg"
           alt="In a date"
           boxSize="250px"
           objectFit="cover"
           rounded={"50%"}
-        /> */}
+          position={"absolute"}
+          left={0}
+          top="50%"
+          transform={"translateY(-50%)"}
+        />
         {isTruthy(activeRoom?.roomState?.currentRound) && (
           <Flex
             height={"100%"}
@@ -317,6 +325,9 @@ const Display = ({ peers, localVideoRef, localAudioRef }: DisplayProps) => {
             startRounds={startRounds}
             isDisabled={peers.length === 0}
           />
+        ) : null}
+        {!isTruthy(activeRoom?.roomState?.currentRound) && !isOwner ? (
+          <WatcherWaiting />
         ) : null}
       </Flex>
       {/* timer controls */}

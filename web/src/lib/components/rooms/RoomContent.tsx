@@ -28,6 +28,7 @@ const RoomContent = () => {
       {roomContent?.map((content) => (
         <ListItem key={content.id} p={4} borderRadius="md" bg={listItemBgColor}>
           <ListIcon as={MdCheckCircle} color="green.500" />
+          Round {content.order}
           <Text fontSize="lg" fontWeight="bold">
             {content.title}
           </Text>
