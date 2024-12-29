@@ -62,8 +62,7 @@ namespace api.Data
                         {
                             Id = Guid.NewGuid(),
                             Title = "Pick Two",
-                            Description =
-                                "Get Ready to pick exactly two profiles in case the room has more.",
+                            Description = "Get Ready to pick exactly two profiles!",
                             Duration = 60,
                             Order = 5,
                         },

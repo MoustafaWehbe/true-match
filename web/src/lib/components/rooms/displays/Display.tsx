@@ -3,10 +3,8 @@ import { useSelector } from "react-redux";
 import {
   Box,
   Flex,
-  Image,
   Text,
   useColorModeValue,
-  useMediaQuery,
   Wrap,
   WrapItem,
 } from "@chakra-ui/react";
@@ -20,17 +18,17 @@ import PeerAudio from "../PeerAudio";
 import PeerVideo from "../PeerVideo";
 import { PeerItem } from "../Room";
 
+import FinalRound from "./FinalRound";
 import MyAudio from "./MyAudio";
 import MyVideo from "./MyVideo";
+import PickingRound from "./PickingRound";
 import PresenterWaiting from "./PresenterWaiting";
 import RoomControls from "./RoomControls";
 import RoundPlayground from "./RoundPlayground";
 import StartRound from "./StartRound";
-import Timer from "./Timer";
 import UserCard from "./UserCard";
 import WatcherWaiting from "./WatcherWaiting";
 
-import { size } from "~/lib/consts";
 import useRound from "~/lib/hooks/useRound";
 import { RootState } from "~/lib/state/store";
 import { colorPalette } from "~/lib/utils/colors/colors";
@@ -63,11 +61,6 @@ const Display = ({ peers, localVideoRef, localAudioRef }: DisplayProps) => {
     resumeCurrentRound,
     nextQuestionClicked,
   } = useRound();
-
-  const [isLaptopOrDesktop] = useMediaQuery(`(min-width: ${size.desktop})`);
-
-  const progressCircleThickness = isLaptopOrDesktop ? 5 : 4;
-  const progressCircleSize = isLaptopOrDesktop ? 140 : 70;
 
   const colorForUserId = useMemo(() => {
     const uniqueColors = [...colorPalette];
@@ -158,9 +151,9 @@ const Display = ({ peers, localVideoRef, localAudioRef }: DisplayProps) => {
     }
   };
 
-  const removeTheUser = () => {
-    if (userToBeRemoved && activeRoom?.id) {
-      const p = peers.find((p) => p.user.id === userToBeRemoved);
+  const removeTheUser = (userId?: string) => {
+    if (activeRoom?.id && userId) {
+      const p = peers.find((p) => p.user.id === userId);
 
       socket.emit(SOCKET_EVENTS.CLIENT.REMOVE_USER, {
         socketIdToRemove: p?.peerID,
@@ -175,12 +168,21 @@ const Display = ({ peers, localVideoRef, localAudioRef }: DisplayProps) => {
     setPreviewProfileModalUserId(undefined);
   };
 
+  const usersFromPeers = useMemo(() => peers.map((p) => p.user), [peers]);
+
   if (!rounds) {
     return null;
   }
 
   return (
-    <Box height={"100%"} mx={{ base: "10px" }} position={"relative"}>
+    <Box
+      height={"100%"}
+      mx={{ base: "10px" }}
+      position={"relative"}
+      display={"flex"}
+      justifyContent={"space-between"}
+      flexDirection={"column"}
+    >
       <Flex
         flexDir={{ base: "column", md: "row" }}
         justifyContent={"center"}
@@ -205,7 +207,7 @@ const Display = ({ peers, localVideoRef, localAudioRef }: DisplayProps) => {
           backgroundColor="gray.800"
           borderRadius="20px"
           boxShadow="0 4px 12px rgba(0, 0, 0, 0.1)"
-          overflow="hidden"
+          overflow="auto"
           width={{ base: "100%" }}
         >
           {peersFiltered?.length === 0 && isOwner ? (
@@ -214,7 +216,7 @@ const Display = ({ peers, localVideoRef, localAudioRef }: DisplayProps) => {
             <Wrap
               gap={{ base: 2, md: 6 }}
               alignContent={"start"}
-              padding={8}
+              padding={2}
               overflowY={"auto"}
             >
               {!isOwner && (
@@ -227,7 +229,6 @@ const Display = ({ peers, localVideoRef, localAudioRef }: DisplayProps) => {
                   p={2}
                   shadow="sm"
                   rounded="md"
-                  marginTop={"30px"}
                 >
                   <MyAudio localAudioRef={localAudioRef} />
                 </WrapItem>
@@ -243,7 +244,6 @@ const Display = ({ peers, localVideoRef, localAudioRef }: DisplayProps) => {
                   p={2}
                   shadow="sm"
                   rounded="md"
-                  marginTop={"30px"}
                 >
                   <UserCard
                     color={colorForUserId[peer.user.id!]}
@@ -272,9 +272,8 @@ const Display = ({ peers, localVideoRef, localAudioRef }: DisplayProps) => {
         alignItems={"center"}
         justify={"center"}
         gap={8}
-        mt={isTruthy(activeRoom?.roomState?.currentRound) ? "7%" : "10%"}
       >
-        <Image
+        {/* <Image
           src="/images/in-a-date.jpg"
           alt="In a date"
           boxSize="250px"
@@ -284,14 +283,14 @@ const Display = ({ peers, localVideoRef, localAudioRef }: DisplayProps) => {
           left={0}
           top="50%"
           transform={"translateY(-50%)"}
-        />
+        /> */}
         {isTruthy(activeRoom?.roomState?.currentRound) && (
           <Flex
             height={"100%"}
             direction={"column"}
             justifyContent={"center"}
             gap={4}
-            maxWidth={{ base: "95vw", md: "65vw" }}
+            maxWidth={{ base: "95vw", md: "95vw" }}
           >
             <Text textAlign={"left"}>
               Round {activeRoom?.roomState?.currentRound! + 1}
@@ -304,20 +303,19 @@ const Display = ({ peers, localVideoRef, localAudioRef }: DisplayProps) => {
               currentRound={activeRoom?.roomState?.currentRound!}
               isOwner={isOwner}
             />
-            <Box
+            {/* <Box
               position={"absolute"}
               top={"50%"}
               right={8}
               transform="translateY(-50%)"
             >
-              {/* Timer section */}
               <Timer
                 progressCircleSize={progressCircleSize}
                 progressCircleThickness={progressCircleThickness}
                 currentRound={activeRoom?.roomState?.currentRound!}
                 timer={activeRoom?.roomState?.timeRemainingForRoundBeforePause!}
               />
-            </Box>
+            </Box> */}
           </Flex>
         )}
         {!isTruthy(activeRoom?.roomState?.currentRound) && isOwner ? (
@@ -354,12 +352,22 @@ const Display = ({ peers, localVideoRef, localAudioRef }: DisplayProps) => {
       <ConfirmDialog
         isOpen={!!userToBeRemoved}
         onClose={() => setUserToBeRemoved(undefined)}
-        onConfirm={removeTheUser}
+        onConfirm={() => removeTheUser(userToBeRemoved)}
         title="Remove user from room?"
         description="Are you sure you want to remove this user from the room?"
         confirmText="Remove"
         cancelText="Cancel"
       />
+      {peers.length > 2 && activeRoom?.roomState?.currentRound === 4 && (
+        <PickingRound
+          users={usersFromPeers}
+          onRemoveUser={(userId) => removeTheUser(userId)}
+          isOwner={isOwner}
+        />
+      )}
+      {activeRoom?.roomState?.currentRound === 5 && peers.length > 0 && (
+        <FinalRound users={usersFromPeers} isOwner={isOwner} />
+      )}
     </Box>
   );
 };

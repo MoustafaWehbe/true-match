@@ -7,7 +7,6 @@ const WatcherWaiting = () => {
     <Box
       id="peer-container"
       height="100%"
-      overflowY="auto"
       width="100%"
       display={"flex"}
       justifyContent={"center"}

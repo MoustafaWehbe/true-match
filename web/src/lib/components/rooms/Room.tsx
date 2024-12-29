@@ -235,7 +235,7 @@ const Room = ({ roomId }: { roomId: string }) => {
           leftIcon={<MdKeyboardArrowLeft />}
           position="fixed"
           left="0"
-          top={"20px"}
+          top={"40px"}
           bg={"red.500"}
           minW={"auto"}
           height={32}

@@ -1,5 +1,5 @@
 import { FiX } from "react-icons/fi";
-import { Avatar, Box, Center, Text } from "@chakra-ui/react";
+import { Box, Center, Text } from "@chakra-ui/react";
 
 import { UserDto } from "@dapp/shared/src/types/openApiGen";
 
@@ -35,34 +35,21 @@ const UserCard = ({
         justifyContent="center"
         border="1px solid"
         borderColor={color}
-        width={{ base: "85px", md: "100px" }}
-        height={{ base: "85px", md: "100px" }}
+        width={{ base: "80px", md: "120px" }}
+        height={{ base: "80px", md: "120px" }}
+        bgImage={`url(${constructMediaUrl(
+          user?.media?.length ? user?.media[0].url : ""
+        )})`}
+        bgSize="cover"
+        bgPosition="center"
+        animation={`${glowingAnimation(color)} 2s infinite`}
+        transition="transform 0.2s ease-in-out"
+        _hover={{
+          transform: "scale(1.1)",
+          cursor: "pointer",
+        }}
+        onClick={() => onUserCardClicked(user.id)}
       >
-        <Box
-          position="absolute"
-          rounded="full"
-          bg={"rgba(0, 128, 255, 0.1)"}
-          animation={`${glowingAnimation(color)} 2s infinite`}
-          top={{ base: -10, md: "-55" }}
-          left={0}
-          zIndex={4}
-          transition="transform 0.2s ease-in-out"
-          _hover={{
-            transform: "scale(1.1)",
-            cursor: "pointer",
-          }}
-          onClick={() => onUserCardClicked(user.id)}
-        >
-          <Avatar
-            src={constructMediaUrl(
-              user?.media?.length ? user?.media[0].url : ""
-            )}
-            size={{ base: "md", md: "lg" }}
-            name={user.firstName!}
-            borderWidth="2px"
-          />
-        </Box>
-
         {isOwner && (
           <Box
             position="absolute"
@@ -73,7 +60,11 @@ const UserCard = ({
               transform: "scale(1.1)",
               cursor: "pointer",
             }}
-            onClick={() => onRemoveUser(user.id)}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              onRemoveUser(user.id);
+            }}
             top="-10px"
             background="white"
             border="1px solid"
@@ -90,21 +81,37 @@ const UserCard = ({
           justifyContent={"center"}
           width={"100%"}
           padding={"0 6px"}
-          marginTop={"20px"}
-          color={"grey"}
-          fontWeight={600}
+          color="black"
+          fontWeight={900}
           fontSize={"medium"}
+          position={"absolute"}
+          bottom={0}
         >
-          <Text textTransform={"uppercase"}>{user?.firstName}</Text>
-          {isMe && (
-            <Text
-              fontSize={"x-small"}
-              fontWeight={"100"}
-              textTransform={"none"}
-            >
-              (you)
-            </Text>
-          )}
+          <Box
+            position="absolute"
+            bottom={0}
+            left={0}
+            w="100%"
+            h="100%"
+            bgGradient="linear(to-t, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.2))"
+            pointerEvents="none"
+            borderRadius="8px"
+            borderTopLeftRadius={"unset"}
+            borderTopRightRadius={"unset"}
+          />
+          <Text textTransform={"uppercase"}>
+            {user?.firstName}
+            {isMe && (
+              <Text
+                as="span"
+                fontSize={"x-small"}
+                fontWeight={"200"}
+                textTransform={"none"}
+              >
+                (you)
+              </Text>
+            )}
+          </Text>
           <Box fontWeight={600} fontSize={"small"}>
             {calculateAge(new Date(user?.userProfile?.birthDate!))}
           </Box>

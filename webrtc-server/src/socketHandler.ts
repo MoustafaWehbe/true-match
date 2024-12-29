@@ -376,14 +376,20 @@ class SocketHandler {
     try {
       const room = await roomService.getRoomById(token, payload.roomId);
       if (room?.data) {
-        const existingRoomState = room.data.roomState as RoomState | undefined;
+        const existingRoomState = room.data.roomState as RoomState;
+        const roomClients = this.io.sockets.adapter.rooms.get(room.data.id!);
+        const socketsCount = roomClients ? roomClients.size : 0;
+
+        const roundNumber =
+          existingRoomState.currentRound === 3 && socketsCount <= 2
+            ? existingRoomState.rounds?.length! - 1
+            : existingRoomState.currentRound! + 1;
         const finalRoomState: RoomState = {
           ...existingRoomState,
           isRoundPaused: false,
-          currentRound: existingRoomState?.currentRound! + 1,
+          currentRound: roundNumber,
           timeRemainingForRoundBeforePause:
-            existingRoomState?.rounds![existingRoomState?.currentRound! + 1]
-              .duration!,
+            existingRoomState?.rounds![roundNumber].duration!,
         };
         this.io.in(payload.roomId).emit(SOCKET_EVENTS.SERVER.SKIP_ROUND_EVENT, {
           roomState: finalRoomState,

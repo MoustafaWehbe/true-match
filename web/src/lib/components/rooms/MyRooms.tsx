@@ -45,8 +45,13 @@ function MyRooms() {
   const bg = useColorModeValue("gray.50", "gray.800");
   const textColor = useColorModeValue("gray.800", "whiteAlpha.900");
   const dispatch = useDispatch<AppDispatch>();
-  const { myRooms, createRoomLoading, updateRoomLoading, getMyRoomsLoading } =
-    useSelector((state: RootState) => state.room);
+  const {
+    myRooms,
+    createRoomLoading,
+    updateRoomLoading,
+    getMyRoomsLoading,
+    isStartingRoom,
+  } = useSelector((state: RootState) => state.room);
   const [selectedStatus, setSelectedStatus] = useState<Option>(options[0]);
   const toast = useToast();
   const [isAgreementChecked, setIsAgreementChecked] = useState(false);
@@ -238,6 +243,7 @@ function MyRooms() {
             room={room}
             onEditClicked={handleEditClicked}
             onStartRoom={handleStartRoom}
+            isStartRoomLoading={isStartingRoom}
           />
         ))}
       </Grid>

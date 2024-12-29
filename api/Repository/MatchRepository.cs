@@ -23,6 +23,16 @@ namespace api.Repository
                 throw new InvalidDataException("user not found.");
             }
 
+            var isAlreadyMatch = await _context.Matches.FirstAsync(m =>
+                (m.User1Id == match.User1Id && m.User2Id == match.User2Id)
+                || (m.User1Id == match.User2Id && m.User2Id == match.User1Id)
+            );
+
+            if (isAlreadyMatch != null)
+            {
+                throw new InvalidDataException("User is already a match.");
+            }
+
             _context.Matches.Add(match);
             await _context.SaveChangesAsync();
             return match;

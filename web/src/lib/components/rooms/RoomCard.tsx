@@ -44,6 +44,7 @@ interface RoomCardProps {
   isComingUp?: boolean;
   isInProgress?: boolean;
   isArchived?: boolean;
+  isStartRoomLoading?: boolean;
   onJoin?: (roomId: string) => void;
   onUpdate?: (roomId: string) => void;
   onDelete?: (roomId: string) => void;
@@ -58,6 +59,7 @@ interface RoomCardProps {
 const RoomCard = ({
   room,
   isComingUp,
+  isStartRoomLoading,
   handleOnInterested,
   handleOnBlock,
   handleOnHideRoom,
@@ -391,7 +393,13 @@ const RoomCard = ({
               Join Room
             </GradientButton>
           ) : (
-            <GradientButton size="md" boxShadow="xl" onClick={onStart}>
+            <GradientButton
+              size="md"
+              boxShadow="xl"
+              onClick={onStart}
+              isLoading={isStartRoomLoading}
+              loadingText="Starting.."
+            >
               Start Room
             </GradientButton>
           )}

@@ -53,10 +53,7 @@ const RoomControls = ({
       display="flex"
       alignItems={"center"}
       justifyContent={isRoomOwner ? "space-between" : "center"}
-      position={"absolute"}
-      bottom={0}
       width={"100%"}
-      left={0}
       borderTop={"1px solid gray"}
       paddingY={4}
     >
