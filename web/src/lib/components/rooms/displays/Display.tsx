@@ -303,19 +303,6 @@ const Display = ({ peers, localVideoRef, localAudioRef }: DisplayProps) => {
               currentRound={activeRoom?.roomState?.currentRound!}
               isOwner={isOwner}
             />
-            {/* <Box
-              position={"absolute"}
-              top={"50%"}
-              right={8}
-              transform="translateY(-50%)"
-            >
-              <Timer
-                progressCircleSize={progressCircleSize}
-                progressCircleThickness={progressCircleThickness}
-                currentRound={activeRoom?.roomState?.currentRound!}
-                timer={activeRoom?.roomState?.timeRemainingForRoundBeforePause!}
-              />
-            </Box> */}
           </Flex>
         )}
         {!isTruthy(activeRoom?.roomState?.currentRound) && isOwner ? (
