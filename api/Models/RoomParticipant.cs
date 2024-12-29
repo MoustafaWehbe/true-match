@@ -19,6 +19,7 @@ namespace api.Models
 
         [ForeignKey("UserId")]
         public User? User { get; set; }
+        public DateTime? NotifiedAt { get; set; }
 
         public ICollection<RoomParticipantEvent> RoomParticipantEvents { get; set; } =
             new List<RoomParticipantEvent>();

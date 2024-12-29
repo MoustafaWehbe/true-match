@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Room Reminder</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f7f8fa;
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 600px;
+      margin: 20px auto;
+      background-color: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      line-height: 1.6;
+    }
+    .header {
+      text-align: center;
+      padding: 10px 0;
+    }
+    .header h2 {
+      color: #2c3e50;
+    }
+    .content {
+      margin: 20px 0;
+    }
+    .content p {
+      margin: 10px 0;
+    }
+    .footer {
+      text-align: center;
+      font-size: 12px;
+      color: #888;
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid #ddd;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h2>Reminder: Room "{{roomTitle}}" Scheduled</h2>
+    </div>
+    <div class="content">
+      <p>Dear {{name}},</p>
+      <p>This is a reminder that the room titled "<strong>{{roomTitle}}</strong>" is scheduled to start in 5 minutes, at <strong>{{scheduledAt}}</strong>.</p>
+      <p>Please make sure you are ready to participate at the scheduled time.</p>
+      <p>Best regards,</p>
+      <p>Dapp</p>
+    </div>
+    <div class="footer">
+      <p>© {{year}} Moustafa app. All rights reserved.</p>
+    </div>
+  </div>
+</body>
+</html>
