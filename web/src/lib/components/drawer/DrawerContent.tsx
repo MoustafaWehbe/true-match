@@ -14,6 +14,7 @@ import {
   ListIcon,
   ListItem,
   Stack,
+  Text,
   useColorModeValue,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
@@ -144,6 +145,20 @@ const DrawerContent = () => {
               Room guide
             </Link>
           </NextLink>
+        </ListItem>
+        <hr />
+        <ListItem color={"gray"}>
+          <Text fontSize="sm">
+            <Link href="/" isExternal rel="noopener noreferrer">
+              Terms & Policies
+            </Link>
+          </Text>
+          <Text fontSize="sm">
+            {new Date().getFullYear()} -{" "}
+            <Link href="/" isExternal rel="noopener noreferrer">
+              App by Moustafa
+            </Link>
+          </Text>
         </ListItem>
       </List>
     </Box>

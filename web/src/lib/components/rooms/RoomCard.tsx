@@ -202,7 +202,6 @@ const RoomCard = ({
       display={"flex"}
       flexDirection={"column"}
       gap={0}
-      overflowY={"auto"}
     >
       <Flex
         direction={"column"}
