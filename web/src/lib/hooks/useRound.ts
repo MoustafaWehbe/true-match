@@ -7,7 +7,7 @@ import { socketEventTypes } from "@dapp/shared/src/types/custom";
 import { getRoomContent } from "../state/room/roomSlice";
 import { AppDispatch, RootState } from "../state/store";
 
-import { socket } from "~/lib/utils/socket/socket";
+import { roomSocket as socket } from "~/lib/utils/socket/socket";
 
 const useRound = () => {
   const dispatch = useDispatch<AppDispatch>();

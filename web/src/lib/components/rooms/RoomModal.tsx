@@ -44,8 +44,10 @@ interface RoomModalProp {
   setIsAgreementChecked: (arg: boolean) => void;
 }
 
-const formatDateTimeLocal = (date: Date) => {
-  return date.toISOString().slice(0, 16); // "YYYY-MM-DDTHH:MM"
+const formatDateForInput = (utcDate: Date): string => {
+  const pad = (num: number) => num.toString().padStart(2, "0");
+
+  return `${utcDate.getFullYear()}-${pad(utcDate.getMonth() + 1)}-${pad(utcDate.getDate())}T${pad(utcDate.getHours())}:${pad(utcDate.getMinutes())}`;
 };
 
 function RoomModal({
@@ -70,7 +72,7 @@ function RoomModal({
         title: room.title || "",
         description: room.description || "",
         scheduledAt: room.scheduledAt
-          ? formatDateTimeLocal(new Date(room.scheduledAt))
+          ? formatDateForInput(new Date(room.scheduledAt))
           : "",
 
         selectedQuestionCategories:

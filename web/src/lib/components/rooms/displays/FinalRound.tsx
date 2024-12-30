@@ -47,7 +47,7 @@ const FinalRound = ({
     const res = await dispatch(
       createMatch({
         origin: 0,
-        user2Id: "03d630af-a622-43cd-b4b2-d0cb36d42fbd",
+        user2Id: user.id,
       })
     );
     if (res.meta.requestStatus !== "rejected") {
@@ -141,6 +141,7 @@ const FinalRound = ({
                     onClick={() => onSelect(user)}
                     mt="6"
                     w="70%"
+                    maxW={"300px"}
                     bg="pink.600"
                     color="white"
                     borderRadius="full"

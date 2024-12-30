@@ -4,6 +4,7 @@ import {
   Box,
   Button,
   Heading,
+  Input,
   Text,
   useColorMode,
   useColorModeValue,
@@ -34,6 +35,7 @@ const OnboardingFormStep4Interests = ({
   const interestsData = (availableDescriptors || [])[1];
   const interestsDataDescriptors =
     (availableDescriptors || [])[1]?.descriptors || [];
+  const [searchTerm, setSearchTerm] = useState("");
 
   if (!interestsData) {
     return null;
@@ -66,6 +68,14 @@ const OnboardingFormStep4Interests = ({
     }
   };
 
+  const filteredChoices = interestsDataDescriptors[0].choices?.filter(
+    (choice) => choice.name?.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value);
+  };
+
   return (
     <Box p={6}>
       <Heading size="lg" mb={2}>
@@ -74,9 +84,15 @@ const OnboardingFormStep4Interests = ({
       <Text fontSize="md" color={textColor} mb={6}>
         {interestsData.prompt}
       </Text>
-
+      <Input
+        placeholder="Search choices"
+        value={searchTerm}
+        onChange={handleSearch}
+        mb={4}
+        variant={"flushed"}
+      />
       <Wrap spacing={4} justify={"center"}>
-        {interestsDataDescriptors[0].choices?.map((choice) => (
+        {filteredChoices?.map((choice) => (
           <WrapItem key={choice.id} width="auto" justifyContent={"center"}>
             <Button
               key={choice.id}

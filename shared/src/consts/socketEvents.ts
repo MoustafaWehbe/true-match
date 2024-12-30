@@ -8,7 +8,6 @@ export const SOCKET_EVENTS = {
     SEND_OFFER_EVENT: "client:video:send-offer",
     SEND_ANSWER_EVENT: "client:viedo:send-answer",
     SEND_ICE_CANDIDATE_EVENT: "client:video:send-ice-candidate",
-    LEAVE_ROOM_EVENT: "client:room:leave",
     START_ROUND_EVENT: "client:room:start-round",
     PAUSE_ROUND_EVENT: "client:room:pause-round",
     RESUME_ROUND_EVENT: "client:room:resume-round",

@@ -1,7 +1,7 @@
 import { SOCKET_EVENTS } from "@dapp/shared/src/consts/socketEvents";
 import { socketEventTypes } from "@dapp/shared/src/types/custom";
 
-import { socket } from "~/lib/utils/socket/socket";
+import { chatSocket as socket } from "~/lib/utils/socket/socket";
 
 export class IndividualChatWebRTCHandler {
   private handleSendMessage: (

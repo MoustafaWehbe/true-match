@@ -4,7 +4,7 @@ import { UserDto } from "@dapp/shared/src/types/openApiGen";
 
 import { PeerItem } from "~/lib/components/rooms/Room";
 import { peerConfiguration } from "~/lib/consts/webrtc";
-import { socket } from "~/lib/utils/socket/socket";
+import { roomSocket as socket } from "~/lib/utils/socket/socket";
 
 export class RoomsWebRTCHandler {
   private stream: MediaStream | null = null;
@@ -104,10 +104,6 @@ export class RoomsWebRTCHandler {
 
   closeConnections() {
     this.peers.forEach(({ peer }) => peer.close());
-
-    socket.emit(SOCKET_EVENTS.CLIENT.LEAVE_ROOM_EVENT, {
-      roomId: this.roomId,
-    } as socketEventTypes.LeaveRoomPayload);
 
     socket.off(SOCKET_EVENTS.SERVER.JOIN_ROOM_EVENT, this.handleUserJoined);
     socket.off(SOCKET_EVENTS.SERVER.SEND_OFFER_EVENT, this.handleIncomingOffer);

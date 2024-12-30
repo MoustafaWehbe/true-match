@@ -105,7 +105,7 @@ const OnboardingFormStep2Gender = ({
             {selectedMainGender?.id === gender.id &&
               selectedMainGender?.children?.length && (
                 <Box mt={2}>
-                  <Link color="blue.500" onClick={onAddMoreGendersOpen}>
+                  <Link color="pink.600" onClick={onAddMoreGendersOpen}>
                     Add more about your gender <ChevronDownIcon />
                   </Link>
                 </Box>

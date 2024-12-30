@@ -25,9 +25,11 @@ axiosInstance.interceptors.response.use(
       const { status } = error.response;
 
       if (
-        status === 401 &&
-        window.location.pathname !== "/login" &&
-        window.location.pathname !== "/signup"
+        status === 401 ||
+        (status === 404 &&
+          error.config?.url === "/me" &&
+          window.location.pathname !== "/login" &&
+          window.location.pathname !== "/signup")
       ) {
         window.location.href = "/login";
       }

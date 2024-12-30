@@ -32,7 +32,7 @@ import {
   updateMessages,
 } from "~/lib/state/match/matchSlice";
 import { AppDispatch, RootState } from "~/lib/state/store";
-import { socket } from "~/lib/utils/socket/socket";
+import { chatSocket as socket } from "~/lib/utils/socket/socket";
 import { IndividualChatWebRTCHandler } from "~/lib/utils/webrtc/IndividualChatWebRTCHandler";
 
 const MotionAvatarBox = motion(Box as any);

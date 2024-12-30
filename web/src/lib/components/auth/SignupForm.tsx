@@ -39,9 +39,9 @@ function SignupForm() {
         isClosable: true,
       });
       if (window) {
-        window.location.href = "/";
+        window.location.href = "/onboarding";
       } else {
-        router.push("/");
+        router.push("/onboarding");
       }
     }
   }, [registerResult, router, toast]);

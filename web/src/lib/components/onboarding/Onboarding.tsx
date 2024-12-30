@@ -173,7 +173,7 @@ const Onboarding = () => {
         ...values,
       })
     );
-    window.location.href = "/";
+    window.location.href = "/browse-rooms";
   };
 
   return (

@@ -26,11 +26,6 @@ const getParticipants = async (client: PoolClient) => {
   `;
   const { rows }: { rows: Participant[] } = await client.query(query);
 
-  if (rows.length === 0) {
-    console.log("No participants to notify.");
-    return [];
-  }
-
   return rows;
 };
 

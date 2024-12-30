@@ -32,7 +32,7 @@ import WatcherWaiting from "./WatcherWaiting";
 import useRound from "~/lib/hooks/useRound";
 import { RootState } from "~/lib/state/store";
 import { colorPalette } from "~/lib/utils/colors/colors";
-import { socket } from "~/lib/utils/socket/socket";
+import { roomSocket as socket } from "~/lib/utils/socket/socket";
 import isTruthy from "~/lib/utils/truthy";
 
 interface DisplayProps {
