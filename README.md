@@ -18,6 +18,9 @@ A dating app for those who have the guts to go live and chat with potential matc
 4. **WebRTC-Server**:
    - A WebSocket server that manages TCP connections for real-time data and WebRTC signaling. It facilitates peer-to-peer connections for live interactions between users.
 
+5. **Worker**:
+   - This package is responsible for running the background jobs, including sending transactional/scheduled emails.
+
 ---
 
 ## Prerequisites
