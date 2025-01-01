@@ -90,6 +90,8 @@ const MultiSelection = ({
               variant={
                 selectedChoices.includes(choice.id!) ? "solid" : "outline"
               }
+              boxSizing="border-box"
+              borderWidth="1px"
               colorScheme={"pink"}
               display="flex"
               flexDirection="column"

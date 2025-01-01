@@ -15,6 +15,7 @@ export const SOCKET_EVENTS = {
     GO_TO_NEXT_QUESTION_EVENT: "client:room:go-to-next-question",
     SEND_MESSAGE: "client:chat:send-message",
     REMOVE_USER: "client:room:remove-user",
+    ADD_NEW_MATCH: "client:room:add-match",
   },
   SERVER: {
     JOIN_ROOM_EVENT: "server:room:user-joined",
@@ -33,5 +34,6 @@ export const SOCKET_EVENTS = {
     SEND_MESSAGE: "server:chat:send-message",
     EMIT_SOCKET_DISCONNECTED: "server:socket:disconnect",
     REMOVE_USER: "server:room:remove-user",
+    ADD_NEW_MATCH: "server:room:add-match",
   },
 };

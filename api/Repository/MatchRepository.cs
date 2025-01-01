@@ -51,8 +51,16 @@ namespace api.Repository
             return await _context
                 .Matches.Include(m => m.User1)
                 .Include(m => m.User2)
+                .Include(m => m.User1!.Media)
+                .Include(m => m.User2!.Media)
                 .Where(m => m.User1Id == userId || m.User2Id == userId)
                 .ToListAsync();
+        }
+
+        public async Task DeleteAsync(Match match)
+        {
+            _context.Matches.Remove(match);
+            await _context.SaveChangesAsync();
         }
     }
 }

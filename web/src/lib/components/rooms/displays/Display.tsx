@@ -109,10 +109,8 @@ const Display = ({ peers, localVideoRef, localAudioRef }: DisplayProps) => {
   const renderVideo = () => {
     if (isOwner) {
       return <MyVideo localVideoRef={localVideoRef} />;
-      // return null;
     } else {
-      if (thePresenter) {
-        // return null;
+      if (thePresenter && activeRoom?.roomState?.currentRound !== 5) {
         return (
           <PeerVideo peer={thePresenter?.peer} user={thePresenter?.user} />
         );
@@ -197,7 +195,6 @@ const Display = ({ peers, localVideoRef, localAudioRef }: DisplayProps) => {
           alignItems={"center"}
           position={"relative"}
           width={{ base: "220px", md: "340px" }}
-          marginLeft={10}
         >
           {renderVideo()}
         </Flex>
@@ -353,7 +350,11 @@ const Display = ({ peers, localVideoRef, localAudioRef }: DisplayProps) => {
         />
       )}
       {activeRoom?.roomState?.currentRound === 5 && peers.length > 0 && (
-        <FinalRound users={usersFromPeers} isOwner={isOwner} />
+        <FinalRound
+          users={usersFromPeers}
+          isOwner={isOwner}
+          thePresenter={thePresenter}
+        />
       )}
     </Box>
   );

@@ -72,6 +72,12 @@ class RoomHandler {
       (payload: socketEventTypes.RemoveUserPayload) =>
         this.removeUser(payload, socket)
     );
+
+    socket.on(
+      SOCKET_EVENTS.CLIENT.ADD_NEW_MATCH,
+      (payload: socketEventTypes.AddNewMatchPayload) =>
+        this.handleNewMatch(payload, socket)
+    );
   }
 
   private async handleOnJoin(
@@ -450,6 +456,15 @@ class RoomHandler {
       } as socketEventTypes.EmitErrorPayload);
       console.error(errorMessage, e);
     }
+  }
+
+  private async handleNewMatch(
+    payload: socketEventTypes.AddNewMatchPayload,
+    socket: Socket
+  ) {
+    socket.broadcast
+      .to(payload.roomId)
+      .emit(SOCKET_EVENTS.SERVER.ADD_NEW_MATCH, payload);
   }
 
   // helpers

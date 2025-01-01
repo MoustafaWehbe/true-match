@@ -22,7 +22,12 @@ const VideoControls = ({
   onToggleVideo,
 }: VideoControlsProps) => {
   return (
-    <Stack direction="row" spacing={{ base: 1, md: 4 }}>
+    <Stack
+      direction="row"
+      spacing={{ base: 1, md: 4 }}
+      flex={1}
+      justifyContent={!isRoomOwner ? "start" : { base: "start", md: "center" }}
+    >
       <IconButton
         onClick={onToggleMic}
         icon={isMicOn ? <FaMicrophone size={12} /> : <FaMicrophoneSlash />}

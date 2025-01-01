@@ -195,13 +195,20 @@ const RoomCard = ({
       borderRadius="lg"
       boxShadow="lg"
       overflow="hidden"
-      maxHeight={600}
+      height={600}
       transition="transform 0.2s"
       _hover={{ transform: "scale(1.05)", cursor: "pointer", opacity: 0.9 }}
       position={"relative"}
       display={"flex"}
       flexDirection={"column"}
       gap={0}
+      overflowY={"auto"}
+      css={{
+        "&::-webkit-scrollbar": {
+          width: "0px",
+        },
+        scrollbarWidth: "none",
+      }}
     >
       <Flex
         direction={"column"}

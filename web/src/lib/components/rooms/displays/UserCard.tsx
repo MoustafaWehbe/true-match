@@ -23,32 +23,35 @@ const UserCard = ({
   onRemoveUser: (userId?: string | null) => void;
 }) => {
   return (
-    <Center flexDir="column">
+    <Center
+      flexDir="column"
+      animation={`${glowingAnimation(color)} 2s infinite`}
+      transition="transform 0.2s ease-in-out"
+      _hover={{
+        transform: "scale(1.1)",
+        cursor: "pointer",
+      }}
+      onClick={() => onUserCardClicked(user.id)}
+      padding={2}
+    >
       <Box
         position="relative"
         bg="white"
         color={"black"}
-        borderRadius="10px"
+        borderRadius="50%"
         display="flex"
         flexDir="column"
         alignItems="center"
         justifyContent="center"
         border="1px solid"
         borderColor={color}
-        width={{ base: "80px", md: "120px" }}
-        height={{ base: "80px", md: "120px" }}
+        width={{ base: "80px", md: "100px" }}
+        height={{ base: "80px", md: "100px" }}
         bgImage={`url(${constructMediaUrl(
           user?.media?.length ? user?.media[0].url : ""
         )})`}
         bgSize="cover"
         bgPosition="center"
-        animation={`${glowingAnimation(color)} 2s infinite`}
-        transition="transform 0.2s ease-in-out"
-        _hover={{
-          transform: "scale(1.1)",
-          cursor: "pointer",
-        }}
-        onClick={() => onUserCardClicked(user.id)}
       >
         {isOwner && (
           <Box
@@ -57,7 +60,7 @@ const UserCard = ({
             zIndex={4}
             transition="transform 0.2s ease-in-out"
             _hover={{
-              transform: "scale(1.1)",
+              transform: "scale(1.2)",
               cursor: "pointer",
             }}
             onClick={(e) => {
@@ -65,56 +68,42 @@ const UserCard = ({
               e.stopPropagation();
               onRemoveUser(user.id);
             }}
-            top="-10px"
+            top="-15px"
             background="white"
             border="1px solid"
-            right="-6px"
-            color="red"
+            right="-16px"
+            color="red.800"
           >
             <FiX size="15px" />
           </Box>
         )}
-        <Box
-          flex="1"
-          display={"flex"}
-          flexDir={"column"}
-          justifyContent={"center"}
-          width={"100%"}
-          padding={"0 6px"}
-          color="black"
-          fontWeight={900}
-          fontSize={"medium"}
-          position={"absolute"}
-          bottom={0}
-        >
-          <Box
-            position="absolute"
-            bottom={0}
-            left={0}
-            w="100%"
-            h="100%"
-            bgGradient="linear(to-t, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.2))"
-            pointerEvents="none"
-            borderRadius="8px"
-            borderTopLeftRadius={"unset"}
-            borderTopRightRadius={"unset"}
-          />
-          <Text textTransform={"uppercase"}>
-            {user?.firstName}
-            {isMe && (
-              <Text
-                as="span"
-                fontSize={"x-small"}
-                fontWeight={"200"}
-                textTransform={"none"}
-              >
-                (you)
-              </Text>
-            )}
-          </Text>
-          <Box fontWeight={600} fontSize={"small"}>
-            {calculateAge(new Date(user?.userProfile?.birthDate!))}
-          </Box>
+      </Box>
+      <Box
+        flex="1"
+        display={"flex"}
+        flexDir={"column"}
+        justifyContent={"center"}
+        width={"100%"}
+        padding={"0 6px"}
+        color="white"
+        fontWeight={900}
+        fontSize={"medium"}
+      >
+        <Text textTransform={"uppercase"}>
+          {user?.firstName}
+          {isMe && (
+            <Text
+              as="span"
+              fontSize={"x-small"}
+              fontWeight={"200"}
+              textTransform={"none"}
+            >
+              (you)
+            </Text>
+          )}
+        </Text>
+        <Box fontWeight={600} fontSize={"small"}>
+          {calculateAge(new Date(user?.userProfile?.birthDate!))}
         </Box>
       </Box>
     </Center>

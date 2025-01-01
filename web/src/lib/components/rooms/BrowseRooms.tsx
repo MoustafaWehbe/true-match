@@ -221,6 +221,8 @@ function BrowseRooms() {
                           bg: menuHoverBg,
                         }}
                         width={"100%"}
+                        paddingLeft={2}
+                        cursor={"pointer"}
                       >
                         {selectedSortByOption.value === option.value ? (
                           <FaCheck width={"20px"} />

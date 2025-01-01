@@ -243,5 +243,14 @@ namespace api.Repository
 
             return await Task.FromResult(count);
         }
+
+        public async Task<Room> MarkRoomAsFinished(Room existingRoom)
+        {
+            existingRoom.FinishedAt = DateTime.UtcNow;
+            _context.Rooms.Update(existingRoom);
+
+            await _context.SaveChangesAsync();
+            return existingRoom;
+        }
     }
 }

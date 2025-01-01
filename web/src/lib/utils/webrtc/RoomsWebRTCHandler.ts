@@ -32,6 +32,7 @@ export class RoomsWebRTCHandler {
   ) => void;
   private onServerError: (payload: socketEventTypes.EmitErrorPayload) => void;
   private onFetchUserMediaError: (event: any) => void;
+  private onNewMatch: (payload: socketEventTypes.AddNewMatchPayload) => void;
 
   constructor(
     roomId: string,
@@ -51,6 +52,7 @@ export class RoomsWebRTCHandler {
       ) => void;
       onServerError: (payload: socketEventTypes.EmitErrorPayload) => void;
       onFetchUserMediaError: (payload: any) => void;
+      onNewMatch: (payload: socketEventTypes.AddNewMatchPayload) => void;
     },
     config: { roomOwner: boolean }
   ) {
@@ -77,6 +79,8 @@ export class RoomsWebRTCHandler {
 
     this.onServerError = callbacks.onServerError.bind(this);
     this.onFetchUserMediaError = callbacks.onFetchUserMediaError.bind(this);
+
+    this.onNewMatch = callbacks.onNewMatch.bind(this);
   }
 
   async init(
@@ -95,11 +99,9 @@ export class RoomsWebRTCHandler {
       localAudioRef.current.srcObject = this.stream;
     }
     this.registerSocketEvents();
-    setTimeout(() => {
-      socket.emit(SOCKET_EVENTS.CLIENT.JOIN_ROOM_EVENT, {
-        roomId: this.roomId,
-      } as socketEventTypes.JoinRoomPayload);
-    }, 5000);
+    socket.emit(SOCKET_EVENTS.CLIENT.JOIN_ROOM_EVENT, {
+      roomId: this.roomId,
+    } as socketEventTypes.JoinRoomPayload);
   }
 
   closeConnections() {
@@ -132,6 +134,7 @@ export class RoomsWebRTCHandler {
       this.onSocketDisconnected
     );
     socket.off(SOCKET_EVENTS.SERVER.REMOVE_USER, this.handleUserRemoved);
+    socket.off(SOCKET_EVENTS.SERVER.ADD_NEW_MATCH, this.onNewMatch);
 
     socket.disconnect();
     const tracks = this.stream?.getTracks();
@@ -177,22 +180,23 @@ export class RoomsWebRTCHandler {
         ?.getAudioTracks()
         .forEach((track) => peer.addTrack(track, this.stream!));
     }
-
     return peer;
   }
 
-  private handleUserJoined(payload: socketEventTypes.UserJoinedPayload): void {
+  private async handleUserJoined(payload: socketEventTypes.UserJoinedPayload) {
     const peer = this.createPeerConnection(payload.userToSignal);
 
-    peer.createOffer().then((offer) => {
-      peer.setLocalDescription(offer).then(() => {
-        socket.emit(SOCKET_EVENTS.CLIENT.SEND_OFFER_EVENT, {
-          targetSocketId: payload.userToSignal,
-          offerSenderSocketId: socket.id!,
-          sdp: peer.localDescription,
-        } as socketEventTypes.OfferPayload);
-      });
+    const offer = await peer.createOffer({
+      offerToReceiveAudio: true,
+      offerToReceiveVideo: true,
     });
+    await peer.setLocalDescription(offer);
+
+    socket.emit(SOCKET_EVENTS.CLIENT.SEND_OFFER_EVENT, {
+      targetSocketId: payload.userToSignal,
+      offerSenderSocketId: socket.id!,
+      sdp: peer.localDescription,
+    } as socketEventTypes.OfferPayload);
 
     const peerObj = {
       peerID: payload.userToSignal,
@@ -204,24 +208,23 @@ export class RoomsWebRTCHandler {
     this.updatePeers();
   }
 
-  private handleIncomingOffer(
+  private async handleIncomingOffer(
     payload: socketEventTypes.OfferProducedPayload
-  ): void {
+  ) {
     const peer = this.createPeerConnection(payload.offerSenderSocketId);
-    peer
-      // .setRemoteDescription(new RTCSessionDescription(payload.sdp))
-      .setRemoteDescription(payload.sdp)
-      .then(() => {
-        peer.createAnswer().then((answer) => {
-          peer.setLocalDescription(answer).then(() => {
-            socket.emit(SOCKET_EVENTS.CLIENT.SEND_ANSWER_EVENT, {
-              targetSocketId: payload.offerSenderSocketId,
-              answerSenderSocketId: socket.id,
-              sdp: peer.localDescription,
-            } as socketEventTypes.AnswerPayload);
-          });
-        });
-      });
+
+    // set the offer to the remote description
+    await peer.setRemoteDescription(payload.sdp);
+
+    const answer = await peer.createAnswer();
+
+    await peer.setLocalDescription(answer);
+
+    socket.emit(SOCKET_EVENTS.CLIENT.SEND_ANSWER_EVENT, {
+      targetSocketId: payload.offerSenderSocketId,
+      answerSenderSocketId: socket.id,
+      sdp: peer.localDescription,
+    } as socketEventTypes.AnswerPayload);
 
     const peerObj = {
       peerID: payload.offerSenderSocketId,
@@ -325,5 +328,6 @@ export class RoomsWebRTCHandler {
       SOCKET_EVENTS.SERVER.EMIT_SOCKET_DISCONNECTED,
       this.onSocketDisconnected
     );
+    socket.on(SOCKET_EVENTS.SERVER.ADD_NEW_MATCH, this.onNewMatch);
   }
 }

@@ -7,6 +7,7 @@ import {
   MatchDtoListApiResponse,
   MessageDto,
   MessageDtoListApiResponse,
+  SimpleApiResponseApiResponse,
 } from "@dapp/shared/src/types/openApiGen";
 
 import axiosInstance, { defaultHeaders } from "~/lib/utils/api/axiosConfig";
@@ -19,6 +20,7 @@ export interface MatchSate {
   messages: Array<MessageDto> | null;
   isCreatingMatch: boolean;
   matchFromCreate?: MatchDto | null;
+  deletingMatch: boolean;
 }
 
 export const getMatches = createAsyncThunk<
@@ -89,6 +91,25 @@ export const createMatch = createAsyncThunk<
   }
 });
 
+export const deleteMatch = createAsyncThunk<
+  SimpleApiResponseApiResponse,
+  string,
+  { rejectValue: string }
+>("match/delete", async (matchId, { rejectWithValue }) => {
+  try {
+    const response = await axiosInstance.delete<SimpleApiResponseApiResponse>(
+      `/api/match/${matchId}`
+    );
+    return response.data;
+  } catch (error) {
+    let errorMessage = "Failed to delete the match!";
+    if (axios.isAxiosError(error) && error.response) {
+      errorMessage = error.response.data.message || errorMessage;
+    }
+    return rejectWithValue(errorMessage);
+  }
+});
+
 const initialState: MatchSate = {
   getMatchesLoading: false,
   getMessagesLoading: false,
@@ -97,6 +118,7 @@ const initialState: MatchSate = {
   messages: null,
   isCreatingMatch: false,
   matchFromCreate: null,
+  deletingMatch: false,
 };
 
 const matchSlice = createSlice({
@@ -109,6 +131,9 @@ const matchSlice = createSlice({
     updateMessages(state, action) {
       state.messages = state.messages || [];
       state.messages = [...state.messages, action.payload];
+    },
+    clearMessages(state) {
+      state.messages = [];
     },
   },
   extraReducers: (builder) => {
@@ -148,10 +173,25 @@ const matchSlice = createSlice({
       })
       .addCase(createMatch.rejected, (state) => {
         state.isCreatingMatch = false;
+      })
+      .addCase(deleteMatch.pending, (state) => {
+        state.deletingMatch = true;
+      })
+      .addCase(deleteMatch.fulfilled, (state, action) => {
+        state.deletingMatch = false;
+        if (state.matches) {
+          state.matches = state.matches?.filter(
+            (match) => match.id !== action.meta.arg
+          );
+        }
+      })
+      .addCase(deleteMatch.rejected, (state) => {
+        state.deletingMatch = false;
       });
   },
 });
 
-export const { setActiveMatchId, updateMessages } = matchSlice.actions;
+export const { setActiveMatchId, updateMessages, clearMessages } =
+  matchSlice.actions;
 
 export default matchSlice.reducer;

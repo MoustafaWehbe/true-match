@@ -45,6 +45,7 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
           </Button>
           <Button
             colorScheme="red"
+            bg={"red.400"}
             onClick={onConfirm}
             isLoading={isLoading} // Display loading indicator if needed
           >

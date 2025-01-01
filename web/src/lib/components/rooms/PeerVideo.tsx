@@ -14,6 +14,10 @@ const PeerVideo: React.FC<{ peer?: RTCPeerConnection; user?: UserDto }> = ({
   useEffect(() => {
     if (peer) {
       peer.ontrack = (event) => {
+        // TODO: remove this
+        event.streams[0].getTracks().forEach((track) => {
+          console.log(`Received track: ${track.kind}`);
+        });
         if (ref.current) {
           ref.current.srcObject = event.streams[0];
         }

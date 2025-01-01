@@ -28,5 +28,6 @@ namespace api.Interfaces
         int GetTotalPages(int pageSize, int totalRooms);
         Task<HideRoomDto> HideRoom(HideRoomDto hideRoomDto, User user);
         Task<List<HiddenRoom>> RoomsIHid(string userId);
+        Task<Room> MarkRoomAsFinished(Room existingRoom);
     }
 }

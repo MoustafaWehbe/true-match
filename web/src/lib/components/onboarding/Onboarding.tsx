@@ -11,6 +11,7 @@ import OnboardingFormStep1Dob from "./OnboardingFormStep1Dob";
 import OnboardingFormStep2Gender from "./OnboardingFormStep2Gender";
 import OnboardingFormStep3RelationGoals from "./OnboardingFormStep3RelationGoals";
 import OnboardingFormStep4Interests from "./OnboardingFormStep4Interests";
+import OnboardingFormStep5GenderPreferences from "./OnboardingFormStep5GenderPreferences";
 import OnboardingLocationAccess from "./OnboardingLocationAccess";
 import UploadImagesForm from "./UploadImageForm";
 
@@ -53,8 +54,10 @@ const Onboarding = () => {
       setStep(4);
     } else if (!user.media?.length) {
       setStep(5);
-    } else if (!user.userProfile.pos) {
+    } else if (!user.userProfile.userProfileGenderPreferences?.length) {
       setStep(6);
+    } else if (!user.userProfile.pos) {
+      setStep(7);
     } else {
       window.location.href = "/";
     }
@@ -141,6 +144,20 @@ const Onboarding = () => {
     setStep(5);
   };
 
+  const onStep5Submit = async (
+    values: Pick<
+      openApiTypes.CreateOrUpdateUserProfileDto,
+      "userProfileGenderPreferences"
+    >
+  ) => {
+    await dispatch(
+      createOrUpdateUserProfile({
+        ...values,
+      })
+    );
+    setStep(6);
+  };
+
   const onUserImagesSubmit = (images: (File | null)[]) => {
     if (!images || !images.length) {
       toast({
@@ -162,7 +179,7 @@ const Onboarding = () => {
         console.error("Error uploading file:", error);
       }
     });
-    setStep(6);
+    setStep(7);
   };
 
   const onLocationSubmit = async (
@@ -184,8 +201,11 @@ const Onboarding = () => {
         <OnboardingFormStep3RelationGoals onSubmit={onStep3Submit} />
       )}
       {step === 4 && <OnboardingFormStep4Interests onSubmit={onStep4Submit} />}
-      {step === 5 && <UploadImagesForm onSubmit={onUserImagesSubmit} />}
-      {step === 6 && <OnboardingLocationAccess onSubmit={onLocationSubmit} />}
+      {step === 5 && (
+        <OnboardingFormStep5GenderPreferences onSubmit={onStep5Submit} />
+      )}
+      {step === 6 && <UploadImagesForm onSubmit={onUserImagesSubmit} />}
+      {step === 7 && <OnboardingLocationAccess onSubmit={onLocationSubmit} />}
     </Box>
   );
 };

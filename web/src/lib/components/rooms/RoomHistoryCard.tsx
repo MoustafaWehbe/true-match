@@ -63,7 +63,6 @@ const RoomHistoryCard = ({ room }: RoomHistoryCardProps) => {
       color={cardTextColor}
       borderRadius="lg"
       boxShadow="lg"
-      overflow="hidden"
       height={330}
       transition="transform 0.2s"
       _hover={{ transform: "scale(1.05)", cursor: "pointer", opacity: 0.9 }}
@@ -71,6 +70,13 @@ const RoomHistoryCard = ({ room }: RoomHistoryCardProps) => {
       display={"flex"}
       flexDirection={"column"}
       gap={0}
+      overflowY={"auto"}
+      css={{
+        "&::-webkit-scrollbar": {
+          width: "0px",
+        },
+        scrollbarWidth: "none",
+      }}
     >
       <Flex
         direction={"column"}

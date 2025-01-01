@@ -29,7 +29,12 @@ const DeleteRoomButton: React.FC<{ roomId: string }> = ({ roomId }) => {
 
   return (
     <>
-      <Button colorScheme="red" variant={"solid"} onClick={openDialog}>
+      <Button
+        colorScheme="red"
+        bg={"red.400"}
+        variant={"solid"}
+        onClick={openDialog}
+      >
         Delete Room
       </Button>
 

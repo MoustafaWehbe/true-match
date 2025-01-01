@@ -11,34 +11,47 @@ import {
 } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 
+import { SOCKET_EVENTS } from "@dapp/shared/src/consts/socketEvents";
+import { socketEventTypes } from "@dapp/shared/src/types/custom";
 import { UserDto } from "@dapp/shared/src/types/openApiGen";
 
 import PreviewProfile from "../../profile/Preview";
+import PeerVideo from "../PeerVideo";
+import { PeerItem } from "../Room";
 
 import { CHAT_MATCH_ID_QUERY_PARAM } from "~/lib/consts";
 import { createMatch } from "~/lib/state/match/matchSlice";
 import { AppDispatch, RootState } from "~/lib/state/store";
+import { roomSocket as socket } from "~/lib/utils/socket/socket";
 
 const FinalRound = ({
   users,
   isOwner,
+  thePresenter,
 }: {
   users: UserDto[];
   isOwner: boolean;
+  thePresenter?: PeerItem;
 }) => {
   const dispatch = useDispatch<AppDispatch>();
   const toast = useToast();
   const router = useRouter();
   const { matchFromCreate } = useSelector((state: RootState) => state.match);
-  const { roomContent } = useSelector((state: RootState) => state.room);
+  const { roomContent, activeRoom } = useSelector(
+    (state: RootState) => state.room
+  );
 
   useEffect(() => {
-    if (matchFromCreate?.id) {
+    if (matchFromCreate?.id && activeRoom?.id) {
       setTimeout(() => {
         router.push(`/chat?${CHAT_MATCH_ID_QUERY_PARAM}=${matchFromCreate.id}`);
+        socket.emit(SOCKET_EVENTS.CLIENT.ADD_NEW_MATCH, {
+          matchId: matchFromCreate.id,
+          roomId: activeRoom.id,
+        } as socketEventTypes.AddNewMatchPayload);
       }, 1000);
     }
-  }, [matchFromCreate, router]);
+  }, [activeRoom?.id, matchFromCreate, router]);
 
   const onSelect = async (user: UserDto) => {
     if (!user.id) {
@@ -50,6 +63,7 @@ const FinalRound = ({
         user2Id: user.id,
       })
     );
+
     if (res.meta.requestStatus !== "rejected") {
       toast({
         title: "Congrats!",
@@ -82,6 +96,7 @@ const FinalRound = ({
       bottom="0"
       left="0"
       width="100vw"
+      padding={2}
       maxHeight="100vh"
       bg="rgba(0, 0, 0, 0.9)"
       zIndex="1000"
@@ -94,140 +109,147 @@ const FinalRound = ({
       }}
       overflowY={"auto"}
     >
-      <Box textAlign={"center"} mt={10} mb={10}>
+      <Box textAlign={"center"} mt={10} mb={10} px={2}>
         <Text fontSize="lg" fontWeight="bold">
           {finalRound.title}
         </Text>
         <Text>{finalRound.description}</Text>
       </Box>
-      <Grid
-        templateColumns={{
-          base: "1fr",
-          md: "repeat(2, 1fr)",
-          lg:
-            users.length <= 2
-              ? `repeat(${users.length}, 1fr)`
-              : "repeat(3, 1fr)",
-        }}
-        gap={4}
-        p={4}
-        placeItems="center"
-        alignItems="start"
-        justifyContent={users.length <= 2 ? "center" : "start"}
-      >
-        {users.map((user, index) => {
-          return (
-            <GridItem
-              key={index}
-              bg="pink.100"
-              borderRadius="md"
-              boxShadow="md"
-              p={4}
-              display="flex"
-              alignItems="center"
-              justifyContent="center"
-              width={"100%"}
-            >
-              <Flex
+      {isOwner && (
+        <Grid
+          templateColumns={{
+            base: "1fr",
+            md: "repeat(2, 1fr)",
+            lg:
+              users.length <= 2
+                ? `repeat(${users.length}, 1fr)`
+                : "repeat(3, 1fr)",
+          }}
+          gap={4}
+          p={4}
+          placeItems="center"
+          alignItems="start"
+          justifyContent={users.length <= 2 ? "center" : "start"}
+        >
+          {users.map((user, index) => {
+            return (
+              <GridItem
                 key={index}
-                direction={"column"}
+                bg="pink.100"
+                borderRadius="md"
+                boxShadow="md"
+                p={4}
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
                 width={"100%"}
-                justifyContent={"center"}
-                alignItems={"center"}
-                gap={4}
               >
-                {isOwner && (
-                  <Button
-                    onClick={() => onSelect(user)}
-                    mt="6"
-                    w="70%"
-                    maxW={"300px"}
-                    bg="pink.600"
-                    color="white"
-                    borderRadius="full"
-                    position="relative"
-                    overflow="hidden"
-                    _hover={{
-                      bg: "pink.500",
-                      transform: "scale(1.1)",
-                    }}
-                    _active={{
-                      bg: "pink.600",
-                      transform: "scale(0.95)",
-                    }}
-                    transition="all 0.2s ease-in-out"
-                    sx={{
-                      "&::before, &::after": {
-                        content: '""',
-                        position: "absolute",
-                        top: "60%",
-                        left: "90%",
-                        width: "100%",
-                        height: "100%",
-                        borderRadius: "50%",
-                        opacity: 0,
-                        pointerEvents: "none",
-                        animation: "sparkle 1s infinite",
-                      },
-                      "&::before": {
-                        content: '"🌟"',
-                        fontSize: "30px",
-                        transform: "translate(-50%, -50%)",
-                        animation: "sparkleStars 1s infinite",
-                      },
-                      "&::after": {
-                        content: '"💖"',
-                        fontSize: "25px",
-                        transform: "translate(-50%, -50%)",
-                        animation: "sparkleHearts 1.5s infinite",
-                      },
-                      "&:hover::before, &:hover::after": {
-                        opacity: 1,
-                      },
-                      "@keyframes sparkleStars": {
-                        "0%": {
-                          opacity: 0.3,
-                          transform: "translate(-50%, -50%) scale(1)",
+                <Flex
+                  key={index}
+                  direction={"column"}
+                  width={"100%"}
+                  justifyContent={"center"}
+                  alignItems={"center"}
+                  gap={4}
+                >
+                  {isOwner && (
+                    <Button
+                      onClick={() => onSelect(user)}
+                      mt="6"
+                      w="70%"
+                      maxW={"300px"}
+                      bg="pink.600"
+                      color="white"
+                      borderRadius="full"
+                      position="relative"
+                      overflow="hidden"
+                      _hover={{
+                        bg: "pink.500",
+                        transform: "scale(1.1)",
+                      }}
+                      _active={{
+                        bg: "pink.600",
+                        transform: "scale(0.95)",
+                      }}
+                      transition="all 0.2s ease-in-out"
+                      sx={{
+                        "&::before, &::after": {
+                          content: '""',
+                          position: "absolute",
+                          top: "60%",
+                          left: "90%",
+                          width: "100%",
+                          height: "100%",
+                          borderRadius: "50%",
+                          opacity: 0,
+                          pointerEvents: "none",
+                          animation: "sparkle 1s infinite",
                         },
-                        "50%": {
+                        "&::before": {
+                          content: '"🌟"',
+                          fontSize: "30px",
+                          transform: "translate(-50%, -50%)",
+                          animation: "sparkleStars 1s infinite",
+                        },
+                        "&::after": {
+                          content: '"💖"',
+                          fontSize: "25px",
+                          transform: "translate(-50%, -50%)",
+                          animation: "sparkleHearts 1.5s infinite",
+                        },
+                        "&:hover::before, &:hover::after": {
                           opacity: 1,
-                          transform: "translate(-50%, -50%) scale(1.3)",
                         },
-                        "100%": {
-                          opacity: 0.3,
-                          transform: "translate(-50%, -50%) scale(1)",
+                        "@keyframes sparkleStars": {
+                          "0%": {
+                            opacity: 0.3,
+                            transform: "translate(-50%, -50%) scale(1)",
+                          },
+                          "50%": {
+                            opacity: 1,
+                            transform: "translate(-50%, -50%) scale(1.3)",
+                          },
+                          "100%": {
+                            opacity: 0.3,
+                            transform: "translate(-50%, -50%) scale(1)",
+                          },
                         },
-                      },
-                      "@keyframes sparkleHearts": {
-                        "0%": {
-                          opacity: 0.3,
-                          transform: "translate(-50%, -50%) scale(1)",
+                        "@keyframes sparkleHearts": {
+                          "0%": {
+                            opacity: 0.3,
+                            transform: "translate(-50%, -50%) scale(1)",
+                          },
+                          "50%": {
+                            opacity: 1,
+                            transform: "translate(-50%, -50%) scale(1.2)",
+                          },
+                          "100%": {
+                            opacity: 0.3,
+                            transform: "translate(-50%, -50%) scale(1)",
+                          },
                         },
-                        "50%": {
-                          opacity: 1,
-                          transform: "translate(-50%, -50%) scale(1.2)",
+                        "@keyframes sparkle": {
+                          "0%": { opacity: 0.1 },
+                          "50%": { opacity: 1 },
+                          "100%": { opacity: 0.1 },
                         },
-                        "100%": {
-                          opacity: 0.3,
-                          transform: "translate(-50%, -50%) scale(1)",
-                        },
-                      },
-                      "@keyframes sparkle": {
-                        "0%": { opacity: 0.1 },
-                        "50%": { opacity: 1 },
-                        "100%": { opacity: 0.1 },
-                      },
-                    }}
-                  >
-                    Match
-                  </Button>
-                )}
-                <PreviewProfile user={user} />
-              </Flex>
-            </GridItem>
-          );
-        })}
-      </Grid>
+                      }}
+                    >
+                      Match
+                    </Button>
+                  )}
+                  {isOwner && <PreviewProfile user={user} />}
+                </Flex>
+              </GridItem>
+            );
+          })}
+        </Grid>
+      )}
+      <Box width={"90vh"} position={"relative"}>
+        {!isOwner && thePresenter && (
+          <PeerVideo peer={thePresenter.peer} user={thePresenter.user} />
+        )}
+      </Box>
     </Box>
   );
 };

@@ -130,6 +130,11 @@ interface RemoveUserPayload {
   roomId: string;
 }
 
+interface AddNewMatchPayload {
+  matchId: string;
+  roomId: string;
+}
+
 export type {
   JoinRoomPayload,
   LeaveRoomPayload,
@@ -157,4 +162,5 @@ export type {
   EmitDisconnectPayload,
   RemoveUserPayload,
   UserRemovedPayload,
+  AddNewMatchPayload,
 };

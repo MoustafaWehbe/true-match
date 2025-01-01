@@ -1,18 +1,16 @@
 "use client";
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { MdKeyboardArrowLeft } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
-import { Box, Button, useToast } from "@chakra-ui/react";
+import { Box, useToast } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 
 import { socketEventTypes } from "@dapp/shared/src/types/custom";
 import { RoomState, UserDto } from "@dapp/shared/src/types/openApiGen";
 
-import CustomTooltip from "../shared/CutsomTooltip";
-
 import Display from "./displays/Display";
 
+import { CHAT_MATCH_ID_QUERY_PARAM } from "~/lib/consts";
 import {
   getRoomById,
   updateActiveRoomStatePartially,
@@ -167,6 +165,13 @@ const Room = ({ roomId }: { roomId: string }) => {
     setPeers([...peers]);
   }, []);
 
+  const onNewMatch = useCallback(
+    (payload: socketEventTypes.AddNewMatchPayload) => {
+      router.push(`/chat?${CHAT_MATCH_ID_QUERY_PARAM}=${payload.matchId}`);
+    },
+    [router]
+  );
+
   useEffect(() => {
     if (user && activeRoom?.user) {
       webRTCHandler.current = new RoomsWebRTCHandler(
@@ -183,6 +188,7 @@ const Room = ({ roomId }: { roomId: string }) => {
           onRoomStateReceived,
           onServerError,
           onFetchUserMediaError,
+          onNewMatch,
         },
         { roomOwner: !!isRoomOwner }
       );
@@ -208,6 +214,7 @@ const Room = ({ roomId }: { roomId: string }) => {
     onServerError,
     onFetchUserMediaError,
     onPeersChanged,
+    onNewMatch,
     roomId,
     isRoomOwner,
     user,
@@ -221,27 +228,6 @@ const Room = ({ roomId }: { roomId: string }) => {
         localVideoRef={localVideoRef}
         peers={peers}
       />
-      <CustomTooltip
-        label="Exit room"
-        bg="white"
-        color={"black"}
-        placement="right"
-      >
-        <Button
-          variant="link"
-          onClick={() => {
-            window.location.href = "/browse-rooms";
-          }}
-          leftIcon={<MdKeyboardArrowLeft />}
-          position="fixed"
-          left="0"
-          top={"40px"}
-          bg={"red.500"}
-          minW={"auto"}
-          height={32}
-          opacity={0.8}
-        />
-      </CustomTooltip>
     </Box>
   );
 };

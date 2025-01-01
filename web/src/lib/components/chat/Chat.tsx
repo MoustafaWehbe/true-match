@@ -1,17 +1,24 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { FaHeart } from "react-icons/fa";
+import { FiMoreVertical } from "react-icons/fi";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Avatar,
   Box,
+  Button,
   Container,
   Fade,
   Heading,
   HStack,
   IconButton,
   Input,
+  Popover,
+  PopoverArrow,
+  PopoverBody,
+  PopoverContent,
+  PopoverTrigger,
   Text,
   useColorModeValue,
   VStack,
@@ -23,9 +30,13 @@ import { SOCKET_EVENTS } from "@dapp/shared/src/consts/socketEvents";
 import { socketEventTypes } from "@dapp/shared/src/types/custom";
 
 import MotionBox from "../motion/Box";
+import PreviewProfileModal from "../profile/Preview/PreviewProfileModal";
+import ConfirmDialog from "../shared/ConfirmDialog";
 
 import { CHAT_MATCH_ID_QUERY_PARAM } from "~/lib/consts";
 import {
+  clearMessages,
+  deleteMatch,
   getMatches,
   getMessages,
   setActiveMatchId,
@@ -33,6 +44,7 @@ import {
 } from "~/lib/state/match/matchSlice";
 import { AppDispatch, RootState } from "~/lib/state/store";
 import { chatSocket as socket } from "~/lib/utils/socket/socket";
+import { constructMediaUrl } from "~/lib/utils/url";
 import { IndividualChatWebRTCHandler } from "~/lib/utils/webrtc/IndividualChatWebRTCHandler";
 
 const MotionAvatarBox = motion(Box as any);
@@ -43,8 +55,13 @@ function Chat() {
   const inputBg = useColorModeValue("gray.100", "gray.600");
   const myMessageBg = useColorModeValue("pink.100", "pink.500");
   const userMessageBg = useColorModeValue("gray.200", "gray.600");
+
+  const moreOptionsBgColor = useColorModeValue("whiteAlpha.900", "gray.700");
+  const moreOptionsTextColor = useColorModeValue("gray.800", "whiteAlpha.900");
+  const moreOptionsHoverColor = useColorModeValue("pink.500", "pink.300");
+
   const [input, setInput] = useState<string>("");
-  const { matches, activeMatchId, messages } = useSelector(
+  const { matches, activeMatchId, messages, deletingMatch } = useSelector(
     (state: RootState) => state.match
   );
   const { user: me } = useSelector((state: RootState) => state.user);
@@ -53,6 +70,9 @@ function Chat() {
   const messageContainerRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const searchParams = useSearchParams();
+  const [previewProfileModalUserId, setPreviewProfileModalUserId] =
+    useState<string>();
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const sendMessage = () => {
     if (input.trim()) {
@@ -128,8 +148,59 @@ function Chat() {
   }, [searchParams, matches, me, dispatch]);
 
   const onMatchClick = (matchId: string) => {
-    router.push(`?${CHAT_MATCH_ID_QUERY_PARAM}=${matchId}`);
+    if (activeMatchId === matchId) {
+      const updatedSearchParams = new URLSearchParams(searchParams.toString());
+      updatedSearchParams.delete(CHAT_MATCH_ID_QUERY_PARAM);
+      const newUrl = updatedSearchParams.toString()
+        ? `?${updatedSearchParams.toString()}`
+        : "/chat";
+      router.push(newUrl);
+
+      dispatch(setActiveMatchId(null));
+    } else {
+      router.push(`?${CHAT_MATCH_ID_QUERY_PARAM}=${matchId}`);
+    }
   };
+
+  const matchedUser = useMemo(() => {
+    const match = matches?.find((m) => m.id === activeMatchId);
+    if (match) {
+      const user = match.user1?.id === me?.id ? match.user2 : match.user1;
+      return user;
+    }
+    return null;
+  }, [activeMatchId, matches, me?.id]);
+
+  const handleClosePreviewProfileModal = () => {
+    setPreviewProfileModalUserId(undefined);
+  };
+
+  const viewProfile = useCallback(() => {
+    if (matchedUser?.id) {
+      setPreviewProfileModalUserId(matchedUser.id);
+    }
+  }, [matchedUser?.id]);
+
+  const openDeleteDialog = () => setIsDialogOpen(true);
+  const closeDeleteDialog = () => setIsDialogOpen(false);
+
+  const handleDelete = async () => {
+    if (!activeMatchId) {
+      return;
+    }
+    try {
+      await dispatch(deleteMatch(activeMatchId));
+      dispatch(clearMessages());
+    } catch (error) {
+      console.error("Failed to delete room:", error);
+    } finally {
+      closeDeleteDialog();
+    }
+  };
+
+  if (!me) {
+    return null;
+  }
 
   return (
     <Container maxW="2xl" py={5}>
@@ -183,7 +254,13 @@ function Chat() {
                   border: borderColor,
                 }}
               >
-                <Avatar name={`${user.firstName} ${user.lastName}`} mb={2} />
+                <Avatar
+                  src={constructMediaUrl(
+                    user?.media?.length ? user?.media[0].url : ""
+                  )}
+                  name={`${user.firstName} ${user.lastName}`}
+                  mb={2}
+                />
                 <Text fontSize="sm" color={cardTextColor}>
                   {user.firstName}
                 </Text>
@@ -218,10 +295,61 @@ function Chat() {
             })}
         </Box>
 
-        <HStack justifyContent="space-between">
+        <HStack width={"100%"}>
+          {matchedUser && (
+            <Avatar
+              src={constructMediaUrl(
+                matchedUser.media?.length ? matchedUser.media[0].url : ""
+              )}
+              name={`${matchedUser.firstName} ${matchedUser.lastName}`}
+              mb={2}
+              cursor={"pointer"}
+              border={"1px solid pink"}
+              onClick={viewProfile}
+            />
+          )}
           <Heading as="h1" size="md" color="pink.400" fontWeight="bold">
-            💕 Chat
+            Chat 💕
           </Heading>
+
+          {matchedUser && (
+            <Popover trigger="click" placement="bottom">
+              <PopoverTrigger>
+                <Button
+                  as={IconButton}
+                  aria-label="Options"
+                  icon={<FiMoreVertical />}
+                  variant="ghost"
+                  bg="transparent"
+                  _hover={{ bg: "transparent" }}
+                  height={"auto"}
+                  width={"fit-content"}
+                  padding={0}
+                  marginLeft={"auto"}
+                />
+              </PopoverTrigger>
+              <PopoverContent bg={moreOptionsBgColor} width={"auto"}>
+                <PopoverArrow />
+                <PopoverBody
+                  display={"flex"}
+                  flexDir={"column"}
+                  width={"fit-content"}
+                  alignItems={"start"}
+                >
+                  <Button
+                    aria-label="block user"
+                    variant="link"
+                    onClick={openDeleteDialog}
+                    color={moreOptionsTextColor}
+                    _hover={{ color: moreOptionsHoverColor }}
+                    cursor={"pointer"}
+                  >
+                    Unmatch
+                  </Button>
+                </PopoverBody>
+              </PopoverContent>
+            </Popover>
+          )}
         </HStack>
 
         {activeMatchId && (
@@ -302,9 +430,25 @@ function Chat() {
             </HStack>
           </>
         )}
-
         {!activeMatchId && <Text>Select a match to chat with..</Text>}
       </VStack>
+      {previewProfileModalUserId && (
+        <PreviewProfileModal
+          isOpen={!!previewProfileModalUserId}
+          onClose={handleClosePreviewProfileModal}
+          userId={previewProfileModalUserId}
+        />
+      )}
+      <ConfirmDialog
+        isOpen={isDialogOpen}
+        onClose={closeDeleteDialog}
+        onConfirm={handleDelete}
+        title="Remove match?"
+        description={`Are you sure you want to remove ${matchedUser?.firstName || "this user"}?`}
+        confirmText="Delete"
+        cancelText="Cancel"
+        isLoading={deletingMatch}
+      />
     </Container>
   );
 }

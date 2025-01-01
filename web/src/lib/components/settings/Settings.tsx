@@ -268,7 +268,7 @@ const SettingsPage = () => {
           Save Settings
         </Button>
 
-        <Button colorScheme="red" w="full" onClick={openDialog}>
+        <Button colorScheme="red" bg={"red.400"} w="full" onClick={openDialog}>
           Delete Account
         </Button>
       </VStack>
