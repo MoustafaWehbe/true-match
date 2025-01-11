@@ -406,7 +406,10 @@ ASALocalRun/
 
 
 # keys
-
 certs/
 
+# env
 *.env
+
+# docs
+dev-notes.txt
