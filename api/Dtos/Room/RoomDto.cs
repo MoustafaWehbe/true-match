@@ -15,7 +15,7 @@ namespace api.Dtos
         public DateTime? FinishedAt { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
-        public UserSimplifiedDto? User { get; set; }
+        public UserDto? User { get; set; }
         public int ParticipantCount { get; set; }
         public bool IsParticipanting { get; set; }
         public bool IsInProgress { get; set; }

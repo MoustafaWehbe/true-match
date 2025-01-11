@@ -276,7 +276,7 @@ function Chat() {
 
           {/* No matches */}
           {!matches?.length &&
-            [1, 2].map((index) => {
+            [1].map((index) => {
               return (
                 <MotionAvatarBox
                   key={index}
@@ -295,8 +295,42 @@ function Chat() {
                   style={{
                     transition: "all 0.2s",
                     height: "100px",
+                    position: "relative",
+                    overflow: "hidden",
+                    backgroundColor: "#f0f0f0", // Light gray background indicating "no match"
                   }}
-                />
+                >
+                  <div
+                    style={{
+                      position: "absolute",
+                      top: 0,
+                      left: 0,
+                      width: "100%",
+                      height: "100%",
+                      background: `radial-gradient(circle, rgba(255, 105, 180, 0.6) 10%, rgba(70, 130, 180, 0.4) 60%, rgba(0, 255, 255, 0.3) 100%)`,
+                      opacity: 0.8, // Increased opacity for vividness
+                      pointerEvents: "none", // Ensures it's not interactive
+                    }}
+                  />
+                  {/* Placeholder Label Text */}
+                  <div
+                    style={{
+                      position: "absolute",
+                      left: "50%",
+                      transform: "translate(-50%, -50%)",
+                      fontSize: "9px",
+                      boxShadow: "2px 2px 4px 0 rgba(225, 18, 18, 0.2)",
+                      color: "darkmagenta",
+                      fontWeight: "bold",
+                      textTransform: "uppercase",
+                      top: "50%",
+                      width: "100%",
+                      padding: "0px 4px",
+                    }}
+                  >
+                    No Matches yet
+                  </div>
+                </MotionAvatarBox>
               );
             })}
         </Box>

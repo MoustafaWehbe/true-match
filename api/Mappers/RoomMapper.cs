@@ -17,7 +17,7 @@ namespace api.Mappers
                 FinishedAt = roomModel.FinishedAt,
                 ParticipantCount = roomModel.RoomParticipants.Count,
                 IsParticipanting = roomModel.RoomParticipants.Any(rp => rp.UserId == userId),
-                User = roomModel.User?.ToUserSimplifiedDto(),
+                User = roomModel.User?.ToUserDto(),
                 CreatedAt = roomModel.CreatedAt,
                 UpdatedAt = roomModel.UpdatedAt,
                 Offers = roomModel.Offers,

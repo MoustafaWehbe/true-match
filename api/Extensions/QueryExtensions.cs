@@ -53,7 +53,10 @@ namespace api.Extensions
 
         public static IQueryable<Room> IncludeRoomDetails(this IQueryable<Room> query)
         {
-            return query.Include(ls => ls.User).Include(ls => ls.RoomParticipants);
+            return query
+                .Include(ls => ls.User)
+                .ThenInclude(u => u.Media)
+                .Include(ls => ls.RoomParticipants);
         }
     }
 }

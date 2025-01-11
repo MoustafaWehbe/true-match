@@ -17,6 +17,7 @@ import {
   Flex,
   Icon,
   IconButton,
+  Image,
   Popover,
   PopoverArrow,
   PopoverBody,
@@ -38,6 +39,7 @@ import GradientButton from "../shared/buttons/GradientButton";
 import DeleteRoomButton from "./DeleteRoomButton";
 
 import { RootState } from "~/lib/state/store";
+import { constructMediaUrl } from "~/lib/utils/url";
 
 interface RoomCardProps {
   room: RoomDto;
@@ -55,6 +57,8 @@ interface RoomCardProps {
   onEditClicked?: (room: RoomDto) => void;
   onStartRoom?: (room: RoomDto) => void;
 }
+
+const fallbackImage = "/images/no-photo.png";
 
 const RoomCard = ({
   room,
@@ -80,6 +84,10 @@ const RoomCard = ({
   const [isPreviewProfileModalOpen, setIsPreviewProfileModalOpen] =
     useState(false);
 
+  const [imgCoverSrc, setImgCoverSrc] = useState(
+    constructMediaUrl(room.user?.media?.[0]?.url) ?? fallbackImage
+  );
+
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
 
   const toggleExpand = () => {
@@ -93,6 +101,7 @@ const RoomCard = ({
       onStartRoom(room);
     }
   };
+  console.log(room);
 
   const handleViewProfile = () => {
     setIsPreviewProfileModalOpen(true);
@@ -296,11 +305,15 @@ const RoomCard = ({
           by {room.user?.firstName} {room.user?.lastName}
         </Text>
       </Flex>
-      <Box
+      <Image
+        src={imgCoverSrc}
+        alt={room.user?.firstName || "User"}
+        objectFit="cover"
+        w="full"
         minHeight={"200px"}
-        bgImage={"url(/images/default-user-image-female.jpg)"}
-        bgSize="cover"
         bgPosition="center"
+        bgSize="cover"
+        onError={() => setImgCoverSrc(fallbackImage)}
       />
       <Button
         position="absolute"

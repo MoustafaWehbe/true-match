@@ -24,6 +24,14 @@ namespace api.Repository
         {
             _context.Rooms.Add(room);
             await _context.SaveChangesAsync();
+
+            await _context
+                .Entry(room)
+                .Reference(r => r.User) // Load the user
+                .Query() // Allows chaining for further queries
+                .Include(u => u.Media)
+                .LoadAsync();
+
             return room;
         }
 
