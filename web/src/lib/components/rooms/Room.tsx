@@ -5,8 +5,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { Box, useToast } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 
-import { socketEventTypes } from "@dapp/shared/src/types/custom";
-import { RoomState, UserDto } from "@dapp/shared/src/types/openApiGen";
+import { socketEventTypes } from "@truematch/shared/src/types/custom";
+import { RoomState, UserDto } from "@truematch/shared/src/types/openApiGen";
 
 import Display from "./displays/Display";
 

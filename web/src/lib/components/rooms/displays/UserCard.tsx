@@ -1,7 +1,7 @@
 import { FiX } from "react-icons/fi";
 import { Box, Center, Text } from "@chakra-ui/react";
 
-import { UserDto } from "@dapp/shared/src/types/openApiGen";
+import { UserDto } from "@truematch/shared/src/types/openApiGen";
 
 import { glowingAnimation } from "~/lib/consts/styles";
 import { calculateAge } from "~/lib/utils/date/date";

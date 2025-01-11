@@ -13,7 +13,7 @@ import {
 import { useFormik } from "formik";
 import * as Yup from "yup";
 
-import { openApiTypes } from "@dapp/shared";
+import { openApiTypes } from "@truematch/shared";
 
 interface OnboardingFormStep1DobProps {
   onSubmit: (

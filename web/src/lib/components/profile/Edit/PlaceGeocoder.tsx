@@ -3,7 +3,7 @@ import { Box, useColorModeValue } from "@chakra-ui/react";
 import { GeocodeFeature } from "@mapbox/search-js-core";
 import { Geocoder } from "@mapbox/search-js-react";
 
-import { UserLocation } from "@dapp/shared/src/types/openApiGen";
+import { UserLocation } from "@truematch/shared/src/types/openApiGen";
 
 import { BasicInfoType } from "./BasicInfo";
 

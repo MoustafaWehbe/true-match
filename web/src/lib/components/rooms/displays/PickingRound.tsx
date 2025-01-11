@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { CloseIcon } from "@chakra-ui/icons";
 import { Box, Flex, Grid, GridItem, Text } from "@chakra-ui/react";
 
-import { UserDto } from "@dapp/shared/src/types/openApiGen";
+import { UserDto } from "@truematch/shared/src/types/openApiGen";
 
 import PreviewProfile from "../../profile/Preview";
 import ConfirmDialog from "../../shared/ConfirmDialog";

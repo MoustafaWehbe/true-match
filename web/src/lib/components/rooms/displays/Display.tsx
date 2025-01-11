@@ -9,8 +9,8 @@ import {
   WrapItem,
 } from "@chakra-ui/react";
 
-import { SOCKET_EVENTS } from "@dapp/shared/src/consts/socketEvents";
-import { socketEventTypes } from "@dapp/shared/src/types/custom";
+import { SOCKET_EVENTS } from "@truematch/shared/src/consts/socketEvents";
+import { socketEventTypes } from "@truematch/shared/src/types/custom";
 
 import PreviewProfileModal from "../../profile/Preview/PreviewProfileModal";
 import ConfirmDialog from "../../shared/ConfirmDialog";

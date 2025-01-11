@@ -1,6 +1,6 @@
 import { Socket } from "socket.io";
 
-import { UserDtoApiResponse } from "@dapp/shared/src/types/openApiGen";
+import { UserDtoApiResponse } from "@truematch/shared/src/types/openApiGen";
 
 import { userService } from "../services";
 

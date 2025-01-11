@@ -10,11 +10,11 @@ services:
     build:
       context: ./api
       dockerfile: Dockerfile
-    container_name: dapp-api-service
+    container_name: truematch-api-service
     ports:
       - "5095:5095"
     networks:
-      - my-dapp-network
+      - my-truematch-network
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://0.0.0.0:5095
@@ -29,11 +29,11 @@ services:
     build:
       context: .
       dockerfile: web/Dockerfile
-    container_name: dapp-web-service
+    container_name: truematch-web-service
     ports:
       - "3000:3000"
     networks:
-      - my-dapp-network
+      - my-truematch-network
     depends_on:
       - api
     volumes:
@@ -48,11 +48,11 @@ services:
     build:
       context: .
       dockerfile: webrtc-server/Dockerfile
-    container_name: dapp-webrtc-service
+    container_name: truematch-webrtc-service
     ports:
       - "8081:8081"
     networks:
-      - my-dapp-network
+      - my-truematch-network
     depends_on:
       - api
     volumes:
@@ -61,5 +61,5 @@ services:
 
 
 networks:
-  my-dapp-network:
+  my-truematch-network:
     driver: bridge

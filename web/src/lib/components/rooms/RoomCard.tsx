@@ -30,7 +30,7 @@ import { format } from "date-fns";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 
-import { RoomDto } from "@dapp/shared/src/types/openApiGen";
+import { RoomDto } from "@truematch/shared/src/types/openApiGen";
 
 import PreviewProfileModal from "../profile/Preview/PreviewProfileModal";
 import GradientButton from "../shared/buttons/GradientButton";

@@ -19,4 +19,4 @@ COPY . .
 EXPOSE 8181
 
 # Start the application
-CMD ["yarn", "workspace", "@dapp/webrtc-server", "start"]
+CMD ["yarn", "workspace", "@truematch/webrtc-server", "start"]

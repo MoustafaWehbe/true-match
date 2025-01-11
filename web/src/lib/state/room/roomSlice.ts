@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 
-import { openApiTypes } from "@dapp/shared";
+import { openApiTypes } from "@truematch/shared";
 
 import axiosInstance, { defaultHeaders } from "~/lib/utils/api/axiosConfig";
 

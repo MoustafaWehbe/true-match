@@ -16,7 +16,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 
-import { openApiTypes } from "@dapp/shared";
+import { openApiTypes } from "@truematch/shared";
 
 import { getGenders } from "~/lib/state/gender/genderSlice";
 import { AppDispatch, RootState } from "~/lib/state/store";

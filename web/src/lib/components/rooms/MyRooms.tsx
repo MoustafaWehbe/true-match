@@ -13,7 +13,7 @@ import {
 } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 
-import { MyRoomStatus, RoomDto } from "@dapp/shared/src/types/openApiGen";
+import { MyRoomStatus, RoomDto } from "@truematch/shared/src/types/openApiGen";
 
 import { Option } from "../shared/buttons/CustomMenuButton";
 import GradientButton from "../shared/buttons/GradientButton";

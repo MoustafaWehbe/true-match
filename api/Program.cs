@@ -97,7 +97,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddSwaggerGen(option =>
 {
-    option.SwaggerDoc("v1", new OpenApiInfo { Title = "Dapp Api", Version = "v1" });
+    option.SwaggerDoc("v1", new OpenApiInfo { Title = "TrueMatch Api", Version = "v1" });
     option.AddSecurityDefinition(
         "Bearer",
         new OpenApiSecurityScheme
@@ -177,7 +177,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI(c =>
     {
         c.ConfigObject.AdditionalItems.Add("persistAuthorization", true);
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Dapp Api V1");
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "TrueMatch Api V1");
     });
 }
 

@@ -78,9 +78,9 @@ module.exports = {
           // Packages. `react` related packages come first.
           ["^react", "^@?\\w"],
           // Internal packages.
-          ["^(@|@dapp)(/[^web]*|$)"],
+          ["^(@|@truematch)(/[^web]*|$)"],
           // Web imports.
-          ["^(@|@dapp/web)(/.*|$)"],
+          ["^(@|@truematch/web)(/.*|$)"],
           // Side effect imports.
           ["^\\u0000"],
           // Parent imports. Put `..` last.

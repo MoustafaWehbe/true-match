@@ -26,8 +26,8 @@ import {
 import { motion } from "framer-motion";
 import { useRouter, useSearchParams } from "next/navigation";
 
-import { SOCKET_EVENTS } from "@dapp/shared/src/consts/socketEvents";
-import { socketEventTypes } from "@dapp/shared/src/types/custom";
+import { SOCKET_EVENTS } from "@truematch/shared/src/consts/socketEvents";
+import { socketEventTypes } from "@truematch/shared/src/types/custom";
 
 import MotionBox from "../motion/Box";
 import PreviewProfileModal from "../profile/Preview/PreviewProfileModal";

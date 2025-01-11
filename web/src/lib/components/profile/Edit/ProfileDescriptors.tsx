@@ -2,7 +2,7 @@ import { memo } from "react";
 import { useSelector } from "react-redux";
 import { VStack } from "@chakra-ui/react";
 
-import { SelectedDescriptor } from "@dapp/shared/src/types/openApiGen";
+import { SelectedDescriptor } from "@truematch/shared/src/types/openApiGen";
 
 import Section from "./Section";
 

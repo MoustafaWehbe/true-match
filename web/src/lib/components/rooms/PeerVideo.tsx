@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { Box, Flex } from "@chakra-ui/react";
 
-import { UserDto } from "@dapp/shared/src/types/openApiGen";
+import { UserDto } from "@truematch/shared/src/types/openApiGen";
 
 import { calculateAge } from "~/lib/utils/date/date";
 

@@ -18,10 +18,10 @@ RUN yarn install --production
 COPY . .
 
 # Build the Next.js application
-# RUN yarn workspace @dapp/web build
+# RUN yarn workspace @truematch/web build
 
 # Expose port
 EXPOSE 3000
 
 # Start the application
-CMD ["yarn", "workspace", "@dapp/web", "dev"]
+CMD ["yarn", "workspace", "@truematch/web", "dev"]

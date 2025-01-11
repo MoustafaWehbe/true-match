@@ -13,7 +13,7 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 
-import { UserLocation } from "@dapp/shared/src/types/openApiGen";
+import { UserLocation } from "@truematch/shared/src/types/openApiGen";
 
 import Geocoder from "./PlaceGeocoder";
 

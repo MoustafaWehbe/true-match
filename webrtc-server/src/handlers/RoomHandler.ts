@@ -1,8 +1,8 @@
 import { Server as SocketIOServer, Socket } from "socket.io";
 
-import { SOCKET_EVENTS } from "@dapp/shared/src/consts/socketEvents";
-import { socketEventTypes } from "@dapp/shared/src/types/custom";
-import { RoomState, UserDto } from "@dapp/shared/src/types/openApiGen";
+import { SOCKET_EVENTS } from "@truematch/shared/src/consts/socketEvents";
+import { socketEventTypes } from "@truematch/shared/src/types/custom";
+import { RoomState, UserDto } from "@truematch/shared/src/types/openApiGen";
 
 import { roomService } from "../services";
 import { maxAllowedUsersTojoin } from "../utils/consts";

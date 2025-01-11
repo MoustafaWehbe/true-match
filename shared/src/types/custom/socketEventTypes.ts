@@ -2,7 +2,7 @@ import {
   RoomContentDto,
   RoomState,
   UserDto,
-} from "@dapp/shared/src/types/openApiGen";
+} from "@truematch/shared/src/types/openApiGen";
 
 interface JoinRoomPayload {
   roomId: string;

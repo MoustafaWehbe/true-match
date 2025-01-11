@@ -22,7 +22,7 @@ import {
   Wrap,
 } from "@chakra-ui/react";
 
-import { UserDto } from "@dapp/shared/src/types/openApiGen";
+import { UserDto } from "@truematch/shared/src/types/openApiGen";
 
 import { RootState } from "~/lib/state/store";
 import { calculateAge } from "~/lib/utils/date/date";

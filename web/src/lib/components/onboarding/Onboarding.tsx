@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Box, useToast } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 
-import { openApiTypes } from "@dapp/shared";
+import { openApiTypes } from "@truematch/shared";
 
 import OnboardingFormStep1Dob from "./OnboardingFormStep1Dob";
 import OnboardingFormStep2Gender from "./OnboardingFormStep2Gender";

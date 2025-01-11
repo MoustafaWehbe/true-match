@@ -11,9 +11,9 @@ import {
 } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 
-import { SOCKET_EVENTS } from "@dapp/shared/src/consts/socketEvents";
-import { socketEventTypes } from "@dapp/shared/src/types/custom";
-import { UserDto } from "@dapp/shared/src/types/openApiGen";
+import { SOCKET_EVENTS } from "@truematch/shared/src/consts/socketEvents";
+import { socketEventTypes } from "@truematch/shared/src/types/custom";
+import { UserDto } from "@truematch/shared/src/types/openApiGen";
 
 import PreviewProfile from "../../profile/Preview";
 import PeerVideo from "../PeerVideo";

@@ -8,7 +8,7 @@ import {
   VStack,
 } from "@chakra-ui/react";
 
-import { CreateOrUpdateUserProfileDto } from "@dapp/shared/src/types/openApiGen";
+import { CreateOrUpdateUserProfileDto } from "@truematch/shared/src/types/openApiGen";
 
 interface OnboardingLocationAccessProps {
   onSubmit: (values: Pick<CreateOrUpdateUserProfileDto, "pos">) => void;

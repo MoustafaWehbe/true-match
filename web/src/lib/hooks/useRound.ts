@@ -1,8 +1,8 @@
 import { useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { SOCKET_EVENTS } from "@dapp/shared/src/consts/socketEvents";
-import { socketEventTypes } from "@dapp/shared/src/types/custom";
+import { SOCKET_EVENTS } from "@truematch/shared/src/consts/socketEvents";
+import { socketEventTypes } from "@truematch/shared/src/types/custom";
 
 import { getRoomContent, updateIsSkippingRound } from "../state/room/roomSlice";
 import { AppDispatch, RootState } from "../state/store";

@@ -28,7 +28,7 @@ import {
 import { useFormik } from "formik";
 import * as Yup from "yup";
 
-import { RoomDto } from "@dapp/shared/src/types/openApiGen";
+import { RoomDto } from "@truematch/shared/src/types/openApiGen";
 
 import ContentModal from "./ContentModal";
 

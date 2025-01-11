@@ -31,7 +31,7 @@
     "baseUrl": ".",
     "noImplicitReturns": false,
     "paths": {
-      "@dapp/*": ["@dapp/*"]
+      "@truematch/*": ["@truematch/*"]
     }
   },
   "include": [],

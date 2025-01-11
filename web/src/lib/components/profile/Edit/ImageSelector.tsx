@@ -12,7 +12,7 @@ import {
   Spinner,
 } from "@chakra-ui/react";
 
-import { Media } from "@dapp/shared/src/types/openApiGen";
+import { Media } from "@truematch/shared/src/types/openApiGen";
 
 import env from "~/lib/consts/env";
 import { RootState } from "~/lib/state/store";

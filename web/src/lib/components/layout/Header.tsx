@@ -72,7 +72,7 @@ const Header = () => {
           color={textColor}
           _hover={{ textDecoration: "none", color: hoverColor }}
         >
-          DAPP
+          TrueMatch
         </Heading>
       </Box>
 

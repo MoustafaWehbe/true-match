@@ -2,7 +2,7 @@ import {
   CreateMessageDto,
   MessageDtoApiResponse,
   MessageStatus,
-} from "@dapp/shared/src/types/openApiGen";
+} from "@truematch/shared/src/types/openApiGen";
 
 import axiosInstance from "./axiosInstance";
 import { handleError } from "./errorHandler";

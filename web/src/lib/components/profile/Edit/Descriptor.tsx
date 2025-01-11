@@ -4,7 +4,7 @@ import { Text } from "@chakra-ui/react";
 import {
   Descriptor as DescriptorType,
   SelectedDescriptor,
-} from "@dapp/shared/src/types/openApiGen";
+} from "@truematch/shared/src/types/openApiGen";
 
 import AdvancedSingleSelection from "./AdvancedSingleSelection";
 import Measurement from "./Measurement";

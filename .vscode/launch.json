@@ -7,7 +7,7 @@
       "request": "launch",
       "name": "Run webrtc-server",
       "runtimeExecutable": "yarn",
-      "runtimeArgs": ["workspace", "@dapp/webrtc-server", "run", "start"],
+      "runtimeArgs": ["workspace", "@truematch/webrtc-server", "run", "start"],
       "cwd": "${workspaceFolder}",
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen",

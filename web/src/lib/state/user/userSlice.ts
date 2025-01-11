@@ -13,7 +13,7 @@ import {
   UserDtoApiResponse,
   UserProfileDto,
   UserProfileDtoApiResponse,
-} from "@dapp/shared/src/types/openApiGen";
+} from "@truematch/shared/src/types/openApiGen";
 
 import { TOKEN } from "~/lib/consts/localStorage";
 import axiosInstance, { defaultHeaders } from "~/lib/utils/api/axiosConfig";

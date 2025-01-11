@@ -20,7 +20,7 @@ import {
 } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 
-import { openApiTypes } from "@dapp/shared";
+import { openApiTypes } from "@truematch/shared";
 
 type Props = {
   onLogout: () => void;

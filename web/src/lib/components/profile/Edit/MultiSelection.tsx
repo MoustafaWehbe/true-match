@@ -13,7 +13,7 @@ import {
 import {
   Descriptor as DescriptorType,
   SelectedDescriptor,
-} from "@dapp/shared/src/types/openApiGen";
+} from "@truematch/shared/src/types/openApiGen";
 
 import { RootState } from "~/lib/state/store";
 

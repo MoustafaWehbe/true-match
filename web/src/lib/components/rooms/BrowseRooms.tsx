@@ -24,7 +24,10 @@ import {
   VStack,
 } from "@chakra-ui/react";
 
-import { AllRoomStatus, RoomsSortBy } from "@dapp/shared/src/types/openApiGen";
+import {
+  AllRoomStatus,
+  RoomsSortBy,
+} from "@truematch/shared/src/types/openApiGen";
 
 import { Option } from "../shared/buttons/CustomMenuButton";
 import ConfirmDialog from "../shared/ConfirmDialog";

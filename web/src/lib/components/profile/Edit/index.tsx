@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Box, useToast } from "@chakra-ui/react";
 
-import { SelectedDescriptor } from "@dapp/shared/src/types/openApiGen";
+import { SelectedDescriptor } from "@truematch/shared/src/types/openApiGen";
 
 import GradientButton from "../../shared/buttons/GradientButton";
 

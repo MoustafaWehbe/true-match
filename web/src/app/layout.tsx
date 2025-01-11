@@ -7,10 +7,10 @@ type RootLayoutProps = {
   children: React.ReactNode;
 };
 
-const APP_NAME = "dapp";
+const APP_NAME = "truematch";
 
 export const metadata: Metadata = {
-  title: { default: APP_NAME, template: "%s | dapp" },
+  title: { default: APP_NAME, template: "%s | truematch" },
   description: "Next.js + chakra-ui + TypeScript template",
   applicationName: APP_NAME,
   appleWebApp: {
@@ -23,7 +23,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     url: "",
-    title: "dapp",
+    title: "truematch",
     description: "Next.js + chakra-ui + TypeScript template",
     images: {
       url: "",

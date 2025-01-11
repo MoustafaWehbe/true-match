@@ -14,7 +14,7 @@ import {
 import {
   AvailableDescriptorDto,
   SelectedDescriptor,
-} from "@dapp/shared/src/types/openApiGen";
+} from "@truematch/shared/src/types/openApiGen";
 
 import Descriptor from "./Descriptor";
 

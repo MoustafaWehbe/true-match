@@ -12,7 +12,7 @@ import {
   WrapItem,
 } from "@chakra-ui/react";
 
-import { CreateOrUpdateUserProfileDto } from "@dapp/shared/src/types/openApiGen";
+import { CreateOrUpdateUserProfileDto } from "@truematch/shared/src/types/openApiGen";
 
 import { RootState } from "~/lib/state/store";
 

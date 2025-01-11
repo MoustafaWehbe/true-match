@@ -8,7 +8,7 @@ import {
   MessageDto,
   MessageDtoListApiResponse,
   SimpleApiResponseApiResponse,
-} from "@dapp/shared/src/types/openApiGen";
+} from "@truematch/shared/src/types/openApiGen";
 
 import axiosInstance, { defaultHeaders } from "~/lib/utils/api/axiosConfig";
 

@@ -1,6 +1,6 @@
-import { SOCKET_EVENTS } from "@dapp/shared/src/consts/socketEvents";
-import { socketEventTypes } from "@dapp/shared/src/types/custom";
-import { UserDto } from "@dapp/shared/src/types/openApiGen";
+import { SOCKET_EVENTS } from "@truematch/shared/src/consts/socketEvents";
+import { socketEventTypes } from "@truematch/shared/src/types/custom";
+import { UserDto } from "@truematch/shared/src/types/openApiGen";
 
 import { PeerItem } from "~/lib/components/rooms/Room";
 import { peerConfiguration } from "~/lib/consts/webrtc";

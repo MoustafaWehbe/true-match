@@ -2,7 +2,7 @@ import { useState } from "react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import { Button, Flex, IconButton } from "@chakra-ui/react";
 
-import { openApiTypes } from "@dapp/shared";
+import { openApiTypes } from "@truematch/shared";
 
 interface Props {
   rooms: openApiTypes.RoomDtoPagedResponse | null;
