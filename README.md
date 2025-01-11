@@ -70,7 +70,11 @@ To run the project locally, ensure the following dependencies are installed:
    dotnet watch
    ```
 
-### 2. Generate Front-End and WebRTC Server Types
+### 2. Install npm dependencies
+
+The repo uses yarn workspaces, hence you should run `yarn install` at the root of the project in order to install the required dependecies for all packages.
+
+### 3. Generate Front-End and WebRTC Server Types
 
 After running the API for the first time or whenever the models have changed, you need to regenerate the TypeScript types for the front end and WebRTC server.
 
@@ -86,7 +90,7 @@ After running the API for the first time or whenever the models have changed, yo
    yarn generate-types
    ```
 
-### 3. Run the WebRTC Server
+### 4. Run the WebRTC Server
 
 1. Navigate to the `webrtc-server` directory:
 
@@ -100,7 +104,7 @@ After running the API for the first time or whenever the models have changed, yo
    yarn start
    ```
 
-### 4. Run the Front-End Client
+### 5. Run the Front-End Client
 
 1. Navigate to the `web` directory:
 
@@ -108,13 +112,7 @@ After running the API for the first time or whenever the models have changed, yo
    cd web
    ```
 
-2. Install dependencies:
-
-   ```bash
-   yarn install
-   ```
-
-3. Start the development server:
+2. Start the development server:
 
    ```bash
    yarn dev
