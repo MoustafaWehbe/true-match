@@ -7,7 +7,7 @@ type RootLayoutProps = {
   children: React.ReactNode;
 };
 
-const APP_NAME = "truematch";
+const APP_NAME = "True Match";
 
 export const metadata: Metadata = {
   title: { default: APP_NAME, template: "%s | truematch" },

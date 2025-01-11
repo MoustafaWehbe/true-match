@@ -5,7 +5,8 @@
     "packages": [
       "web",
       "webrtc-server",
-      "shared"
+      "shared",
+      "worker"
     ]
   },
   "scripts": {

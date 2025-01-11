@@ -4,8 +4,10 @@ import {
   Box,
   Flex,
   Heading,
+  Image,
   keyframes,
   Link,
+  Stack,
   useColorModeValue,
 } from "@chakra-ui/react";
 
@@ -56,13 +58,6 @@ const Header = () => {
       boxShadow="rgba(0, 0, 0, 0.12) 0px 1px 1px"
       borderRadius="lg"
       border={`1px solid ${borderColor}`}
-      // bgImage={useColorModeValue(
-      //   'url(/images/pink-hearts.jpg)',
-      //   'url(/images/pink-hearts.jpg)'
-      // )}
-      // bgSize="cover"
-      // bgRepeat="repeat"
-      // bgPosition="center"
     >
       <Box animation={`${bounceAnimation} 2s infinite`}>
         <Heading
@@ -72,7 +67,15 @@ const Header = () => {
           color={textColor}
           _hover={{ textDecoration: "none", color: hoverColor }}
         >
-          TrueMatch
+          <Stack direction={"row"} gap={2} justify={"center"} align={"center"}>
+            <Image
+              src="/true-match-logo-transparent.png"
+              alt="Error 404 not found Illustration"
+              width={"50px"}
+              height={"50px"}
+            />
+            <Box as="span">TrueMatch</Box>
+          </Stack>
         </Heading>
       </Box>
 
