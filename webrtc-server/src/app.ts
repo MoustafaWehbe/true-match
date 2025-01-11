@@ -41,6 +41,7 @@ class App {
           "https://admin.socket.io",
           "https://192.168.43.7", // Laptop WebSocket server
           "http://192.168.43.7:3000", // Laptop React App
+          "https://192.168.43.7:3000", // Laptop React App
         ],
         credentials: true,
         methods: ["GET", "POST"],

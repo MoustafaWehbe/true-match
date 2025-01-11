@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { CiUser } from "react-icons/ci";
 import { FaHeart } from "react-icons/fa";
 import { FiMoreVertical } from "react-icons/fi";
@@ -183,6 +183,14 @@ const RoomCard = ({
     }
   };
 
+  const hasButtomButtons = useMemo(() => {
+    return (
+      (isOwner && !room.isArchived) ||
+      (room.isInProgress && !isOwner && !room.isArchived) ||
+      (!room.isInProgress && !isOwner && !room.isArchived)
+    );
+  }, [isOwner, room.isArchived, room.isInProgress]);
+
   const moreOptionsBgColor = useColorModeValue("whiteAlpha.900", "gray.700");
   const moreOptionsTextColor = useColorModeValue("gray.800", "whiteAlpha.900");
   const moreOptionsHoverColor = useColorModeValue("pink.500", "pink.300");
@@ -195,7 +203,7 @@ const RoomCard = ({
       borderRadius="lg"
       boxShadow="lg"
       overflow="hidden"
-      height={600}
+      height={hasButtomButtons ? 600 : 530}
       transition="transform 0.2s"
       _hover={{ transform: "scale(1.05)", cursor: "pointer", opacity: 0.9 }}
       position={"relative"}
@@ -222,14 +230,16 @@ const RoomCard = ({
           <Text
             fontWeight="bold"
             fontSize={"medium"}
-            sx={{
-              textOverflow: "ellipsis",
-              overflow: "hidden",
-              lineClamp: "2",
-              display: "-webkit-box",
-              "-webkit-box-orient": "vertical",
-              "-webkit-line-clamp": "1",
-            }}
+            maxWidth={isOwner && isComingUp ? "60%" : "auto"}
+            title={room.title!}
+            // sx={{
+            //   textOverflow: "ellipsis",
+            //   overflow: "hidden",
+            //   lineClamp: "2",
+            //   display: "-webkit-box",
+            //   "-webkit-box-orient": "vertical",
+            //   "-webkit-line-clamp": "1",
+            // }}
           >
             {room.title}
           </Text>
@@ -263,7 +273,6 @@ const RoomCard = ({
                     color={moreOptionsTextColor}
                     _hover={{ color: moreOptionsHoverColor }}
                     cursor={"pointer"}
-                    mt="10px"
                   >
                     View profile
                   </Button>
@@ -392,7 +401,7 @@ const RoomCard = ({
         >
           {room.isInProgress ? (
             <GradientButton
-              size="md"
+              size="sm"
               boxShadow="xl"
               onClick={() => router.push(`rooms/${room.id}`)}
             >
@@ -400,7 +409,7 @@ const RoomCard = ({
             </GradientButton>
           ) : (
             <GradientButton
-              size="md"
+              size="sm"
               boxShadow="xl"
               onClick={onStart}
               isLoading={isStartRoomLoading}

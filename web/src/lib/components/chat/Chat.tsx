@@ -110,6 +110,12 @@ function Chat() {
   );
 
   useEffect(() => {
+    return () => {
+      dispatch(setActiveMatchId(null));
+    };
+  }, [dispatch]);
+
+  useEffect(() => {
     // Scroll to the bottom whenever messages change
     if (messageContainerRef.current) {
       messageContainerRef.current.scrollTop =
@@ -337,7 +343,7 @@ function Chat() {
                   alignItems={"start"}
                 >
                   <Button
-                    aria-label="block user"
+                    aria-label="unmatch"
                     variant="link"
                     onClick={openDeleteDialog}
                     color={moreOptionsTextColor}

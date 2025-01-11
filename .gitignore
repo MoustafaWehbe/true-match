@@ -403,3 +403,10 @@ ASALocalRun/
 
 # Local History for Visual Studio
 .localhistory/
+
+
+# keys
+
+certs/
+
+*.env

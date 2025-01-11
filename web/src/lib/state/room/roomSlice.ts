@@ -29,6 +29,7 @@ export interface RoomSate {
   ishidingRoom: boolean;
   isStartingRoom: boolean;
   actionPerformedOnRoomId: string | null;
+  isSkippingRound: boolean;
 }
 
 export const getRoomContent = createAsyncThunk<
@@ -351,6 +352,7 @@ const initialState: RoomSate = {
   ishidingRoom: false,
   actionPerformedOnRoomId: null,
   isStartingRoom: false,
+  isSkippingRound: false,
 };
 
 const roomSlice = createSlice({
@@ -390,6 +392,9 @@ const roomSlice = createSlice({
           ...action.payload,
         };
       }
+    },
+    updateIsSkippingRound(state, action) {
+      state.isSkippingRound = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -594,5 +599,6 @@ export const { removeRoomsByUserId } = roomSlice.actions;
 export const { removeRoomById } = roomSlice.actions;
 export const { updateActiveRoomState } = roomSlice.actions;
 export const { updateActiveRoomStatePartially } = roomSlice.actions;
+export const { updateIsSkippingRound } = roomSlice.actions;
 
 export default roomSlice.reducer;

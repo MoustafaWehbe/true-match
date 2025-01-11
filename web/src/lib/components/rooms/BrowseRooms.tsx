@@ -139,13 +139,21 @@ function BrowseRooms() {
     }
   };
 
-  const handleOnInterested = (roomId: string) => {
-    dispatch(registerRoom(roomId));
-    toast({
-      title: "Congrats! You will be notified before the live starts.",
-      status: "success",
-      isClosable: true,
-    });
+  const handleOnInterested = async (roomId: string) => {
+    const res = await dispatch(registerRoom(roomId));
+    if (res.meta.requestStatus === "rejected") {
+      toast({
+        title: (res.payload as { status: number; data: string }).data as string,
+        status: "error",
+        isClosable: true,
+      });
+    } else {
+      toast({
+        title: "Congrats! You will be notified before the live starts.",
+        status: "success",
+        isClosable: true,
+      });
+    }
   };
 
   const handleOnHideRoom = (roomId: string) => {

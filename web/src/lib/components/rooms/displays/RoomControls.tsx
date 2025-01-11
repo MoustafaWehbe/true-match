@@ -35,7 +35,9 @@ const RoomControls = ({
   onToggleVideo,
   onToggleMic,
 }: RoomControlsProps) => {
-  const { roomContent: rounds } = useSelector((state: RootState) => state.room);
+  const { roomContent: rounds, isSkippingRound } = useSelector(
+    (state: RootState) => state.room
+  );
 
   if (!rounds) {
     return null;
@@ -116,7 +118,8 @@ const RoomControls = ({
             isDisabled={
               !isTruthy(currentRound) ||
               currentRound! >= rounds.length - 1 ||
-              peersCount === 0
+              peersCount === 0 ||
+              isSkippingRound
             }
           >
             Skip round

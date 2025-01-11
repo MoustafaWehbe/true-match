@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "dev-secure": "next dev --experimental-https",
     "turbo": "yarn dlx turbo@2.0.1",
     "build:turbo": "yarn turbo run build",
     "postbuild": "next-sitemap --config next-sitemap.config.js",

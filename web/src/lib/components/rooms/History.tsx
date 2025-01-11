@@ -2,7 +2,7 @@
 
 import React, { useCallback, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Box, Grid, useColorModeValue } from "@chakra-ui/react";
+import { Box, Grid, Text, useColorModeValue } from "@chakra-ui/react";
 
 import Loader from "../shared/Loader";
 import NoDataText from "../shared/NoDataText";
@@ -51,6 +51,9 @@ function History() {
   };
   return (
     <Box bg={bg} color={textColor} px={8} py={4} borderRadius="lg">
+      <Text fontSize="2xl" textAlign={"center"}>
+        History
+      </Text>
       {!roomsHistory?.data?.length && !getRoomsHistoryLoading && (
         <NoDataText text="All the lives you have attended will appear here." />
       )}

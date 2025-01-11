@@ -14,6 +14,7 @@ import { CHAT_MATCH_ID_QUERY_PARAM } from "~/lib/consts";
 import {
   getRoomById,
   updateActiveRoomStatePartially,
+  updateIsSkippingRound,
 } from "~/lib/state/room/roomSlice";
 import { AppDispatch, RootState } from "~/lib/state/store";
 import isTruthy from "~/lib/utils/truthy";
@@ -134,6 +135,7 @@ const Room = ({ roomId }: { roomId: string }) => {
           isRoundPaused: payload.roomState.isRoundPaused,
         } as RoomState)
       );
+      dispatch(updateIsSkippingRound(false));
     },
     [dispatch]
   );
@@ -151,14 +153,14 @@ const Room = ({ roomId }: { roomId: string }) => {
   const onRoundsEnded = useCallback(
     (_payload: socketEventTypes.RoundsEndedPayload) => {
       toast({
-        title:
-          "You nailed it! Remember, it’s all about stepping into the spotlight :)",
+        title: "Time is up! Thanks for joining",
         status: "success",
         duration: null,
         isClosable: true,
       });
+      router.push("/");
     },
-    [toast]
+    [router, toast]
   );
 
   const onPeersChanged = useCallback((peers: PeerItem[]) => {

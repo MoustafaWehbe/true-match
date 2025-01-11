@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { SOCKET_EVENTS } from "@dapp/shared/src/consts/socketEvents";
 import { socketEventTypes } from "@dapp/shared/src/types/custom";
 
-import { getRoomContent } from "../state/room/roomSlice";
+import { getRoomContent, updateIsSkippingRound } from "../state/room/roomSlice";
 import { AppDispatch, RootState } from "../state/store";
 
 import { roomSocket as socket } from "~/lib/utils/socket/socket";
@@ -49,8 +49,9 @@ const useRound = () => {
       socket.emit(SOCKET_EVENTS.CLIENT.SKIP_ROUND_EVENT, {
         roomId: activeRoom?.id!,
       } as socketEventTypes.SkipRoundPayload);
+      dispatch(updateIsSkippingRound(true));
     }
-  }, [activeRoom?.id, activeRoom?.roomState?.currentRound]);
+  }, [activeRoom?.id, activeRoom?.roomState?.currentRound, dispatch]);
 
   const nextQuestionClicked = useCallback(() => {
     socket.emit(SOCKET_EVENTS.CLIENT.GO_TO_NEXT_QUESTION_EVENT, {

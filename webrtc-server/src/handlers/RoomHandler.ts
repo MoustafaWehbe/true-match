@@ -332,22 +332,22 @@ class RoomHandler {
           isRoundPaused: false,
           currentRound: roundNumber,
           timeRemainingForRoundBeforePause:
-            existingRoomState?.rounds![roundNumber].duration!,
+            existingRoomState?.rounds![roundNumber]?.duration!,
         };
-        this.io
-          .of("/room")
-          .in(payload.roomId)
-          .emit(SOCKET_EVENTS.SERVER.SKIP_ROUND_EVENT, {
-            roomState: finalRoomState,
-          } as socketEventTypes.RoundSkipedPayload);
-
         await roomService.updateRoom(
           token,
           { roomState: finalRoomState },
           room?.data?.id!
         );
 
-        this.setTimer(room.data.id!, finalRoomState, token, socket.id);
+        await this.setTimer(room.data.id!, finalRoomState, token, socket.id);
+
+        this.io
+          .of("/room")
+          .in(payload.roomId)
+          .emit(SOCKET_EVENTS.SERVER.SKIP_ROUND_EVENT, {
+            roomState: finalRoomState,
+          } as socketEventTypes.RoundSkipedPayload);
       } else {
         throw Error("Could not find room");
       }

@@ -251,7 +251,7 @@ function MyRooms() {
         <PaginatedRooms rooms={myRooms} handlePageChange={handlePageChange} />
       )}
 
-      {!myRooms?.data?.length && (
+      {!myRooms?.data?.length && !getMyRoomsLoading && (
         <NoDataText
           text="No scheduled rooms! Start by scheduling a room at the top right of the
           page."
