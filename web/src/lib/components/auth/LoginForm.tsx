@@ -8,6 +8,7 @@ import {
   Container,
   FormLabel,
   Heading,
+  Image,
   Input,
   Link,
   Stack,
@@ -89,6 +90,29 @@ function SignupForm() {
 
   return (
     <Container maxW="lg" pb="20px">
+      <Stack
+        spacing={2}
+        align="center"
+        py={8}
+        direction={"row"}
+        textAlign={"center"}
+        justify={"center"}
+      >
+        <Image
+          src="/true-match-logo-transparent.png"
+          alt="Error 404 not found Illustration"
+          width={"70px"}
+          height={"70px"}
+        />
+        <Text
+          fontSize={"2xl"}
+          textTransform={"uppercase"}
+          fontWeight={"bolder"}
+        >
+          True Match
+        </Text>
+      </Stack>
+
       <Stack
         spacing={2}
         mx="auto"
