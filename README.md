@@ -4,6 +4,8 @@
 
 A dating app for those who have the guts to go live and chat with potential matches
 
+Click the image below to watch the demo:
+
 [![Watch the video](https://img.youtube.com/vi/3b0-R2eKZxI/0.jpg)](https://www.youtube.com/watch?v=3b0-R2eKZxI)
 
 ### Packages
