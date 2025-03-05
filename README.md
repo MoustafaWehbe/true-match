@@ -4,6 +4,8 @@
 
 A dating app for those who have the guts to go live and chat with potential matches
 
+<iframe width="720" height="480" src="https://www.youtube.com/embed/3b0-R2eKZxI?si=8WCdhEDqPm5gnYE0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
 ### Packages
 
 1. **API**:
